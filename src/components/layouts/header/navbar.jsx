@@ -1,9 +1,10 @@
+import { useEffect, useState } from 'react'
 import Link from '@mui/material/Link'
 import styled from '@emotion/styled'
 import ROUTE_URL from '../../../constants/routeUrl'
 import SearchIcon from '@mui/icons-material/Search'
 import ChatIcon from '@mui/icons-material/ChatBubbleOutline'
-import Button from '@mui/material/Button'
+import LogoutButton from '@mui/material/Button'
 
 const searchIcon = <SearchIcon />
 const chatIcon = <ChatIcon />
@@ -26,10 +27,23 @@ const PageLink = styled.li`
   margin-right: 20px;
 `
 
-const Navbar = ({ isLogined }) => {
-  const linkList = isLogined
+const Navbar = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState()
+
+  useEffect(() => {
+    const loginState = !!localStorage.getItem('jwt')
+    setIsLoggedIn(loginState)
+  }, [])
+
+  const linkList = isLoggedIn
     ? PAGE_LINK_LIST.concat({ href: ROUTE_URL.HOME, name: '로그아웃' })
     : PAGE_LINK_LIST.concat({ href: ROUTE_URL.LOGIN, name: '로그인' })
+
+  const handleLogout = () => {
+    localStorage.removeItem('jwt')
+    localStorage.removeItem('username')
+    setIsLoggedIn(false)
+  }
 
   return (
     <nav>
@@ -37,13 +51,9 @@ const Navbar = ({ isLogined }) => {
         {linkList.map(link => (
           <PageLink key={link.href}>
             {link.name === '로그아웃' ? (
-              <Button
-                variant="text"
-                size="large"
-                onClick={() => console.log(`로그아웃이 완료되었습니다.`)}
-              >
+              <LogoutButton variant="text" size="large" onClick={handleLogout}>
                 {link.name}
-              </Button>
+              </LogoutButton>
             ) : (
               <Link href={link.href}>{link.name}</Link>
             )}
