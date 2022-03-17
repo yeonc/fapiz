@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { useState } from 'react'
 import Typography from '@mui/material/Typography'
 import ProTip from '../ProTip'
 import Copyright from '../Copyright'

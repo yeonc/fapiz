@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React from 'react'
 import styled from '@emotion/styled'
 import Navbar from './navbar'
 import HeaderLogo from './headerLogo'
@@ -10,11 +10,10 @@ const StyledHeaderWrapper = styled.header`
 `
 
 const Header = () => {
-  const [isLogined, setIsLogined] = useState(false)
   return (
     <StyledHeaderWrapper>
       <HeaderLogo />
-      <Navbar isLogined={isLogined} />
+      <Navbar />
     </StyledHeaderWrapper>
   )
 }
