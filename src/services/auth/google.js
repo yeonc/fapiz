@@ -1,12 +1,9 @@
 import axios from 'axios'
+import { BACKEND_URL } from '../../constants/constants'
 
 class GoogleAuthProvider {
-  constructor() {
-    this.BACKEND_URL = process.env.NEXT_PUBLIC_STRAPI_BACKEND_URL
-  }
-
-  login(accessToken) {
-    const response = axios.get(`${this.BACKEND_URL}/auth/google/callback`, {
+  static login(accessToken) {
+    const response = axios.get(`${BACKEND_URL}/api/auth/google/callback`, {
       params: { access_token: accessToken },
     })
     return response

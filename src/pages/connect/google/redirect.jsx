@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react'
 import ROUTE_URL from '../../../constants/routeUrl'
-import GoogleAuthProvider from '../../../services/auth/google'
+import GoogleAuth from '../../../services/auth/google'
+import { useRouter } from 'next/router'
+import { IS_SERVER } from '../../../constants/constants'
 
-const GoogleAuth = new GoogleAuthProvider()
+const GoogleLoginRedirect = () => {
+  const router = useRouter()
 
-const googleLoginRedirect = () => {
   let accessToken
-  if (typeof window !== 'undefined') {
+  if (!IS_SERVER) {
     function searchParam(key) {
       const URLSearch = new URLSearchParams(location.search)
       const accessTokenValue = URLSearch.get(key)
@@ -18,14 +20,15 @@ const googleLoginRedirect = () => {
   useEffect(() => {
     GoogleAuth.login(accessToken)
       .then(response => {
-        localStorage.setItem('jwt', response.jwt)
-        localStorage.setItem('username', response.user.username)
-        setTimeout(() => router.push(ROUTE_URL.HOME), 3000)
+        const data = response.data
+        localStorage.setItem('jwt', data.jwt)
+        localStorage.setItem('username', data.user.username)
+        router.push(ROUTE_URL.HOME)
       })
-      .catch(console.log)
+      .catch(console.error)
   }, [])
 
-  return <h1>googleLoginRedirect</h1>
+  return <p>로그인 중입니다. 잠시만 기다려 주세요</p>
 }
 
-export default googleLoginRedirect
+export default GoogleLoginRedirect
