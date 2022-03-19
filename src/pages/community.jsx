@@ -1,11 +1,6 @@
 import React from 'react'
-import Header from 'components/layouts/header/header'
+import withHeader from 'components/layouts/Header'
 
-const CommunityPage = props => (
-  <>
-    <Header />
-    <h1>community page</h1>
-  </>
-)
+const CommunityPage = () => <h1>community page</h1>
 
-export default CommunityPage
+export default withHeader(CommunityPage)

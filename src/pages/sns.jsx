@@ -1,11 +1,6 @@
 import React from 'react'
-import Header from 'components/layouts/header/header'
+import withHeader from 'components/layouts/Header'
 
-const SNSPage = props => (
-  <>
-    <Header />
-    <h1>SNS page</h1>
-  </>
-)
+const SNSPage = () => <h1>SNS page</h1>
 
-export default SNSPage
+export default withHeader(SNSPage)

@@ -1,11 +1,6 @@
 import React from 'react'
-import Header from 'components/layouts/header/header'
+import withHeader from 'components/layouts/Header'
 
-const ClosetPage = props => (
-  <>
-    <Header />
-    <h1>closet page</h1>
-  </>
-)
+const ClosetPage = () => <h1>closet page</h1>
 
-export default ClosetPage
+export default withHeader(ClosetPage)

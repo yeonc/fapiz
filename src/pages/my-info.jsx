@@ -1,11 +1,6 @@
 import React from 'react'
-import Header from 'components/layouts/header/header'
+import withHeader from 'components/layouts/Header'
 
-const MyInfoPage = props => (
-  <>
-    <Header />
-    <h1>myinfo page</h1>
-  </>
-)
+const MyInfoPage = () => <h1>myinfo page</h1>
 
-export default MyInfoPage
+export default withHeader(MyInfoPage)

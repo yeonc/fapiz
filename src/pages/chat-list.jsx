@@ -1,11 +1,6 @@
 import React from 'react'
-import Header from 'components/layouts/header/header'
+import withHeader from 'components/layouts/Header'
 
-const ChatListPage = props => (
-  <>
-    <Header />
-    <h1>chatlist page</h1>
-  </>
-)
+const ChatListPage = () => <h1>chatlist page</h1>
 
-export default ChatListPage
+export default withHeader(ChatListPage)

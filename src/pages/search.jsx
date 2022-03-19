@@ -1,11 +1,6 @@
 import React from 'react'
-import Header from 'components/layouts/header/header'
+import withHeader from 'components/layouts/Header'
 
-const SearchPage = props => (
-  <>
-    <Header />
-    <h1>search page</h1>
-  </>
-)
+const SearchPage = () => <h1>search page</h1>
 
-export default SearchPage
+export default withHeader(SearchPage)
