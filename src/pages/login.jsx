@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from '@mui/material/Link'
-import Header from '../components/layouts/header/header'
-import { BACKEND_URL } from '../constants/constants'
+import Header from 'components/layouts/header/header'
+import { BACKEND_URL } from 'constants/constants'
 
 const LoginPage = () => {
   return (

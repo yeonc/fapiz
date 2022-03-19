@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { BACKEND_URL } from '../../constants/constants'
+import { BACKEND_URL } from 'constants/constants'
 
 class GoogleAuthProvider {
   static login(accessToken) {

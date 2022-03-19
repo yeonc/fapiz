@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
-import ROUTE_URL from '../../../constants/routeUrl'
-import GoogleAuth from '../../../services/auth/google'
 import { useRouter } from 'next/router'
-import { IS_SERVER } from '../../../constants/constants'
+import GoogleAuth from 'services/auth/google'
+import ROUTE_URL from 'constants/routeUrl'
+import { IS_SERVER } from 'constants/constants'
 
 const GoogleLoginRedirectPage = () => {
   const router = useRouter()

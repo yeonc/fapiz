@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import Link from '@mui/material/Link'
-import styled from '@emotion/styled'
-import ROUTE_URL from '../../../constants/routeUrl'
 import SearchIcon from '@mui/icons-material/Search'
 import ChatIcon from '@mui/icons-material/ChatBubbleOutline'
 import LogoutButton from '@mui/material/Button'
+import styled from '@emotion/styled'
+import ROUTE_URL from 'constants/routeUrl'
 
 const searchIcon = <SearchIcon />
 const chatIcon = <ChatIcon />
