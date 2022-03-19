@@ -4,7 +4,7 @@ import GoogleAuth from '../../../services/auth/google'
 import { useRouter } from 'next/router'
 import { IS_SERVER } from '../../../constants/constants'
 
-const GoogleLoginRedirect = () => {
+const GoogleLoginRedirectPage = () => {
   const router = useRouter()
 
   let accessToken
@@ -31,4 +31,4 @@ const GoogleLoginRedirect = () => {
   return <p>로그인 중입니다. 잠시만 기다려 주세요</p>
 }
 
-export default GoogleLoginRedirect
+export default GoogleLoginRedirectPage
