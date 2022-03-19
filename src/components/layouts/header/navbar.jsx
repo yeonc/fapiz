@@ -1,22 +1,16 @@
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 import Link from '@mui/material/Link'
 import SearchIcon from '@mui/icons-material/Search'
 import ChatIcon from '@mui/icons-material/ChatBubbleOutline'
-import LogoutButton from '@mui/material/Button'
+import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import ROUTE_URL from 'constants/routeUrl'
 
-const searchIcon = <SearchIcon />
-const chatIcon = <ChatIcon />
-
-const PAGE_LINK_LIST = [
-  { href: ROUTE_URL.SNS, name: 'SNS' },
-  { href: ROUTE_URL.COMMUNITY, name: '커뮤니티' },
-  { href: ROUTE_URL.CLOSET, name: '마이페이지' },
-  { href: ROUTE_URL.SEARCH, name: searchIcon },
-  { href: ROUTE_URL.CHAT_LIST, name: chatIcon },
-  { href: ROUTE_URL.MY_INFO, name: '내정보' },
-]
+const NavWrapper = styled.nav`
+  display: flex;
+  align-items: center;
+`
 
 const PageLinkList = styled.ul`
   display: flex;
@@ -27,40 +21,55 @@ const PageLink = styled.li`
   margin-right: 20px;
 `
 
+const AuthButton = ({ text, onClick }) => (
+  <Button variant="contained" size="medium" onClick={onClick}>
+    {text}
+  </Button>
+)
+
+const searchIcon = <SearchIcon />
+const chatIcon = <ChatIcon />
+
+const PAGE_LINK_LIST = [
+  { href: ROUTE_URL.SNS, content: 'SNS' },
+  { href: ROUTE_URL.COMMUNITY, content: '커뮤니티' },
+  { href: ROUTE_URL.CLOSET, content: '마이페이지' },
+  { href: ROUTE_URL.SEARCH, content: searchIcon },
+  { href: ROUTE_URL.CHAT_LIST, content: chatIcon },
+  { href: ROUTE_URL.MY_INFO, content: '내정보' },
+]
+
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState()
+  const router = useRouter()
 
   useEffect(() => {
     const loginState = !!localStorage.getItem('jwt')
     setIsLoggedIn(loginState)
   }, [])
 
-  const linkList = isLoggedIn
-    ? PAGE_LINK_LIST.concat({ href: ROUTE_URL.HOME, name: '로그아웃' })
-    : PAGE_LINK_LIST.concat({ href: ROUTE_URL.LOGIN, name: '로그인' })
+  const goToLoginPage = () => router.push(ROUTE_URL.LOGIN)
 
-  const handleLogout = () => {
+  const logout = () => {
     localStorage.removeItem('jwt')
     localStorage.removeItem('username')
     setIsLoggedIn(false)
   }
 
   return (
-    <nav>
+    <NavWrapper>
       <PageLinkList>
-        {linkList.map(link => (
+        {PAGE_LINK_LIST.map(link => (
           <PageLink key={link.href}>
-            {link.name === '로그아웃' ? (
-              <LogoutButton variant="text" size="large" onClick={handleLogout}>
-                {link.name}
-              </LogoutButton>
-            ) : (
-              <Link href={link.href}>{link.name}</Link>
-            )}
+            <Link href={link.href}>{link.content}</Link>
           </PageLink>
         ))}
       </PageLinkList>
-    </nav>
+      <AuthButton
+        text={isLoggedIn ? '로그아웃' : '로그인'}
+        onClick={isLoggedIn ? logout : goToLoginPage}
+      />
+    </NavWrapper>
   )
 }
 
