@@ -1,0 +1,76 @@
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
+import Link from '@mui/material/Link'
+import SearchIcon from '@mui/icons-material/Search'
+import ChatIcon from '@mui/icons-material/ChatBubbleOutline'
+import Button from '@mui/material/Button'
+import styled from '@emotion/styled'
+import ROUTE_URL from 'constants/routeUrl'
+
+const NavWrapper = styled.nav`
+  display: flex;
+  align-items: center;
+`
+
+const PageLinkList = styled.ul`
+  display: flex;
+  align-items: center;
+`
+
+const PageLink = styled.li`
+  margin-right: 20px;
+`
+
+const AuthButton = ({ text, onClick }) => (
+  <Button variant="contained" size="medium" onClick={onClick}>
+    {text}
+  </Button>
+)
+
+const searchIcon = <SearchIcon />
+const chatIcon = <ChatIcon />
+
+const PAGE_LINK_LIST = [
+  { href: ROUTE_URL.SNS, content: 'SNS' },
+  { href: ROUTE_URL.COMMUNITY, content: '커뮤니티' },
+  { href: ROUTE_URL.CLOSET, content: '마이페이지' },
+  { href: ROUTE_URL.SEARCH, content: searchIcon },
+  { href: ROUTE_URL.CHAT_LIST, content: chatIcon },
+  { href: ROUTE_URL.MY_INFO, content: '내정보' },
+]
+
+const Navbar = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState()
+  const router = useRouter()
+
+  useEffect(() => {
+    const loginState = !!localStorage.getItem('jwt')
+    setIsLoggedIn(loginState)
+  }, [])
+
+  const goToLoginPage = () => router.push(ROUTE_URL.LOGIN)
+
+  const logout = () => {
+    localStorage.removeItem('jwt')
+    localStorage.removeItem('username')
+    setIsLoggedIn(false)
+  }
+
+  return (
+    <NavWrapper>
+      <PageLinkList>
+        {PAGE_LINK_LIST.map(link => (
+          <PageLink key={link.href}>
+            <Link href={link.href}>{link.content}</Link>
+          </PageLink>
+        ))}
+      </PageLinkList>
+      <AuthButton
+        text={isLoggedIn ? '로그아웃' : '로그인'}
+        onClick={isLoggedIn ? logout : goToLoginPage}
+      />
+    </NavWrapper>
+  )
+}
+
+export default Navbar
