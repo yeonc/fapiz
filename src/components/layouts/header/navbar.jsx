@@ -39,14 +39,8 @@ const PAGE_LINK_LIST = [
   { href: ROUTE_URL.MY_INFO, content: '내정보' },
 ]
 
-const Navbar = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState()
+const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
   const router = useRouter()
-
-  useEffect(() => {
-    const loginState = !!localStorage.getItem('jwt')
-    setIsLoggedIn(loginState)
-  }, [])
 
   const goToLoginPage = () => router.push(ROUTE_URL.LOGIN)
 

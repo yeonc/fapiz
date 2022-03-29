@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from '@emotion/styled'
 import Navbar from './navbar'
 import HeaderLogo from './headerLogo'
@@ -9,11 +8,11 @@ const StyledHeaderWrapper = styled.header`
   font-size: 20px;
 `
 
-const Header = () => {
+const Header = ({ isLoggedIn, setIsLoggedIn }) => {
   return (
     <StyledHeaderWrapper>
       <HeaderLogo />
-      <Navbar />
+      <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
     </StyledHeaderWrapper>
   )
 }
