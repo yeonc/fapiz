@@ -2,53 +2,57 @@ import styled from '@emotion/styled'
 import Avatar from '@mui/material/Avatar'
 import visuallyHidden from 'styles/visuallyHidden'
 import { horizontal, mgRight } from 'styles/layout'
+import { BACKEND_URL } from 'constants/constants'
 
 const UserProfileWrapper = styled.div`
   display: flex;
 `
 
-const UserAvatar = () => (
+const UserAvatar = ({ profileImageUrl, username }) => (
   <Avatar
-    alt="Remy Sharp"
-    src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
+    alt={username}
+    src={BACKEND_URL + profileImageUrl}
     sx={{ width: 100, height: 100, marginRight: 4 }}
   />
 )
 
-const UserDetail = () => {
-  const userInfo = { height: 160, weight: 50, follower: 300, following: 200 }
+const UserDetail = ({ user }) => {
+  const { username, weight, height, follower, following } = user ?? {}
 
   return (
     <div>
-      <h1>yeon</h1>
+      <h1>{username}</h1>
       <dl css={horizontal}>
         <div css={mgRight(8)}>
           <dt css={visuallyHidden}>키</dt>
-          <dd>{userInfo.height}cm</dd>
+          <dd>{height}cm</dd>
         </div>
         <div>
           <dt css={visuallyHidden}>몸무게</dt>
-          <dd>{userInfo.weight}kg</dd>
+          <dd>{weight}kg</dd>
         </div>
       </dl>
       <dl css={horizontal}>
         <div css={[mgRight(18), horizontal]}>
           <dt css={mgRight(4)}>팔로워</dt>
-          <dd>{userInfo.follower}</dd>
+          <dd>{follower?.length}</dd>
         </div>
         <div css={horizontal}>
           <dt css={mgRight(4)}>팔로잉</dt>
-          <dd>{userInfo.following}</dd>
+          <dd>{following?.length}</dd>
         </div>
       </dl>
     </div>
   )
 }
 
-const UserProfile = () => (
+const UserProfile = ({ user }) => (
   <UserProfileWrapper>
-    <UserAvatar />
-    <UserDetail />
+    <UserAvatar
+      profileImageUrl={user?.profileImage.url}
+      username={user?.username}
+    />
+    <UserDetail user={user} />
   </UserProfileWrapper>
 )
 
