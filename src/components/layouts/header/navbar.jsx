@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from '@mui/material/Link'
 import SearchIcon from '@mui/icons-material/Search'
@@ -21,11 +20,26 @@ const PageLink = styled.li`
   margin-right: 20px;
 `
 
-const AuthButton = ({ text, onClick }) => (
-  <Button variant="contained" size="medium" onClick={onClick}>
-    {text}
-  </Button>
-)
+const AuthButton = ({ isLoggedIn, setIsLoggedIn }) => {
+  const router = useRouter()
+
+  const goToLoginPage = () => router.push(ROUTE_URL.LOGIN)
+
+  const logout = () => {
+    localStorage.removeItem('jwt')
+    localStorage.removeItem('username')
+    setIsLoggedIn(false)
+  }
+
+  const text = isLoggedIn ? '로그아웃' : '로그인'
+  const handleClick = isLoggedIn ? logout : goToLoginPage
+
+  return (
+    <Button variant="contained" size="medium" onClick={handleClick}>
+      {text}
+    </Button>
+  )
+}
 
 const searchIcon = <SearchIcon />
 const chatIcon = <ChatIcon />
@@ -40,16 +54,6 @@ const PAGE_LINK_LIST = [
 ]
 
 const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
-  const router = useRouter()
-
-  const goToLoginPage = () => router.push(ROUTE_URL.LOGIN)
-
-  const logout = () => {
-    localStorage.removeItem('jwt')
-    localStorage.removeItem('username')
-    setIsLoggedIn(false)
-  }
-
   return (
     <NavWrapper>
       <PageLinkList>
@@ -59,10 +63,7 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
           </PageLink>
         ))}
       </PageLinkList>
-      <AuthButton
-        text={isLoggedIn ? '로그아웃' : '로그인'}
-        onClick={isLoggedIn ? logout : goToLoginPage}
-      />
+      <AuthButton isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
     </NavWrapper>
   )
 }
