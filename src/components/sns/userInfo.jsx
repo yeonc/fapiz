@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import UserProfile from 'components/sns/userProfile'
 import UserButtons from 'components/sns/userButtons'
-import useAxios from 'hooks/useAxios'
-import { IS_SERVER } from 'constants/constants'
+import useGetRequest from 'hooks/useGetRequest'
+import { BACKEND_URL, IS_SERVER } from 'constants/constants'
 
 const UserInfo = () => {
   const [user, setUser] = useState()
 
   const token = !IS_SERVER && localStorage.getItem('jwt')
-  const { response } = useAxios('/api/users/me', 'get', {
+  const { response } = useGetRequest(BACKEND_URL, '/api/users/me', {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -16,7 +16,7 @@ const UserInfo = () => {
 
   useEffect(() => {
     if (response !== null) {
-      setUser(response)
+      setUser(response.data)
     }
   }, [response])
 
