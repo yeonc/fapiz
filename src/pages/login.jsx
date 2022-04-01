@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from '@mui/material/Link'
-import withHeader from 'components/layouts/header'
+import withHeader from 'hocs/withHeader'
 import { BACKEND_URL } from 'constants/constants'
 
 const LoginPage = () => (

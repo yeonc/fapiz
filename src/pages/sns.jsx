@@ -1,4 +1,4 @@
-import withHeader from 'components/layouts/header'
+import withHeader from 'hocs/withHeader'
 import UserInfo from 'components/sns/userInfo'
 import SnsPosts from 'components/sns/snsPosts'
 

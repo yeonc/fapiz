@@ -1,23 +1,20 @@
-import { useEffect, useState } from 'react'
-import Header from './header'
+import styled from '@emotion/styled'
+import Navbar from './navbar'
+import HeaderLogo from './headerLogo'
 
-const withHeader = Page => {
-  return () => {
-    // 임시 코드 (상태 관리 라이브러리 도입 후 지울 것)
-    const [isLoggedIn, setIsLoggedIn] = useState()
+const StyledHeaderWrapper = styled.header`
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+`
 
-    useEffect(() => {
-      const loginState = !!localStorage.getItem('jwt')
-      setIsLoggedIn(loginState)
-    }, [])
-
-    return (
-      <>
-        <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
-        <Page isLoggedIn={isLoggedIn} />
-      </>
-    )
-  }
+const Header = ({ isLoggedIn, setIsLoggedIn }) => {
+  return (
+    <StyledHeaderWrapper>
+      <HeaderLogo />
+      <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+    </StyledHeaderWrapper>
+  )
 }
 
-export default withHeader
+export default Header
