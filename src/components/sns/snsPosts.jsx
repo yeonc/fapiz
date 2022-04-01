@@ -1,22 +1,22 @@
-import SNSPostList from '@mui/material/ImageList'
-import SNSPostItem from '@mui/material/ImageListItem'
+import SnsPostList from '@mui/material/ImageList'
+import SnsPostItem from '@mui/material/ImageListItem'
 
-const SNSPosts = () => (
-  <SNSPostList sx={{ width: 650 }} cols={3}>
+const SnsPosts = () => (
+  <SnsPostList sx={{ width: 650 }} cols={3}>
     {itemData.map(item => (
-      <SNSPostItem key={item.img}>
+      <SnsPostItem key={item.img}>
         <img
           src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
           srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
           alt={item.title}
           loading="lazy"
         />
-      </SNSPostItem>
+      </SnsPostItem>
     ))}
-  </SNSPostList>
+  </SnsPostList>
 )
 
-export default SNSPosts
+export default SnsPosts
 
 const itemData = [
   {

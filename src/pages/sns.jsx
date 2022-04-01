@@ -1,14 +1,14 @@
 import withHeader from 'components/layouts/Header'
-import UserInfo from 'components/SNSPage/userInfo'
-import SNSPosts from 'components/SNSPage/SNSPosts'
+import UserInfo from 'components/sns/userInfo'
+import SnsPosts from 'components/sns/snsPosts'
 
-const SNSPage = () => {
+const SnsPage = () => {
   return (
     <>
       <UserInfo />
-      <SNSPosts />
+      <SnsPosts />
     </>
   )
 }
 
-export default withHeader(SNSPage)
+export default withHeader(SnsPage)

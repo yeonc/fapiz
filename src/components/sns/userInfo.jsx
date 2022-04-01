@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import UserProfile from 'components/SNSPage/userProfile'
-import UserButtons from 'components/SNSPage/userButtons'
+import UserProfile from 'components/sns/userProfile'
+import UserButtons from 'components/sns/userButtons'
 import useAxios from 'hooks/useAxios'
 import { IS_SERVER } from 'constants/constants'
 
