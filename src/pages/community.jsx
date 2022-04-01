@@ -1,5 +1,5 @@
 import React from 'react'
-import withHeader from 'components/layouts/Header'
+import withHeader from 'components/layouts/header'
 
 const CommunityPage = () => <h1>community page</h1>
 
