@@ -49,7 +49,7 @@ const UserDetail = ({ user }) => {
 const UserProfile = ({ user }) => (
   <UserProfileWrapper>
     <UserAvatar
-      profileImageUrl={user?.profileImage.url}
+      profileImageUrl={user?.profileImage?.url}
       username={user?.username}
     />
     <UserDetail user={user} />

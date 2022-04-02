@@ -21,9 +21,7 @@ const SnsPosts = ({ userId }) => {
     },
     { encodeValuesOnly: true }
   )
-
   const UrlForFetchingSNSPosts = `/api/sns-posts?${query}`
-
   const { response } = useGetRequest(BACKEND_URL, UrlForFetchingSNSPosts)
 
   useEffect(() => {
@@ -43,7 +41,11 @@ const SnsPosts = ({ userId }) => {
     }
   })
 
-  return (
+  const snsPostCount = sanitizedSnsPosts?.length
+
+  return snsPostCount === 0 ? (
+    <p>작성된 포스트가 없습니다.</p>
+  ) : (
     <SnsPostList sx={{ width: 650 }} cols={3}>
       {sanitizedSnsPosts?.map(post => {
         const firstImage = post.postImage[0]
