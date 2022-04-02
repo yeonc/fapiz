@@ -7,7 +7,7 @@ import useGetRequest from 'hooks/useGetRequest'
 import { BACKEND_URL } from 'constants/constants'
 
 const SnsPageByUserId = () => {
-  const [user, setUser] = useState()
+  const [snsPageUser, setSnsPageUser] = useState()
 
   const router = useRouter()
   const { userId } = router.query
@@ -15,14 +15,14 @@ const SnsPageByUserId = () => {
 
   useEffect(() => {
     if (response !== null) {
-      setUser(response.data)
+      setSnsPageUser(response.data)
     }
   }, [response])
 
   return (
     <>
-      <UserInfo user={user} />
-      <SnsPosts userId={user?.id} />
+      <UserInfo snsPageUser={snsPageUser} />
+      <SnsPosts snsPageUserId={snsPageUser?.id} />
     </>
   )
 }

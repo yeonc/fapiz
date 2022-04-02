@@ -5,7 +5,7 @@ import SnsPostItem from '@mui/material/ImageListItem'
 import useGetRequest from 'hooks/useGetRequest'
 import { BACKEND_URL } from 'constants/constants'
 
-const SnsPosts = ({ userId }) => {
+const SnsPosts = ({ snsPageUserId }) => {
   const [snsPosts, setSnsPosts] = useState([])
 
   const query = qs.stringify(
@@ -14,7 +14,7 @@ const SnsPosts = ({ userId }) => {
       filters: {
         author: {
           id: {
-            $eq: userId,
+            $eq: snsPageUserId,
           },
         },
       },
