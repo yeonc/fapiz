@@ -4,10 +4,10 @@ import UserButtons from 'components/sns/userButtons'
 import useGetRequest from 'hooks/useGetRequest'
 import { BACKEND_URL, IS_SERVER } from 'constants/constants'
 
-const UserInfo = ({ snsPageUser }) => {
-  const [snsPageUserId, setSnsPageUserId] = useState(null)
+const UserInfo = ({ user }) => {
+  const [userId, setUserId] = useState(null)
   const [loggedInUserId, setLoggedInUserId] = useState(null)
-  const isMe = snsPageUserId === loggedInUserId
+  const isMe = userId === loggedInUserId
 
   const token = !IS_SERVER && localStorage.getItem('jwt')
   const { response } = useGetRequest(BACKEND_URL, '/api/users/me', {
@@ -20,13 +20,13 @@ const UserInfo = ({ snsPageUser }) => {
     if (response !== null) {
       const loggedInUserInfo = response.data
       setLoggedInUserId(loggedInUserInfo.id)
-      setSnsPageUserId(snsPageUser?.id)
+      setUserId(user?.id)
     }
-  }, [response, snsPageUser?.id])
+  }, [response, user?.id])
 
   return (
     <header>
-      <UserProfile snsPageUser={snsPageUser} />
+      <UserProfile user={user} />
       {isMe || <UserButtons />}
     </header>
   )

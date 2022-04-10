@@ -16,8 +16,8 @@ const UserAvatar = ({ profileImageUrl, username }) => (
   />
 )
 
-const UserDetail = ({ snsPageUser }) => {
-  const { username, weight, height, follower, following } = snsPageUser ?? {}
+const UserDetail = ({ user }) => {
+  const { username, weight, height, follower, following } = user ?? {}
 
   return (
     <div>
@@ -46,13 +46,13 @@ const UserDetail = ({ snsPageUser }) => {
   )
 }
 
-const UserProfile = ({ snsPageUser }) => (
+const UserProfile = ({ user }) => (
   <UserProfileWrapper>
     <UserAvatar
-      profileImageUrl={snsPageUser?.profileImage?.url}
-      username={snsPageUser?.username}
+      profileImageUrl={user?.profileImage?.url}
+      username={user?.username}
     />
-    <UserDetail snsPageUser={snsPageUser} />
+    <UserDetail user={user} />
   </UserProfileWrapper>
 )
 

@@ -6,7 +6,7 @@ import useGetRequest from 'hooks/useGetRequest'
 import { BACKEND_URL, IS_SERVER } from 'constants/constants'
 
 const SnsPage = () => {
-  const [snsPageUser, setSnsPageUser] = useState()
+  const [user, setUser] = useState()
 
   const token = !IS_SERVER && localStorage.getItem('jwt')
   const { response } = useGetRequest(BACKEND_URL, '/api/users/me', {
@@ -17,14 +17,14 @@ const SnsPage = () => {
 
   useEffect(() => {
     if (response !== null) {
-      setSnsPageUser(response.data)
+      setUser(response.data)
     }
   }, [response])
 
   return (
     <>
-      <UserInfo snsPageUser={snsPageUser} />
-      <SnsPosts snsPageUserId={snsPageUser?.id} />
+      <UserInfo user={user} />
+      <SnsPosts userId={user?.id} />
     </>
   )
 }
