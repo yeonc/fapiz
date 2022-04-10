@@ -16,35 +16,31 @@ const UserAvatar = ({ profileImageUrl, username }) => (
   />
 )
 
-const UserDetail = ({ user }) => {
-  const { username, weight, height, follower, following } = user ?? {}
-
-  return (
-    <div>
-      <h1>{username}</h1>
-      <dl css={horizontal}>
-        <div css={mgRight(8)}>
-          <dt css={visuallyHidden}>키</dt>
-          <dd>{height}cm</dd>
-        </div>
-        <div>
-          <dt css={visuallyHidden}>몸무게</dt>
-          <dd>{weight}kg</dd>
-        </div>
-      </dl>
-      <dl css={horizontal}>
-        <div css={[mgRight(18), horizontal]}>
-          <dt css={mgRight(4)}>팔로워</dt>
-          <dd>{follower?.length}</dd>
-        </div>
-        <div css={horizontal}>
-          <dt css={mgRight(4)}>팔로잉</dt>
-          <dd>{following?.length}</dd>
-        </div>
-      </dl>
-    </div>
-  )
-}
+const UserProfileText = ({ username, weight, height, follower, following }) => (
+  <div>
+    <h1>{username}</h1>
+    <dl css={horizontal}>
+      <div css={mgRight(8)}>
+        <dt css={visuallyHidden}>키</dt>
+        <dd>{height}cm</dd>
+      </div>
+      <div>
+        <dt css={visuallyHidden}>몸무게</dt>
+        <dd>{weight}kg</dd>
+      </div>
+    </dl>
+    <dl css={horizontal}>
+      <div css={[mgRight(18), horizontal]}>
+        <dt css={mgRight(4)}>팔로워</dt>
+        <dd>{follower?.length}</dd>
+      </div>
+      <div css={horizontal}>
+        <dt css={mgRight(4)}>팔로잉</dt>
+        <dd>{following?.length}</dd>
+      </div>
+    </dl>
+  </div>
+)
 
 const UserProfile = ({ user }) => (
   <UserProfileWrapper>
@@ -52,7 +48,13 @@ const UserProfile = ({ user }) => (
       profileImageUrl={user?.profileImage?.url}
       username={user?.username}
     />
-    <UserDetail user={user} />
+    <UserProfileText
+      username={user?.username}
+      weight={user?.weight}
+      height={user?.height}
+      follower={user?.follower}
+      following={user?.following}
+    />
   </UserProfileWrapper>
 )
 
