@@ -3,23 +3,31 @@ import axios from 'axios'
 
 const useGetRequest = (baseURL, url, config) => {
   const [response, setResponse] = useState(null)
-  const [error, setError] = useState()
+  const [error, setError] = useState(null)
 
   useEffect(() => {
-    fetchData()
+    setStates()
   }, [url])
 
-  const axiosConfig = {
-    baseURL,
-    ...config,
+  const fetchData = async () => {
+    const axiosConfig = {
+      baseURL,
+      ...config,
+    }
+
+    const data = await axios.get(url, axiosConfig)
+    return data
   }
 
-  const fetchData = () => {
-    axios
-      .get(url, axiosConfig)
-      .then(res => setResponse(res))
-      .then(() => setError(null))
-      .catch(error => setError(error))
+  const setStates = async () => {
+    try {
+      const res = await fetchData()
+      setResponse(res)
+      setError(null)
+    } catch (error) {
+      setError(error)
+      setResponse(null)
+    }
   }
 
   const loading = !response && !error
