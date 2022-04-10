@@ -21,8 +21,9 @@ const SnsPosts = ({ userId }) => {
     },
     { encodeValuesOnly: true }
   )
-  const UrlForFetchingSNSPosts = `/api/sns-posts?${query}`
-  const { response } = useGetRequest(BACKEND_URL, UrlForFetchingSNSPosts)
+
+  const URL_FOR_FETCHING_SNS_POSTS = `/api/sns-posts?${query}`
+  const { response } = useGetRequest(BACKEND_URL, URL_FOR_FETCHING_SNS_POSTS)
 
   useEffect(() => {
     if (response !== null) {
@@ -33,11 +34,11 @@ const SnsPosts = ({ userId }) => {
   const sanitizedSnsPosts = snsPosts?.data?.map(post => {
     const postId = post.id
     const postImageArray = post.attributes.postImage.data
-    const purePostImages = postImageArray.map(postImage => postImage.attributes)
+    const postImages = postImageArray.map(postImage => postImage.attributes)
 
     return {
       postId,
-      postImage: purePostImages,
+      postImages,
     }
   })
 
@@ -48,7 +49,7 @@ const SnsPosts = ({ userId }) => {
   ) : (
     <SnsPostList sx={{ width: 650 }} cols={3}>
       {sanitizedSnsPosts?.map(post => {
-        const firstImage = post.postImage[0]
+        const firstImage = post.postImages[0]
         const firstImageUrl = BACKEND_URL + firstImage.url
         const firstImageAlt = firstImage.alternativeText
 
