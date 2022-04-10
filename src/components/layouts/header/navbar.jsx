@@ -20,7 +20,7 @@ const PageLink = styled.li`
   margin-right: 20px;
 `
 
-const AuthButton = ({ isLoggedIn, setIsLoggedIn }) => {
+const AuthButton = ({ isLoggedIn, onLogout }) => {
   const router = useRouter()
 
   const goToLoginPage = () => router.push(ROUTE_URL.LOGIN)
@@ -28,7 +28,7 @@ const AuthButton = ({ isLoggedIn, setIsLoggedIn }) => {
   const logout = () => {
     localStorage.removeItem('jwt')
     localStorage.removeItem('username')
-    setIsLoggedIn(false)
+    onLogout()
   }
 
   const text = isLoggedIn ? '로그아웃' : '로그인'
@@ -53,7 +53,7 @@ const PAGE_LINK_LIST = [
   { href: ROUTE_URL.MY_INFO, content: '내정보' },
 ]
 
-const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
+const Navbar = ({ isLoggedIn, onLogout }) => {
   return (
     <NavWrapper>
       <PageLinkList>
@@ -63,7 +63,7 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
           </PageLink>
         ))}
       </PageLinkList>
-      <AuthButton isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+      <AuthButton isLoggedIn={isLoggedIn} onLogout={onLogout} />
     </NavWrapper>
   )
 }

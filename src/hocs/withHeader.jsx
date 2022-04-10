@@ -11,9 +11,11 @@ const withHeader = Page => {
       setIsLoggedIn(loginState)
     }, [])
 
+    const handleLogout = () => setIsLoggedIn(false)
+
     return (
       <>
-        <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+        <Header isLoggedIn={isLoggedIn} onLogout={handleLogout} />
         <Page isLoggedIn={isLoggedIn} />
       </>
     )
