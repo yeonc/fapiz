@@ -42,23 +42,20 @@ const SnsPosts = ({ userId }) => {
     }
   })
 
-  const snsPostCount = sanitizedSnsPosts?.length
-
-  return snsPostCount === 0 ? (
+  return sanitizedSnsPosts?.length === 0 ? (
     <p>작성된 포스트가 없습니다.</p>
   ) : (
     <SnsPostList sx={{ width: 650 }} cols={3}>
       {sanitizedSnsPosts?.map(post => {
         const firstImage = post.postImages[0]
         const firstImageUrl = BACKEND_URL + firstImage.url
-        const firstImageAlt = firstImage.alternativeText
 
         return (
           <SnsPostItem key={firstImageUrl}>
             <img
               src={`${firstImageUrl}?w=164&h=164&fit=crop&auto=format`}
               srcSet={`${firstImageUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-              alt={firstImageAlt}
+              alt={firstImage.alternativeText}
               loading="lazy"
             />
           </SnsPostItem>

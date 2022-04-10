@@ -4,11 +4,11 @@ const FollowToggleButton = () => <Button>팔로잉</Button>
 
 const MessageButton = () => <Button>메시지</Button>
 
-const UserButtons = () => (
+const ButtonsForUserCommunication = () => (
   <>
     <FollowToggleButton />
     <MessageButton />
   </>
 )
 
-export default UserButtons
+export default ButtonsForUserCommunication

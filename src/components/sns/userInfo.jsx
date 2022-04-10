@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import UserProfile from 'components/sns/userProfile'
-import UserButtons from 'components/sns/userButtons'
+import ButtonsForUserCommunication from 'components/sns/buttonsForUserCommunication'
 import useGetRequest from 'hooks/useGetRequest'
 import { BACKEND_URL, IS_SERVER } from 'constants/constants'
 
@@ -27,7 +27,7 @@ const UserInfo = ({ user }) => {
   return (
     <header>
       <UserProfile user={user} />
-      {isMe || <UserButtons />}
+      {isMe || <ButtonsForUserCommunication />}
     </header>
   )
 }

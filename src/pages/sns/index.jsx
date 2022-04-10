@@ -5,7 +5,7 @@ import SnsPosts from 'components/sns/snsPosts'
 import useGetRequest from 'hooks/useGetRequest'
 import { BACKEND_URL, IS_SERVER } from 'constants/constants'
 
-const SnsPage = () => {
+const SnsPageForLoggedInUser = () => {
   const [user, setUser] = useState()
 
   const token = !IS_SERVER && localStorage.getItem('jwt')
@@ -29,4 +29,4 @@ const SnsPage = () => {
   )
 }
 
-export default withHeader(SnsPage)
+export default withHeader(SnsPageForLoggedInUser)
