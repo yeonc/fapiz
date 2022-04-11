@@ -1,25 +1,18 @@
-import { useState, useEffect } from 'react'
 import withHeader from 'hocs/withHeader'
 import UserInfo from 'components/sns/userInfo'
 import SnsPosts from 'components/sns/snsPosts'
-import useGetRequest from 'hooks/useGetRequest'
-import { BACKEND_URL, IS_SERVER } from 'constants/constants'
+import useFetchUser from 'hooks/useFetchUser'
 
 const SnsPageForLoggedInUser = () => {
-  const [user, setUser] = useState()
+  const { user, error, loading } = useFetchUser()
 
-  const token = !IS_SERVER && localStorage.getItem('jwt')
-  const { response } = useGetRequest(BACKEND_URL, '/api/users/me', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
+  if (loading) {
+    return <p>로딩중...</p>
+  }
 
-  useEffect(() => {
-    if (response !== null) {
-      setUser(response.data)
-    }
-  }, [response])
+  if (error) {
+    return <p>에러가 발생했습니다. 홈으로 돌아가세요</p>
+  }
 
   return (
     <>
