@@ -1,29 +1,10 @@
-import qs from 'qs'
 import SnsPostList from '@mui/material/ImageList'
 import SnsPostItem from '@mui/material/ImageListItem'
-import useGetRequest from 'hooks/useGetRequest'
+import useFetchSnsPosts from 'hooks/useFetchSnsPosts'
 import { BACKEND_URL } from 'constants/constants'
 
 const SnsPosts = ({ userId }) => {
-  const query = qs.stringify(
-    {
-      populate: '*',
-      filters: {
-        author: {
-          id: {
-            $eq: userId,
-          },
-        },
-      },
-    },
-    { encodeValuesOnly: true }
-  )
-
-  const URL_FOR_FETCHING_SNS_POSTS = `/api/sns-posts?${query}`
-  const { response, error, loading } = useGetRequest(
-    BACKEND_URL,
-    URL_FOR_FETCHING_SNS_POSTS
-  )
+  const { snsPosts, error, loading } = useFetchSnsPosts(userId)
 
   if (loading) {
     return <p>로딩중...</p>
@@ -32,8 +13,6 @@ const SnsPosts = ({ userId }) => {
   if (error) {
     return <p>에러가 발생했습니다. 홈으로 돌아가세요</p>
   }
-
-  const snsPosts = response.data
 
   const sanitizedSnsPosts = snsPosts.data.map(post => {
     const postId = post.id
