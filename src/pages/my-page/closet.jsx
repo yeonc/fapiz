@@ -1,5 +1,5 @@
 import React from 'react'
-import withHeader from 'components/layouts/Header'
+import withHeader from 'hocs/withHeader'
 
 const ClosetPage = () => <h1>closet page</h1>
 

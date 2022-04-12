@@ -1,6 +1,6 @@
 import React from 'react'
-import Typo from 'components/common/Typo'
-import withHeader from 'components/layouts/Header'
+import Typo from 'components/common/typo'
+import withHeader from 'hocs/withHeader'
 import ProTip from 'ProTip'
 import Copyright from 'Copyright'
 

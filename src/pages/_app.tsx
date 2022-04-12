@@ -1,9 +1,10 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
+import { AppProps } from 'next/app'
 import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
-import { CacheProvider } from '@emotion/react'
+import { CacheProvider, EmotionCache } from '@emotion/react'
 import globalResetStyles from 'styles/globalResetStyles'
 import theme from 'theme'
 import createEmotionCache from 'createEmotionCache'
@@ -11,7 +12,11 @@ import createEmotionCache from 'createEmotionCache'
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache()
 
-export default function MyApp(props) {
+interface MyAppProps extends AppProps {
+  emotionCache?: EmotionCache
+}
+
+export default function MyApp(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props
 
   return (

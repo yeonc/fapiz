@@ -1,5 +1,11 @@
 import * as React from 'react'
-import Document, { Html, Head, Main, NextScript } from 'next/document'
+import Document, {
+  Html,
+  Head,
+  Main,
+  NextScript,
+  DocumentContext,
+} from 'next/document'
 import createEmotionServer from '@emotion/server/create-instance'
 import theme from 'theme'
 import createEmotionCache from 'createEmotionCache'
@@ -17,7 +23,7 @@ export default class MyDocument extends Document {
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
           />
           {/* Inject MUI styles first to match with the prepend: true configuration. */}
-          {this.props.emotionStyleTags}
+          {(this.props as any).emotionStyleTags}
         </Head>
         <body>
           <Main />
@@ -30,7 +36,7 @@ export default class MyDocument extends Document {
 
 // `getInitialProps` belongs to `_document` (instead of `_app`),
 // it's compatible with static-site generation (SSG).
-MyDocument.getInitialProps = async ctx => {
+MyDocument.getInitialProps = async (ctx: DocumentContext) => {
   // Resolution order
   //
   // On the server:
@@ -62,7 +68,7 @@ MyDocument.getInitialProps = async ctx => {
 
   ctx.renderPage = () =>
     originalRenderPage({
-      enhanceApp: App =>
+      enhanceApp: (App: any) =>
         function EnhanceApp(props) {
           return <App emotionCache={cache} {...props} />
         },
