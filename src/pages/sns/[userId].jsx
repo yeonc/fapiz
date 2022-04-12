@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import withHeader from 'hocs/withHeader'
 import UserInfo from 'components/sns/userInfo'
@@ -7,17 +6,23 @@ import useGetRequest from 'hooks/useGetRequest'
 import { BACKEND_URL } from 'constants/constants'
 
 const SnsPageByUserId = () => {
-  const [user, setUser] = useState()
-
   const router = useRouter()
   const { userId } = router.query
-  const { response } = useGetRequest(BACKEND_URL, `/api/users/${userId}`)
 
-  useEffect(() => {
-    if (response !== null) {
-      setUser(response.data)
-    }
-  }, [response])
+  const { response, error, loading } = useGetRequest(
+    BACKEND_URL,
+    `/api/users/${userId}`
+  )
+
+  if (loading) {
+    return <p>로딩중...</p>
+  }
+
+  if (error) {
+    return <p>에러가 발생했습니다. 홈으로 돌아가세요</p>
+  }
+
+  const user = response?.data
 
   return (
     <>
