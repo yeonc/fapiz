@@ -1,5 +1,4 @@
 import useGetRequest from 'hooks/useGetRequest'
-import { BACKEND_URL } from 'constants/constants'
 import createUrlQuery from 'utils/createUrlQuery'
 
 const useFetchSnsPosts = userId => {
@@ -8,11 +7,9 @@ const useFetchSnsPosts = userId => {
     'filters[author][id][$eq]': userId,
   })
 
-  const URL_FOR_FETCHING_SNS_POSTS = `/api/sns-posts?${query}`
-  const { response, error, loading } = useGetRequest(
-    BACKEND_URL,
-    URL_FOR_FETCHING_SNS_POSTS
-  )
+  const { response, error, loading } = useGetRequest({
+    url: `/api/sns-posts?${query}`,
+  })
 
   const snsPosts = response?.data
 

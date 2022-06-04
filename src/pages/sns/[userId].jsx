@@ -3,16 +3,14 @@ import withHeader from 'hocs/withHeader'
 import UserInfo from 'components/sns/userInfo'
 import SnsPosts from 'components/sns/snsPosts'
 import useGetRequest from 'hooks/useGetRequest'
-import { BACKEND_URL } from 'constants/constants'
 
 const SnsPageByUserId = () => {
   const router = useRouter()
   const { userId } = router.query
 
-  const { response, error, loading } = useGetRequest(
-    BACKEND_URL,
-    `/api/users/${userId}`
-  )
+  const { response, error, loading } = useGetRequest({
+    url: `/api/users/${userId}`,
+  })
 
   if (loading) {
     return <p>로딩중...</p>

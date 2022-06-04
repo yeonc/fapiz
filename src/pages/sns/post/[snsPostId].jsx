@@ -1,15 +1,13 @@
 import { useRouter } from 'next/router'
 import withHeader from 'hocs/withHeader'
 import useGetRequest from 'hooks/useGetRequest'
-import { BACKEND_URL } from 'constants/constants'
 
 const SnsPostPage = () => {
   const router = useRouter()
   const { snsPostId } = router.query
-  const { response, error, loading } = useGetRequest(
-    BACKEND_URL,
-    `/api/sns-posts/${snsPostId}`
-  )
+  const { response, error, loading } = useGetRequest({
+    url: `/api/sns-posts/${snsPostId}`,
+  })
 
   if (loading) {
     return <p>로딩중...</p>

@@ -1,13 +1,18 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import { BACKEND_URL } from 'constants/constants'
 
-const useGetRequest = (baseURL, url, config) => {
+const useGetRequest = ({ baseURL = BACKEND_URL, url, config, skip }) => {
   const [response, setResponse] = useState(null)
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    setStates()
-  }, [url])
+    if (skip) {
+      return
+    }
+
+    fetchData().then(handleSuccess).catch(handleFailure)
+  }, [url, skip])
 
   const fetchData = async () => {
     const axiosConfig = {
@@ -19,15 +24,14 @@ const useGetRequest = (baseURL, url, config) => {
     return data
   }
 
-  const setStates = async () => {
-    try {
-      const res = await fetchData()
-      setResponse(res)
-      setError(null)
-    } catch (error) {
-      setError(error)
-      setResponse(null)
-    }
+  const handleSuccess = res => {
+    setResponse(res)
+    setError(null)
+  }
+
+  const handleFailure = error => {
+    setError(error)
+    setResponse(null)
   }
 
   const loading = !response && !error

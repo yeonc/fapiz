@@ -1,18 +1,18 @@
 import useGetRequest from 'hooks/useGetRequest'
-import { BACKEND_URL, IS_SERVER } from 'constants/constants'
+import { IS_SERVER } from 'constants/constants'
 
 const useFetchUser = () => {
   const token = !IS_SERVER && localStorage.getItem('jwt')
 
-  const { response, error, loading } = useGetRequest(
-    BACKEND_URL,
-    '/api/users/me',
-    {
+  const { response, error, loading } = useGetRequest({
+    url: '/api/users/me',
+    config: {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }
-  )
+    },
+    skip: !token,
+  })
 
   const user = response?.data
 
