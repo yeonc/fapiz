@@ -45,15 +45,15 @@ const UserProfileText = ({ username, weight, height, follower, following }) => (
 const UserProfile = ({ user }) => (
   <UserProfileWrapper>
     <UserAvatar
-      profileImageUrl={user?.profileImage?.url}
-      username={user?.username}
+      profileImageUrl={user.profileImage.url}
+      username={user.username}
     />
     <UserProfileText
-      username={user?.username}
-      weight={user?.weight}
-      height={user?.height}
-      follower={user?.follower}
-      following={user?.following}
+      username={user.username}
+      weight={user.weight}
+      height={user.height}
+      follower={user.follower}
+      following={user.following}
     />
   </UserProfileWrapper>
 )

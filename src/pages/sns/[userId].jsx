@@ -27,7 +27,7 @@ const SnsPageByUserId = () => {
   return (
     <>
       <UserInfo user={user} />
-      <SnsPosts userId={user?.id} />
+      <SnsPosts userId={user.id} />
     </>
   )
 }

@@ -4,7 +4,7 @@ import useFetchUser from 'hooks/useFetchUser'
 
 const UserInfo = ({ user }) => {
   const { user: loggedInUser, error, loading } = useFetchUser()
-  const isMe = user?.id === loggedInUser?.id
+  const isMe = user.id === loggedInUser?.id
 
   if (loading) {
     return <p>로딩중...</p>
