@@ -2,12 +2,18 @@ import Button from '@mui/material/Button'
 
 const FollowToggleButton = () => <Button>팔로잉</Button>
 
-const MessageButton = () => <Button>메시지</Button>
+const MessageButton = ({ user }) => {
+  const goToChatRoom = () => {
+    window.location.href = `/chat-room/${user.id}`
+  }
 
-const ButtonsForUserCommunication = () => (
+  return <Button onClick={goToChatRoom}>메시지</Button>
+}
+
+const ButtonsForUserCommunication = ({ user }) => (
   <>
     <FollowToggleButton />
-    <MessageButton />
+    <MessageButton user={user} />
   </>
 )
 

@@ -17,7 +17,7 @@ const UserInfo = ({ user }) => {
   return (
     <header>
       <UserProfile user={user} />
-      {!isMe && <ButtonsForUserCommunication />}
+      {!isMe && <ButtonsForUserCommunication user={user} />}
     </header>
   )
 }
