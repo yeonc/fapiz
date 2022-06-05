@@ -2,6 +2,11 @@ import SnsPostList from '@mui/material/ImageList'
 import SnsPostItem from '@mui/material/ImageListItem'
 import useFetchSnsPosts from 'hooks/useFetchSnsPosts'
 import { BACKEND_URL } from 'constants/constants'
+import { css } from '@emotion/react'
+
+export const cursorPointer = css`
+  cursor: pointer;
+`
 
 const SnsPosts = ({ userId }) => {
   const { snsPosts, error, loading } = useFetchSnsPosts(userId)
@@ -32,9 +37,16 @@ const SnsPosts = ({ userId }) => {
       {sanitizedSnsPosts.map(post => {
         const firstImage = post.postImages[0]
         const firstImageUrl = BACKEND_URL + firstImage.url
+        const goToSnsPost = () => {
+          window.location.href = `/sns/post/${post.postId}`
+        }
 
         return (
-          <SnsPostItem key={firstImageUrl}>
+          <SnsPostItem
+            key={firstImageUrl}
+            onClick={goToSnsPost}
+            css={cursorPointer}
+          >
             <img
               src={`${firstImageUrl}?w=164&h=164&fit=crop&auto=format`}
               srcSet={`${firstImageUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
