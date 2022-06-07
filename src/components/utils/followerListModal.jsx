@@ -1,6 +1,12 @@
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Modal from '@mui/material/Modal'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemAvatar from '@mui/material/ListItemAvatar'
+import ListItemText from '@mui/material/ListItemText'
+import Avatar from '@mui/material/Avatar'
+import Button from '@mui/material/Button'
 
 const modalBoxStyle = {
   position: 'absolute',
@@ -14,7 +20,29 @@ const modalBoxStyle = {
   p: 4,
 }
 
-const FollowerListModal = ({ onClose, open }) => {
+const FollowerList = ({ follower }) =>
+  follower.length === 0 ? (
+    <p>팔로워가 존재하지 않습니다.</p>
+  ) : (
+    <List>
+      {follower.map(person => (
+        <ListItem
+          key={person.id}
+          secondaryAction={<Button variant="outlined">button</Button>}
+        >
+          <ListItemAvatar>
+            <Avatar alt={person.username} src="" />
+          </ListItemAvatar>
+          <ListItemText
+            primary={person.username}
+            secondary={`${person.height}cm ${person.weight}kg`}
+          />
+        </ListItem>
+      ))}
+    </List>
+  )
+
+const FollowerListModal = ({ onClose, open, follower }) => {
   return (
     <Modal
       open={open}
@@ -26,9 +54,7 @@ const FollowerListModal = ({ onClose, open }) => {
         <Typography id="modal-modal-title" variant="h6" component="h2">
           Follower
         </Typography>
-        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-          Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-        </Typography>
+        <FollowerList follower={follower} />
       </Box>
     </Modal>
   )
