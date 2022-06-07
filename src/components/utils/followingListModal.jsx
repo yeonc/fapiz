@@ -7,6 +7,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar'
 import ListItemText from '@mui/material/ListItemText'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
+import Link from '@mui/material/Link'
 
 const modalBoxStyle = {
   position: 'absolute',
@@ -31,12 +32,18 @@ const FollowingList = ({ following }) =>
           secondaryAction={<Button variant="outlined">button</Button>}
         >
           <ListItemAvatar>
-            <Avatar alt={person.username} src="" />
+            <Avatar
+              alt={person.username}
+              src=""
+              component="a"
+              href={`/sns/${person.id}`}
+            />
           </ListItemAvatar>
-          <ListItemText
-            primary={person.username}
-            secondary={`${person.height}cm ${person.weight}kg`}
-          />
+          <ListItemText secondary={`${person.height}cm ${person.weight}kg`}>
+            <Link href={`/sns/${person.id}`} underline="hover">
+              {person.username}
+            </Link>
+          </ListItemText>
         </ListItem>
       ))}
     </List>

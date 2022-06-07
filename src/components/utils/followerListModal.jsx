@@ -7,6 +7,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar'
 import ListItemText from '@mui/material/ListItemText'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
+import Link from '@mui/material/Link'
 
 const modalBoxStyle = {
   position: 'absolute',
@@ -20,8 +21,10 @@ const modalBoxStyle = {
   p: 4,
 }
 
-const FollowerList = ({ follower }) =>
-  follower.length === 0 ? (
+const FollowerList = ({ follower }) => {
+  console.log(follower)
+
+  return follower.length === 0 ? (
     <p>팔로워가 존재하지 않습니다.</p>
   ) : (
     <List>
@@ -31,16 +34,23 @@ const FollowerList = ({ follower }) =>
           secondaryAction={<Button variant="outlined">button</Button>}
         >
           <ListItemAvatar>
-            <Avatar alt={person.username} src="" />
+            <Avatar
+              alt={person.username}
+              src=""
+              component="a"
+              href={`/sns/${person.id}`}
+            />
           </ListItemAvatar>
-          <ListItemText
-            primary={person.username}
-            secondary={`${person.height}cm ${person.weight}kg`}
-          />
+          <ListItemText secondary={`${person.height}cm ${person.weight}kg`}>
+            <Link href={`/sns/${person.id}`} underline="hover">
+              {person.username}
+            </Link>
+          </ListItemText>
         </ListItem>
       ))}
     </List>
   )
+}
 
 const FollowerListModal = ({ onClose, open, follower }) => {
   return (
