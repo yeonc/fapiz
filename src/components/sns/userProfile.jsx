@@ -20,7 +20,14 @@ const UserAvatar = ({ profileImageUrl, username }) => (
   />
 )
 
-const UserProfileText = ({ username, weight, height, follower, following }) => {
+const UserProfileText = ({
+  username,
+  weight,
+  height,
+  follower,
+  followerCount,
+  following,
+}) => {
   const [followingModalOpen, setFollowingModalOpen] = useState(false)
   const [followerModalOpen, setFollowerModalOpen] = useState(false)
   const handleFollowingModalOpen = () => setFollowingModalOpen(true)
@@ -46,7 +53,7 @@ const UserProfileText = ({ username, weight, height, follower, following }) => {
           <dt css={mgRight(4)}>팔로워</dt>
           <dd>
             <Button variant="text" onClick={handleFollowerModalOpen}>
-              {follower?.length}
+              {followerCount}
             </Button>
             <FollowerListModal
               onClose={handleFollowerModalClose}
@@ -73,24 +80,21 @@ const UserProfileText = ({ username, weight, height, follower, following }) => {
   )
 }
 
-const UserProfile = ({ user }) => {
-  console.log(user)
-
-  return (
-    <UserProfileWrapper>
-      <UserAvatar
-        profileImageUrl={user.profileImage.url}
-        username={user.username}
-      />
-      <UserProfileText
-        username={user.username}
-        weight={user.weight}
-        height={user.height}
-        follower={user.follower}
-        following={user.following}
-      />
-    </UserProfileWrapper>
-  )
-}
+const UserProfile = ({ user, followerCount }) => (
+  <UserProfileWrapper>
+    <UserAvatar
+      profileImageUrl={user.profileImage.url}
+      username={user.username}
+    />
+    <UserProfileText
+      username={user.username}
+      weight={user.weight}
+      height={user.height}
+      follower={user.follower}
+      followerCount={followerCount}
+      following={user.following}
+    />
+  </UserProfileWrapper>
+)
 
 export default UserProfile

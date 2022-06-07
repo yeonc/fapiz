@@ -21,10 +21,8 @@ const modalBoxStyle = {
   p: 4,
 }
 
-const FollowerList = ({ follower }) => {
-  console.log(follower)
-
-  return follower.length === 0 ? (
+const FollowerList = ({ follower }) =>
+  follower.length === 0 ? (
     <p>팔로워가 존재하지 않습니다.</p>
   ) : (
     <List>
@@ -50,7 +48,6 @@ const FollowerList = ({ follower }) => {
       ))}
     </List>
   )
-}
 
 const FollowerListModal = ({ onClose, open, follower }) => {
   return (
