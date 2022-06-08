@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import SnsPostList from '@mui/material/ImageList'
 import SnsPostItem from '@mui/material/ImageListItem'
 import useFetchSnsPosts from 'hooks/useFetchSnsPosts'
@@ -9,6 +10,7 @@ export const cursorPointer = css`
 `
 
 const SnsPosts = ({ userId }) => {
+  const router = useRouter()
   const { snsPosts, error, loading } = useFetchSnsPosts(userId)
 
   if (loading) {
@@ -38,7 +40,7 @@ const SnsPosts = ({ userId }) => {
         const firstImage = post.postImages[0]
         const firstImageUrl = BACKEND_URL + firstImage.url
         const goToSnsPost = () => {
-          window.location.href = `/sns/post/${post.postId}`
+          router.push(`/sns/post/${post.postId}`)
         }
 
         return (
