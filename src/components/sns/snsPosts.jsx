@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router'
 import SnsPostList from '@mui/material/ImageList'
 import SnsPostItem from '@mui/material/ImageListItem'
-import useFetchSnsPosts from 'hooks/useFetchSnsPosts'
-import { BACKEND_URL } from 'constants/constants'
 import { css } from '@emotion/react'
+import useSnsPosts from 'hooks/useSnsPosts'
+import { BACKEND_URL } from 'constants/constants'
 
 export const cursorPointer = css`
   cursor: pointer;
@@ -11,13 +11,13 @@ export const cursorPointer = css`
 
 const SnsPosts = ({ userId }) => {
   const router = useRouter()
-  const { snsPosts, error, loading } = useFetchSnsPosts(userId)
+  const { snsPosts, isError, isLoading } = useSnsPosts(userId)
 
-  if (loading) {
+  if (isLoading) {
     return <p>로딩중...</p>
   }
 
-  if (error) {
+  if (isError) {
     return <p>에러가 발생했습니다. 홈으로 돌아가세요</p>
   }
 

@@ -44,9 +44,9 @@ const AuthButton = ({ isLoggedIn }) => {
 const searchIcon = <SearchIcon />
 const chatIcon = <ChatIcon />
 
-const Navbar = ({ isLoggedIn, userId }) => {
+const Navbar = ({ isLoggedIn, myId }) => {
   const PAGE_LINK_LIST = [
-    { href: ROUTE_URL.SNS + '/' + userId, content: 'SNS' },
+    { href: ROUTE_URL.SNS + '/' + myId, content: 'SNS' },
     { href: ROUTE_URL.COMMUNITY, content: '커뮤니티' },
     { href: ROUTE_URL.CLOSET, content: '마이페이지' },
     { href: ROUTE_URL.SEARCH, content: searchIcon },

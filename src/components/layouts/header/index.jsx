@@ -8,11 +8,11 @@ const StyledHeaderWrapper = styled.header`
   font-size: 20px;
 `
 
-const Header = ({ isLoggedIn, userId }) => {
+const Header = ({ isLoggedIn, myId }) => {
   return (
     <StyledHeaderWrapper>
       <HeaderLogo />
-      <Navbar isLoggedIn={isLoggedIn} userId={userId} />
+      <Navbar isLoggedIn={isLoggedIn} myId={myId} />
     </StyledHeaderWrapper>
   )
 }

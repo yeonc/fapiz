@@ -1,18 +1,22 @@
 import Header from 'components/layouts/header'
-import useFetchUser from 'hooks/useFetchUser'
+import useMe from 'hooks/useMe'
 
 const withHeader = Page => {
   return () => {
-    const { user, error } = useFetchUser()
+    const { me, isError } = useMe()
 
-    if (error) {
+    // if (loading) {
+    //   return <p>로딩중...</p>
+    // }
+
+    if (isError) {
       return <p>에러가 발생했습니다. 홈으로 돌아가세요</p>
     }
 
     return (
       <>
-        <Header isLoggedIn={!!user} userId={user?.id} />
-        <Page isLoggedIn={!!user} />
+        <Header isLoggedIn={!!me} myId={me?.id} />
+        <Page isLoggedIn={!!me} me={me} />
       </>
     )
   }
