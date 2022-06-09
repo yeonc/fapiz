@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useRouter } from 'next/router'
 import styled from '@emotion/styled'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
@@ -7,6 +8,7 @@ import FollowingListModal from 'components/sns/followingListModal'
 import visuallyHidden from 'styles/visuallyHidden'
 import { horizontal, mgRight } from 'styles/layout'
 import { BACKEND_URL } from 'constants/constants'
+import useUser from 'hooks/useUser'
 
 const UserProfileWrapper = styled.div`
   display: flex;
@@ -20,14 +22,7 @@ const UserAvatar = ({ profileImageUrl, username }) => (
   />
 )
 
-const UserProfileText = ({
-  username,
-  weight,
-  height,
-  follower,
-  followerCount,
-  following,
-}) => {
+const UserProfileText = ({ username, weight, height, follower, following }) => {
   const [followingModalOpen, setFollowingModalOpen] = useState(false)
   const [followerModalOpen, setFollowerModalOpen] = useState(false)
   const handleFollowingModalOpen = () => setFollowingModalOpen(true)
@@ -53,7 +48,7 @@ const UserProfileText = ({
           <dt css={mgRight(4)}>팔로워</dt>
           <dd>
             <Button variant="text" onClick={handleFollowerModalOpen}>
-              {followerCount}
+              {follower.length}
             </Button>
             <FollowerListModal
               onClose={handleFollowerModalClose}
@@ -80,21 +75,35 @@ const UserProfileText = ({
   )
 }
 
-const UserProfile = ({ user, followerCount }) => (
-  <UserProfileWrapper>
-    <UserAvatar
-      profileImageUrl={user.profileImage.url}
-      username={user.username}
-    />
-    <UserProfileText
-      username={user.username}
-      weight={user.weight}
-      height={user.height}
-      follower={user.follower}
-      followerCount={followerCount}
-      following={user.following}
-    />
-  </UserProfileWrapper>
-)
+const UserProfile = () => {
+  const router = useRouter()
+  const { userId } = router.query
+
+  const { user, isLoading, isError } = useUser(userId)
+
+  if (isLoading) {
+    return <p>로딩중...</p>
+  }
+
+  if (isError) {
+    return <p>에러가 발생했습니다. 홈으로 돌아가세요</p>
+  }
+
+  return (
+    <UserProfileWrapper>
+      <UserAvatar
+        profileImageUrl={user.profileImage.url}
+        username={user.username}
+      />
+      <UserProfileText
+        username={user.username}
+        weight={user.weight}
+        height={user.height}
+        follower={user.follower}
+        following={user.following}
+      />
+    </UserProfileWrapper>
+  )
+}
 
 export default UserProfile

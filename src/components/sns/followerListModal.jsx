@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Modal from '@mui/material/Modal'
@@ -8,6 +9,7 @@ import ListItemText from '@mui/material/ListItemText'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import Link from '@mui/material/Link'
+import useUser from 'hooks/useUser'
 
 const modalBoxStyle = {
   position: 'absolute',
@@ -21,8 +23,23 @@ const modalBoxStyle = {
   p: 4,
 }
 
-const FollowerList = ({ follower }) =>
-  follower.length === 0 ? (
+const FollowerList = () => {
+  const router = useRouter()
+  const { userId } = router.query
+
+  const { user, isLoading, isError } = useUser(userId)
+
+  const follower = user.follower
+
+  if (isLoading) {
+    return <p>로딩중...</p>
+  }
+
+  if (isError) {
+    return <p>에러가 발생했습니다. 홈으로 돌아가세요</p>
+  }
+
+  return follower.length === 0 ? (
     <p>팔로워가 존재하지 않습니다.</p>
   ) : (
     <List>
@@ -48,6 +65,7 @@ const FollowerList = ({ follower }) =>
       ))}
     </List>
   )
+}
 
 const FollowerListModal = ({ onClose, open, follower }) => {
   return (
