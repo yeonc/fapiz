@@ -4,7 +4,7 @@ import UserInfo from 'components/sns/userInfo'
 import SnsPosts from 'components/sns/snsPosts'
 import useGetRequest from 'hooks/useGetRequest'
 
-const SnsPageByUserId = () => {
+const SnsPage = () => {
   const router = useRouter()
   const { userId } = router.query
 
@@ -30,4 +30,4 @@ const SnsPageByUserId = () => {
   )
 }
 
-export default withHeader(SnsPageByUserId)
+export default withHeader(SnsPage)
