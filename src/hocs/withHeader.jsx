@@ -1,22 +1,18 @@
-import { useEffect, useState } from 'react'
 import Header from 'components/layouts/header'
+import useFetchUser from 'hooks/useFetchUser'
 
 const withHeader = Page => {
   return () => {
-    // 임시 코드 (상태 관리 라이브러리 도입 후 지울 것)
-    const [isLoggedIn, setIsLoggedIn] = useState()
+    const { user, error } = useFetchUser()
 
-    useEffect(() => {
-      const loginState = !!localStorage.getItem('jwt')
-      setIsLoggedIn(loginState)
-    }, [])
-
-    const handleLogout = () => setIsLoggedIn(false)
+    if (error) {
+      return <p>에러가 발생했습니다. 홈으로 돌아가세요</p>
+    }
 
     return (
       <>
-        <Header isLoggedIn={isLoggedIn} onLogout={handleLogout} />
-        <Page isLoggedIn={isLoggedIn} />
+        <Header isLoggedIn={!!user} userId={user?.id} />
+        <Page isLoggedIn={!!user} />
       </>
     )
   }

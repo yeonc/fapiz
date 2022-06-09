@@ -20,7 +20,7 @@ const PageLink = styled.li`
   margin-right: 20px;
 `
 
-const AuthButton = ({ isLoggedIn, onLogout }) => {
+const AuthButton = ({ isLoggedIn }) => {
   const router = useRouter()
 
   const goToLoginPage = () => router.push(ROUTE_URL.LOGIN)
@@ -28,7 +28,7 @@ const AuthButton = ({ isLoggedIn, onLogout }) => {
   const logout = () => {
     localStorage.removeItem('jwt')
     localStorage.removeItem('username')
-    onLogout()
+    router.push(ROUTE_URL.HOME)
   }
 
   const text = isLoggedIn ? '로그아웃' : '로그인'
@@ -44,16 +44,16 @@ const AuthButton = ({ isLoggedIn, onLogout }) => {
 const searchIcon = <SearchIcon />
 const chatIcon = <ChatIcon />
 
-const PAGE_LINK_LIST = [
-  { href: ROUTE_URL.SNS, content: 'SNS' },
-  { href: ROUTE_URL.COMMUNITY, content: '커뮤니티' },
-  { href: ROUTE_URL.CLOSET, content: '마이페이지' },
-  { href: ROUTE_URL.SEARCH, content: searchIcon },
-  { href: ROUTE_URL.CHAT_LIST, content: chatIcon },
-  { href: ROUTE_URL.MY_INFO, content: '내정보' },
-]
+const Navbar = ({ isLoggedIn, userId }) => {
+  const PAGE_LINK_LIST = [
+    { href: ROUTE_URL.SNS + '/' + userId, content: 'SNS' },
+    { href: ROUTE_URL.COMMUNITY, content: '커뮤니티' },
+    { href: ROUTE_URL.CLOSET, content: '마이페이지' },
+    { href: ROUTE_URL.SEARCH, content: searchIcon },
+    { href: ROUTE_URL.CHAT_LIST, content: chatIcon },
+    { href: ROUTE_URL.MY_INFO, content: '내정보' },
+  ]
 
-const Navbar = ({ isLoggedIn, onLogout }) => {
   return (
     <NavWrapper>
       <PageLinkList>
@@ -63,7 +63,7 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
           </PageLink>
         ))}
       </PageLinkList>
-      <AuthButton isLoggedIn={isLoggedIn} onLogout={onLogout} />
+      <AuthButton isLoggedIn={isLoggedIn} />
     </NavWrapper>
   )
 }
