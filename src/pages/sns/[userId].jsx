@@ -20,7 +20,7 @@ const SnsPage = ({ me }) => {
 
   return (
     <>
-      <UserInfo user={user} me={me} />
+      <UserInfo me={me} />
       <SnsPosts userId={user.id} />
     </>
   )
