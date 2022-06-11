@@ -75,20 +75,7 @@ const UserProfileText = ({ username, weight, height, follower, following }) => {
   )
 }
 
-const UserProfile = () => {
-  const router = useRouter()
-  const { userId } = router.query
-
-  const { user, isLoading, isError } = useUser(userId)
-
-  if (isLoading) {
-    return <p>로딩중...</p>
-  }
-
-  if (isError) {
-    return <p>에러가 발생했습니다. 홈으로 돌아가세요</p>
-  }
-
+const UserProfile = ({ user }) => {
   return (
     <UserProfileWrapper>
       <UserAvatar

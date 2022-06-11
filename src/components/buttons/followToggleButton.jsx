@@ -5,13 +5,15 @@ import Button from '@mui/material/Button'
 import follow from 'services/users/follow'
 import unfollow from 'services/users/unfollow'
 import useUser from 'hooks/useUser'
+import useMe from 'hooks/useMe'
 
-const FollowToggleButton = ({ me }) => {
+const FollowToggleButton = () => {
   const { mutate } = useSWRConfig()
 
   const router = useRouter()
   const { userId } = router.query
 
+  const { me } = useMe()
   const { user, isLoading, isError } = useUser(userId)
 
   if (isLoading) {
@@ -43,7 +45,7 @@ const FollowToggleButton = ({ me }) => {
     }
   }
 
-  const isFollowing = user.follower.some(person => person.id === me.id)
+  const isFollowing = user.follower.some(person => person.id === me?.id)
 
   const buttonText = isFollowing ? '팔로우 취소하기' : '팔로우하기'
   const handleFollow = isFollowing ? unfollowUser : followUser

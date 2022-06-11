@@ -4,7 +4,7 @@ import UserInfo from 'components/sns/userInfo'
 import SnsPosts from 'components/sns/snsPosts'
 import useUser from 'hooks/useUser'
 
-const SnsPage = ({ me }) => {
+const SnsPage = () => {
   const router = useRouter()
   const { userId } = router.query
 
@@ -20,7 +20,7 @@ const SnsPage = ({ me }) => {
 
   return (
     <>
-      <UserInfo me={me} />
+      <UserInfo user={user} />
       <SnsPosts userId={user.id} />
     </>
   )

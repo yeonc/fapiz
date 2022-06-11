@@ -1,11 +1,11 @@
 import FollowToggleButton from 'components/buttons/followToggleButton'
 import MessageButton from 'components/buttons/messageButton'
 
-const ButtonsForUserCommunication = ({ me }) => {
+const ButtonsForUserCommunication = ({ user }) => {
   return (
     <>
-      <FollowToggleButton me={me} />
-      <MessageButton />
+      <FollowToggleButton />
+      <MessageButton userId={user.id} />
     </>
   )
 }

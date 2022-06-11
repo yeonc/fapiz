@@ -5,6 +5,7 @@ import ChatIcon from '@mui/icons-material/ChatBubbleOutline'
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import ROUTE_URL from 'constants/routeUrl'
+import useMe from 'hooks/useMe'
 
 const NavWrapper = styled.nav`
   display: flex;
@@ -20,8 +21,10 @@ const PageLink = styled.li`
   margin-right: 20px;
 `
 
-const AuthButton = ({ isLoggedIn }) => {
+const AuthButton = () => {
   const router = useRouter()
+
+  const { me } = useMe()
 
   const goToLoginPage = () => router.push(ROUTE_URL.LOGIN)
 
@@ -30,8 +33,8 @@ const AuthButton = ({ isLoggedIn }) => {
     localStorage.removeItem('username')
   }
 
-  const text = isLoggedIn ? '로그아웃' : '로그인'
-  const handleClick = isLoggedIn
+  const text = me ? '로그아웃' : '로그인'
+  const handleClick = me
     ? () => {
         logout()
         router.push(ROUTE_URL.HOME)
@@ -48,9 +51,14 @@ const AuthButton = ({ isLoggedIn }) => {
 const searchIcon = <SearchIcon />
 const chatIcon = <ChatIcon />
 
-const Navbar = ({ isLoggedIn, myId }) => {
+const Navbar = () => {
+  const { me } = useMe()
+
   const PAGE_LINK_LIST = [
-    { href: ROUTE_URL.SNS + '/' + myId, content: 'SNS' },
+    {
+      href: me ? `${ROUTE_URL.SNS}/${me.id}` : ROUTE_URL.LOGIN,
+      content: 'SNS',
+    },
     { href: ROUTE_URL.COMMUNITY, content: '커뮤니티' },
     { href: ROUTE_URL.CLOSET, content: '마이페이지' },
     { href: ROUTE_URL.SEARCH, content: searchIcon },
@@ -67,7 +75,7 @@ const Navbar = ({ isLoggedIn, myId }) => {
           </PageLink>
         ))}
       </PageLinkList>
-      <AuthButton isLoggedIn={isLoggedIn} />
+      <AuthButton />
     </NavWrapper>
   )
 }

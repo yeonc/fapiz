@@ -1,13 +1,9 @@
-import { useRouter } from 'next/router'
 import UserProfile from 'components/sns/userProfile'
 import ButtonsForUserCommunication from 'components/sns/buttonsForUserCommunication'
-import useUser from 'hooks/useUser'
+import useMe from 'hooks/useMe'
 
-const UserInfo = ({ me }) => {
-  const router = useRouter()
-  const { userId } = router.query
-
-  const { user, isLoading, isError } = useUser(userId)
+const UserInfo = ({ user }) => {
+  const { me, isLoading, isError } = useMe()
 
   if (isLoading) {
     return <p>로딩중...</p>
@@ -21,8 +17,8 @@ const UserInfo = ({ me }) => {
 
   return (
     <header>
-      <UserProfile />
-      {!isMe && <ButtonsForUserCommunication me={me} />}
+      <UserProfile user={user} />
+      {!isMe && <ButtonsForUserCommunication user={user} />}
     </header>
   )
 }
