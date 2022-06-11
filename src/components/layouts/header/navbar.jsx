@@ -28,11 +28,15 @@ const AuthButton = ({ isLoggedIn }) => {
   const logout = () => {
     localStorage.removeItem('jwt')
     localStorage.removeItem('username')
-    router.push(ROUTE_URL.HOME)
   }
 
   const text = isLoggedIn ? '로그아웃' : '로그인'
-  const handleClick = isLoggedIn ? logout : goToLoginPage
+  const handleClick = isLoggedIn
+    ? () => {
+        logout()
+        router.push(ROUTE_URL.HOME)
+      }
+    : goToLoginPage
 
   return (
     <Button variant="contained" size="medium" onClick={handleClick}>
