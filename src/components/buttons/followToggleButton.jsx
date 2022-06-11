@@ -14,13 +14,13 @@ const FollowToggleButton = () => {
   const { userId } = router.query
 
   const { me } = useMe()
-  const { user, isLoading, isError } = useUser(userId)
+  const { user, isLoading, error } = useUser(userId)
 
   if (isLoading) {
     return <p>로딩중...</p>
   }
 
-  if (isError) {
+  if (error) {
     return <p>에러가 발생했습니다. 홈으로 돌아가세요</p>
   }
 

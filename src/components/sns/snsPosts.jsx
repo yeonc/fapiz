@@ -11,13 +11,13 @@ export const cursorPointer = css`
 
 const SnsPosts = ({ userId }) => {
   const router = useRouter()
-  const { snsPosts, isError, isLoading } = useSnsPosts(userId)
+  const { snsPosts, error, isLoading } = useSnsPosts(userId)
 
   if (isLoading) {
     return <p>로딩중...</p>
   }
 
-  if (isError) {
+  if (error) {
     return <p>에러가 발생했습니다. 홈으로 돌아가세요</p>
   }
 

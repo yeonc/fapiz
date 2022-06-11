@@ -17,7 +17,7 @@ const useUser = id => {
   return {
     user: data,
     isLoading: !data && !error,
-    isError: error,
+    error,
   }
 }
 

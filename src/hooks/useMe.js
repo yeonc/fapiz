@@ -34,7 +34,7 @@ const useMe = () => {
   return {
     me: data,
     isLoading: !data && !error,
-    isError: error,
+    error,
   }
 }
 

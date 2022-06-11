@@ -27,7 +27,7 @@ const FollowerList = () => {
   const router = useRouter()
   const { userId } = router.query
 
-  const { user, isLoading, isError } = useUser(userId)
+  const { user, isLoading, error } = useUser(userId)
 
   const follower = user.follower
 
@@ -35,7 +35,7 @@ const FollowerList = () => {
     return <p>로딩중...</p>
   }
 
-  if (isError) {
+  if (error) {
     return <p>에러가 발생했습니다. 홈으로 돌아가세요</p>
   }
 

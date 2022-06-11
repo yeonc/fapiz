@@ -3,13 +3,13 @@ import ButtonsForUserCommunication from 'components/sns/buttonsForUserCommunicat
 import useMe from 'hooks/useMe'
 
 const UserInfo = ({ user }) => {
-  const { me, isLoading, isError } = useMe()
+  const { me, isLoading, error } = useMe()
 
   if (isLoading) {
     return <p>로딩중...</p>
   }
 
-  if (isError) {
+  if (error) {
     return <p>에러가 발생했습니다. 홈으로 돌아가세요</p>
   }
 

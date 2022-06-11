@@ -28,7 +28,7 @@ const useSnsPosts = userId => {
   return {
     snsPosts: data,
     isLoading: !data && !error,
-    isError: error,
+    error,
   }
 }
 

@@ -8,13 +8,13 @@ const SnsPage = () => {
   const router = useRouter()
   const { userId } = router.query
 
-  const { user, isError, isLoading } = useUser(userId)
+  const { user, error, isLoading } = useUser(userId)
 
   if (isLoading) {
     return <p>로딩중...</p>
   }
 
-  if (isError) {
+  if (error) {
     return <p>에러가 발생했습니다. 홈으로 돌아가세요</p>
   }
 
