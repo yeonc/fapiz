@@ -1,16 +1,22 @@
-import { useState } from 'react'
 import Button from '@mui/material/Button'
-import FollowerListModal from 'components/sns/followerListModal'
-import FollowingListModal from 'components/sns/followingListModal'
 import { horizontal, mgRight } from 'styles/layout'
+import useModalState from 'hooks/useModalState'
+import FollowingListModal from 'components/modals/modal'
+import FollowerListModal from 'components/modals/modal'
+import UserList from './userList'
 
 const FollowerFollowing = ({ followers, followings }) => {
-  const [followingModalOpen, setFollowingModalOpen] = useState(false)
-  const [followerModalOpen, setFollowerModalOpen] = useState(false)
-  const handleFollowingModalOpen = () => setFollowingModalOpen(true)
-  const handleFollowingModalClose = () => setFollowingModalOpen(false)
-  const handleFollowerModalOpen = () => setFollowerModalOpen(true)
-  const handleFollowerModalClose = () => setFollowerModalOpen(false)
+  const {
+    isOpen: isFollowingModalOpen,
+    handleOpen: handleFollowingModalOpen,
+    handleClose: handleFollowingModalClose,
+  } = useModalState()
+
+  const {
+    isOpen: isFollowerModalOpen,
+    handleOpen: handleFollowerModalOpen,
+    handleClose: handleFollowerModalClose,
+  } = useModalState()
 
   return (
     <>
@@ -22,9 +28,10 @@ const FollowerFollowing = ({ followers, followings }) => {
               {followers.length}
             </Button>
             <FollowerListModal
+              title="Followers"
+              contents={<UserList users={followers} />}
+              open={isFollowerModalOpen}
               onClose={handleFollowerModalClose}
-              open={followerModalOpen}
-              followers={followers}
             />
           </dd>
         </div>
@@ -35,9 +42,10 @@ const FollowerFollowing = ({ followers, followings }) => {
               {followings?.length}
             </Button>
             <FollowingListModal
+              title="Followings"
+              contents={<UserList users={followings} />}
+              open={isFollowingModalOpen}
               onClose={handleFollowingModalClose}
-              open={followingModalOpen}
-              followings={followings}
             />
           </dd>
         </div>
