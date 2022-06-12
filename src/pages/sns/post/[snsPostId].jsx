@@ -1,15 +1,20 @@
 import { useRouter } from 'next/router'
+import useSWR from 'swr'
+import axios from 'axios'
 import withHeader from 'hocs/withHeader'
-import useGetRequest from 'hooks/useGetRequest'
 import { BACKEND_URL } from 'constants/constants'
+
+const fetcher = url => axios.get(url).then(res => res.data)
 
 const SnsPostPage = () => {
   const router = useRouter()
   const { snsPostId } = router.query
-  const { response, error, loading } = useGetRequest(
-    BACKEND_URL,
-    `/api/sns-posts/${snsPostId}`
+
+  const { data: response, error } = useSWR(
+    snsPostId && `${BACKEND_URL}/api/sns-posts/${snsPostId}`,
+    fetcher
   )
+  const loading = !response && !error
 
   if (loading) {
     return <p>로딩중...</p>
@@ -23,8 +28,8 @@ const SnsPostPage = () => {
 
   return (
     <>
-      <h1>PostId: {snsPost.data.id} </h1>
-      <p>content: {snsPost.data.attributes.content}</p>
+      <h1>PostId: {snsPost.id} </h1>
+      <p>content: {snsPost.attributes.content}</p>
     </>
   )
 }

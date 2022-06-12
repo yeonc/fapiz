@@ -5,6 +5,7 @@ import ChatIcon from '@mui/icons-material/ChatBubbleOutline'
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import ROUTE_URL from 'constants/routeUrl'
+import useMe from 'hooks/useMe'
 
 const NavWrapper = styled.nav`
   display: flex;
@@ -20,19 +21,25 @@ const PageLink = styled.li`
   margin-right: 20px;
 `
 
-const AuthButton = ({ isLoggedIn, onLogout }) => {
+const AuthButton = () => {
   const router = useRouter()
+
+  const { me } = useMe()
 
   const goToLoginPage = () => router.push(ROUTE_URL.LOGIN)
 
   const logout = () => {
     localStorage.removeItem('jwt')
     localStorage.removeItem('username')
-    onLogout()
   }
 
-  const text = isLoggedIn ? '로그아웃' : '로그인'
-  const handleClick = isLoggedIn ? logout : goToLoginPage
+  const text = me ? '로그아웃' : '로그인'
+  const handleClick = me
+    ? () => {
+        logout()
+        router.push(ROUTE_URL.HOME)
+      }
+    : goToLoginPage
 
   return (
     <Button variant="contained" size="medium" onClick={handleClick}>
@@ -44,16 +51,21 @@ const AuthButton = ({ isLoggedIn, onLogout }) => {
 const searchIcon = <SearchIcon />
 const chatIcon = <ChatIcon />
 
-const PAGE_LINK_LIST = [
-  { href: ROUTE_URL.SNS, content: 'SNS' },
-  { href: ROUTE_URL.COMMUNITY, content: '커뮤니티' },
-  { href: ROUTE_URL.CLOSET, content: '마이페이지' },
-  { href: ROUTE_URL.SEARCH, content: searchIcon },
-  { href: ROUTE_URL.CHAT_LIST, content: chatIcon },
-  { href: ROUTE_URL.MY_INFO, content: '내정보' },
-]
+const Navbar = () => {
+  const { me } = useMe()
 
-const Navbar = ({ isLoggedIn, onLogout }) => {
+  const PAGE_LINK_LIST = [
+    {
+      href: me ? `${ROUTE_URL.SNS}/${me.id}` : ROUTE_URL.LOGIN,
+      content: 'SNS',
+    },
+    { href: ROUTE_URL.COMMUNITY, content: '커뮤니티' },
+    { href: ROUTE_URL.CLOSET, content: '마이페이지' },
+    { href: ROUTE_URL.SEARCH, content: searchIcon },
+    { href: ROUTE_URL.CHAT_LIST, content: chatIcon },
+    { href: ROUTE_URL.MY_INFO, content: '내정보' },
+  ]
+
   return (
     <NavWrapper>
       <PageLinkList>
@@ -63,7 +75,7 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
           </PageLink>
         ))}
       </PageLinkList>
-      <AuthButton isLoggedIn={isLoggedIn} onLogout={onLogout} />
+      <AuthButton />
     </NavWrapper>
   )
 }

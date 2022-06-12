@@ -1,12 +1,19 @@
+import { useRouter } from 'next/router'
 import SnsPostList from '@mui/material/ImageList'
 import SnsPostItem from '@mui/material/ImageListItem'
-import useFetchSnsPosts from 'hooks/useFetchSnsPosts'
+import { css } from '@emotion/react'
+import useSnsPosts from 'hooks/useSnsPosts'
 import { BACKEND_URL } from 'constants/constants'
 
-const SnsPosts = ({ userId }) => {
-  const { snsPosts, error, loading } = useFetchSnsPosts(userId)
+export const cursorPointer = css`
+  cursor: pointer;
+`
 
-  if (loading) {
+const SnsPosts = ({ userId }) => {
+  const router = useRouter()
+  const { snsPosts, error, isLoading } = useSnsPosts(userId)
+
+  if (isLoading) {
     return <p>로딩중...</p>
   }
 
@@ -32,9 +39,16 @@ const SnsPosts = ({ userId }) => {
       {sanitizedSnsPosts.map(post => {
         const firstImage = post.postImages[0]
         const firstImageUrl = BACKEND_URL + firstImage.url
+        const goToSnsPost = () => {
+          router.push(`/sns/post/${post.postId}`)
+        }
 
         return (
-          <SnsPostItem key={firstImageUrl}>
+          <SnsPostItem
+            key={firstImageUrl}
+            onClick={goToSnsPost}
+            css={cursorPointer}
+          >
             <img
               src={`${firstImageUrl}?w=164&h=164&fit=crop&auto=format`}
               srcSet={`${firstImageUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
