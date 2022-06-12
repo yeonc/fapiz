@@ -1,4 +1,3 @@
-import * as React from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 import { AppProps } from 'next/app'
@@ -8,6 +7,9 @@ import { CacheProvider, EmotionCache } from '@emotion/react'
 import globalResetStyles from 'styles/globalResetStyles'
 import theme from 'theme'
 import createEmotionCache from 'createEmotionCache'
+import axios from 'axios'
+import { SWRConfig } from 'swr'
+import { BACKEND_URL } from 'constants/constants'
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache()
@@ -27,7 +29,20 @@ export default function MyApp(props: MyAppProps) {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         {globalResetStyles}
-        <Component {...pageProps} />
+        <SWRConfig
+          value={{
+            fetcher: ({ baseURL = BACKEND_URL, url, config }) => {
+              const axiosConfig = {
+                baseURL,
+                ...config,
+              }
+
+              return axios.get(url, axiosConfig).then(res => res.data)
+            },
+          }}
+        >
+          <Component {...pageProps} />
+        </SWRConfig>
       </ThemeProvider>
     </CacheProvider>
   )
