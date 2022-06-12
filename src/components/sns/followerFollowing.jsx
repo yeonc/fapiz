@@ -4,8 +4,11 @@ import useModalState from 'hooks/useModalState'
 import FollowingListModal from 'components/modals/modal'
 import FollowerListModal from 'components/modals/modal'
 import UserList from './userList'
+import useMe from 'hooks/useMe'
 
 const FollowerFollowing = ({ followers, followings }) => {
+  const { me } = useMe()
+
   const {
     isOpen: isFollowingModalOpen,
     handleOpen: handleFollowingModalOpen,
@@ -29,7 +32,7 @@ const FollowerFollowing = ({ followers, followings }) => {
             </Button>
             <FollowerListModal
               title="Followers"
-              contents={<UserList users={followers} />}
+              contents={<UserList users={followers} me={me} />}
               open={isFollowerModalOpen}
               onClose={handleFollowerModalClose}
             />
@@ -43,7 +46,7 @@ const FollowerFollowing = ({ followers, followings }) => {
             </Button>
             <FollowingListModal
               title="Followings"
-              contents={<UserList users={followings} />}
+              contents={<UserList users={followings} me={me} />}
               open={isFollowingModalOpen}
               onClose={handleFollowingModalClose}
             />

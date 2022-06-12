@@ -1,5 +1,7 @@
 import UserProfile from 'components/sns/userProfile'
 import ButtonsForUserCommunication from 'components/sns/buttonsForUserCommunication'
+import FollowToggleButton from 'components/buttons/followToggleButton'
+import MessageButton from 'components/buttons/messageButton'
 import useMe from 'hooks/useMe'
 
 const UserInfo = ({ user }) => {
@@ -18,7 +20,12 @@ const UserInfo = ({ user }) => {
   return (
     <header>
       <UserProfile user={user} />
-      {!isMe && <ButtonsForUserCommunication user={user} />}
+      {!isMe && (
+        <ButtonsForUserCommunication
+          followToggleButton={<FollowToggleButton me={me} targetUser={user} />}
+          messageButton={<MessageButton userId={user.id} />}
+        />
+      )}
     </header>
   )
 }
