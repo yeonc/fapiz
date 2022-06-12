@@ -21,12 +21,12 @@ const modalBoxStyle = {
   p: 4,
 }
 
-const FollowingList = ({ following }) =>
-  following.length === 0 ? (
+const FollowingList = ({ followings }) =>
+  followings.length === 0 ? (
     <p>팔로잉 한 사람이 존재하지 않습니다.</p>
   ) : (
     <List>
-      {following.map(person => (
+      {followings.map(person => (
         <ListItem
           key={person.id}
           secondaryAction={<Button variant="outlined">button</Button>}
@@ -49,7 +49,7 @@ const FollowingList = ({ following }) =>
     </List>
   )
 
-const FollowingListModal = ({ onClose, open, following }) => {
+const FollowingListModal = ({ onClose, open, followings }) => {
   return (
     <Modal
       open={open}
@@ -61,7 +61,7 @@ const FollowingListModal = ({ onClose, open, following }) => {
         <Typography id="modal-modal-title" variant="h6" component="h2">
           Following
         </Typography>
-        <FollowingList following={following} />
+        <FollowingList followings={followings} />
       </Box>
     </Modal>
   )

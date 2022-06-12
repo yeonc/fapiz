@@ -23,7 +23,7 @@ const modalBoxStyle = {
   p: 4,
 }
 
-const FollowerList = () => {
+const FollowerList = ({ followers }) => {
   const router = useRouter()
   const { userId } = router.query
 
@@ -39,11 +39,11 @@ const FollowerList = () => {
     return <p>에러가 발생했습니다. 홈으로 돌아가세요</p>
   }
 
-  return follower.length === 0 ? (
+  return followers.length === 0 ? (
     <p>팔로워가 존재하지 않습니다.</p>
   ) : (
     <List>
-      {follower.map(person => (
+      {followers.map(person => (
         <ListItem
           key={person.id}
           secondaryAction={<Button variant="outlined">button</Button>}
@@ -67,7 +67,7 @@ const FollowerList = () => {
   )
 }
 
-const FollowerListModal = ({ onClose, open, follower }) => {
+const FollowerListModal = ({ onClose, open, followers }) => {
   return (
     <Modal
       open={open}
@@ -79,7 +79,7 @@ const FollowerListModal = ({ onClose, open, follower }) => {
         <Typography id="modal-modal-title" variant="h6" component="h2">
           Follower
         </Typography>
-        <FollowerList follower={follower} />
+        <FollowerList followers={followers} />
       </Box>
     </Modal>
   )
