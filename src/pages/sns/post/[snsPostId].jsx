@@ -11,7 +11,7 @@ const SnsPostPage = () => {
   const { snsPostId } = router.query
 
   const { data: response, error } = useSWR(
-    `${BACKEND_URL}/api/sns-posts/${snsPostId}`,
+    snsPostId && `${BACKEND_URL}/api/sns-posts/${snsPostId}`,
     fetcher
   )
   const loading = !response && !error
@@ -24,12 +24,12 @@ const SnsPostPage = () => {
     return <p>에러가 발생했습니다. 홈으로 돌아가세요</p>
   }
 
-  const snsPost = response?.data
+  const snsPost = response.data
 
   return (
     <>
-      <h1>PostId: {snsPost?.id} </h1>
-      <p>content: {snsPost?.attributes.content}</p>
+      <h1>PostId: {snsPost.id} </h1>
+      <p>content: {snsPost.attributes.content}</p>
     </>
   )
 }
