@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import { useRouter } from 'next/router'
 import styled from '@emotion/styled'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
@@ -7,32 +9,14 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import UserAvatar from 'components/common/images/userAvatar'
 import { horizontal } from 'styles/layout'
 import useMe from 'hooks/useMe'
+import useSnsPost from 'hooks/useSnsPost'
 import createComment from 'services/users/createComment'
-import { useState } from 'react'
-import { useRouter } from 'next/router'
+import createUrlQuery from 'utils/createUrlQuery'
 
 const CommentInputFormWrapper = styled.form`
   display: flex;
   align-items: center;
 `
-
-const comments = [
-  {
-    id: 1,
-    author: 'author 1',
-    text: 'abcabcabcabcabcabcabcabcabc',
-  },
-  {
-    id: 2,
-    author: 'author 2',
-    text: 'defdefdefdefdefdefdefdefdefdefdefdefdefdef',
-  },
-  {
-    id: 3,
-    author: 'author 3',
-    text: 'ghighighighighighighighighighighighighighighighighighighighighighighighighighighighighighighighighighighighighi',
-  },
-]
 
 const PostCommentInputForm = ({ snsPostId }) => {
   const [comment, setComment] = useState('')
@@ -84,31 +68,57 @@ const PostCommentInputForm = ({ snsPostId }) => {
   )
 }
 
-const PostCommentList = () => (
+const PostCommentList = ({ comments }) => (
   <ul>
-    {comments.map(comment => (
-      <li key={comment.id} css={horizontal}>
-        <span>{comment.author}</span>
-        <p>{comment.text}</p>
-        <IconButton aria-label="댓글 수정">
-          <EditIcon />
-        </IconButton>
-        <IconButton aria-label="댓글 삭제">
-          <DeleteIcon />
-        </IconButton>
-      </li>
-    ))}
+    {comments &&
+      comments.map(comment => (
+        <li key={comment.id} css={horizontal}>
+          <UserAvatar
+            profileImageUrl={comment.profileImageUrl}
+            username={comment.author}
+            styleConfig={{ width: 30, height: 30, marginRight: 1 }}
+          />
+          <span>{comment.author}</span>
+          <p>{comment.content}</p>
+          <IconButton aria-label="댓글 수정">
+            <EditIcon />
+          </IconButton>
+          <IconButton aria-label="댓글 삭제">
+            <DeleteIcon />
+          </IconButton>
+        </li>
+      ))}
   </ul>
 )
+
+const query = createUrlQuery({
+  'populate[0]': 'comments.author',
+  'populate[1]': 'comments.author.profileImage',
+})
 
 const PostCommentContents = () => {
   const router = useRouter()
   const { snsPostId } = router.query
 
+  const { snsPost } = useSnsPost(snsPostId, query)
+
+  const commentsFromStrapiDB = snsPost && snsPost.data.attributes.comments.data
+
+  const comments =
+    commentsFromStrapiDB &&
+    commentsFromStrapiDB.map(comment => ({
+      id: comment.id,
+      author: comment.attributes.author.data.attributes.username,
+      content: comment.attributes.content,
+      profileImageUrl:
+        comment.attributes.author.data.attributes.profileImage.data.attributes
+          .url,
+    }))
+
   return (
     <>
       <PostCommentInputForm snsPostId={snsPostId} />
-      <PostCommentList />
+      <PostCommentList comments={comments} />
     </>
   )
 }
