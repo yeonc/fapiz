@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
+import { useSWRConfig } from 'swr'
 import styled from '@emotion/styled'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
@@ -18,9 +19,16 @@ const CommentInputFormWrapper = styled.form`
   align-items: center;
 `
 
+const query = createUrlQuery({
+  'populate[0]': 'comments.author',
+  'populate[1]': 'comments.author.profileImage',
+})
+
 const PostCommentInputForm = ({ snsPostId }) => {
   const [comment, setComment] = useState('')
   const { me, error } = useMe()
+
+  const { mutate } = useSWRConfig()
 
   const loading = !me && !error
 
@@ -40,6 +48,7 @@ const PostCommentInputForm = ({ snsPostId }) => {
     e.preventDefault()
     try {
       await createComment({ comment, postId: snsPostId, authorId: me.id })
+      mutate({ url: `api/sns-posts/${snsPostId}?${query}` })
     } catch (error) {
       console.error(error)
     } finally {
@@ -90,11 +99,6 @@ const PostCommentList = ({ comments }) => (
       ))}
   </ul>
 )
-
-const query = createUrlQuery({
-  'populate[0]': 'comments.author',
-  'populate[1]': 'comments.author.profileImage',
-})
 
 const PostCommentContents = () => {
   const router = useRouter()
