@@ -7,6 +7,8 @@ import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
+import SendIcon from '@mui/icons-material/Send'
+import Input from '@mui/material/Input'
 import UserAvatar from 'components/common/images/userAvatar'
 import { horizontal } from 'styles/layout'
 import useMe from 'hooks/useMe'
@@ -14,6 +16,7 @@ import useSnsPost from 'hooks/useSnsPost'
 import createComment from 'services/users/createComment'
 import createUrlQuery from 'utils/createUrlQuery'
 import deleteComment from 'services/users/deleteComment'
+import editComment from 'services/users/editComment'
 
 const CommentInputFormWrapper = styled.form`
   display: flex;
@@ -79,33 +82,74 @@ const PostCommentInputForm = ({ snsPostId }) => {
 }
 
 const PostCommentList = ({ comments, snsPostId }) => {
+  const [isCommentEditMode, setIsCommentEditMode] = useState(false)
+  const [editedComment, setEditedComment] = useState('')
+
+  const handleCommentEditButtonClick = () => {
+    setIsCommentEditMode(true)
+  }
+
+  const handleCommentEditInputChange = e => {
+    setEditedComment(e.target.value)
+  }
+
+  console.log(isCommentEditMode)
   return (
-    <ul>
-      {comments &&
-        comments.map(comment => (
-          <li key={comment.id} css={horizontal}>
-            <UserAvatar
-              profileImageUrl={comment.profileImageUrl}
-              username={comment.author}
-              styleConfig={{ width: 30, height: 30, marginRight: 1 }}
-            />
-            <span>{comment.author}</span>
-            <p>{comment.content}</p>
-            <IconButton aria-label="댓글 수정">
-              <EditIcon />
-            </IconButton>
-            <IconButton
-              aria-label="댓글 삭제"
-              onClick={async () => {
-                await deleteComment(comment.id).catch(console.error)
-                mutate({ url: `api/sns-posts/${snsPostId}?${query}` })
-              }}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </li>
-        ))}
-    </ul>
+    <>
+      <ul>
+        {comments &&
+          comments.map(comment => (
+            <li key={comment.id} css={horizontal}>
+              <UserAvatar
+                profileImageUrl={comment.profileImageUrl}
+                username={comment.author}
+                styleConfig={{ width: 30, height: 30, marginRight: 1 }}
+              />
+              <span>{comment.author}</span>
+              {isCommentEditMode ? (
+                <>
+                  <Input
+                    defaultValue={comment.content}
+                    placeholder="수정할 댓글 내용을 입력하세요"
+                    value={editedComment}
+                    onChange={handleCommentEditInputChange}
+                  />
+                  <IconButton
+                    aria-label="수정한 댓글 전송"
+                    onClick={() => {
+                      editComment({
+                        commentId: comment.id,
+                        comment: editedComment,
+                      })
+                    }}
+                  >
+                    <SendIcon />
+                  </IconButton>
+                </>
+              ) : (
+                <>
+                  <p>{comment.content}</p>
+                  <IconButton
+                    aria-label="댓글 수정"
+                    onClick={handleCommentEditButtonClick}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                </>
+              )}
+              <IconButton
+                aria-label="댓글 삭제"
+                onClick={async () => {
+                  await deleteComment(comment.id).catch(console.error)
+                  mutate({ url: `api/sns-posts/${snsPostId}?${query}` })
+                }}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </li>
+          ))}
+      </ul>
+    </>
   )
 }
 
