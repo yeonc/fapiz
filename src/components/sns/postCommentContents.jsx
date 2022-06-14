@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import { useSWRConfig } from 'swr'
+import { mutate, useSWRConfig } from 'swr'
 import styled from '@emotion/styled'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
@@ -13,6 +13,7 @@ import useMe from 'hooks/useMe'
 import useSnsPost from 'hooks/useSnsPost'
 import createComment from 'services/users/createComment'
 import createUrlQuery from 'utils/createUrlQuery'
+import deleteComment from 'services/users/deleteComment'
 
 const CommentInputFormWrapper = styled.form`
   display: flex;
@@ -77,28 +78,36 @@ const PostCommentInputForm = ({ snsPostId }) => {
   )
 }
 
-const PostCommentList = ({ comments }) => (
-  <ul>
-    {comments &&
-      comments.map(comment => (
-        <li key={comment.id} css={horizontal}>
-          <UserAvatar
-            profileImageUrl={comment.profileImageUrl}
-            username={comment.author}
-            styleConfig={{ width: 30, height: 30, marginRight: 1 }}
-          />
-          <span>{comment.author}</span>
-          <p>{comment.content}</p>
-          <IconButton aria-label="댓글 수정">
-            <EditIcon />
-          </IconButton>
-          <IconButton aria-label="댓글 삭제">
-            <DeleteIcon />
-          </IconButton>
-        </li>
-      ))}
-  </ul>
-)
+const PostCommentList = ({ comments, snsPostId }) => {
+  return (
+    <ul>
+      {comments &&
+        comments.map(comment => (
+          <li key={comment.id} css={horizontal}>
+            <UserAvatar
+              profileImageUrl={comment.profileImageUrl}
+              username={comment.author}
+              styleConfig={{ width: 30, height: 30, marginRight: 1 }}
+            />
+            <span>{comment.author}</span>
+            <p>{comment.content}</p>
+            <IconButton aria-label="댓글 수정">
+              <EditIcon />
+            </IconButton>
+            <IconButton
+              aria-label="댓글 삭제"
+              onClick={async () => {
+                await deleteComment(comment.id).catch(console.error)
+                mutate({ url: `api/sns-posts/${snsPostId}?${query}` })
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </li>
+        ))}
+    </ul>
+  )
+}
 
 const PostCommentContents = () => {
   const router = useRouter()
@@ -122,7 +131,7 @@ const PostCommentContents = () => {
   return (
     <>
       <PostCommentInputForm snsPostId={snsPostId} />
-      <PostCommentList comments={comments} />
+      <PostCommentList comments={comments} snsPostId={snsPostId} />
     </>
   )
 }
