@@ -19,7 +19,7 @@ import deleteComment from 'services/users/deleteComment'
 import editComment from 'services/users/editComment'
 import { BACKEND_URL } from 'constants/constants'
 
-const CommentInputFormWrapper = styled.form`
+const PostCommentWritingAreaWrapper = styled.form`
   display: flex;
   align-items: center;
 `
@@ -29,56 +29,44 @@ const query = createUrlQuery({
   'populate[1]': 'comments.author.profileImage',
 })
 
-const PostCommentInputForm = ({ snsPostId }) => {
+const PostCommentWritingArea = ({ snsPostId, author }) => {
   const [comment, setComment] = useState('')
-  const { me, error } = useMe()
 
   const { mutate } = useSWRConfig()
 
-  const loading = !me && !error
-
-  if (loading) {
-    return <p>로딩중...</p>
-  }
-
-  if (error) {
-    return <p>에러가 발생했습니다. 홈으로 돌아가세요</p>
-  }
-
-  const handleChange = e => {
+  const handleCommentChange = e => {
     setComment(e.target.value)
   }
 
   const handleSubmit = async e => {
     e.preventDefault()
     try {
-      await createComment({ comment, postId: snsPostId, authorId: me.id })
+      await createComment({ comment, postId: snsPostId, authorId: author.id })
       mutate({ url: `api/sns-posts/${snsPostId}?${query}` })
+      setComment('')
     } catch (error) {
       console.error(error)
-    } finally {
-      setComment('')
     }
   }
 
   return (
-    <CommentInputFormWrapper onSubmit={handleSubmit}>
+    <PostCommentWritingAreaWrapper onSubmit={handleSubmit}>
       <UserAvatar
-        alt={me.username}
-        src={BACKEND_URL + me.profileImage.url}
+        alt={author.username}
+        src={BACKEND_URL + author.profileImage.url}
         sx={{ width: 30, height: 30, marginRight: 1 }}
       />
       <TextField
         label="댓글을 입력하세요"
         variant="standard"
         value={comment}
-        onChange={handleChange}
+        onChange={handleCommentChange}
         required
       />
       <Button variant="contained" size="small" type="submit">
         등록
       </Button>
-    </CommentInputFormWrapper>
+    </PostCommentWritingAreaWrapper>
   )
 }
 
@@ -159,6 +147,11 @@ const PostCommentContents = () => {
   const { snsPostId } = router.query
 
   const { snsPost } = useSnsPost(snsPostId, query)
+  const { me, isLoading } = useMe()
+
+  if (isLoading) {
+    return <p>로딩중</p>
+  }
 
   const commentsFromStrapiDB = snsPost && snsPost.data.attributes.comments.data
 
@@ -175,7 +168,7 @@ const PostCommentContents = () => {
 
   return (
     <>
-      <PostCommentInputForm snsPostId={snsPostId} />
+      <PostCommentWritingArea snsPostId={snsPostId} author={me} />
       <PostCommentList comments={comments} snsPostId={snsPostId} />
     </>
   )
