@@ -3,9 +3,10 @@ import IconButton from '@mui/material/IconButton'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import UserAvatar from 'components/common/images/userAvatar'
+import UserAvatar from '@mui/material/Avatar'
 import UserProfileText from 'components/sns/userProfileText'
 import styled from '@emotion/styled'
+import { BACKEND_URL } from 'constants/constants'
 
 const MenuButton = () => {
   const [anchorEl, setAnchorEl] = useState(null)
@@ -51,9 +52,9 @@ const PostAuthorHeaderWrapper = styled.header`
 const PostAuthorHeader = () => (
   <PostAuthorHeaderWrapper>
     <UserAvatar
-      profileImageUrl=""
-      username="ggg"
-      styleConfig={{ width: 50, height: 50, marginRight: 2 }}
+      alt="user-name"
+      src="https://cdn.pixabay.com/photo/2021/02/27/16/25/woman-6055084_960_720.jpg"
+      sx={{ width: 50, height: 50, marginRight: 2 }}
     />
     <UserProfileText
       username="test"

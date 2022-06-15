@@ -1,7 +1,8 @@
 import styled from '@emotion/styled'
-import UserAvatar from 'components/common/images/userAvatar'
+import UserAvatar from '@mui/material/Avatar'
 import UserProfileText from './userProfileText'
 import FollowerFollowing from './followerFollowing'
+import { BACKEND_URL } from 'constants/constants'
 
 const UserProfileWrapper = styled.div`
   display: flex;
@@ -18,9 +19,9 @@ const UserProfile = ({ user }) => {
   return (
     <UserProfileWrapper>
       <UserAvatar
-        profileImageUrl={user.profileImage.url}
-        username={user.username}
-        styleConfig={{ width: 100, height: 100, marginRight: 4 }}
+        alt={user.username}
+        src={BACKEND_URL + user.profileImage.url}
+        sx={{ width: 100, height: 100, marginRight: 4 }}
       />
       <UserProfileContents
         userProfileText={

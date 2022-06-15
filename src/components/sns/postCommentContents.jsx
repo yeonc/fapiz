@@ -9,7 +9,7 @@ import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import SendIcon from '@mui/icons-material/Send'
 import Input from '@mui/material/Input'
-import UserAvatar from 'components/common/images/userAvatar'
+import UserAvatar from '@mui/material/Avatar'
 import { horizontal } from 'styles/layout'
 import useMe from 'hooks/useMe'
 import useSnsPost from 'hooks/useSnsPost'
@@ -17,6 +17,7 @@ import createComment from 'services/users/createComment'
 import createUrlQuery from 'utils/createUrlQuery'
 import deleteComment from 'services/users/deleteComment'
 import editComment from 'services/users/editComment'
+import { BACKEND_URL } from 'constants/constants'
 
 const CommentInputFormWrapper = styled.form`
   display: flex;
@@ -63,9 +64,9 @@ const PostCommentInputForm = ({ snsPostId }) => {
   return (
     <CommentInputFormWrapper onSubmit={handleSubmit}>
       <UserAvatar
-        profileImageUrl={me.profileImage.url}
-        username={me.username}
-        styleConfig={{ width: 30, height: 30, marginRight: 1 }}
+        alt={me.username}
+        src={BACKEND_URL + me.profileImage.url}
+        sx={{ width: 30, height: 30, marginRight: 1 }}
       />
       <TextField
         label="댓글을 입력하세요"
@@ -101,9 +102,9 @@ const PostCommentList = ({ comments, snsPostId }) => {
           comments.map(comment => (
             <li key={comment.id} css={horizontal}>
               <UserAvatar
-                profileImageUrl={comment.profileImageUrl}
-                username={comment.author}
-                styleConfig={{ width: 30, height: 30, marginRight: 1 }}
+                alt={comment.author}
+                src={BACKEND_URL + comment.profileImageUrl}
+                sx={{ width: 30, height: 30, marginRight: 1 }}
               />
               <span>{comment.author}</span>
               {isCommentEditMode ? (
