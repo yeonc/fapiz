@@ -153,7 +153,7 @@ const PostCommentContents = () => {
     return <p>로딩중</p>
   }
 
-  const commentsFromStrapiDB = snsPost && snsPost.data.attributes.comments.data
+  const commentsFromStrapiDB = snsPost && snsPost.attributes.comments.data
 
   const comments =
     commentsFromStrapiDB &&
