@@ -86,57 +86,56 @@ const PostCommentList = ({ comments, snsPostId }) => {
   return (
     <>
       <ul>
-        {comments &&
-          comments.map(comment => (
-            <li key={comment.id} css={horizontal}>
-              <UserAvatar
-                alt={comment.author}
-                src={BACKEND_URL + comment.profileImageUrl}
-                sx={{ width: 30, height: 30, marginRight: 1 }}
-              />
-              <span>{comment.author}</span>
-              {isCommentEditMode ? (
-                <>
-                  <Input
-                    defaultValue={comment.content}
-                    placeholder="수정할 댓글 내용을 입력하세요"
-                    value={editedComment}
-                    onChange={handleCommentEditInputChange}
-                  />
-                  <IconButton
-                    aria-label="수정한 댓글 전송"
-                    onClick={() => {
-                      editComment({
-                        commentId: comment.id,
-                        comment: editedComment,
-                      })
-                    }}
-                  >
-                    <SendIcon />
-                  </IconButton>
-                </>
-              ) : (
-                <>
-                  <p>{comment.content}</p>
-                  <IconButton
-                    aria-label="댓글 수정"
-                    onClick={handleCommentEditButtonClick}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                </>
-              )}
-              <IconButton
-                aria-label="댓글 삭제"
-                onClick={async () => {
-                  await deleteComment(comment.id).catch(console.error)
-                  mutate({ url: `api/sns-posts/${snsPostId}?${query}` })
-                }}
-              >
-                <DeleteIcon />
-              </IconButton>
-            </li>
-          ))}
+        {comments.map(comment => (
+          <li key={comment.id} css={horizontal}>
+            <UserAvatar
+              alt={comment.author}
+              src={BACKEND_URL + comment.profileImageUrl}
+              sx={{ width: 30, height: 30, marginRight: 1 }}
+            />
+            <span>{comment.author}</span>
+            {isCommentEditMode ? (
+              <>
+                <Input
+                  defaultValue={comment.content}
+                  placeholder="수정할 댓글 내용을 입력하세요"
+                  value={editedComment}
+                  onChange={handleCommentEditInputChange}
+                />
+                <IconButton
+                  aria-label="수정한 댓글 전송"
+                  onClick={() => {
+                    editComment({
+                      commentId: comment.id,
+                      comment: editedComment,
+                    })
+                  }}
+                >
+                  <SendIcon />
+                </IconButton>
+              </>
+            ) : (
+              <>
+                <p>{comment.content}</p>
+                <IconButton
+                  aria-label="댓글 수정"
+                  onClick={handleCommentEditButtonClick}
+                >
+                  <EditIcon />
+                </IconButton>
+              </>
+            )}
+            <IconButton
+              aria-label="댓글 삭제"
+              onClick={async () => {
+                await deleteComment(comment.id).catch(console.error)
+                mutate({ url: `api/sns-posts/${snsPostId}?${query}` })
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </li>
+        ))}
       </ul>
     </>
   )
@@ -155,16 +154,16 @@ const PostCommentContents = () => {
 
   const commentsFromStrapiDB = snsPost && snsPost.attributes.comments.data
 
-  const comments =
-    commentsFromStrapiDB &&
-    commentsFromStrapiDB.map(comment => ({
-      id: comment.id,
-      author: comment.attributes.author.data.attributes.username,
-      content: comment.attributes.content,
-      profileImageUrl:
-        comment.attributes.author.data.attributes.profileImage.data.attributes
-          .url,
-    }))
+  const comments = commentsFromStrapiDB
+    ? commentsFromStrapiDB.map(comment => ({
+        id: comment.id,
+        author: comment.attributes.author.data.attributes.username,
+        content: comment.attributes.content,
+        profileImageUrl:
+          comment.attributes.author.data.attributes.profileImage.data.attributes
+            .url,
+      }))
+    : []
 
   return (
     <>
