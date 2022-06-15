@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
-import Navbar from './navbar'
-import HeaderLogo from './headerLogo'
+import Navbar from 'components/layouts/header/navbar'
+import HeaderLogo from 'components/layouts/header/headerLogo'
 
 const StyledHeaderWrapper = styled.header`
   display: flex;

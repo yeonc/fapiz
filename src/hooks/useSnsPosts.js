@@ -12,7 +12,7 @@ const useSnsPosts = userId => {
   })
 
   return {
-    snsPosts: data,
+    snsPosts: data?.data,
     isLoading: !data && !error,
     error,
   }

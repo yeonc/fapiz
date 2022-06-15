@@ -4,7 +4,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar'
 import ListItemText from '@mui/material/ListItemText'
 import Avatar from '@mui/material/Avatar'
 import Link from '@mui/material/Link'
-import FollowToggleButton from 'components/buttons/followToggleButton'
+import FollowToggleButton from 'components/common/buttons/followToggleButton'
 
 const UserList = ({ users, me }) =>
   users.length === 0 ? (

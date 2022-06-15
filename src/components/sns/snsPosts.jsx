@@ -21,7 +21,7 @@ const SnsPosts = ({ userId }) => {
     return <p>에러가 발생했습니다. 홈으로 돌아가세요</p>
   }
 
-  const sanitizedSnsPosts = snsPosts.data.map(post => {
+  const sanitizedSnsPosts = snsPosts.map(post => {
     const postId = post.id
     const postImageArray = post.attributes.postImage.data
     const postImages = postImageArray.map(postImage => postImage.attributes)
