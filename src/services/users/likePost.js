@@ -6,7 +6,7 @@ const likePost = async ({ snsPostId, likeUserId }) => {
     method: 'put',
     url: `${BACKEND_URL}/api/sns-posts/${snsPostId}`,
     data: {
-      likeUsers: [likeUserId],
+      likeUsers: likeUserId,
     },
   })
 }

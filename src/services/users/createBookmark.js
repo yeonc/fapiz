@@ -6,7 +6,7 @@ const createBookmark = async ({ snsPostId, bookmarkUserId }) => {
     method: 'put',
     url: `${BACKEND_URL}/api/sns-posts/${snsPostId}`,
     data: {
-      bookmarkUsers: [bookmarkUserId],
+      bookmarkUsers: bookmarkUserId,
     },
   })
 }
