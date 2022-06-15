@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import UserAvatar from '@mui/material/Avatar'
-import UserProfileText from './userProfileText'
-import FollowerFollowing from './followerFollowing'
+import UserProfileText from 'components/sns/userProfileText'
+import FollowerFollowing from 'components/sns/followerFollowing'
 import { BACKEND_URL } from 'constants/constants'
 
 const UserProfileWrapper = styled.div`

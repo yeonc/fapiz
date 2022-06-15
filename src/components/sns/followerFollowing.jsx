@@ -3,7 +3,7 @@ import { horizontal, mgRight } from 'styles/layout'
 import useModalState from 'hooks/useModalState'
 import FollowingListModal from 'components/modals/modal'
 import FollowerListModal from 'components/modals/modal'
-import UserList from './userList'
+import UserList from 'components/sns/userList'
 import useMe from 'hooks/useMe'
 
 const FollowerFollowing = ({ followers, followings }) => {

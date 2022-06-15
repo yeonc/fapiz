@@ -1,7 +1,7 @@
 import Link from '@mui/material/Link'
 import styled from '@emotion/styled'
 import ROUTE_URL from 'constants/routeUrl'
-import FapizLogo from './fapizLogo'
+import FapizLogo from 'components/layouts/header/fapizLogo'
 
 const FapizLogoWrapper = styled.div`
   margin-right: 28px;
