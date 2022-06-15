@@ -82,7 +82,18 @@ const PostCommentList = ({ comments, snsPostId }) => {
     setEditedComment(e.target.value)
   }
 
-  console.log(isCommentEditMode)
+  const handleCommentSendButtonClick = async (commentId, editedComment) => {
+    await editComment({
+      commentId,
+      comment: editedComment,
+    }).catch(console.error)
+  }
+
+  const handleCommentDeleteButtonClick = async commentId => {
+    await deleteComment(commentId).catch(console.error)
+    mutate({ url: `api/sns-posts/${snsPostId}?${query}` })
+  }
+
   return (
     <>
       <ul>
@@ -104,12 +115,9 @@ const PostCommentList = ({ comments, snsPostId }) => {
                 />
                 <IconButton
                   aria-label="수정한 댓글 전송"
-                  onClick={() => {
-                    editComment({
-                      commentId: comment.id,
-                      comment: editedComment,
-                    })
-                  }}
+                  onClick={() =>
+                    handleCommentSendButtonClick(comment.id, editedComment)
+                  }
                 >
                   <SendIcon />
                 </IconButton>
@@ -127,10 +135,7 @@ const PostCommentList = ({ comments, snsPostId }) => {
             )}
             <IconButton
               aria-label="댓글 삭제"
-              onClick={async () => {
-                await deleteComment(comment.id).catch(console.error)
-                mutate({ url: `api/sns-posts/${snsPostId}?${query}` })
-              }}
+              onClick={() => handleCommentDeleteButtonClick(comment.id)}
             >
               <DeleteIcon />
             </IconButton>
