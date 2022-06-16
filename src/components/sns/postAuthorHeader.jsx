@@ -49,17 +49,17 @@ const MenuButton = () => {
 const PostAuthorHeaderWrapper = styled.header`
   display: flex;
 `
-const PostAuthorHeader = () => (
+const PostAuthorHeader = ({ author }) => (
   <PostAuthorHeaderWrapper>
     <UserAvatar
-      alt="user-name"
-      src="https://cdn.pixabay.com/photo/2021/02/27/16/25/woman-6055084_960_720.jpg"
+      alt={author.username}
+      src={BACKEND_URL + author.avatarUrl}
       sx={{ width: 50, height: 50, marginRight: 2 }}
     />
     <UserProfileText
-      username="test"
-      height="150"
-      weight="40"
+      username={author.username}
+      height={author.height}
+      weight={author.weight}
       usernameTypoVarient="h6"
     />
     <MenuButton />

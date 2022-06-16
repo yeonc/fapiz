@@ -42,7 +42,7 @@ const PostCommentWritingArea = ({ snsPostId, author }) => {
     e.preventDefault()
     try {
       await createComment({ comment, postId: snsPostId, authorId: author.id })
-      mutate({ url: `api/sns-posts/${snsPostId}?${query}` })
+      mutate({ url: `/api/sns-posts/${snsPostId}?${query}` })
       setComment('')
     } catch (error) {
       console.error(error)
@@ -91,7 +91,7 @@ const PostCommentList = ({ comments, snsPostId }) => {
 
   const handleCommentDeleteButtonClick = async commentId => {
     await deleteComment(commentId).catch(console.error)
-    mutate({ url: `api/sns-posts/${snsPostId}?${query}` })
+    mutate({ url: `/api/sns-posts/${snsPostId}?${query}` })
   }
 
   return (
