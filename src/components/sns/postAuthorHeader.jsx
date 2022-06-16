@@ -1,13 +1,12 @@
 import UserAvatar from '@mui/material/Avatar'
 import styled from '@emotion/styled'
 import UserProfileText from 'components/sns/userProfileText'
-import PopoverMenu from 'components/common/menus/popoverMenu'
 import { BACKEND_URL } from 'constants/constants'
 
 const PostAuthorHeaderWrapper = styled.header`
   display: flex;
 `
-const PostAuthorHeader = ({ author }) => (
+const PostAuthorHeader = ({ author, popoverMenu }) => (
   <PostAuthorHeaderWrapper>
     <UserAvatar
       alt={author.username}
@@ -20,7 +19,7 @@ const PostAuthorHeader = ({ author }) => (
       weight={author.weight}
       usernameTypoVarient="h6"
     />
-    <PopoverMenu />
+    {popoverMenu}
   </PostAuthorHeaderWrapper>
 )
 

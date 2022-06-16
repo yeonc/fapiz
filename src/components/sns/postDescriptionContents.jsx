@@ -2,7 +2,9 @@ import { useRouter } from 'next/router'
 import PostImages from 'components/sns/postImages'
 import PostAuthorHeader from 'components/sns/postAuthorHeader'
 import ButtonsForLikeAndBookmark from 'components/sns/buttonsForLikeAndBookmark'
+import PopoverMenu from 'components/common/menus/popoverMenu'
 import useSnsPost from 'hooks/useSnsPost'
+import useMe from 'hooks/useMe'
 import createUrlQuery from 'utils/createUrlQuery'
 import getDateFormat from 'utils/getDateFormat'
 
@@ -43,6 +45,8 @@ const PostDescriptionContents = () => {
     error,
   } = useSnsPost(snsPostId, query)
 
+  const { me } = useMe()
+
   if (isLoading) {
     return <p>로딩중..</p>
   }
@@ -72,7 +76,10 @@ const PostDescriptionContents = () => {
 
   return (
     <>
-      <PostAuthorHeader author={userInfo} />
+      <PostAuthorHeader
+        author={userInfo}
+        popoverMenu={<PopoverMenu postId={snsPostId} myId={me.id} />}
+      />
       <PostImages images={snsPostImages} />
       <ButtonsForLikeAndBookmark likeCountNum={snsPost.likeUsers.data.length} />
       <PostText text={snsPost.content} createdDate={dateFormat} />
