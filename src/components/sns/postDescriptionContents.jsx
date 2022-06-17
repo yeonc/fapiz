@@ -83,6 +83,9 @@ const PostDescriptionContents = () => {
         likeCountNum={snsPost.likeUsers.data.length}
         snsPostId={snsPostId}
         targetUserId={me && me.id}
+        myId={me && me.id}
+        likeUsers={snsPost.likeUsers.data}
+        bookmarkUsers={snsPost.bookmarkUsers.data}
       />
       <PostImages images={snsPostImages} />
       <ButtonsForLikeAndBookmark likeCountNum={snsPost.likeUsers.data.length} />

@@ -15,7 +15,9 @@ const deleteBookmark = async ({
     method: 'put',
     url,
     data: {
-      bookmarkUsers: null,
+      data: {
+        bookmarkUsers: null,
+      },
     },
   })
     // 2. 첫 번째 put 요청에서 에러 발생 시, bookmarkUsers를 원래 들어있던 데이터로 복구해 줌
@@ -24,7 +26,9 @@ const deleteBookmark = async ({
         method: 'put',
         url,
         data: {
-          bookmarkUsers: bookmarkUserIds,
+          data: {
+            bookmarkUsers: bookmarkUserIds,
+          },
         },
       })
     })
@@ -34,9 +38,11 @@ const deleteBookmark = async ({
         method: 'put',
         url,
         data: {
-          bookmarkUsers: bookmarkUserIds.filter(
-            id => id !== deleteBookmarkUserId
-          ),
+          data: {
+            bookmarkUsers: bookmarkUserIds.filter(
+              id => id !== deleteBookmarkUserId
+            ),
+          },
         },
       })
     })

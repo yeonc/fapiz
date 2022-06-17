@@ -11,7 +11,9 @@ const unlikePost = async ({ snsPostId, likePostUserIds, unlikeUserId }) => {
     method: 'put',
     url,
     data: {
-      likeUsers: null,
+      data: {
+        likeUsers: null,
+      },
     },
   })
     // 2. 첫 번째 put 요청에서 에러 발생 시, likeUsers를 원래 들어있던 데이터로 복구해 줌
@@ -20,7 +22,9 @@ const unlikePost = async ({ snsPostId, likePostUserIds, unlikeUserId }) => {
         method: 'put',
         url,
         data: {
-          likeUsers: likePostUserIds,
+          data: {
+            likeUsers: likePostUserIds,
+          },
         },
       })
     })
@@ -30,7 +34,9 @@ const unlikePost = async ({ snsPostId, likePostUserIds, unlikeUserId }) => {
         method: 'put',
         url,
         data: {
-          likeUsers: likePostUserIds.filter(id => id !== unlikeUserId),
+          data: {
+            likeUsers: likePostUserIds.filter(id => id !== unlikeUserId),
+          },
         },
       })
     })
