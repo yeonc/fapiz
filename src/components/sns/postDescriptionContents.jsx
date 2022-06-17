@@ -79,6 +79,10 @@ const PostDescriptionContents = () => {
       <PostAuthorHeader
         author={userInfo}
         popoverMenu={<PopoverMenu postId={snsPostId} myId={me.id} />}
+      <ButtonsForLikeAndBookmark
+        likeCountNum={snsPost.likeUsers.data.length}
+        snsPostId={snsPostId}
+        targetUserId={me && me.id}
       />
       <PostImages images={snsPostImages} />
       <ButtonsForLikeAndBookmark likeCountNum={snsPost.likeUsers.data.length} />
