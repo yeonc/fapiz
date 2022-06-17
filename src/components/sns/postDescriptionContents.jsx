@@ -8,6 +8,10 @@ import useMe from 'hooks/useMe'
 import createUrlQuery from 'utils/createUrlQuery'
 import getDateFormat from 'utils/getDateFormat'
 
+const generateKey = () => {
+  return Math.random() + new Date().getTime()
+}
+
 const PostText = ({ text, createdDate }) => (
   <>
     <p>{text}</p>
@@ -20,7 +24,7 @@ const PostFashionItemInfo = ({ fashionItems }) => (
     <h3>착용한 제품 정보</h3>
     <ul>
       {fashionItems?.map(item => (
-        <li key={item.itemPrice}>
+        <li key={generateKey()}>
           {item.itemType}: {item.itemPrice}원 / {item.itemPlace}
         </li>
       ))}
@@ -56,12 +60,14 @@ const PostDescriptionContents = () => {
   }
 
   const snsPost = snsPostFromStrapi.attributes
-
-  const snsPostImages = snsPost.postImage.data.map(image => ({
-    id: image.id,
-    altText: image.attributes.alternativeText,
-    url: image.attributes.url,
-  }))
+  const snsPostImagesFromStrapi = snsPost.postImage.data
+  const snsPostImages = snsPostImagesFromStrapi
+    ? snsPostImagesFromStrapi.map(image => ({
+        id: image.id,
+        altText: image.attributes.alternativeText,
+        url: image.attributes.url,
+      }))
+    : []
 
   const author = snsPost.author.data.attributes
   const userInfo = {
@@ -78,17 +84,15 @@ const PostDescriptionContents = () => {
     <>
       <PostAuthorHeader
         author={userInfo}
-        popoverMenu={<PopoverMenu postId={snsPostId} myId={me.id} />}
+        popoverMenu={<PopoverMenu postId={snsPostId} myId={me && me.id} />}
+      />
+      {snsPostImagesFromStrapi && <PostImages images={snsPostImages} />}
       <ButtonsForLikeAndBookmark
-        likeCountNum={snsPost.likeUsers.data.length}
         snsPostId={snsPostId}
-        targetUserId={me && me.id}
         myId={me && me.id}
         likeUsers={snsPost.likeUsers.data}
         bookmarkUsers={snsPost.bookmarkUsers.data}
       />
-      <PostImages images={snsPostImages} />
-      <ButtonsForLikeAndBookmark likeCountNum={snsPost.likeUsers.data.length} />
       <PostText text={snsPost.content} createdDate={dateFormat} />
       {snsPost.itemInformation && (
         <PostFashionItemInfo fashionItems={snsPost.itemInformation} />

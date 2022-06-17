@@ -6,31 +6,22 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import Button from '@mui/material/Button'
 
-const ItemInfomation = () => {
-  const [itemCategory, setItemCategory] = useState('')
-  const [itemPrice, setItemPriceChange] = useState('')
-  const [itemBuyingPlace, setItemBuyingPlaceChange] = useState('')
-
-  const handleItemCategoryChange = e => {
-    setItemCategory(e.target.value)
-  }
-
-  const handleItemPriceChange = e => {
-    setItemPriceChange(e.target.value)
-  }
-
-  const handleItemBuyingPlaceChange = e => {
-    setItemBuyingPlaceChange(e.target.value)
-  }
-
+const ItemInfomation = ({
+  category,
+  price,
+  buyingPlace,
+  onCategoryChange,
+  onPriceChange,
+  onBuyingPlaceChange,
+}) => {
   return (
     <div>
       <FormControl sx={{ width: 150 }}>
         <InputLabel>아이템 종류</InputLabel>
         <Select
           label="아이템 종류"
-          value={itemCategory}
-          onChange={handleItemCategoryChange}
+          value={category}
+          onChange={onCategoryChange}
         >
           <MenuItem value="">선택하지 않음</MenuItem>
           <MenuItem value="상의">상의</MenuItem>
@@ -45,13 +36,13 @@ const ItemInfomation = () => {
       <TextField
         label="가격"
         type="number"
-        value={itemPrice}
-        onChange={handleItemPriceChange}
+        value={price}
+        onChange={onPriceChange}
       />
       <TextField
         label="구입처"
-        value={itemBuyingPlace}
-        onChange={handleItemBuyingPlaceChange}
+        value={buyingPlace}
+        onChange={onBuyingPlaceChange}
       />
       <Button variant="contained">아이템 정보 더 추가</Button>
     </div>
