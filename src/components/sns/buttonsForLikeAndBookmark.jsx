@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { useSWRConfig } from 'swr'
 import LikeButton from '@mui/material/Checkbox'
 import BookmarkButton from '@mui/material/Checkbox'
@@ -34,16 +33,36 @@ const ButtonsForLikeAndBookmark = ({
     bookmarkUser => bookmarkUser.id === myId
   )
 
+  const like = async () => {
+    await likePost({ snsPostId, likeUserId: myId })
+  }
+
+  const unlike = async () => {
+    const likePostUserIds = likeUsers.map(likeUser => likeUser.id)
+    await unlikePost({ snsPostId, likePostUserIds, unlikeUserId: myId })
+  }
+
+  const bookmark = async () => {
+    await createBookmark({
+      snsPostId,
+      bookmarkUserId: myId,
+    })
+  }
+
+  const unBookmark = async () => {
+    const bookmarkUserIds = bookmarkUsers.map(bookmarkUser => bookmarkUser.id)
+    await deleteBookmark({
+      snsPostId,
+      bookmarkUserIds,
+      deleteBookmarkUserId: myId,
+    })
+  }
+
   const handleLikeButtonClick = async () => {
     try {
-      if (isLike) {
-        const likePostUserIds = likeUsers.map(likeUser => likeUser.id)
-        await unlikePost({ snsPostId, likePostUserIds, unlikeUserId: myId })
-        mutate(mutateKey)
-      } else {
-        await likePost({ snsPostId, likeUserId: myId })
-        mutate(mutateKey)
-      }
+      if (isLike) await unlike()
+      if (!isLike) await like()
+      mutate(mutateKey)
     } catch {
       console.error(error)
     }
@@ -51,23 +70,9 @@ const ButtonsForLikeAndBookmark = ({
 
   const handleBookmarkButtonClick = async () => {
     try {
-      if (isBookmark) {
-        const bookmarkUserIds = bookmarkUsers.map(
-          bookmarkUser => bookmarkUser.id
-        )
-        await deleteBookmark({
-          snsPostId,
-          bookmarkUserIds,
-          deleteBookmarkUserId: myId,
-        })
-        mutate(mutateKey)
-      } else {
-        await createBookmark({
-          snsPostId,
-          bookmarkUserId: myId,
-        })
-        mutate(mutateKey)
-      }
+      if (isBookmark) await unBookmark()
+      if (!isBookmark) await bookmark()
+      mutate(mutateKey)
     } catch (error) {
       console.error(error)
     }
