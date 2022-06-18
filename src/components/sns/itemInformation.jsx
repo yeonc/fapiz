@@ -1,10 +1,20 @@
-import { useState } from 'react'
 import Select from '@mui/material/Select'
 import TextField from '@mui/material/TextField'
 import MenuItem from '@mui/material/MenuItem'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import Button from '@mui/material/Button'
+
+const CATEGORIES = [
+  { id: '0', name: '선택하지 않음' },
+  { id: '1', name: '상의' },
+  { id: '2', name: '하의' },
+  { id: '3', name: '원피스' },
+  { id: '4', name: '아우터' },
+  { id: '5', name: '신발' },
+  { id: '6', name: '가방' },
+  { id: '7', name: '모자' },
+]
 
 const ItemInfomation = ({
   category,
@@ -23,14 +33,15 @@ const ItemInfomation = ({
           value={category}
           onChange={onCategoryChange}
         >
-          <MenuItem value="">선택하지 않음</MenuItem>
-          <MenuItem value="상의">상의</MenuItem>
-          <MenuItem value="하의">하의</MenuItem>
-          <MenuItem value="원피스">원피스</MenuItem>
-          <MenuItem value="아우터">아우터</MenuItem>
-          <MenuItem value="신발">신발</MenuItem>
-          <MenuItem value="가방">가방</MenuItem>
-          <MenuItem value="모자">모자</MenuItem>
+          {CATEGORIES.map(category => {
+            const value = category.name === '선택하지 않음' ? '' : category.name
+
+            return (
+              <MenuItem key={category.id} value={value}>
+                {category.name}
+              </MenuItem>
+            )
+          })}
         </Select>
       </FormControl>
       <TextField
