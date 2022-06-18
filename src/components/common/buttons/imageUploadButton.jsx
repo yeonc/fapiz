@@ -14,7 +14,7 @@ const ImageUploadButton = ({ onImageFilesChange, buttonAriaLabel }) => {
         accept="image/*"
         multiple
         css={inputDisplayNone}
-        onChange={onImageFilesChange}
+        onChange={e => onImageFilesChange(e.target.files)}
       />
       <IconButton color="primary" aria-label={buttonAriaLabel} component="span">
         <PhotoCamera />

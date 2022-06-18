@@ -25,24 +25,24 @@ const SnsPostPostingPage = () => {
 
   const router = useRouter()
 
-  const handleCategoryChange = e => {
-    setCategory(e.target.value)
+  const handleCategoryChange = category => {
+    setCategory(category)
   }
 
-  const handlePriceChange = e => {
-    setPriceChange(e.target.value)
+  const handlePriceChange = price => {
+    setPriceChange(price)
   }
 
-  const handleBuyingPlaceChange = e => {
-    setBuyingPlace(e.target.value)
+  const handleBuyingPlaceChange = buyingPlace => {
+    setBuyingPlace(buyingPlace)
   }
 
-  const handlePostTextChange = e => {
-    setPostText(e.target.value)
+  const handlePostTextChange = postText => {
+    setPostText(postText)
   }
 
-  const handleImageFilesChange = e => {
-    setImageFiles(e.target.files)
+  const handleImageFilesChange = imageFiles => {
+    setImageFiles(imageFiles)
   }
 
   const handlePostingSubmit = async e => {
@@ -87,7 +87,7 @@ const SnsPostPostingPage = () => {
         label="글 내용을 작성해 주세요"
         multiline
         value={postText}
-        onChange={handlePostTextChange}
+        onChange={e => handlePostTextChange(e.target.value)}
       />
       <Button variant="contained" type="submit">
         등록

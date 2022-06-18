@@ -31,7 +31,7 @@ const ItemInfomation = ({
         <Select
           label="아이템 종류"
           value={category}
-          onChange={onCategoryChange}
+          onChange={e => onCategoryChange(e.target.value)}
         >
           {CATEGORIES.map(category => {
             const value = category.name === '선택하지 않음' ? '' : category.name
@@ -48,12 +48,12 @@ const ItemInfomation = ({
         label="가격"
         type="number"
         value={price}
-        onChange={onPriceChange}
+        onChange={e => onPriceChange(e.target.value)}
       />
       <TextField
         label="구입처"
         value={buyingPlace}
-        onChange={onBuyingPlaceChange}
+        onChange={e => onBuyingPlaceChange(e.target.value)}
       />
       <Button variant="contained">아이템 정보 더 추가</Button>
     </div>
