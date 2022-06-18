@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import IconButton from '@mui/material/IconButton'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
@@ -8,12 +8,11 @@ import deletePost from 'services/users/deletePost'
 
 const PopoverMenu = ({ postId, myId }) => {
   const router = useRouter()
+  const menuButtonRef = useRef()
 
-  const [menuOpenLocation, setMenuOpenLocation] = useState(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  const handleMenuOpen = e => {
-    setMenuOpenLocation(e.target)
+  const handleMenuOpen = () => {
     setIsMenuOpen(true)
   }
 
@@ -22,12 +21,10 @@ const PopoverMenu = ({ postId, myId }) => {
   }
 
   const handleEditClick = () => {
-    handleMenuClose()
     router.push(`/sns/post/edit/${postId}`)
   }
 
   const handleDeleteClick = () => {
-    handleMenuClose()
     deletePost(postId)
       .then(() => {
         router.push(`/sns/${myId}`)
@@ -37,13 +34,13 @@ const PopoverMenu = ({ postId, myId }) => {
 
   return (
     <div>
-      <IconButton onClick={handleMenuOpen}>
+      <IconButton onClick={handleMenuOpen} ref={menuButtonRef}>
         <MoreVertIcon />
       </IconButton>
       <Menu
-        anchorEl={menuOpenLocation}
+        anchorEl={menuButtonRef.current}
         open={isMenuOpen}
-        onClose={handleMenuClose}
+        onClick={handleMenuClose}
       >
         <MenuItem onClick={handleEditClick}>수정</MenuItem>
         <MenuItem onClick={handleDeleteClick}>삭제</MenuItem>
