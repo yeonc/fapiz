@@ -48,13 +48,7 @@ const SnsPostPostingPage = () => {
   const handlePostingSubmit = async e => {
     e.preventDefault()
 
-    try {
-      const formData = new FormData()
-      for (let i = 0; i < imageFiles.length; i++) {
-        formData.append('files', imageFiles[i])
-      }
-
-      const responseAfterUploadImage = await uploadImage(formData)
+    const createSnsPost = async responseAfterUploadImage => {
       const postImageIds = responseAfterUploadImage.data.map(res => res.id)
       const responseAfterCreatePost = await createPost({
         postText,
@@ -62,8 +56,18 @@ const SnsPostPostingPage = () => {
         authorId: me.id,
         postImageIds,
       })
-      const postId = responseAfterCreatePost.data.data.id
+
+      return responseAfterCreatePost.data.data.id
+    }
+
+    const goToCreatedSnsPost = postId => {
       router.push(`/sns/post/${postId}`)
+    }
+
+    try {
+      const responseAfterUploadImage = await uploadImage(imageFiles)
+      const createdPostId = await createSnsPost(responseAfterUploadImage)
+      goToCreatedSnsPost(createdPostId)
     } catch (error) {
       console.error(error)
     }
