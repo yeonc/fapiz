@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import { mutate, useSWRConfig } from 'swr'
+import { useSWRConfig } from 'swr'
 import styled from '@emotion/styled'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
@@ -42,11 +42,15 @@ const PostCommentWritingArea = ({ snsPostId, author }) => {
     e.preventDefault()
     try {
       await createComment({ comment, postId: snsPostId, authorId: author.id })
-      mutate({ url: `/api/sns-posts/${snsPostId}?${query}` })
+      refetch()
       setComment('')
     } catch (error) {
       console.error(error)
     }
+  }
+
+  const refetch = () => {
+    mutate({ url: `/api/sns-posts/${snsPostId}?${query}` })
   }
 
   return (
@@ -83,15 +87,23 @@ const PostCommentList = ({ comments, snsPostId }) => {
   }
 
   const handleCommentSendButtonClick = async (commentId, editedComment) => {
-    await editComment({
-      commentId,
-      comment: editedComment,
-    }).catch(console.error)
+    try {
+      await editComment({
+        commentId,
+        comment: editedComment,
+      })
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   const handleCommentDeleteButtonClick = async commentId => {
-    await deleteComment(commentId).catch(console.error)
-    mutate({ url: `/api/sns-posts/${snsPostId}?${query}` })
+    try {
+      await deleteComment(commentId)
+      refetch()
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   return (
