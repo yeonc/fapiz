@@ -24,7 +24,9 @@ const SnsPosts = ({ userId }) => {
   const sanitizedSnsPosts = snsPosts.map(post => {
     const postId = post.id
     const postImageArray = post.attributes.postImage.data
-    const postImages = postImageArray.map(postImage => postImage.attributes)
+    const postImages = postImageArray
+      ? postImageArray.map(postImage => postImage.attributes)
+      : []
 
     return {
       postId,
@@ -38,7 +40,7 @@ const SnsPosts = ({ userId }) => {
     <SnsPostList sx={{ width: 650 }} cols={3}>
       {sanitizedSnsPosts.map(post => {
         const firstImage = post.postImages[0]
-        const firstImageUrl = BACKEND_URL + firstImage.url
+        const firstImageUrl = firstImage && BACKEND_URL + firstImage.url
         const goToSnsPost = () => {
           router.push(`/sns/post/${post.postId}`)
         }
@@ -52,7 +54,7 @@ const SnsPosts = ({ userId }) => {
             <img
               src={`${firstImageUrl}?w=164&h=164&fit=crop&auto=format`}
               srcSet={`${firstImageUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-              alt={firstImage.alternativeText}
+              alt={firstImage && firstImage.alternativeText}
               loading="lazy"
             />
           </SnsPostItem>
