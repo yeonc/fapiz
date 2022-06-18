@@ -71,7 +71,10 @@ const SnsPostPostingPage = () => {
 
   return (
     <form onSubmit={handlePostingSubmit}>
-      <ImageUploadButton onImageFilesChange={handleImageFilesChange} />
+      <ImageUploadButton
+        onImageFilesChange={handleImageFilesChange}
+        buttonAriaLabel="포스트 사진 업로드"
+      />
       <ItemInfomation
         onCategoryChange={handleCategoryChange}
         onPriceChange={handlePriceChange}

@@ -6,22 +6,17 @@ const inputDisplayNone = css`
   display: none;
 `
 
-const ImageUploadButton = ({ onImageFilesChange }) => {
+const ImageUploadButton = ({ onImageFilesChange, buttonAriaLabel }) => {
   return (
-    <label htmlFor="post-image-upload">
+    <label>
       <input
         type="file"
         accept="image/*"
-        id="post-image-upload"
         multiple
         css={inputDisplayNone}
         onChange={onImageFilesChange}
       />
-      <IconButton
-        color="primary"
-        aria-label="포스트 사진 업로드"
-        component="span"
-      >
+      <IconButton color="primary" aria-label={buttonAriaLabel} component="span">
         <PhotoCamera />
       </IconButton>
     </label>
