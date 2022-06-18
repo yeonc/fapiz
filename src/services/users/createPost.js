@@ -10,7 +10,7 @@ const createPost = async ({ postText, itemInfo, authorId, postImageIds }) => {
         content: postText,
         itemInformation: itemInfo,
         author: authorId,
-        postImage: postImageIds.length === 1 ? postImageIds[0] : postImageIds,
+        postImage: postImageIds,
       },
     },
   })

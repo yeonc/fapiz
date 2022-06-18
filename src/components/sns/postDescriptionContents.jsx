@@ -8,10 +8,6 @@ import useMe from 'hooks/useMe'
 import createUrlQuery from 'utils/createUrlQuery'
 import getFormattedDate from 'utils/getFormattedDate'
 
-const generateKey = () => {
-  return Math.random() + new Date().getTime()
-}
-
 const PostText = ({ text, createdDate }) => (
   <>
     <p>{text}</p>
@@ -23,8 +19,8 @@ const PostFashionItemInfo = ({ fashionItems }) => (
   <>
     <h3>착용한 제품 정보</h3>
     <ul>
-      {fashionItems?.map(item => (
-        <li key={generateKey()}>
+      {fashionItems?.map((item, index) => (
+        <li key={index.toString()}>
           {item.itemType}: {item.itemPrice}원 / {item.itemPlace}
         </li>
       ))}
