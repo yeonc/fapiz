@@ -6,7 +6,7 @@ import PopoverMenu from 'components/common/menus/popoverMenu'
 import useSnsPost from 'hooks/useSnsPost'
 import useMe from 'hooks/useMe'
 import createUrlQuery from 'utils/createUrlQuery'
-import getDateFormat from 'utils/getDateFormat'
+import getFormattedDate from 'utils/getFormattedDate'
 
 const generateKey = () => {
   return Math.random() + new Date().getTime()
@@ -78,7 +78,7 @@ const PostDescriptionContents = () => {
   }
 
   const createdDate = new Date(snsPost.createdAt)
-  const dateFormat = getDateFormat(createdDate)
+  const dateFormat = getFormattedDate(createdDate)
 
   return (
     <>

@@ -1,8 +1,8 @@
 const getFullDate = date => {
-  const createdYear = date.getFullYear()
-  const createdMonth = date.getMonth() + 1
-  const createdDay = date.getDate()
-  return `${createdYear}/${createdMonth}/${createdDay}`
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  return `${year}/${month}/${day}`
 }
 
 export default getFullDate
