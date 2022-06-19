@@ -4,13 +4,16 @@ import ImageListItem from '@mui/material/ImageListItem'
 import ImageListItemBar from '@mui/material/ImageListItemBar'
 import IconButton from '@mui/material/IconButton'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
+import useSnsPosts from 'hooks/useSnsPosts'
+import createUrlQuery from 'utils/createUrlQuery'
+import { BACKEND_URL } from 'constants/constants'
 
-const ImageCardItems = ({ items }) => {
-  return items.map(item => (
-    <ImageListItem key={item.img}>
-      <img src={item.img} alt={item.title} />
+const ImageCardItems = ({ itemsData }) => {
+  return itemsData.map(itemData => (
+    <ImageListItem key={itemData.id}>
+      <img src={itemData.imageUrl} alt={itemData.imageAltText} />
       <ImageListItemBar
-        title={item.title}
+        title={itemData.author}
         position="top"
         actionIcon={
           <IconButton>
@@ -23,35 +26,34 @@ const ImageCardItems = ({ items }) => {
   ))
 }
 
-const MainPage = () => (
-  <>
-    <ImageList variant="masonry" cols={3}>
-      <ImageCardItems items={itemData} />
-    </ImageList>
-  </>
-)
+const query = createUrlQuery({
+  'populate[0]': 'postImage',
+  'populate[1]': 'likeUsers',
+  'populate[2]': 'author',
+})
 
-const itemData = [
-  {
-    img: 'https://cdn.pixabay.com/photo/2022/05/06/13/11/lake-7178316_960_720.jpg',
-    title: 'Breakfast',
-    author: '@bkristastucchio',
-  },
-  {
-    img: 'https://cdn.pixabay.com/photo/2022/05/24/09/48/sky-7218043_960_720.jpg',
-    title: 'Burger',
-    author: '@rollelflex_graphy726',
-  },
-  {
-    img: 'https://cdn.pixabay.com/photo/2021/08/22/06/24/bird-6564285_960_720.jpg',
-    title: 'Camera',
-    author: '@helloimnik',
-  },
-  {
-    img: 'https://cdn.pixabay.com/photo/2022/04/05/05/54/pop-7112848_960_720.png',
-    title: 'Fern',
-    author: '@katie_wasserman',
-  },
-]
+const MainPage = () => {
+  const { snsPosts: snsPostsFromStrapi, isLoading } = useSnsPosts(query)
+
+  if (isLoading) {
+    return <p>loading...</p>
+  }
+
+  const SnsPostsData = snsPostsFromStrapi.map(snsPost => ({
+    id: snsPost.id,
+    author: snsPost.attributes.author.data.attributes.username,
+    imageUrl: BACKEND_URL + snsPost.attributes.postImage.data[0].attributes.url,
+    imageAltText:
+      snsPost.attributes.postImage.data[0].attributes.alternativeText,
+  }))
+
+  return (
+    <>
+      <ImageList variant="masonry" cols={3}>
+        <ImageCardItems itemsData={SnsPostsData} />
+      </ImageList>
+    </>
+  )
+}
 
 export default withHeader(MainPage)
