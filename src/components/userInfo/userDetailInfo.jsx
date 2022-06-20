@@ -11,7 +11,12 @@ import FormHelperText from '@mui/material/FormHelperText'
 import Modal from 'components/modals/modal'
 import useModalState from 'hooks/useModalState'
 
-const UserDetailInfoForm = ({ buttonInModal }) => {
+const UserDetailInfoForm = ({
+  prevGender,
+  prevFashionStyles,
+  prevBodyShape,
+  buttonInModal,
+}) => {
   const [fashionStyles, setFashionStyles] = useState([])
 
   const handleFashionStyleChange = fashionStyle => e => {
@@ -34,26 +39,26 @@ const UserDetailInfoForm = ({ buttonInModal }) => {
     <>
       <FormControl>
         <FormLabel>성별</FormLabel>
-        <RadioGroup row name="gender">
+        <RadioGroup row name="gender" defaultValue={prevGender}>
           {GENDERS.map(gender => (
             <FormControlLabel
               key={gender.id}
-              value={gender.englishName}
+              value={gender.name}
               control={<Radio />}
-              label={gender.koreaName}
+              label={gender.name}
             />
           ))}
         </RadioGroup>
       </FormControl>
       <FormControl>
         <FormLabel>체형</FormLabel>
-        <RadioGroup row>
+        <RadioGroup row name="body-shape" defaultValue={prevBodyShape}>
           {BODY_SHAPES.map(bodyShape => (
             <FormControlLabel
               key={bodyShape.id}
-              value={bodyShape.englishName}
+              value={bodyShape.name}
               control={<Radio />}
-              label={bodyShape.koreaName}
+              label={bodyShape.name}
             />
           ))}
         </RadioGroup>
@@ -64,8 +69,12 @@ const UserDetailInfoForm = ({ buttonInModal }) => {
           {FASHION_STYLES.map(fashionStyle => (
             <FormControlLabel
               key={fashionStyle.id}
+              value={fashionStyle.name}
               control={
-                <Checkbox onChange={handleFashionStyleChange(fashionStyle)} />
+                <Checkbox
+                  onChange={handleFashionStyleChange(fashionStyle)}
+                  defaultChecked={fashionStyle.isChecked}
+                />
               }
               label={fashionStyle.name}
             />
@@ -78,11 +87,16 @@ const UserDetailInfoForm = ({ buttonInModal }) => {
   )
 }
 
-const UserDetailInfoControlButtonAndModal = ({
-  buttonText,
-  modalTitleText,
-  buttonTextinModal,
-}) => {
+const UserDetailInfoControlButtonAndModal = ({ button, modal }) => {
+  return (
+    <>
+      {button}
+      {modal}
+    </>
+  )
+}
+
+const UserDetailInfo = ({ data }) => {
   const {
     isOpen: isUserDetailInfoModalOpen,
     handleOpen: handleUserDetailInfoModalOpen,
@@ -91,54 +105,65 @@ const UserDetailInfoControlButtonAndModal = ({
 
   return (
     <>
-      <Button varient="contained" onClick={handleUserDetailInfoModalOpen}>
-        {buttonText}
-      </Button>
-      <Modal
-        title={modalTitleText}
-        contents={
-          <UserDetailInfoForm
-            buttonInModal={
-              <Button variant="contained">{buttonTextinModal}</Button>
-            }
-          />
-        }
-        open={isUserDetailInfoModalOpen}
-        onClose={handleUserDetailInfoModalClose}
-      />
-    </>
-  )
-}
-
-const UserDetailInfo = () => {
-  return (
-    <>
       {/* 유저의 상세 정보(성별, 옷 스타일, 체형) 데이터가 하나도 없다면 렌더링 될 부분 */}
       <p>상세 정보를 입력하고 나와 같은 스타일의 유저들을 만나보세요!</p>
       <UserDetailInfoControlButtonAndModal
-        buttonText="상세 정보 입력하러 가기"
-        modalTitleText="상세 정보 입력하기"
-        buttonTextinModal="등록"
+        button={
+          <Button varient="contained" onClick={handleUserDetailInfoModalOpen}>
+            상세 정보 입력하러 가기
+          </Button>
+        }
+        modal={
+          <Modal
+            title="상세 정보 입력하기"
+            contents={
+              <UserDetailInfoForm
+                buttonInModal={<Button variant="contained">등록</Button>}
+              />
+            }
+            open={isUserDetailInfoModalOpen}
+            onClose={handleUserDetailInfoModalClose}
+          />
+        }
       />
 
       <dl>
         <div>
           <dt>성별</dt>
-          <dd>여</dd>
+          <dd>{data.gender}</dd>
         </div>
         <div>
           <dt>옷 스타일</dt>
-          <dd>캐주얼, 빈티지, 시크</dd>
+          <dd>
+            {data.fashionStyles.map(fashionStyle => `${fashionStyle.name} `)}
+          </dd>
         </div>
         <div>
           <dt>체형</dt>
-          <dd>모래시계형</dd>
+          <dd>{data.bodyShape}</dd>
         </div>
       </dl>
       <UserDetailInfoControlButtonAndModal
-        buttonText="상세 정보 수정"
-        modalTitleText="상세 정보 수정하기"
-        buttonTextinModal="수정"
+        button={
+          <Button varient="contained" onClick={handleUserDetailInfoModalOpen}>
+            상세 정보 수정
+          </Button>
+        }
+        modal={
+          <Modal
+            title="상세 정보 수정하기"
+            contents={
+              <UserDetailInfoForm
+                prevGender={data.gender}
+                prevFashionStyles={data.fashionStyles}
+                prevBodyShape={data.bodyShape}
+                buttonInModal={<Button variant="contained">수정</Button>}
+              />
+            }
+            open={isUserDetailInfoModalOpen}
+            onClose={handleUserDetailInfoModalClose}
+          />
+        }
       />
     </>
   )
@@ -147,17 +172,17 @@ const UserDetailInfo = () => {
 export default UserDetailInfo
 
 const GENDERS = [
-  { id: 1, englishName: 'male', koreaName: '남' },
-  { id: 2, englishName: 'female', koreaName: '여' },
+  { id: 1, name: '남' },
+  { id: 2, name: '여' },
 ]
 
 const BODY_SHAPES = [
-  { id: 1, englishName: 'triangle', koreaName: '삼각형' },
-  { id: 2, englishName: 'inverted-triangle', koreaName: '역삼각형' },
-  { id: 3, englishName: 'oval', koreaName: '타원형' },
-  { id: 4, englishName: 'rectangle', koreaName: '직사각형' },
-  { id: 5, englishName: 'hourglass', koreaName: '모래시계형' },
-  { id: 6, englishName: 'trapezoid', koreaName: '사다리꼴형' },
+  { id: 1, name: '삼각형' },
+  { id: 2, name: '역삼각형' },
+  { id: 3, name: '타원형' },
+  { id: 4, name: '직사각형' },
+  { id: 5, name: '모래시계형' },
+  { id: 6, name: '사다리꼴형' },
 ]
 
 const FASHION_STYLES = [
