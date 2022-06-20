@@ -11,11 +11,9 @@ const editUserDetailInfo = async ({
     method: 'put',
     url: `${BACKEND_URL}/api/users/${userId}`,
     data: {
-      data: {
-        gender,
-        bodyShape,
-        fashionStyle,
-      },
+      gender,
+      bodyShape,
+      fashionStyle,
     },
   })
 }

@@ -12,12 +12,10 @@ const editUserBasicInfo = async ({
     method: 'put',
     url: `${BACKEND_URL}/api/users/${userId}`,
     data: {
-      data: {
-        username,
-        height,
-        weight,
-        profileImage: profileImageId,
-      },
+      username,
+      height,
+      weight,
+      profileImage: profileImageId,
     },
   })
 }

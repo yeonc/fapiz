@@ -19,7 +19,7 @@ const MyInfoPage = () => {
       ? BACKEND_URL + me.profileImage.url
       : NOT_INFOMATION_TEXT,
     username: me.username ? me.username : NOT_INFOMATION_TEXT,
-    height: me.height ? me.weight : NOT_INFOMATION_TEXT,
+    height: me.height ? me.height : NOT_INFOMATION_TEXT,
     weight: me.weight ? me.weight : NOT_INFOMATION_TEXT,
     points: me.points ? me.points : NOT_INFOMATION_TEXT,
     level: me.level ? me.level : NOT_INFOMATION_TEXT,
