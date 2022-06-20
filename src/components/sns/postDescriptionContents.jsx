@@ -1,8 +1,9 @@
 import { useRouter } from 'next/router'
 import PostImages from 'components/sns/postImages'
 import PostAuthorHeader from 'components/sns/postAuthorHeader'
-import ButtonsForLikeAndBookmark from 'components/sns/buttonsForLikeAndBookmark'
 import PopoverMenu from 'components/common/menus/popoverMenu'
+import LikeButton from 'components/common/buttons/likeButton'
+import BookmarkButton from 'components/common/buttons/bookmarkButton'
 import useSnsPost from 'hooks/useSnsPost'
 import useMe from 'hooks/useMe'
 import createUrlQuery from 'utils/createUrlQuery'
@@ -83,12 +84,8 @@ const PostDescriptionContents = () => {
         popoverMenu={<PopoverMenu postId={snsPostId} myId={me && me.id} />}
       />
       {snsPostImagesFromStrapi && <PostImages images={snsPostImages} />}
-      <ButtonsForLikeAndBookmark
-        snsPostId={snsPostId}
-        myId={me && me.id}
-        likeUsers={snsPost.likeUsers.data}
-        bookmarkUsers={snsPost.bookmarkUsers.data}
-      />
+      <LikeButton me={me} targetPost={snsPost} isShowUsersNum={true} />
+      <BookmarkButton me={me} targetPost={snsPost} isShowUsersNum={true} />
       <PostText text={snsPost.content} createdDate={dateFormat} />
       {snsPost.itemInformation && (
         <PostFashionItemInfo fashionItems={snsPost.itemInformation} />
