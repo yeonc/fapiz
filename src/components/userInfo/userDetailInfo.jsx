@@ -10,6 +10,7 @@ import Checkbox from '@mui/material/Checkbox'
 import FormHelperText from '@mui/material/FormHelperText'
 import Modal from 'components/modals/modal'
 import useModalState from 'hooks/useModalState'
+import useMe from 'hooks/useMe'
 
 const UserDetailInfoForm = ({
   prevGender,
@@ -71,10 +72,7 @@ const UserDetailInfoForm = ({
               key={fashionStyle.id}
               value={fashionStyle.name}
               control={
-                <Checkbox
-                  onChange={handleFashionStyleChange(fashionStyle)}
-                  defaultChecked={fashionStyle.isChecked}
-                />
+                <Checkbox onChange={handleFashionStyleChange(fashionStyle)} />
               }
               label={fashionStyle.name}
             />
@@ -96,7 +94,7 @@ const UserDetailInfoControlButtonAndModal = ({ button, modal }) => {
   )
 }
 
-const UserDetailInfo = ({ data }) => {
+const UserDetailInformationGetArea = () => {
   const {
     isOpen: isUserDetailInfoModalOpen,
     handleOpen: handleUserDetailInfoModalOpen,
@@ -105,7 +103,6 @@ const UserDetailInfo = ({ data }) => {
 
   return (
     <>
-      {/* 유저의 상세 정보(성별, 옷 스타일, 체형) 데이터가 하나도 없다면 렌더링 될 부분 */}
       <p>상세 정보를 입력하고 나와 같은 스타일의 유저들을 만나보세요!</p>
       <UserDetailInfoControlButtonAndModal
         button={
@@ -126,7 +123,19 @@ const UserDetailInfo = ({ data }) => {
           />
         }
       />
+    </>
+  )
+}
 
+const UserDetailInformationShowAndEditArea = ({ data }) => {
+  const {
+    isOpen: isUserDetailInfoModalOpen,
+    handleOpen: handleUserDetailInfoModalOpen,
+    handleClose: handleUserDetailInfoModalClose,
+  } = useModalState()
+
+  return (
+    <>
       <dl>
         <div>
           <dt>성별</dt>
@@ -165,6 +174,33 @@ const UserDetailInfo = ({ data }) => {
           />
         }
       />
+    </>
+  )
+}
+
+const UserDetailInfo = () => {
+  const { me } = useMe()
+
+  console.log(me)
+
+  const NOT_INFOMATION_TEXT =
+    '정보가 없습니다. 상세 정보 수정 버튼을 눌러 정보를 입력해 보세요!'
+
+  const detailInfo = {
+    gender: me.gender ? me.gender : NOT_INFOMATION_TEXT,
+    fashionStyles: me.fashionStyle ? me.fashionStyle : NOT_INFOMATION_TEXT,
+    bodyShape: me.bodyShape ? me.bodyShape : NOT_INFOMATION_TEXT,
+  }
+
+  return (
+    <>
+      {me.gender || me.fashionStyle || me.bodyShape ? (
+        // 유저의 상세 정보(성별, 옷 스타일, 체형) 데이터가 하나라도 있다면 렌더링 될 컴포넌트
+        <UserDetailInformationShowAndEditArea data={detailInfo} />
+      ) : (
+        // 유저의 상세 정보(성별, 옷 스타일, 체형) 데이터가 하나도 없다면 렌더링 될 컴포넌트
+        <UserDetailInformationGetArea />
+      )}
     </>
   )
 }
