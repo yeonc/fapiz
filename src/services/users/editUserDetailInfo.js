@@ -5,7 +5,7 @@ const editUserDetailInfo = async ({
   userId,
   gender,
   bodyShape,
-  fashionStyle,
+  fashionStyles,
 }) => {
   return axios({
     method: 'put',
@@ -13,7 +13,7 @@ const editUserDetailInfo = async ({
     data: {
       gender,
       bodyShape,
-      fashionStyle,
+      fashionStyles,
     },
   })
 }

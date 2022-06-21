@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useSWRConfig } from 'swr'
 import Button from '@mui/material/Button'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
@@ -9,16 +10,47 @@ import FormLabel from '@mui/material/FormLabel'
 import Checkbox from '@mui/material/Checkbox'
 import FormHelperText from '@mui/material/FormHelperText'
 import Modal from 'components/modals/modal'
+import editUserDetailInfo from 'services/users/editUserDetailInfo'
 import useModalState from 'hooks/useModalState'
 import useMe from 'hooks/useMe'
+import { BACKEND_URL, IS_SERVER } from 'constants/constants'
 
 const UserDetailInfoForm = ({
+  userId,
   prevGender,
   prevFashionStyles,
   prevBodyShape,
   buttonInModal,
+  onModalClose,
 }) => {
-  const [fashionStyles, setFashionStyles] = useState([])
+  const { mutate } = useSWRConfig()
+  const refetch = () => {
+    const token = !IS_SERVER && localStorage.getItem('jwt')
+    mutate(
+      token
+        ? {
+            url: `${BACKEND_URL}/api/users/me`,
+            config: {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            },
+          }
+        : null
+    )
+  }
+
+  const [fashionStyles, setFashionStyles] = useState(prevFashionStyles)
+  const [gender, setGender] = useState(prevGender)
+  const [bodyShape, setBodyShape] = useState(prevBodyShape)
+
+  const handleGenderChange = gender => {
+    setGender(gender)
+  }
+
+  const handleBodyShapeChange = bodyShape => {
+    setBodyShape(bodyShape)
+  }
 
   const handleFashionStyleChange = fashionStyle => e => {
     if (e.target.checked === true) {
@@ -28,38 +60,69 @@ const UserDetailInfoForm = ({
     }
 
     if (e.target.checked === false) {
-      const filteredFashionStyles = fashionStyles.filter(
+      const checkedFashionStyles = fashionStyles.filter(
         style => style.name !== fashionStyle.name
       )
-      setFashionStyles([...filteredFashionStyles])
+      console.log(checkedFashionStyles)
+      setFashionStyles([...checkedFashionStyles])
       console.log(fashionStyles) // 다시 살펴볼 것! 왜 출력될 때 아이템이 빠지지 않은 상태인지
     }
   }
 
+  const editDetailInfo = async () => {
+    await editUserDetailInfo({ userId, gender, bodyShape, fashionStyles })
+  }
+
+  const afterEditDetailInfo = () => {
+    onModalClose()
+    refetch()
+  }
+
+  const handleUserInfoSubmit = async e => {
+    e.preventDefault()
+
+    try {
+      await editDetailInfo()
+      afterEditDetailInfo()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
-    <>
+    <form onSubmit={handleUserInfoSubmit}>
       <FormControl>
         <FormLabel>성별</FormLabel>
-        <RadioGroup row name="gender" defaultValue={prevGender}>
-          {GENDERS.map(gender => (
+        <RadioGroup
+          row
+          name="gender"
+          value={gender}
+          onChange={e => handleGenderChange(e.target.value)}
+        >
+          {GENDER_LIST.map(genderItem => (
             <FormControlLabel
-              key={gender.id}
-              value={gender.name}
+              key={genderItem.id}
+              value={genderItem.name}
               control={<Radio />}
-              label={gender.name}
+              label={genderItem.name}
             />
           ))}
         </RadioGroup>
       </FormControl>
       <FormControl>
         <FormLabel>체형</FormLabel>
-        <RadioGroup row name="body-shape" defaultValue={prevBodyShape}>
-          {BODY_SHAPES.map(bodyShape => (
+        <RadioGroup
+          row
+          name="body-shape"
+          value={bodyShape}
+          onChange={e => handleBodyShapeChange(e.target.value)}
+        >
+          {BODY_SHAPE_LIST.map(bodyShapeItem => (
             <FormControlLabel
-              key={bodyShape.id}
-              value={bodyShape.name}
+              key={bodyShapeItem.id}
+              value={bodyShapeItem.name}
               control={<Radio />}
-              label={bodyShape.name}
+              label={bodyShapeItem.name}
             />
           ))}
         </RadioGroup>
@@ -67,21 +130,31 @@ const UserDetailInfoForm = ({
       <FormControl>
         <FormLabel>패션 스타일</FormLabel>
         <FormGroup>
-          {FASHION_STYLES.map(fashionStyle => (
+          {FASHION_STYLE_LIST.map(fashionStyleItem => (
             <FormControlLabel
-              key={fashionStyle.id}
-              value={fashionStyle.name}
+              key={fashionStyleItem.id}
+              value={fashionStyleItem.name}
               control={
-                <Checkbox onChange={handleFashionStyleChange(fashionStyle)} />
+                <Checkbox
+                  checked={
+                    fashionStyles.findIndex(
+                      fashionStyle => fashionStyle.id === fashionStyleItem.id
+                    ) >= 0
+                  }
+                  onClick={handleFashionStyleChange({
+                    id: fashionStyleItem.id,
+                    name: fashionStyleItem.name,
+                  })}
+                />
               }
-              label={fashionStyle.name}
+              label={fashionStyleItem.name}
             />
           ))}
         </FormGroup>
         <FormHelperText>3개까지 선택 가능</FormHelperText>
       </FormControl>
       {buttonInModal}
-    </>
+    </form>
   )
 }
 
@@ -95,6 +168,8 @@ const UserDetailInfoControlButtonAndModal = ({ button, modal }) => {
 }
 
 const UserDetailInformationGetArea = () => {
+  const { me } = useMe()
+
   const {
     isOpen: isUserDetailInfoModalOpen,
     handleOpen: handleUserDetailInfoModalOpen,
@@ -115,7 +190,13 @@ const UserDetailInformationGetArea = () => {
             title="상세 정보 입력하기"
             contents={
               <UserDetailInfoForm
-                buttonInModal={<Button variant="contained">등록</Button>}
+                userId={me.id}
+                buttonInModal={
+                  <Button variant="contained" type="submit">
+                    등록
+                  </Button>
+                }
+                onModalClose={handleUserDetailInfoModalClose}
               />
             }
             open={isUserDetailInfoModalOpen}
@@ -128,6 +209,8 @@ const UserDetailInformationGetArea = () => {
 }
 
 const UserDetailInformationShowAndEditArea = ({ data }) => {
+  const { me } = useMe()
+
   const {
     isOpen: isUserDetailInfoModalOpen,
     handleOpen: handleUserDetailInfoModalOpen,
@@ -163,10 +246,16 @@ const UserDetailInformationShowAndEditArea = ({ data }) => {
             title="상세 정보 수정하기"
             contents={
               <UserDetailInfoForm
+                userId={me.id}
                 prevGender={data.gender}
                 prevFashionStyles={data.fashionStyles}
                 prevBodyShape={data.bodyShape}
-                buttonInModal={<Button variant="contained">수정</Button>}
+                buttonInModal={
+                  <Button variant="contained" type="submit">
+                    수정
+                  </Button>
+                }
+                onModalClose={handleUserDetailInfoModalClose}
               />
             }
             open={isUserDetailInfoModalOpen}
@@ -188,7 +277,7 @@ const UserDetailInfo = () => {
 
   const detailInfo = {
     gender: me.gender ? me.gender : NOT_INFOMATION_TEXT,
-    fashionStyles: me.fashionStyle ? me.fashionStyle : NOT_INFOMATION_TEXT,
+    fashionStyles: me.fashionStyles ? me.fashionStyles : NOT_INFOMATION_TEXT,
     bodyShape: me.bodyShape ? me.bodyShape : NOT_INFOMATION_TEXT,
   }
 
@@ -207,12 +296,12 @@ const UserDetailInfo = () => {
 
 export default UserDetailInfo
 
-const GENDERS = [
+const GENDER_LIST = [
   { id: 1, name: '남' },
   { id: 2, name: '여' },
 ]
 
-const BODY_SHAPES = [
+const BODY_SHAPE_LIST = [
   { id: 1, name: '삼각형' },
   { id: 2, name: '역삼각형' },
   { id: 3, name: '타원형' },
@@ -221,7 +310,7 @@ const BODY_SHAPES = [
   { id: 6, name: '사다리꼴형' },
 ]
 
-const FASHION_STYLES = [
+const FASHION_STYLE_LIST = [
   { id: 1, name: '캐주얼' },
   { id: 2, name: '스트릿' },
   { id: 3, name: '빈티지' },
