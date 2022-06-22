@@ -2,7 +2,7 @@ import axios from 'axios'
 import { BACKEND_URL } from 'constants/constants'
 
 const editUserBasicInfo = async ({
-  userId,
+  myId,
   username,
   height,
   weight,
@@ -10,7 +10,7 @@ const editUserBasicInfo = async ({
 }) => {
   return axios({
     method: 'put',
-    url: `${BACKEND_URL}/api/users/${userId}`,
+    url: `${BACKEND_URL}/api/users/${myId}`,
     data: {
       username,
       height,
