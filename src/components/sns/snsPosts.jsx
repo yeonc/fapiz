@@ -3,6 +3,7 @@ import SnsPostList from '@mui/material/ImageList'
 import SnsPostItem from '@mui/material/ImageListItem'
 import { css } from '@emotion/react'
 import useSnsPosts from 'hooks/useSnsPosts'
+import createUrlQuery from 'utils/createUrlQuery'
 import { BACKEND_URL } from 'constants/constants'
 
 export const cursorPointer = css`
@@ -11,15 +12,13 @@ export const cursorPointer = css`
 
 const SnsPosts = ({ userId }) => {
   const router = useRouter()
-  const { snsPosts, error, isLoading } = useSnsPosts(userId)
 
-  if (isLoading) {
-    return <p>로딩중...</p>
-  }
+  const query = createUrlQuery({
+    populate: '*',
+    'filters[author][id][$eq]': userId,
+  })
 
-  if (error) {
-    return <p>에러가 발생했습니다. 홈으로 돌아가세요</p>
-  }
+  const { snsPosts, error, isLoading } = useSnsPosts(query)
 
   const sanitizedSnsPosts = snsPosts.map(post => {
     const postId = post.id

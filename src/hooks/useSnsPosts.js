@@ -1,12 +1,6 @@
 import useSWR from 'swr'
-import createUrlQuery from 'utils/createUrlQuery'
 
-const useSnsPosts = userId => {
-  const query = createUrlQuery({
-    populate: '*',
-    'filters[author][id][$eq]': userId,
-  })
-
+const useSnsPosts = query => {
   const { data, error } = useSWR({
     url: `/api/sns-posts?${query}`,
   })

@@ -1,6 +1,14 @@
-import React from 'react'
 import withHeader from 'hocs/withHeader'
+import MyBasicInfo from 'components/myInfo/myBasicInfo'
+import MyAdditionalInfo from 'components/myInfo/myAdditionalInfo'
 
-const MyInfoPage = () => <h1>myinfo page</h1>
+const MyInfoPage = () => {
+  return (
+    <>
+      <MyBasicInfo />
+      <MyAdditionalInfo />
+    </>
+  )
+}
 
 export default withHeader(MyInfoPage)
