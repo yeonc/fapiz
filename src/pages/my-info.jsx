@@ -1,12 +1,12 @@
 import withHeader from 'hocs/withHeader'
-import MyBasicInfo from 'components/userInfo/myBasicInfo'
-import UserDetailInfo from 'components/userInfo/userDetailInfo'
+import MyBasicInfo from 'components/myInfo/myBasicInfo'
+import MyAdditionalInfo from 'components/myInfo/myAdditionalInfo'
 
 const MyInfoPage = () => {
   return (
     <>
       <MyBasicInfo />
-      {/* <UserDetailInfo /> */}
+      <MyAdditionalInfo />
     </>
   )
 }

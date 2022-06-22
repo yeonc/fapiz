@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { BACKEND_URL } from 'constants/constants'
 
-const editUserBasicInfo = async ({
+const editMyBasicInfo = async ({
   myId,
   username,
   height,
@@ -20,4 +20,4 @@ const editUserBasicInfo = async ({
   })
 }
 
-export default editUserBasicInfo
+export default editMyBasicInfo

@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import ImageUploadButton from 'components/common/buttons/imageUploadButton'
 import uploadImage from 'services/users/uploadImage'
-import editUserBasicInfo from 'services/users/editUserBasicInfo'
+import editMyBasicInfo from 'services/users/editMyBasicInfo'
 
 const MyBasicInfoForm = ({
   myId,
@@ -40,7 +40,7 @@ const MyBasicInfoForm = ({
   }
 
   const editBasicInfo = async uploadedImageId => {
-    await editUserBasicInfo({
+    await editMyBasicInfo({
       myId,
       username,
       weight,

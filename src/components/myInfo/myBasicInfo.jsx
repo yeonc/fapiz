@@ -1,5 +1,5 @@
-import MyBasicInfoShowArea from 'components/userInfo/myBasicInfoShowArea'
-import MyBasicInfoEditArea from 'components/userInfo/myBasicInfoEditArea'
+import MyBasicInfoShowArea from 'components/myInfo/myBasicInfoShowArea'
+import MyBasicInfoEditArea from 'components/myInfo/myBasicInfoEditArea'
 import useMe from 'hooks/useMe'
 import { BACKEND_URL } from 'constants/constants'
 

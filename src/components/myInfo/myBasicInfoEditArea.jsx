@@ -3,13 +3,13 @@ import Button from '@mui/material/Button'
 import Modal from 'components/modals/modal'
 import useModalState from 'hooks/useModalState'
 import { BACKEND_URL, IS_SERVER } from 'constants/constants'
-import MyBasicInfoForm from 'components/userInfo/myBasicInfoForm'
+import MyBasicInfoForm from 'components/myInfo/myBasicInfoForm'
 
 const MyBasicInfoEditArea = ({ myBasicInfo }) => {
   const {
-    isOpen: isUserBasicInfoModalOpen,
-    handleOpen: handleUserBasicInfoModalOpen,
-    handleClose: handleUserBasicInfoModalClose,
+    isOpen: isMyBasicInfoModalOpen,
+    handleOpen: handleMyBasicInfoModalOpen,
+    handleClose: handleMyBasicInfoModalClose,
   } = useModalState()
 
   const { mutate } = useSWRConfig()
@@ -29,13 +29,13 @@ const MyBasicInfoEditArea = ({ myBasicInfo }) => {
   }
 
   const afterEditBasicInfo = () => {
-    handleUserBasicInfoModalClose()
+    handleMyBasicInfoModalClose()
     refetch()
   }
 
   return (
     <>
-      <Button variant="contained" onClick={handleUserBasicInfoModalOpen}>
+      <Button variant="contained" onClick={handleMyBasicInfoModalOpen}>
         기본 정보 변경하기
       </Button>
       <Modal
@@ -50,8 +50,8 @@ const MyBasicInfoEditArea = ({ myBasicInfo }) => {
             afterEditBasicInfo={afterEditBasicInfo}
           />
         }
-        open={isUserBasicInfoModalOpen}
-        onClose={handleUserBasicInfoModalClose}
+        open={isMyBasicInfoModalOpen}
+        onClose={handleMyBasicInfoModalClose}
       />
     </>
   )
