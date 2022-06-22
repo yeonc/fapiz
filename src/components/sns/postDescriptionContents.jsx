@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router'
+import { useSWRConfig } from 'swr'
 import PostImages from 'components/sns/postImages'
 import PostAuthorHeader from 'components/sns/postAuthorHeader'
 import PopoverMenu from 'components/common/menus/popoverMenu'
@@ -8,6 +9,25 @@ import useSnsPost from 'hooks/useSnsPost'
 import useMe from 'hooks/useMe'
 import createUrlQuery from 'utils/createUrlQuery'
 import getFormattedDate from 'utils/getFormattedDate'
+
+const queryForFetchingSnsPostByPostId = createUrlQuery({
+  'populate[0]': 'author.profileImage',
+  'populate[1]': 'likeUsers',
+  'populate[2]': 'bookmarkUsers',
+  'populate[3]': 'postImage',
+})
+const mutateKeyForFetchingSnsPostByPostId = postId => ({
+  url: `/api/sns-posts/${postId}?${queryForFetchingSnsPostByPostId}`,
+})
+
+const queryForFetchingSnsPosts = createUrlQuery({
+  'populate[0]': 'postImage',
+  'populate[1]': 'likeUsers',
+  'populate[2]': 'author',
+})
+const mutateKeyForFetchingSnsPosts = {
+  url: `/api/sns-posts?${queryForFetchingSnsPosts}`,
+}
 
 const PostText = ({ text, createdDate }) => (
   <>
@@ -29,13 +49,6 @@ const PostFashionItemInfo = ({ fashionItems }) => (
   </>
 )
 
-const query = createUrlQuery({
-  'populate[0]': 'author.profileImage',
-  'populate[1]': 'likeUsers',
-  'populate[2]': 'bookmarkUsers',
-  'populate[3]': 'postImage',
-})
-
 const PostDescriptionContents = () => {
   const router = useRouter()
   const { snsPostId } = router.query
@@ -44,7 +57,7 @@ const PostDescriptionContents = () => {
     snsPost: snsPostFromStrapi,
     isLoading,
     error,
-  } = useSnsPost(snsPostId, query)
+  } = useSnsPost(snsPostId, queryForFetchingSnsPostByPostId)
 
   const { me } = useMe()
 
@@ -77,6 +90,16 @@ const PostDescriptionContents = () => {
   const createdDate = new Date(snsPost.createdAt)
   const dateFormat = getFormattedDate(createdDate)
 
+  const { mutate } = useSWRConfig()
+
+  const afterBookmark = () => {
+    mutate(mutateKeyForFetchingSnsPostByPostId(snsPost.id))
+  }
+
+  const afterLike = () => {
+    mutate(mutateKeyForFetchingSnsPosts)
+  }
+
   return (
     <>
       <PostAuthorHeader
@@ -84,8 +107,18 @@ const PostDescriptionContents = () => {
         popoverMenu={<PopoverMenu postId={snsPostId} myId={me && me.id} />}
       />
       {snsPostImagesFromStrapi && <PostImages images={snsPostImages} />}
-      <LikeButton me={me} targetPost={snsPost} isShowUsersNum={true} />
-      <BookmarkButton me={me} targetPost={snsPost} isShowUsersNum={true} />
+      <LikeButton
+        myId={me.id}
+        targetForLike={snsPost}
+        afterLike={afterLike}
+        isShowLikeUsersNumber={true}
+      />
+      <BookmarkButton
+        myId={me.id}
+        targetForBookmark={snsPost}
+        afterBookmark={afterBookmark}
+        isShowBookmarkUsersNumber={true}
+      />
       <PostText text={snsPost.content} createdDate={dateFormat} />
       {snsPost.itemInformation && (
         <PostFashionItemInfo fashionItems={snsPost.itemInformation} />

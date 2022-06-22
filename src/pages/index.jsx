@@ -8,18 +8,28 @@ import useSnsPosts from 'hooks/useSnsPosts'
 import useMe from 'hooks/useMe'
 import createUrlQuery from 'utils/createUrlQuery'
 import { BACKEND_URL } from 'constants/constants'
+import { useSWRConfig } from 'swr'
 
-const query = createUrlQuery({
+const queryForFetchingSnsPosts = createUrlQuery({
   'populate[0]': 'postImage',
   'populate[1]': 'likeUsers',
   'populate[2]': 'author',
 })
+const mutateKeyForFetchingSnsPosts = {
+  url: `/api/sns-posts?${queryForFetchingSnsPosts}`,
+}
 
 const ImageCardItems = ({ cardItemsData }) => {
   const { me, isLoading: isMeLoading } = useMe()
 
   if (isMeLoading) {
     return <p>내 정보를 받아오는 중입니다.</p>
+  }
+
+  const { mutate } = useSWRConfig()
+
+  const afterLike = () => {
+    mutate(mutateKeyForFetchingSnsPosts)
   }
 
   return cardItemsData.map(cardItemData => (
@@ -31,9 +41,10 @@ const ImageCardItems = ({ cardItemsData }) => {
         actionIcon={
           <IconButton>
             <LikeButton
-              me={me}
-              targetPost={cardItemData.object}
-              isShowUsersNum={false}
+              myId={me.id}
+              targetForLike={cardItemData.object}
+              afterLike={afterLike}
+              isShowLikeUsersNumber={false}
             />
           </IconButton>
         }
@@ -45,7 +56,7 @@ const ImageCardItems = ({ cardItemsData }) => {
 
 const MainPage = () => {
   const { snsPosts: snsPostsFromStrapi, isLoading: isSnsPostsLoading } =
-    useSnsPosts(query)
+    useSnsPosts(queryForFetchingSnsPosts)
 
   if (isSnsPostsLoading) {
     return <p>포스트를 받아오는 중입니다.</p>

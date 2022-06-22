@@ -1,48 +1,41 @@
-import { useSWRConfig } from 'swr'
 import Checkbox from '@mui/material/Checkbox'
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder'
 import BookmarkIcon from '@mui/icons-material/Bookmark'
 import createBookmark from 'services/users/createBookmark'
 import deleteBookmark from 'services/users/deleteBookmark'
-import createUrlQuery from 'utils/createUrlQuery'
 
-const query = createUrlQuery({
-  'populate[0]': 'author.profileImage',
-  'populate[1]': 'likeUsers',
-  'populate[2]': 'bookmarkUsers',
-  'populate[3]': 'postImage',
-})
-
-const BookmarkButton = ({ me, targetPost, isShowUsersNum }) => {
-  const { mutate } = useSWRConfig()
-  const mutateKey = { url: `/api/sns-posts/${targetPost.id}?${query}` }
-
-  const bookmarkUsers = targetPost.bookmarkUsers.data
-  const isBookmark = bookmarkUsers.some(
-    bookmarkUser => bookmarkUser.id === me.Id
+const BookmarkButton = ({
+  myId,
+  targetForBookmark,
+  afterBookmark,
+  isShowBookmarkUsersNumber,
+}) => {
+  const bookmarkUsers = targetForBookmark.bookmarkUsers.data
+  const isBookmarked = bookmarkUsers.some(
+    bookmarkUser => bookmarkUser.id === myId
   )
 
   const bookmark = async () => {
     await createBookmark({
-      snsPostId: targetPost.id,
-      bookmarkUserId: me.Id,
+      snsPostId: targetForBookmark.id,
+      bookmarkUserId: myId,
     })
   }
 
   const unBookmark = async () => {
     const bookmarkUserIds = bookmarkUsers.map(bookmarkUser => bookmarkUser.id)
     await deleteBookmark({
-      snsPostId: targetPost.id,
+      snsPostId: targetForBookmark.id,
       bookmarkUserIds,
-      deleteBookmarkUserId: me.Id,
+      deleteBookmarkUserId: myId,
     })
   }
 
   const handleBookmarkButtonClick = async () => {
     try {
-      if (isBookmark) await unBookmark()
-      if (!isBookmark) await bookmark()
-      mutate(mutateKey)
+      if (isBookmarked) await unBookmark()
+      if (!isBookmarked) await bookmark()
+      afterBookmark()
     } catch (error) {
       console.error(error)
     }
@@ -53,10 +46,10 @@ const BookmarkButton = ({ me, targetPost, isShowUsersNum }) => {
       <Checkbox
         icon={<BookmarkBorderIcon />}
         checkedIcon={<BookmarkIcon />}
-        checked={isBookmark}
+        checked={isBookmarked}
         onClick={handleBookmarkButtonClick}
       />
-      {isShowUsersNum && <span>{bookmarkUsers.length}</span>}
+      {isShowBookmarkUsersNumber && <span>{bookmarkUsers.length}</span>}
     </>
   )
 }
