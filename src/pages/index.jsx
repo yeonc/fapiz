@@ -1,4 +1,6 @@
+import { useRouter } from 'next/router'
 import withHeader from 'hocs/withHeader'
+import { css } from '@emotion/react'
 import ImageList from '@mui/material/ImageList'
 import ImageListItem from '@mui/material/ImageListItem'
 import ImageListItemBar from '@mui/material/ImageListItemBar'
@@ -19,9 +21,22 @@ const mutateKeyForFetchingSnsPosts = {
   url: `/api/sns-posts?${queryForFetchingSnsPosts}`,
 }
 
+const cursorPointer = css`
+  cursor: pointer;
+`
+
 const ImageCardItem = ({ cardItemData, rightActionButton }) => {
+  const router = useRouter()
+
+  const goToSnsPost = snsPostId => {
+    router.push(`/sns/post/${snsPostId}`)
+  }
+
   return (
-    <ImageListItem>
+    <ImageListItem
+      onClick={() => goToSnsPost(cardItemData.id)}
+      css={cursorPointer}
+    >
       <img src={cardItemData.imageUrl} alt={cardItemData.imageAltText} />
       <ImageListItemBar
         title={cardItemData.author}

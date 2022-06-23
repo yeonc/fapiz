@@ -107,18 +107,22 @@ const PostDescriptionContents = () => {
         popoverMenu={<PopoverMenu postId={snsPostId} myId={me && me.id} />}
       />
       {snsPostImagesFromStrapi && <PostImages images={snsPostImages} />}
-      <LikeButton
-        myId={me.id}
-        targetForLike={snsPost}
-        afterLike={afterLike}
-        isShowLikeUsersNumber={true}
-      />
-      <BookmarkButton
-        myId={me.id}
-        targetForBookmark={snsPost}
-        afterBookmark={afterBookmark}
-        isShowBookmarkUsersNumber={true}
-      />
+      {!!me ? (
+        <LikeButton
+          myId={me.id}
+          targetForLike={snsPost}
+          afterLike={afterLike}
+          isShowLikeUsersNumber={true}
+        />
+      ) : null}
+      {!!me ? (
+        <BookmarkButton
+          myId={me.id}
+          targetForBookmark={snsPost}
+          afterBookmark={afterBookmark}
+          isShowBookmarkUsersNumber={true}
+        />
+      ) : null}
       <PostText text={snsPost.content} createdDate={dateFormat} />
       {snsPost.itemInformation && (
         <PostFashionItemInfo fashionItems={snsPost.itemInformation} />
