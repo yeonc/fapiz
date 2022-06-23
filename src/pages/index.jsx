@@ -9,6 +9,7 @@ import LikeButton from 'components/common/buttons/likeButton'
 import useSnsPosts from 'hooks/useSnsPosts'
 import useMe from 'hooks/useMe'
 import createUrlQuery from 'utils/createUrlQuery'
+import getDaysBetweenTwoDate from 'utils/getDaysBetweenTwoDate'
 import { BACKEND_URL } from 'constants/constants'
 import { useSWRConfig } from 'swr'
 
@@ -24,6 +25,8 @@ const mutateKeyForFetchingSnsPosts = {
 const cursorPointer = css`
   cursor: pointer;
 `
+
+const TWO_DAYS = 2
 
 const ImageCardItem = ({ cardItemData, rightActionButton }) => {
   const router = useRouter()
@@ -49,6 +52,12 @@ const ImageCardItem = ({ cardItemData, rightActionButton }) => {
 }
 
 const MainPage = () => {
+  const { mutate } = useSWRConfig()
+
+  const afterLike = () => {
+    mutate(mutateKeyForFetchingSnsPosts)
+  }
+
   const { me } = useMe()
   const { snsPosts: snsPostsFromStrapi, isLoading: isSnsPostsLoading } =
     useSnsPosts(queryForFetchingSnsPosts)
@@ -57,8 +66,9 @@ const MainPage = () => {
     return <p>포스트를 받아오는 중입니다.</p>
   }
 
-  const snsPosts = snsPostsFromStrapi.map(snsPost => ({
+  let snsPosts = snsPostsFromStrapi.map(snsPost => ({
     id: snsPost.id,
+    createdAt: snsPost.attributes.createdAt,
     author: snsPost.attributes.author.data.attributes.username,
     imageUrl: BACKEND_URL + snsPost.attributes.postImage.data[0].attributes.url,
     imageAltText:
@@ -66,11 +76,22 @@ const MainPage = () => {
     object: snsPost,
   }))
 
-  const { mutate } = useSWRConfig()
-
-  const afterLike = () => {
-    mutate(mutateKeyForFetchingSnsPosts)
+  const filterRecentlyCreatedSnsPosts = snsPosts => {
+    return snsPosts.filter(snsPost => {
+      const today = new Date()
+      const snsPostCreatedAt = new Date(snsPost.createdAt)
+      const isCreatedInLast2Days =
+        getDaysBetweenTwoDate(snsPostCreatedAt, today) < TWO_DAYS
+      return isCreatedInLast2Days
+    })
   }
+
+  const randomizeSnsPosts = snsPosts => {
+    return snsPosts.sort(() => Math.random() - 0.5)
+  }
+
+  const filteredSnsPosts = filterRecentlyCreatedSnsPosts(snsPosts)
+  snsPosts = randomizeSnsPosts(filteredSnsPosts)
 
   return (
     <>
