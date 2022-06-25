@@ -14,14 +14,14 @@ const queryForFetchingSnsPostByPostId = createUrlQuery({
   'populate[0]': 'author.profileImage',
   'populate[1]': 'likeUsers',
   'populate[2]': 'bookmarkUsers',
-  'populate[3]': 'postImage',
+  'populate[3]': 'postImages',
 })
 const mutateKeyForFetchingSnsPostByPostId = postId => ({
   url: `/api/sns-posts/${postId}?${queryForFetchingSnsPostByPostId}`,
 })
 
 const queryForFetchingSnsPosts = createUrlQuery({
-  'populate[0]': 'postImage',
+  'populate[0]': 'postImages',
   'populate[1]': 'likeUsers',
   'populate[2]': 'author',
 })
@@ -42,7 +42,7 @@ const PostFashionItemInfo = ({ fashionItems }) => (
     <ul>
       {fashionItems?.map((item, index) => (
         <li key={index.toString()}>
-          {item.itemType}: {item.itemPrice}원 / {item.itemPlace}
+          {item.category}: {item.price}원 / {item.buyingPlace}
         </li>
       ))}
     </ul>
@@ -70,7 +70,7 @@ const PostDescriptionContents = () => {
   }
 
   const snsPost = snsPostFromStrapi.attributes
-  const snsPostImagesFromStrapi = snsPost.postImage.data
+  const snsPostImagesFromStrapi = snsPost.postImages.data
   const snsPostImages = snsPostImagesFromStrapi
     ? snsPostImagesFromStrapi.map(image => ({
         id: image.id,
@@ -124,8 +124,8 @@ const PostDescriptionContents = () => {
         />
       ) : null}
       <PostText text={snsPost.content} createdDate={dateFormat} />
-      {snsPost.itemInformation && (
-        <PostFashionItemInfo fashionItems={snsPost.itemInformation} />
+      {snsPost.fashionItemsInfo && (
+        <PostFashionItemInfo fashionItems={snsPost.fashionItemsInfo} />
       )}
     </>
   )

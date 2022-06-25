@@ -14,7 +14,7 @@ import { BACKEND_URL } from 'constants/constants'
 import { useSWRConfig } from 'swr'
 
 const queryForFetchingSnsPosts = createUrlQuery({
-  'populate[0]': 'postImage',
+  'populate[0]': 'postImages',
   'populate[1]': 'likeUsers',
   'populate[2]': 'author',
 })
@@ -70,9 +70,10 @@ const MainPage = () => {
     id: snsPost.id,
     createdAt: snsPost.attributes.createdAt,
     author: snsPost.attributes.author.data.attributes.username,
-    imageUrl: BACKEND_URL + snsPost.attributes.postImage.data[0].attributes.url,
+    imageUrl:
+      BACKEND_URL + snsPost.attributes.postImages.data[0].attributes.url,
     imageAltText:
-      snsPost.attributes.postImage.data[0].attributes.alternativeText,
+      snsPost.attributes.postImages.data[0].attributes.alternativeText,
     object: snsPost,
   }))
 

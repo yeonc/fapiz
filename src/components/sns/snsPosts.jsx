@@ -18,11 +18,15 @@ const SnsPosts = ({ userId }) => {
     'filters[author][id][$eq]': userId,
   })
 
-  const { snsPosts, error, isLoading } = useSnsPosts(query)
+  const { snsPosts, isLoading } = useSnsPosts(query)
+
+  if (isLoading) {
+    return <p>게시물을 불러오는 중입니다...</p>
+  }
 
   const sanitizedSnsPosts = snsPosts.map(post => {
     const postId = post.id
-    const postImageArray = post.attributes.postImage.data
+    const postImageArray = post.attributes.postImages.data
     const postImages = postImageArray
       ? postImageArray.map(postImage => postImage.attributes)
       : []

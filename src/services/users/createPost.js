@@ -8,9 +8,9 @@ const createPost = async ({ postText, itemInfo, authorId, postImageIds }) => {
     data: {
       data: {
         content: postText,
-        itemInformation: itemInfo,
+        fashionItemsInfo: itemInfo,
         author: authorId,
-        postImage: postImageIds,
+        postImages: postImageIds,
       },
     },
   })
