@@ -20,9 +20,8 @@ import createUrlQuery from 'utils/createUrlQuery'
 import generateIdToObject from 'utils/generateIdToObject'
 
 const EMPTY_FASHION_ITEM_INFO = { category: '', price: '', buyingPlace: '' }
-const newEmptyFashionItemInfo = generateIdToObject(EMPTY_FASHION_ITEM_INFO)
 
-const snsPostImagePreviewSize = css`
+const snsPostPreviewImagesSize = css`
   width: 200px;
 `
 
@@ -38,46 +37,48 @@ const SnsPostEditPage = () => {
 
   const { snsPost } = useSnsPost(snsPostId)
 
-  const initialPreviewImageUrls = snsPost
-    ? snsPost.attributes.postImages.data.map(
-        image => BACKEND_URL + image.attributes.url
-      )
+  const initialPreviewImages = snsPost
+    ? snsPost.attributes.postImages.data.map(image => ({
+        url: BACKEND_URL + image.attributes.url,
+        altText: image.attributes.alternativeText,
+      }))
     : []
   const initialPostText = snsPost ? snsPost.attributes.content : ''
+
+  const newEmptyFashionItemInfo = generateIdToObject(EMPTY_FASHION_ITEM_INFO)
   const initialFashionItemsInfo = snsPost
     ? snsPost.attributes.fashionItemsInfo
     : [].concat(newEmptyFashionItemInfo)
 
   const [imageFiles, setImageFiles] = useState(null)
-  const [previewImageUrls, setPreviewImageUrls] = useState(
-    initialPreviewImageUrls
-  )
+  const [previewImages, setPreviewImages] = useState(initialPreviewImages)
   const [postText, setPostText] = useState(initialPostText)
   const [fashionItemsInfo, setFashionItemsInfo] = useState(
     initialFashionItemsInfo
   )
 
   useEffect(() => {
-    setPreviewImageUrls(initialPreviewImageUrls)
+    setPreviewImages(initialPreviewImages)
     setPostText(initialPostText)
     setFashionItemsInfo(initialFashionItemsInfo)
   }, [snsPost])
 
-  const setSnsPostPreviewImageUrls = imageFiles => {
-    const previewImageUrls = [...imageFiles].map(imageFile =>
-      URL.createObjectURL(imageFile)
-    )
-    setPreviewImageUrls(previewImageUrls)
+  const setSnsPostPreviewImages = imageFiles => {
+    const previewImages = [...imageFiles].map(imageFile => ({
+      url: URL.createObjectURL(imageFile),
+      altText: imageFile.name,
+    }))
+    setPreviewImages(previewImages)
   }
 
   const handleImageFilesChange = imageFiles => {
     setImageFiles(imageFiles)
-    setSnsPostPreviewImageUrls(imageFiles)
+    setSnsPostPreviewImages(imageFiles)
     mutate({ url: `/api/sns-posts/${snsPostId}?${query}` })
   }
 
-  const handlePreviewImageUrlsChange = imageUrls => {
-    setPreviewImageUrls(imageUrls)
+  const handlePreviewImagesChange = previewImages => {
+    setPreviewImages(previewImages)
   }
 
   const handlePostTextChange = postText => {
@@ -91,6 +92,9 @@ const SnsPostEditPage = () => {
 
   const handleFashionItemInfoAddMoreButtonClick = () => {
     setFashionItemsInfo(prev => {
+      const newEmptyFashionItemInfo = generateIdToObject(
+        EMPTY_FASHION_ITEM_INFO
+      )
       return prev.concat(newEmptyFashionItemInfo)
     })
   }
@@ -134,12 +138,13 @@ const SnsPostEditPage = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      {previewImageUrls.map(previewImageUrl => (
+      {previewImages.map(previewImage => (
         <img
-          src={previewImageUrl}
-          alt={previewImageUrl}
-          onChange={handlePreviewImageUrlsChange}
-          css={snsPostImagePreviewSize}
+          key={previewImage.url}
+          src={previewImage.url}
+          alt={previewImage.altText}
+          onChange={handlePreviewImagesChange}
+          css={snsPostPreviewImagesSize}
         />
       ))}
       <ImageUploadButton
