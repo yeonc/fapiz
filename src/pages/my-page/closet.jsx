@@ -1,6 +1,16 @@
-import React from 'react'
 import withHeader from 'hocs/withHeader'
+import FashionItemsList from 'components/closet/fashionItemsList'
+import ButtonGroupsForFilteringFashionItems from 'components/closet/buttonGroupsForFilteringFashionItems'
+import FashionItemAddingArea from 'components/closet/fashionItemAddingArea'
 
-const ClosetPage = () => <h1>closet page</h1>
+const ClosetPage = () => {
+  return (
+    <>
+      <ButtonGroupsForFilteringFashionItems />
+      <FashionItemsList />
+      <FashionItemAddingArea />
+    </>
+  )
+}
 
 export default withHeader(ClosetPage)
