@@ -4,6 +4,7 @@ import Fab from '@mui/material/Fab'
 import CheckroomIcon from '@mui/icons-material/Checkroom'
 import Modal from 'components/modals/modal'
 import FashionItemCreateForm from 'components/closet/fashionItemCreateForm'
+import useMe from 'hooks/useMe'
 import useModalState from 'hooks/useModalState'
 import createUrlQuery from 'utils/createUrlQuery'
 
@@ -13,12 +14,16 @@ const FabPositionFixed = css`
   bottom: 20px;
 `
 
-const query = createUrlQuery({
-  'populate[0]': 'image',
-  'populate[1]': 'owner',
-})
-
 const FashionItemCreatingArea = () => {
+  const { me } = useMe()
+
+  const query = createUrlQuery({
+    'populate[0]': 'image',
+    'populate[1]': 'owner',
+    'filters[owner][id][$eq]': me && me.id,
+    sort: 'createdAt:desc',
+  })
+
   const {
     isOpen: isFashionItemCreateModalOpen,
     handleOpen: handleFashionItemCreateModalOpen,

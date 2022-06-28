@@ -4,6 +4,7 @@ import IconButton from '@mui/material/IconButton'
 import EditIcon from '@mui/icons-material/Edit'
 import Modal from 'components/modals/modal'
 import FashionItemEditForm from 'components/closet/fashionItemEditForm'
+import useMe from 'hooks/useMe'
 import useModalState from 'hooks/useModalState'
 import createUrlQuery from 'utils/createUrlQuery'
 
@@ -13,12 +14,16 @@ const fashionItemEditButtonStyle = css`
   bottom: 8px;
 `
 
-const query = createUrlQuery({
-  'populate[0]': 'image',
-  'populate[1]': 'owner',
-})
-
 const FashionItemEditingArea = ({ initialFashionItem }) => {
+  const { me } = useMe()
+
+  const query = createUrlQuery({
+    'populate[0]': 'image',
+    'populate[1]': 'owner',
+    'filters[owner][id][$eq]': me && me.id,
+    sort: 'createdAt:desc',
+  })
+
   const {
     isOpen: isFashionItemEditModalOpen,
     handleOpen: handleFashionItemEditModalOpen,
