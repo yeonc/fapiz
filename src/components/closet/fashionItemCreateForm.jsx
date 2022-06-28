@@ -6,6 +6,9 @@ import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
 import ImageUploadButton from 'components/common/buttons/imageUploadButton'
+import uploadImage from 'services/users/uploadImage'
+import createFashionItem from 'services/users/createFashionItem'
+import useMe from 'hooks/useMe'
 import { SEASONS, CATEGORIES, COLORS } from 'constants/fashionItemFeatures'
 
 const previewImageStyle = css`
@@ -21,15 +24,24 @@ const DEFAULT_PREVIEW_IMAGE = {
   altText: '기본 프리뷰 이미지',
 }
 
-const FashionItemAddForm = () => {
+const FashionItemCreateForm = ({ afterCreateFashionItem }) => {
+  const { me } = useMe()
+
   const [imageFiles, setImageFiles] = useState(null)
   const [previewImage, setPreviewImage] = useState(DEFAULT_PREVIEW_IMAGE)
   const [season, setSeason] = useState('')
   const [category, setCategory] = useState('')
   const [color, setColor] = useState('')
 
+  const changeImageFilesToImage = imageFiles => ({
+    url: URL.createObjectURL(imageFiles[0]),
+    altText: imageFiles[0].name,
+  })
+
   const handleImageFilesChange = imageFiles => {
     setImageFiles(imageFiles)
+    const imageFromImageFiles = changeImageFilesToImage(imageFiles)
+    setPreviewImage(imageFromImageFiles)
   }
 
   const handleSeasonChange = season => {
@@ -44,8 +56,32 @@ const FashionItemAddForm = () => {
     setColor(color)
   }
 
-  const handleFashionItemSubmit = e => {
+  const createFashionItemWithImage = async uploadedImageId => {
+    await createFashionItem({
+      season,
+      category,
+      color,
+      imageId: uploadedImageId,
+      ownerId: me.id,
+    })
+  }
+
+  const handleFashionItemSubmit = async e => {
     e.preventDefault()
+
+    try {
+      if (imageFiles === null) {
+        alert('이미지를 첨부해 주세요!')
+        return
+      }
+
+      const res = await uploadImage(imageFiles)
+      const uploadedImageId = res.data[0].id
+      await createFashionItemWithImage(uploadedImageId)
+      afterCreateFashionItem()
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   return (
@@ -65,6 +101,7 @@ const FashionItemAddForm = () => {
           value={season}
           label="계절"
           onChange={e => handleSeasonChange(e.target.value)}
+          required
         >
           {SEASONS.map(season => (
             <MenuItem key={season.id} value={season.name}>
@@ -79,6 +116,7 @@ const FashionItemAddForm = () => {
           value={category}
           label="카테고리"
           onChange={e => handleCategoryChange(e.target.value)}
+          required
         >
           {CATEGORIES.map(category => (
             <MenuItem key={category.id} value={category.name}>
@@ -93,6 +131,7 @@ const FashionItemAddForm = () => {
           value={color}
           label="색상"
           onChange={e => handleColorChange(e.target.value)}
+          required
         >
           {COLORS.map(color => (
             <MenuItem key={color.id} value={color.name}>
@@ -108,4 +147,4 @@ const FashionItemAddForm = () => {
   )
 }
 
-export default FashionItemAddForm
+export default FashionItemCreateForm
