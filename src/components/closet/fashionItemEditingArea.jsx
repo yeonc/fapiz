@@ -33,6 +33,11 @@ const FashionItemEditingArea = ({ initialFashionItem }) => {
     refetch()
   }
 
+  const afterDeleteFashionItem = () => {
+    handleFashionItemEditModalClose()
+    refetch()
+  }
+
   return (
     <>
       <IconButton
@@ -49,6 +54,7 @@ const FashionItemEditingArea = ({ initialFashionItem }) => {
           <FashionItemEditForm
             initialFashionItem={initialFashionItem}
             afterEditFashionItem={afterEditFashionItem}
+            afterDeleteFashionItem={afterDeleteFashionItem}
           />
         }
         open={isFashionItemEditModalOpen}

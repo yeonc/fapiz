@@ -8,6 +8,7 @@ import Button from '@mui/material/Button'
 import ImageUploadButton from 'components/common/buttons/imageUploadButton'
 import uploadImage from 'services/users/uploadImage'
 import editFashionItem from 'services/users/editFashionItem'
+import deleteFashionItem from 'services/users/deleteFashionItem'
 import { SEASONS, CATEGORIES, COLORS } from 'constants/fashionItemFeatures'
 
 const previewImageStyle = css`
@@ -18,7 +19,11 @@ const previewImageStyle = css`
   object-fit: cover;
 `
 
-const FashionItemEditForm = ({ initialFashionItem, afterEditFashionItem }) => {
+const FashionItemEditForm = ({
+  initialFashionItem,
+  afterEditFashionItem,
+  afterDeleteFashionItem,
+}) => {
   const [imageFiles, setImageFiles] = useState(null)
   const [previewImage, setPreviewImage] = useState(initialFashionItem.image)
   const [season, setSeason] = useState(initialFashionItem.season)
@@ -74,7 +79,14 @@ const FashionItemEditForm = ({ initialFashionItem, afterEditFashionItem }) => {
     }
   }
 
-  const handleFashionItemDeleteButtonClick = () => {}
+  const handleFashionItemDeleteButtonClick = async () => {
+    try {
+      await deleteFashionItem(initialFashionItem.id)
+      afterDeleteFashionItem()
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   return (
     <form>
