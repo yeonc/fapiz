@@ -6,6 +6,8 @@ import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
 import ImageUploadButton from 'components/common/buttons/imageUploadButton'
+import uploadImage from 'services/users/uploadImage'
+import editFashionItem from 'services/users/editFashionItem'
 import { SEASONS, CATEGORIES, COLORS } from 'constants/fashionItemFeatures'
 
 const previewImageStyle = css`
@@ -16,15 +18,22 @@ const previewImageStyle = css`
   object-fit: cover;
 `
 
-const FashionItemEditForm = ({ initialFashionItem }) => {
+const FashionItemEditForm = ({ initialFashionItem, afterEditFashionItem }) => {
   const [imageFiles, setImageFiles] = useState(null)
   const [previewImage, setPreviewImage] = useState(initialFashionItem.image)
   const [season, setSeason] = useState(initialFashionItem.season)
   const [category, setCategory] = useState(initialFashionItem.category)
   const [color, setColor] = useState(initialFashionItem.color)
 
+  const changeImageFilestoImage = imageFiles => ({
+    url: URL.createObjectURL(imageFiles[0]),
+    altText: imageFiles[0].name,
+  })
+
   const handleImageFilesChange = imageFiles => {
     setImageFiles(imageFiles)
+    const imageFromImageFiles = changeImageFilestoImage(imageFiles)
+    setPreviewImage(imageFromImageFiles)
   }
 
   const handleSeasonChange = season => {
@@ -39,12 +48,36 @@ const FashionItemEditForm = ({ initialFashionItem }) => {
     setColor(color)
   }
 
-  const handleFashionItemSubmit = e => {
-    e.preventDefault()
+  const editFashionItemWithImage = async uploadedImageId => {
+    await editFashionItem({
+      fashionItemId: initialFashionItem.id,
+      season,
+      category,
+      color,
+      imageId: uploadedImageId,
+    })
   }
 
+  const handleFashionItemEditButtonClick = async () => {
+    try {
+      let uploadedImageId
+
+      if (imageFiles) {
+        const res = await uploadImage(imageFiles)
+        uploadedImageId = res.data[0].id
+      }
+
+      await editFashionItemWithImage(uploadedImageId)
+      afterEditFashionItem()
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const handleFashionItemDeleteButtonClick = () => {}
+
   return (
-    <form onSubmit={handleFashionItemSubmit}>
+    <form>
       <img
         src={previewImage.url}
         alt={previewImage.altText}
@@ -96,10 +129,18 @@ const FashionItemEditForm = ({ initialFashionItem }) => {
           ))}
         </Select>
       </FormControl>
-      <Button variant="contained" type="submit">
+      <Button
+        variant="contained"
+        type="button"
+        onClick={handleFashionItemEditButtonClick}
+      >
         수정
       </Button>
-      <Button variant="outlined" type="submit">
+      <Button
+        variant="outlined"
+        type="button"
+        onClick={handleFashionItemDeleteButtonClick}
+      >
         삭제
       </Button>
     </form>
