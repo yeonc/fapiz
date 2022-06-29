@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import styled from '@emotion/styled'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import ToggleButton from '@mui/material/ToggleButton'
@@ -9,29 +8,20 @@ const ButtonGroupsForFilteringFashionItemsWrapper = styled.div`
   flex-direction: column;
 `
 
-const ButtonGroupsForFilteringFashionItems = () => {
-  const [season, setSeason] = useState(null)
-  const [categories, setCategories] = useState(null)
-  const [colors, setColors] = useState(null)
-
-  const handleSeasonChange = (event, season) => {
-    setSeason(season)
-  }
-
-  const handleCategoriesChange = (event, categories) => {
-    setCategories(categories)
-  }
-
-  const handleColorsChange = (event, colors) => {
-    setColors(colors)
-  }
-
+const ButtonGroupsForFilteringFashionItems = ({
+  season,
+  category,
+  color,
+  onSeasonChange,
+  onCategoryChange,
+  onColorChange,
+}) => {
   return (
     <ButtonGroupsForFilteringFashionItemsWrapper>
       <ToggleButtonGroup
         value={season}
         exclusive
-        onChange={handleSeasonChange}
+        onChange={onSeasonChange}
         aria-label="계절 선택"
       >
         {SEASONS.map(season => (
@@ -45,8 +35,9 @@ const ButtonGroupsForFilteringFashionItems = () => {
         ))}
       </ToggleButtonGroup>
       <ToggleButtonGroup
-        value={categories}
-        onChange={handleCategoriesChange}
+        value={category}
+        exclusive
+        onChange={onCategoryChange}
         aria-label="카테고리 선택"
       >
         {CATEGORIES.map(category => (
@@ -60,8 +51,9 @@ const ButtonGroupsForFilteringFashionItems = () => {
         ))}
       </ToggleButtonGroup>
       <ToggleButtonGroup
-        value={colors}
-        onChange={handleColorsChange}
+        value={color}
+        exclusive
+        onChange={onColorChange}
         aria-label="색상 선택"
       >
         {COLORS.map(color => (
