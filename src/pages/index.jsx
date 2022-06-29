@@ -17,6 +17,7 @@ const queryForFetchingSnsPosts = createUrlQuery({
   'populate[0]': 'postImages',
   'populate[1]': 'likeUsers',
   'populate[2]': 'author',
+  'pagination[limit]': 200,
 })
 const mutateKeyForFetchingSnsPosts = {
   url: `/api/sns-posts?${queryForFetchingSnsPosts}`,
@@ -27,6 +28,9 @@ const cursorPointer = css`
 `
 
 const TWO_DAYS = 2
+
+const ADD_ADDITIONAL_INFO_MESSAGE =
+  '추가 정보 세 개 중 하나밖에 작성되지 않았네요! 두 가지 이상을 작성하시면 맞춤형 게시물을 보실 수 있습니다! 지금 정보를 수정하러 가 볼까요?'
 
 const ImageCardItem = ({ cardItemData, rightActionButton }) => {
   const router = useRouter()
@@ -58,9 +62,14 @@ const MainPage = () => {
     mutate(mutateKeyForFetchingSnsPosts)
   }
 
-  const { me } = useMe()
+  const { me, isLoading: isMeLoading } = useMe()
+
   const { snsPosts: snsPostsFromStrapi, isLoading: isSnsPostsLoading } =
     useSnsPosts(queryForFetchingSnsPosts)
+
+  if (isMeLoading) {
+    return <p>유저 정보를 받아오는 중입니다.</p>
+  }
 
   if (isSnsPostsLoading) {
     return <p>포스트를 받아오는 중입니다.</p>
@@ -70,6 +79,10 @@ const MainPage = () => {
     id: snsPost.id,
     createdAt: snsPost.attributes.createdAt,
     author: snsPost.attributes.author.data.attributes.username,
+    authorGender: snsPost.attributes.author.data.attributes.gender,
+    authorBodyShape: snsPost.attributes.author.data.attributes.bodyShape,
+    authorFashionStyles:
+      snsPost.attributes.author.data.attributes.fashionStyles,
     imageUrl:
       BACKEND_URL + snsPost.attributes.postImages.data[0].attributes.url,
     imageAltText:
@@ -91,8 +104,103 @@ const MainPage = () => {
     return snsPosts.sort(() => Math.random() - 0.5)
   }
 
-  const filteredSnsPosts = filterRecentlyCreatedSnsPosts(snsPosts)
-  snsPosts = randomizeSnsPosts(filteredSnsPosts)
+  const filterSnsPostsByMyInfo = snsPosts => {
+    const isMyGenderInfoNotExist = me.gender === null || me.gender === ''
+    const isMyBodyShapeInfoNotExist =
+      me.bodyShape === null || me.bodyShape === ''
+    const isMyFashionStylesInfoNotExist =
+      me.fashionStyles === null || me.fashionStyles === []
+
+    const isAllOfMyAdditionalInfoNotExist =
+      isMyGenderInfoNotExist &&
+      isMyBodyShapeInfoNotExist &&
+      isMyFashionStylesInfoNotExist
+    const isOnlyGenderInfoExist =
+      me.gender && isMyBodyShapeInfoNotExist && isMyFashionStylesInfoNotExist
+    const isOnlyBodyShapeInfoExist =
+      me.bodyShape && isMyGenderInfoNotExist && isMyFashionStylesInfoNotExist
+    const isOnlyFashionStylesInfoExist =
+      me.fashionStyles && isMyGenderInfoNotExist && isMyBodyShapeInfoNotExist
+
+    const isSnsPostAuthorFashionStylesMatchWithMyFashionStyles = (
+      myFashionStyles,
+      snsPostAuthorFashionStyles
+    ) =>
+      snsPostAuthorFashionStyles !== null && snsPostAuthorFashionStyles !== []
+        ? snsPostAuthorFashionStyles.some(authorFashionStyle =>
+            myFashionStyles.some(
+              myFashionStyle => authorFashionStyle.id === myFashionStyle.id
+            )
+          )
+        : false
+
+    if (!me || isAllOfMyAdditionalInfoNotExist) {
+      return snsPosts
+    }
+
+    if (isOnlyGenderInfoExist) {
+      alert(ADD_ADDITIONAL_INFO_MESSAGE)
+      return snsPosts
+    }
+
+    if (isOnlyBodyShapeInfoExist) {
+      alert(ADD_ADDITIONAL_INFO_MESSAGE)
+      return snsPosts
+    }
+
+    if (isOnlyFashionStylesInfoExist) {
+      alert(ADD_ADDITIONAL_INFO_MESSAGE)
+      return snsPosts
+    }
+
+    if (me.gender && me.bodyShape && me.fashionStyles) {
+      return snsPosts.filter(
+        snsPost =>
+          snsPost.authorGender === me.gender &&
+          snsPost.authorBodyShape === me.bodyShape &&
+          isSnsPostAuthorFashionStylesMatchWithMyFashionStyles(
+            me.fashionStyles,
+            snsPost.authorFashionStyles
+          )
+      )
+    }
+
+    if (me.gender && me.bodyShape) {
+      return snsPosts.filter(
+        snsPost =>
+          snsPost.authorGender === me.gender &&
+          snsPost.authorBodyShape === me.bodyShape
+      )
+    }
+
+    if (me.gender && me.fashionStyles) {
+      return snsPosts.filter(
+        snsPost =>
+          snsPost.authorGender === me.gender &&
+          isSnsPostAuthorFashionStylesMatchWithMyFashionStyles(
+            me.fashionStyles,
+            snsPost.authorFashionStyles
+          )
+      )
+    }
+
+    if (me.bodyShape && me.fashionStyles) {
+      return snsPosts.filter(
+        snsPost =>
+          snsPost.authorBodyShape === me.bodyShape &&
+          isSnsPostAuthorFashionStylesMatchWithMyFashionStyles(
+            me.fashionStyles,
+            snsPost.authorFashionStyles
+          )
+      )
+    }
+  }
+
+  const recentlyCreatedSnsPosts = filterRecentlyCreatedSnsPosts(snsPosts)
+  const filteredSnsPostsByMyInfo = filterSnsPostsByMyInfo(
+    recentlyCreatedSnsPosts
+  )
+  snsPosts = randomizeSnsPosts(filteredSnsPostsByMyInfo)
 
   return (
     <>

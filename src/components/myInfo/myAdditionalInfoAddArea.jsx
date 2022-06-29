@@ -3,7 +3,7 @@ import Button from '@mui/material/Button'
 import Modal from 'components/modals/modal'
 import MyAdditionalInfoForm from 'components/myInfo/myAdditionalInfoForm'
 import useModalState from 'hooks/useModalState'
-import { IS_SERVER } from 'constants/constants'
+import { BACKEND_URL, IS_SERVER } from 'constants/constants'
 
 const MyAdditionalInfoAddArea = ({ myId }) => {
   const {
