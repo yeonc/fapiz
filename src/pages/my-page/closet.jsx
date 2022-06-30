@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import withHeader from 'hocs/withHeader'
 import FashionItemsList from 'components/closet/fashionItemsList'
 import ButtonGroupsForFilteringFashionItems from 'components/closet/buttonGroupsForFilteringFashionItems'
@@ -9,20 +9,10 @@ import createUrlQuery from 'utils/createUrlQuery'
 import { BACKEND_URL } from 'constants/constants'
 
 const ClosetPage = () => {
-  const [season, setSeason] = useState('')
-  const [category, setCategory] = useState('')
-  const [color, setColor] = useState('')
+  const [filteredFashionItems, setfilteredFashionItems] = useState([])
 
-  const handleSeasonChange = (event, season) => {
-    setSeason(season)
-  }
-
-  const handleCategoryChange = (event, category) => {
-    setCategory(category)
-  }
-
-  const handleColorChange = (event, color) => {
-    setColor(color)
+  const afterFashionItemsFilter = filteredFashionItems => {
+    setfilteredFashionItems(filteredFashionItems)
   }
 
   const { me } = useMe()
@@ -47,40 +37,14 @@ const ClosetPage = () => {
     },
   }))
 
-  let queryArrayForFilteringFashionItems = [season, category, color]
-  queryArrayForFilteringFashionItems =
-    queryArrayForFilteringFashionItems.filter(
-      query => query !== null && query !== ''
-    )
-
-  const filter = (dataArray, queryArray) =>
-    dataArray.filter(data => {
-      const valuesOfData = Object.values(data)
-      const isMatchWithQuery = queryArray.every(query =>
-        valuesOfData.includes(query)
-      )
-      return isMatchWithQuery
-    })
-
-  const filteredFashionItems = filter(
-    fashionItems,
-    queryArrayForFilteringFashionItems
-  )
-
   const fashionItemsToShowed =
-    season === '' && category === '' && color === ''
-      ? fashionItems
-      : filteredFashionItems
+    filteredFashionItems === [] ? fashionItems : filteredFashionItems
 
   return (
     <>
       <ButtonGroupsForFilteringFashionItems
-        season={season}
-        category={category}
-        color={color}
-        onSeasonChange={handleSeasonChange}
-        onCategoryChange={handleCategoryChange}
-        onColorChange={handleColorChange}
+        fashionItemsToFiltered={fashionItems}
+        afterFashionItemsFilter={afterFashionItemsFilter}
       />
       <FashionItemsList fashionItems={fashionItemsToShowed} />
       <FashionItemCreatingArea />

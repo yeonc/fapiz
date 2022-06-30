@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import ToggleButton from '@mui/material/ToggleButton'
@@ -9,19 +10,60 @@ const ButtonGroupsForFilteringFashionItemsWrapper = styled.div`
 `
 
 const ButtonGroupsForFilteringFashionItems = ({
-  season,
-  category,
-  color,
-  onSeasonChange,
-  onCategoryChange,
-  onColorChange,
+  fashionItemsToFiltered,
+  afterFashionItemsFilter,
 }) => {
+  const [season, setSeason] = useState('')
+  const [category, setCategory] = useState('')
+  const [color, setColor] = useState('')
+
+  const handleSeasonChange = (event, season) => {
+    setSeason(season)
+  }
+
+  const handleCategoryChange = (event, category) => {
+    setCategory(category)
+  }
+
+  const handleColorChange = (event, color) => {
+    setColor(color)
+  }
+
+  const filter = (dataArray, queryArray) =>
+    dataArray.filter(data => {
+      const valuesOfData = Object.values(data)
+      const isMatchWithQuery = queryArray.every(query =>
+        valuesOfData.includes(query)
+      )
+      return isMatchWithQuery
+    })
+
+  useEffect(() => {
+    let queryArrayForFilteringFashionItems = [season, category, color]
+    queryArrayForFilteringFashionItems =
+      queryArrayForFilteringFashionItems.filter(
+        query => query !== null && query !== ''
+      )
+
+    if (queryArrayForFilteringFashionItems === []) {
+      afterFashionItemsFilter([])
+      return
+    }
+
+    const filteredFashionItems = filter(
+      fashionItemsToFiltered,
+      queryArrayForFilteringFashionItems
+    )
+
+    afterFashionItemsFilter(filteredFashionItems)
+  }, [season, category, color])
+
   return (
     <ButtonGroupsForFilteringFashionItemsWrapper>
       <ToggleButtonGroup
         value={season}
         exclusive
-        onChange={onSeasonChange}
+        onChange={handleSeasonChange}
         aria-label="계절 선택"
       >
         {SEASONS.map(season => (
@@ -37,7 +79,7 @@ const ButtonGroupsForFilteringFashionItems = ({
       <ToggleButtonGroup
         value={category}
         exclusive
-        onChange={onCategoryChange}
+        onChange={handleCategoryChange}
         aria-label="카테고리 선택"
       >
         {CATEGORIES.map(category => (
@@ -53,7 +95,7 @@ const ButtonGroupsForFilteringFashionItems = ({
       <ToggleButtonGroup
         value={color}
         exclusive
-        onChange={onColorChange}
+        onChange={handleColorChange}
         aria-label="색상 선택"
       >
         {COLORS.map(color => (
