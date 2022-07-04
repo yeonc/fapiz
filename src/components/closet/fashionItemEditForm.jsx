@@ -63,16 +63,27 @@ const FashionItemEditForm = ({
     })
   }
 
+  const editFashionItemWithoutImage = async () => {
+    await editFashionItem({
+      fashionItemId: initialFashionItem.id,
+      season,
+      category,
+      color,
+    })
+  }
+
   const handleFashionItemEditButtonClick = async () => {
     try {
-      let uploadedImageId
-
       if (imageFiles) {
         const res = await uploadImage(imageFiles)
-        uploadedImageId = res.data[0].id
+        const uploadedImageId = res.data[0].id
+        await editFashionItemWithImage(uploadedImageId)
       }
 
-      await editFashionItemWithImage(uploadedImageId)
+      if (!imageFiles) {
+        await editFashionItemWithoutImage()
+      }
+
       afterEditFashionItem()
     } catch (error) {
       console.error(error)
@@ -80,6 +91,13 @@ const FashionItemEditForm = ({
   }
 
   const handleFashionItemDeleteButtonClick = async () => {
+    const isFashionItemDelete =
+      window.confirm('패션 아이템을 삭제하시겠습니까?')
+
+    if (!isFashionItemDelete) {
+      return
+    }
+
     try {
       await deleteFashionItem(initialFashionItem.id)
       afterDeleteFashionItem()
