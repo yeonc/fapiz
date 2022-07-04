@@ -33,15 +33,16 @@ const FashionItemCreateForm = ({ afterCreateFashionItem }) => {
   const [category, setCategory] = useState('')
   const [color, setColor] = useState('')
 
-  const changeImageFilesToImage = imageFiles => ({
+  const changeImageFilesToPreviewImage = imageFiles => ({
     url: URL.createObjectURL(imageFiles[0]),
     altText: imageFiles[0].name,
   })
 
   const handleImageFilesChange = imageFiles => {
     setImageFiles(imageFiles)
-    const imageFromImageFiles = changeImageFilesToImage(imageFiles)
-    setPreviewImage(imageFromImageFiles)
+    const previewImageFromImageFiles =
+      changeImageFilesToPreviewImage(imageFiles)
+    setPreviewImage(previewImageFromImageFiles)
   }
 
   const handleSeasonChange = season => {
@@ -69,12 +70,12 @@ const FashionItemCreateForm = ({ afterCreateFashionItem }) => {
   const handleFashionItemSubmit = async e => {
     e.preventDefault()
 
-    try {
-      if (imageFiles === null) {
-        alert('이미지를 첨부해 주세요!')
-        return
-      }
+    if (imageFiles === null) {
+      alert('이미지를 첨부해 주세요!')
+      return
+    }
 
+    try {
       const res = await uploadImage(imageFiles)
       const uploadedImageId = res.data[0].id
       await createFashionItemWithImage(uploadedImageId)

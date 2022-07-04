@@ -1,15 +1,30 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import withHeader from 'hocs/withHeader'
-import FashionItemsList from 'components/closet/fashionItemsList'
+import { css } from '@emotion/react'
+import Fab from '@mui/material/Fab'
+import CheckroomIcon from '@mui/icons-material/Checkroom'
+import FashionItemList from 'components/closet/fashionItemList'
 import ButtonGroupsForFilteringFashionItems from 'components/closet/buttonGroupsForFilteringFashionItems'
-import FashionItemCreatingArea from 'components/closet/fashionItemCreatingArea'
+import FashionItemCreatingModal from 'components/closet/fashionItemCreatingModal'
 import useMe from 'hooks/useMe'
 import useFashionItems from 'hooks/useFashionItems'
+import useModalState from 'hooks/useModalState'
 import createUrlQuery from 'utils/createUrlQuery'
 import { BACKEND_URL } from 'constants/constants'
 
+const fabPositionFixed = css`
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+`
+
 const ClosetPage = () => {
   const [filteredFashionItems, setfilteredFashionItems] = useState([])
+  const {
+    isOpen: isFashionItemCreateModalOpen,
+    handleOpen: handleFashionItemCreateModalOpen,
+    handleClose: handleFashionItemCreateModalClose,
+  } = useModalState()
 
   const afterFashionItemsFilter = filteredFashionItems => {
     setfilteredFashionItems(filteredFashionItems)
@@ -46,8 +61,19 @@ const ClosetPage = () => {
         fashionItemsToFiltered={fashionItems}
         afterFashionItemsFilter={afterFashionItemsFilter}
       />
-      <FashionItemsList fashionItems={fashionItemsToShowed} />
-      <FashionItemCreatingArea />
+      <FashionItemList fashionItems={fashionItemsToShowed} />
+      <Fab
+        color="primary"
+        aria-label="옷장에 패션 아이템 등록"
+        css={fabPositionFixed}
+        onClick={handleFashionItemCreateModalOpen}
+      >
+        <CheckroomIcon />
+      </Fab>
+      <FashionItemCreatingModal
+        isFashionItemCreateModalOpen={isFashionItemCreateModalOpen}
+        onFashionItemCreateModalClose={handleFashionItemCreateModalClose}
+      />
     </>
   )
 }
