@@ -9,7 +9,11 @@ import ImageUploadButton from 'components/common/buttons/imageUploadButton'
 import uploadImage from 'services/users/uploadImage'
 import createFashionItem from 'services/users/createFashionItem'
 import useMe from 'hooks/useMe'
-import { SEASONS, CATEGORIES, COLORS } from 'constants/fashionItemFeatures'
+import {
+  FASHION_ITEM_SEASONS,
+  FASHION_ITEM_CATEGORIES,
+  FASHION_ITEM_COLORS,
+} from 'constants/fashionItem'
 
 const previewImageStyle = css`
   width: 250px;
@@ -104,7 +108,7 @@ const FashionItemCreateForm = ({ afterCreateFashionItem }) => {
           onChange={e => handleSeasonChange(e.target.value)}
           required
         >
-          {SEASONS.map(season => (
+          {FASHION_ITEM_SEASONS.map(season => (
             <MenuItem key={season.id} value={season.name}>
               {season.name}
             </MenuItem>
@@ -119,7 +123,7 @@ const FashionItemCreateForm = ({ afterCreateFashionItem }) => {
           onChange={e => handleCategoryChange(e.target.value)}
           required
         >
-          {CATEGORIES.map(category => (
+          {FASHION_ITEM_CATEGORIES.map(category => (
             <MenuItem key={category.id} value={category.name}>
               {category.name}
             </MenuItem>
@@ -134,7 +138,7 @@ const FashionItemCreateForm = ({ afterCreateFashionItem }) => {
           onChange={e => handleColorChange(e.target.value)}
           required
         >
-          {COLORS.map(color => (
+          {FASHION_ITEM_COLORS.map(color => (
             <MenuItem key={color.id} value={color.name}>
               {color.name}
             </MenuItem>

@@ -9,7 +9,11 @@ import ImageUploadButton from 'components/common/buttons/imageUploadButton'
 import uploadImage from 'services/users/uploadImage'
 import editFashionItem from 'services/users/editFashionItem'
 import deleteFashionItem from 'services/users/deleteFashionItem'
-import { SEASONS, CATEGORIES, COLORS } from 'constants/fashionItemFeatures'
+import {
+  FASHION_ITEM_SEASONS,
+  FASHION_ITEM_CATEGORIES,
+  FASHION_ITEM_COLORS,
+} from 'constants/fashionItem'
 
 const previewImageStyle = css`
   width: 250px;
@@ -124,7 +128,7 @@ const FashionItemEditForm = ({
           label="계절"
           onChange={e => handleSeasonChange(e.target.value)}
         >
-          {SEASONS.map(season => (
+          {FASHION_ITEM_SEASONS.map(season => (
             <MenuItem key={season.id} value={season.name}>
               {season.name}
             </MenuItem>
@@ -138,7 +142,7 @@ const FashionItemEditForm = ({
           label="카테고리"
           onChange={e => handleCategoryChange(e.target.value)}
         >
-          {CATEGORIES.map(category => (
+          {FASHION_ITEM_CATEGORIES.map(category => (
             <MenuItem key={category.id} value={category.name}>
               {category.name}
             </MenuItem>
@@ -152,7 +156,7 @@ const FashionItemEditForm = ({
           label="색상"
           onChange={e => handleColorChange(e.target.value)}
         >
-          {COLORS.map(color => (
+          {FASHION_ITEM_COLORS.map(color => (
             <MenuItem key={color.id} value={color.name}>
               {color.name}
             </MenuItem>

@@ -1,4 +1,4 @@
-export const SEASONS = [
+export const FASHION_ITEM_SEASONS = [
   {
     id: 1,
     name: '모든 계절',
@@ -21,7 +21,7 @@ export const SEASONS = [
   },
 ]
 
-export const CATEGORIES = [
+export const FASHION_ITEM_CATEGORIES = [
   {
     id: 1,
     name: '상의',
@@ -56,7 +56,7 @@ export const CATEGORIES = [
   },
 ]
 
-export const COLORS = [
+export const FASHION_ITEM_COLORS = [
   {
     id: 1,
     name: '화이트',

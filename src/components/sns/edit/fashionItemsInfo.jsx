@@ -6,17 +6,7 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
-
-const CATEGORIES = [
-  { id: '0', name: '선택하지 않음' },
-  { id: '1', name: '상의' },
-  { id: '2', name: '하의' },
-  { id: '3', name: '원피스' },
-  { id: '4', name: '아우터' },
-  { id: '5', name: '신발' },
-  { id: '6', name: '가방' },
-  { id: '7', name: '모자' },
-]
+import { FASHION_ITEM_CATEGORIES } from 'constants/fashionItem'
 
 const FASHION_ITEM_INFO_TYPE = {
   category: 'category',
@@ -71,16 +61,11 @@ const FashionItemsInfo = ({
                   FASHION_ITEM_INFO_TYPE.category
                 )}
               >
-                {CATEGORIES.map(category => {
-                  const value =
-                    category.name === '선택하지 않음' ? '' : category.name
-
-                  return (
-                    <MenuItem key={category.id} value={value}>
-                      {category.name}
-                    </MenuItem>
-                  )
-                })}
+                {FASHION_ITEM_CATEGORIES.map(category => (
+                  <MenuItem key={category.id} value={category.name}>
+                    {category.name}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
             <TextField

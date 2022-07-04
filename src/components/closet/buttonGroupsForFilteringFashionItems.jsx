@@ -2,7 +2,11 @@ import { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import ToggleButton from '@mui/material/ToggleButton'
-import { SEASONS, CATEGORIES, COLORS } from 'constants/fashionItemFeatures'
+import {
+  FASHION_ITEM_SEASONS,
+  FASHION_ITEM_CATEGORIES,
+  FASHION_ITEM_COLORS,
+} from 'constants/fashionItem'
 
 const StyledButtonGroupsForFilteringFashionItemsWrapper = styled.div`
   display: flex;
@@ -66,7 +70,7 @@ const ButtonGroupsForFilteringFashionItems = ({
         onChange={handleSeasonChange}
         aria-label="계절 선택"
       >
-        {SEASONS.map(season => (
+        {FASHION_ITEM_SEASONS.map(season => (
           <ToggleButton
             key={season.id}
             value={season.name}
@@ -82,7 +86,7 @@ const ButtonGroupsForFilteringFashionItems = ({
         onChange={handleCategoryChange}
         aria-label="카테고리 선택"
       >
-        {CATEGORIES.map(category => (
+        {FASHION_ITEM_CATEGORIES.map(category => (
           <ToggleButton
             key={category.id}
             value={category.name}
@@ -98,7 +102,7 @@ const ButtonGroupsForFilteringFashionItems = ({
         onChange={handleColorChange}
         aria-label="색상 선택"
       >
-        {COLORS.map(color => (
+        {FASHION_ITEM_COLORS.map(color => (
           <ToggleButton
             key={color.id}
             value={color.name}
