@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
-import UserAvatar from '@mui/material/Avatar'
+import Avatar from '@mui/material/Avatar'
 import styled from '@emotion/styled'
 import { horizontal } from 'styles/layout'
 import createComment from 'services/users/createComment'
@@ -39,7 +39,7 @@ const PostCommentWritingArea = ({ snsPostId, afterPostCommentSubmit }) => {
 
   return (
     <StyledPostCommentWritingAreaWrapper>
-      <UserAvatar
+      <Avatar
         alt={me.username}
         src={BACKEND_URL + me.profileImage.url}
         sx={{ width: 30, height: 30, marginRight: 1 }}

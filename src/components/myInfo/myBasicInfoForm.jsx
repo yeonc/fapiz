@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import UserAvatar from '@mui/material/Avatar'
+import Avatar from '@mui/material/Avatar'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import ImageUploadButton from 'components/common/buttons/imageUploadButton'
@@ -64,7 +64,7 @@ const MyBasicInfoForm = ({
 
   return (
     <form onSubmit={handleUserInfoSubmit}>
-      <UserAvatar
+      <Avatar
         alt={username}
         src={userPreviewAvatarUrl}
         sx={{ width: 70, height: 70 }}

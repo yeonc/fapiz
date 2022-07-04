@@ -1,4 +1,4 @@
-import UserAvatar from '@mui/material/Avatar'
+import Avatar from '@mui/material/Avatar'
 import styled from '@emotion/styled'
 import UserProfileText from 'components/sns/userProfileText'
 import { BACKEND_URL } from 'constants/constants'
@@ -8,7 +8,7 @@ const StyledPostAuthorHeaderWrapper = styled.header`
 `
 const PostAuthorHeader = ({ author, popoverMenu }) => (
   <StyledPostAuthorHeaderWrapper>
-    <UserAvatar
+    <Avatar
       alt={author.username}
       src={BACKEND_URL + author.avatarUrl}
       sx={{ width: 50, height: 50, marginRight: 2 }}

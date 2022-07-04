@@ -1,4 +1,4 @@
-import UserAvatar from '@mui/material/Avatar'
+import Avatar from '@mui/material/Avatar'
 import CommentByMode from 'components/sns/comment/commentByMode'
 import { horizontal } from 'styles/layout'
 import useSnsComments from 'hooks/useSnsComments'
@@ -29,7 +29,7 @@ const PostCommentList = ({ snsPostId }) => {
     <ul>
       {comments.map(comment => (
         <li key={comment.id} css={horizontal}>
-          <UserAvatar
+          <Avatar
             alt={comment.authorProfileImageUrl}
             src={comment.authorProfileImageUrl}
             sx={{ width: 30, height: 30, marginRight: 1 }}
