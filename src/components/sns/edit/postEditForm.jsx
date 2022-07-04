@@ -9,7 +9,7 @@ const PostEditForm = ({
   afterEditPost,
   children,
 }) => {
-  const editPost = async uploadedImageIds => {
+  const editPostWithImage = async uploadedImageIds => {
     return editSnsPost({
       postId: snsPostId,
       content: postText,
@@ -18,18 +18,28 @@ const PostEditForm = ({
     })
   }
 
+  const editPostWithoutImage = async () => {
+    return editSnsPost({
+      postId: snsPostId,
+      content: postText,
+      fashionItemsInfo,
+    })
+  }
+
   const handleSubmit = async e => {
     e.preventDefault()
 
     try {
-      if (imageFiles === null) {
-        await editPost()
-        afterEditPost()
+      if (!imageFiles) {
+        await editPostWithoutImage()
       }
 
-      const res = await uploadImage(imageFiles)
-      const uploadedImageIds = res.data.map(image => image.id)
-      await editPost(uploadedImageIds)
+      if (imageFiles) {
+        const res = await uploadImage(imageFiles)
+        const uploadedImageIds = res.data.map(image => image.id)
+        await editPostWithImage(uploadedImageIds)
+      }
+
       afterEditPost()
     } catch (error) {
       console.error(error)
