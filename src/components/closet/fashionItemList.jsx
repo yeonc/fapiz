@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import FashionItemListItem from './fashionItemListItem'
+import FashionItemListItem from 'components/closet/fashionItemListItem'
 
 const StyledFashionItemListWrapper = styled.div`
   display: flex;
