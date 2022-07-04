@@ -4,7 +4,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import ToggleButton from '@mui/material/ToggleButton'
 import { SEASONS, CATEGORIES, COLORS } from 'constants/fashionItemFeatures'
 
-const ButtonGroupsForFilteringFashionItemsWrapper = styled.div`
+const StyledButtonGroupsForFilteringFashionItemsWrapper = styled.div`
   display: flex;
   flex-direction: column;
 `
@@ -59,7 +59,7 @@ const ButtonGroupsForFilteringFashionItems = ({
   }, [season, category, color])
 
   return (
-    <ButtonGroupsForFilteringFashionItemsWrapper>
+    <StyledButtonGroupsForFilteringFashionItemsWrapper>
       <ToggleButtonGroup
         value={season}
         exclusive
@@ -108,7 +108,7 @@ const ButtonGroupsForFilteringFashionItems = ({
           </ToggleButton>
         ))}
       </ToggleButtonGroup>
-    </ButtonGroupsForFilteringFashionItemsWrapper>
+    </StyledButtonGroupsForFilteringFashionItemsWrapper>
   )
 }
 

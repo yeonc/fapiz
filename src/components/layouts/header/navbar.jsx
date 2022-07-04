@@ -7,17 +7,17 @@ import styled from '@emotion/styled'
 import ROUTE_URL from 'constants/routeUrl'
 import useMe from 'hooks/useMe'
 
-const NavWrapper = styled.nav`
+const StyledNavWrapper = styled.nav`
   display: flex;
   align-items: center;
 `
 
-const PageLinkList = styled.ul`
+const StyledPageLinkList = styled.ul`
   display: flex;
   align-items: center;
 `
 
-const PageLink = styled.li`
+const StyledPageLink = styled.li`
   margin-right: 20px;
 `
 
@@ -67,16 +67,16 @@ const Navbar = () => {
   ]
 
   return (
-    <NavWrapper>
-      <PageLinkList>
+    <StyledNavWrapper>
+      <StyledPageLinkList>
         {PAGE_LINK_LIST.map(link => (
-          <PageLink key={link.href}>
+          <StyledPageLink key={link.href}>
             <Link href={link.href}>{link.content}</Link>
-          </PageLink>
+          </StyledPageLink>
         ))}
-      </PageLinkList>
+      </StyledPageLinkList>
       <AuthButton />
-    </NavWrapper>
+    </StyledNavWrapper>
   )
 }
 

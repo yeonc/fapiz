@@ -3,13 +3,13 @@ import Typography from '@mui/material/Typography'
 import { horizontal, mgRight } from 'styles/layout'
 import visuallyHidden from 'styles/visuallyHidden'
 
-const UserProfileTextWrapper = styled.div`
+const StyledUserProfileTextWrapper = styled.div`
   display: flex;
   flex-direction: column;
 `
 
 const UserProfileText = ({ username, height, weight, usernameTypoVarient }) => (
-  <UserProfileTextWrapper>
+  <StyledUserProfileTextWrapper>
     <Typography variant={usernameTypoVarient} component="h1">
       {username}
     </Typography>
@@ -23,7 +23,7 @@ const UserProfileText = ({ username, height, weight, usernameTypoVarient }) => (
         <dd>{weight}kg</dd>
       </div>
     </dl>
-  </UserProfileTextWrapper>
+  </StyledUserProfileTextWrapper>
 )
 
 export default UserProfileText

@@ -4,7 +4,7 @@ import UserProfileText from 'components/sns/userProfileText'
 import FollowerFollowing from 'components/sns/followerFollowing'
 import { BACKEND_URL } from 'constants/constants'
 
-const UserProfileWrapper = styled.div`
+const StyledUserProfileWrapper = styled.div`
   display: flex;
 `
 
@@ -17,7 +17,7 @@ const UserProfileContents = ({ userProfileText, followerFollowing }) => (
 
 const UserProfile = ({ user }) => {
   return (
-    <UserProfileWrapper>
+    <StyledUserProfileWrapper>
       <UserAvatar
         alt={user.username}
         src={BACKEND_URL + user.profileImage.url}
@@ -39,7 +39,7 @@ const UserProfile = ({ user }) => {
           />
         }
       />
-    </UserProfileWrapper>
+    </StyledUserProfileWrapper>
   )
 }
 

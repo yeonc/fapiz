@@ -7,7 +7,7 @@ import createComment from 'services/users/createComment'
 import useMe from 'hooks/useMe'
 import { BACKEND_URL } from 'constants/constants'
 
-const PostCommentWritingAreaWrapper = styled.form`
+const StyledPostCommentWritingAreaWrapper = styled.form`
   display: flex;
   align-items: center;
 `
@@ -37,7 +37,7 @@ const PostCommentWritingArea = ({ snsPostId, afterPostCommentSubmit }) => {
   }
 
   return (
-    <PostCommentWritingAreaWrapper onSubmit={handleCommentSubmit}>
+    <StyledPostCommentWritingAreaWrapper onSubmit={handleCommentSubmit}>
       <UserAvatar
         alt={me.username}
         src={BACKEND_URL + me.profileImage.url}
@@ -53,7 +53,7 @@ const PostCommentWritingArea = ({ snsPostId, afterPostCommentSubmit }) => {
       <Button variant="contained" size="small" type="submit">
         등록
       </Button>
-    </PostCommentWritingAreaWrapper>
+    </StyledPostCommentWritingAreaWrapper>
   )
 }
 
