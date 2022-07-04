@@ -14,8 +14,6 @@ const PostCommentList = ({ snsPostId }) => {
   })
   const { snsComments: snsCommentsFromStrapi } = useSnsComments(query)
 
-  console.log(snsCommentsFromStrapi)
-
   const comments = snsCommentsFromStrapi.map(snsComment => ({
     id: snsComment.id,
     content: snsComment.attributes.content,

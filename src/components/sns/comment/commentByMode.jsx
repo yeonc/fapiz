@@ -2,97 +2,12 @@ import { useState } from 'react'
 import { useSWRConfig } from 'swr'
 import IconButton from '@mui/material/IconButton'
 import EditIcon from '@mui/icons-material/Edit'
-import EditOffIcon from '@mui/icons-material/EditOff'
 import DeleteIcon from '@mui/icons-material/Delete'
-import SendIcon from '@mui/icons-material/Send'
-import Input from '@mui/material/Input'
-import deleteComment from 'services/users/deleteComment'
-import editComment from 'services/users/editComment'
+import CommentEditInput from 'components/sns/comment/commentEditInput'
+import Comment from 'components/common/texts/comment'
 import useMe from 'hooks/useMe'
+import deleteComment from 'services/users/deleteComment'
 import createUrlQuery from 'utils/createUrlQuery'
-
-const CommentInViewMode = ({
-  commentId,
-  commentText,
-  onCommentEditButtonClick,
-  afterPostCommentDelete,
-  isShowCommentEditButtonGroup,
-}) => {
-  const handleCommentDeleteButtonClick = async commentId => {
-    try {
-      await deleteComment(commentId)
-      afterPostCommentDelete()
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  return (
-    <>
-      <p>{commentText}</p>
-      {isShowCommentEditButtonGroup ? (
-        <>
-          <IconButton aria-label="댓글 수정" onClick={onCommentEditButtonClick}>
-            <EditIcon />
-          </IconButton>
-          <IconButton
-            aria-label="댓글 삭제"
-            onClick={() => handleCommentDeleteButtonClick(commentId)}
-          >
-            <DeleteIcon />
-          </IconButton>
-        </>
-      ) : null}
-    </>
-  )
-}
-
-const CommentInEditMode = ({
-  commentId,
-  commentText,
-  onCommentEditCancelButtonClick,
-  afterPostCommentUpdate,
-}) => {
-  const [comment, setComment] = useState(commentText)
-
-  const handleCommentTextChange = commentText => {
-    setComment(commentText)
-  }
-
-  const handleCommentSubmitButtonClick = async (commentId, comment) => {
-    try {
-      await editComment({
-        commentId,
-        comment,
-      })
-      afterPostCommentUpdate()
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  return (
-    <>
-      <Input
-        placeholder="수정할 댓글 내용을 입력하세요"
-        value={comment}
-        onChange={e => handleCommentTextChange(e.target.value)}
-      />
-      <IconButton
-        aria-label="댓글 수정 취소"
-        onClick={onCommentEditCancelButtonClick}
-      >
-        <EditOffIcon />
-      </IconButton>
-      <IconButton
-        aria-label="수정한 댓글 전송"
-        onClick={() => handleCommentSubmitButtonClick(commentId, comment)}
-      >
-        <SendIcon />
-      </IconButton>
-    </>
-  )
-}
 
 const CommentByMode = ({ commentId, commentText, snsPostId, authorId }) => {
   const { mutate } = useSWRConfig()
@@ -125,31 +40,54 @@ const CommentByMode = ({ commentId, commentText, snsPostId, authorId }) => {
     setIsCommentEditMode(false)
   }
 
-  const afterPostCommentUpdate = () => {
+  const handleCommentDeleteButtonClick = async () => {
+    const isCommentDelete = window.confirm('댓글을 삭제하시겠습니까?')
+    if (!isCommentDelete) return
+
+    try {
+      await deleteComment(commentId)
+      afterPostCommentDeleted()
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const afterPostCommentEdited = () => {
     setIsCommentEditMode(false)
     refetch()
   }
 
-  const afterPostCommentDelete = () => {
+  const afterPostCommentDeleted = () => {
     refetch()
   }
+
+  const commentEditButtons = (
+    <>
+      <IconButton aria-label="댓글 수정" onClick={handleCommentEditButtonClick}>
+        <EditIcon />
+      </IconButton>
+      <IconButton
+        aria-label="댓글 삭제"
+        onClick={handleCommentDeleteButtonClick}
+      >
+        <DeleteIcon />
+      </IconButton>
+    </>
+  )
 
   return (
     <>
       {isCommentEditMode ? (
-        <CommentInEditMode
-          onCommentEditCancelButtonClick={handleCommentEditCancelButtonClick}
-          afterPostCommentUpdate={afterPostCommentUpdate}
+        <CommentEditInput
           commentId={commentId}
-          commentText={commentText}
+          initialCommentText={commentText}
+          onCommentEditCancelButtonClick={handleCommentEditCancelButtonClick}
+          afterPostCommentEdited={afterPostCommentEdited}
         />
       ) : (
-        <CommentInViewMode
-          onCommentEditButtonClick={handleCommentEditButtonClick}
-          afterPostCommentDelete={afterPostCommentDelete}
-          commentId={commentId}
-          commentText={commentText}
-          isShowCommentEditButtonGroup={isShowCommentEditButtonGroup}
+        <Comment
+          text={commentText}
+          buttons={isShowCommentEditButtonGroup && commentEditButtons}
         />
       )}
     </>
