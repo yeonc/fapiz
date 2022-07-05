@@ -35,15 +35,19 @@ const ADD_ADDITIONAL_INFO_MESSAGE =
 const ImageCardItem = ({ cardItemData, rightActionButton }) => {
   const router = useRouter()
 
-  const goToSnsPost = snsPostId => {
-    router.push(`/sns/post/${snsPostId}`)
+  const goToSnsPost = snsPostId => router.push(`/sns/post/${snsPostId}`)
+
+  const handleImageListItemClick = e => {
+    const isLikeButtonClicked = e.target.tagName === 'INPUT'
+    if (isLikeButtonClicked) {
+      return
+    }
+
+    goToSnsPost(cardItemData.id)
   }
 
   return (
-    <ImageListItem
-      onClick={() => goToSnsPost(cardItemData.id)}
-      css={cursorPointer}
-    >
+    <ImageListItem onClick={handleImageListItemClick} css={cursorPointer}>
       <img src={cardItemData.imageUrl} alt={cardItemData.imageAltText} />
       <ImageListItemBar
         title={cardItemData.author}
