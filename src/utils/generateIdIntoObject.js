@@ -1,6 +1,6 @@
 import createUniqueId from 'utils/createUniqueId'
 
-const generateIdToObject = object => {
+const generateIdIntoObject = object => {
   const id = createUniqueId()
 
   return {
@@ -9,4 +9,4 @@ const generateIdToObject = object => {
   }
 }
 
-export default generateIdToObject
+export default generateIdIntoObject

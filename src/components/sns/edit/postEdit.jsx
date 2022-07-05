@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import editSnsPost from 'services/users/editSnsPost'
 import uploadImage from 'services/users/uploadImage'
-import generateIdToObject from 'utils/generateIdToObject'
+import generateIdIntoObject from 'utils/generateIdIntoObject'
 import { changeImageFilesToPreviewImages } from 'utils/previewImage'
 import { BACKEND_URL } from 'constants/constants'
 
@@ -14,7 +14,7 @@ const PostEdit = ({ snsPost, afterEditPost, children }) => {
       altText: image.attributes.alternativeText,
     })
   )
-  const newEmptyFashionItemInfo = generateIdToObject(EMPTY_FASHION_ITEM_INFO)
+  const newEmptyFashionItemInfo = generateIdIntoObject(EMPTY_FASHION_ITEM_INFO)
   const initialFashionItemsInfo = snsPost.attributes.fashionIemsInfo ?? [
     newEmptyFashionItemInfo,
   ]
@@ -40,7 +40,7 @@ const PostEdit = ({ snsPost, afterEditPost, children }) => {
 
   const handleFashionItemInfoAddMoreButtonClick = () => {
     setFashionItemsInfo(prev => {
-      const newEmptyFashionItemInfo = generateIdToObject(
+      const newEmptyFashionItemInfo = generateIdIntoObject(
         EMPTY_FASHION_ITEM_INFO
       )
       return prev.concat(newEmptyFashionItemInfo)
