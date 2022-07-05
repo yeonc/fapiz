@@ -9,6 +9,7 @@ import ImageUploadButton from 'components/common/buttons/imageUploadButton'
 import uploadImage from 'services/users/uploadImage'
 import editFashionItem from 'services/users/editFashionItem'
 import deleteFashionItem from 'services/users/deleteFashionItem'
+import { changeImageFilesToPreviewImage } from 'utils/previewImage'
 import {
   FASHION_ITEM_SEASONS,
   FASHION_ITEM_CATEGORIES,
@@ -34,15 +35,11 @@ const FashionItemEditForm = ({
   const [category, setCategory] = useState(initialFashionItem.category)
   const [color, setColor] = useState(initialFashionItem.color)
 
-  const changeImageFilestoImage = imageFiles => ({
-    url: URL.createObjectURL(imageFiles[0]),
-    altText: imageFiles[0].name,
-  })
-
   const handleImageFilesChange = imageFiles => {
     setImageFiles(imageFiles)
-    const imageFromImageFiles = changeImageFilestoImage(imageFiles)
-    setPreviewImage(imageFromImageFiles)
+    const previewImageFromImageFiles =
+      changeImageFilesToPreviewImage(imageFiles)
+    setPreviewImage(previewImageFromImageFiles)
   }
 
   const handleSeasonChange = season => {

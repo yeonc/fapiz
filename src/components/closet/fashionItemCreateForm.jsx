@@ -9,6 +9,7 @@ import ImageUploadButton from 'components/common/buttons/imageUploadButton'
 import uploadImage from 'services/users/uploadImage'
 import createFashionItem from 'services/users/createFashionItem'
 import useMe from 'hooks/useMe'
+import { changeImageFilesToPreviewImage } from 'utils/previewImage'
 import {
   FASHION_ITEM_SEASONS,
   FASHION_ITEM_CATEGORIES,
@@ -36,11 +37,6 @@ const FashionItemCreateForm = ({ afterCreateFashionItem }) => {
   const [season, setSeason] = useState('')
   const [category, setCategory] = useState('')
   const [color, setColor] = useState('')
-
-  const changeImageFilesToPreviewImage = imageFiles => ({
-    url: URL.createObjectURL(imageFiles[0]),
-    altText: imageFiles[0].name,
-  })
 
   const handleImageFilesChange = imageFiles => {
     setImageFiles(imageFiles)

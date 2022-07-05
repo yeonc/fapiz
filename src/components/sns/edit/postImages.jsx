@@ -4,18 +4,13 @@ const postPreviewImagesSize = css`
   width: 200px;
 `
 
-const PostImages = ({
-  previewImages,
-  onPreviewImagesChange,
-  imageUploadButton,
-}) => (
+const PostImages = ({ previewImages, imageUploadButton }) => (
   <>
     {previewImages.map(previewImage => (
       <img
         key={previewImage.url}
         src={previewImage.url}
         alt={previewImage.altText}
-        onChange={onPreviewImagesChange}
         css={postPreviewImagesSize}
       />
     ))}

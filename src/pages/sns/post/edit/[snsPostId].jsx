@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/router'
-import { useSWRConfig } from 'swr'
 import withHeader from 'hocs/withHeader'
 import Button from '@mui/material/Button'
 import PostEditForm from 'components/sns/edit/postEditForm'
@@ -10,28 +9,16 @@ import FashionItemsInfo from 'components/sns/edit/fashionItemsInfo'
 import PostText from 'components/sns/edit/postText'
 import useSnsPost from 'hooks/useSnsPost'
 import { BACKEND_URL } from 'constants/constants'
-import createUrlQuery from 'utils/createUrlQuery'
 import generateIdToObject from 'utils/generateIdToObject'
+import { changeImageFilesToPreviewImages } from 'utils/previewImage'
 
 const EMPTY_FASHION_ITEM_INFO = { category: '', price: '', buyingPlace: '' }
 
-const query = createUrlQuery({
-  populate: '*',
-})
-
 const SnsPostEditPage = () => {
-  const { mutate } = useSWRConfig()
-
   const router = useRouter()
   const { snsPostId } = router.query
 
-  const { snsPost } = useSnsPost(snsPostId)
-
-  useEffect(() => {
-    setPreviewImages(initialPreviewImages)
-    setPostText(initialPostText)
-    setFashionItemsInfo(initialFashionItemsInfo)
-  }, [snsPost])
+  const { snsPost, isLoading: isSnsPostLoading } = useSnsPost(snsPostId)
 
   const initialPreviewImages = snsPost
     ? snsPost.attributes.postImages.data.map(image => ({
@@ -42,8 +29,8 @@ const SnsPostEditPage = () => {
   const newEmptyFashionItemInfo = generateIdToObject(EMPTY_FASHION_ITEM_INFO)
   const initialFashionItemsInfo =
     snsPost && snsPost.attributes.fashionItemsInfo
-      ? snsPost.attributes.fashionItemsInfo
-      : [].concat(newEmptyFashionItemInfo)
+      ? snsPost.attributes.fashionIemsInfo
+      : [newEmptyFashionItemInfo]
   const initialPostText = snsPost ? snsPost.attributes.content : ''
 
   const [imageFiles, setImageFiles] = useState(null)
@@ -53,26 +40,11 @@ const SnsPostEditPage = () => {
   )
   const [postText, setPostText] = useState(initialPostText)
 
-  const setPostPreviewImages = imageFiles => {
-    const previewImages = [...imageFiles].map(imageFile => ({
-      url: URL.createObjectURL(imageFile),
-      altText: imageFile.name,
-    }))
-    setPreviewImages(previewImages)
-  }
-
-  const afterImageFilesChange = () => {
-    mutate({ url: `/api/sns-posts/${snsPostId}?${query}` })
-  }
-
   const handleImageFilesChange = imageFiles => {
     setImageFiles(imageFiles)
-    setPostPreviewImages(imageFiles)
-    afterImageFilesChange()
-  }
-
-  const handlePreviewImagesChange = previewImages => {
-    setPreviewImages(previewImages)
+    const previewImagesFromImageFiles =
+      changeImageFilesToPreviewImages(imageFiles)
+    setPreviewImages(previewImagesFromImageFiles)
   }
 
   const handleFashionItemsInfoChange = fashionItemsInfo => {
@@ -102,6 +74,10 @@ const SnsPostEditPage = () => {
     router.push(`/sns/post/${snsPostId}`)
   }
 
+  if (isSnsPostLoading) {
+    return <p>SNS post 정보를 불러오는 중입니다.</p>
+  }
+
   return (
     <PostEditForm
       snsPostId={snsPostId}
@@ -114,7 +90,6 @@ const SnsPostEditPage = () => {
         imageFiles={imageFiles}
         previewImages={previewImages}
         onImageFilesChange={handleImageFilesChange}
-        onPreviewImagesChange={handlePreviewImagesChange}
         imageUploadButton={
           <ImageUploadButton
             onImageFilesChange={handleImageFilesChange}
