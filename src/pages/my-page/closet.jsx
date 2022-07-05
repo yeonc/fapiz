@@ -26,7 +26,7 @@ const ClosetPage = () => {
     handleClose: handleFashionItemCreateModalClose,
   } = useModalState()
 
-  const afterFashionItemsFilter = filteredFashionItems => {
+  const afterFashionItemsFiltered = filteredFashionItems => {
     setfilteredFashionItems(filteredFashionItems)
   }
 
@@ -59,7 +59,7 @@ const ClosetPage = () => {
     <>
       <ButtonGroupsForFilteringFashionItems
         fashionItemsToFiltered={fashionItems}
-        afterFashionItemsFilter={afterFashionItemsFilter}
+        afterFashionItemsFiltered={afterFashionItemsFiltered}
       />
       <FashionItemList fashionItems={fashionItemsToShowed} />
       <Fab

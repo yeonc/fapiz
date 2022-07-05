@@ -15,21 +15,21 @@ const StyledButtonGroupsForFilteringFashionItemsWrapper = styled.div`
 
 const ButtonGroupsForFilteringFashionItems = ({
   fashionItemsToFiltered,
-  afterFashionItemsFilter,
+  afterFashionItemsFiltered,
 }) => {
   const [season, setSeason] = useState('')
   const [category, setCategory] = useState('')
   const [color, setColor] = useState('')
 
-  const handleSeasonChange = (event, season) => {
+  const handleSeasonChange = season => {
     setSeason(season)
   }
 
-  const handleCategoryChange = (event, category) => {
+  const handleCategoryChange = category => {
     setCategory(category)
   }
 
-  const handleColorChange = (event, color) => {
+  const handleColorChange = color => {
     setColor(color)
   }
 
@@ -50,7 +50,7 @@ const ButtonGroupsForFilteringFashionItems = ({
       )
 
     if (queryArrayForFilteringFashionItems === []) {
-      afterFashionItemsFilter([])
+      afterFashionItemsFiltered([])
       return
     }
 
@@ -59,7 +59,7 @@ const ButtonGroupsForFilteringFashionItems = ({
       queryArrayForFilteringFashionItems
     )
 
-    afterFashionItemsFilter(filteredFashionItems)
+    afterFashionItemsFiltered(filteredFashionItems)
   }, [season, category, color])
 
   return (
@@ -67,7 +67,7 @@ const ButtonGroupsForFilteringFashionItems = ({
       <ToggleButtonGroup
         value={season}
         exclusive
-        onChange={handleSeasonChange}
+        onChange={(e, season) => handleSeasonChange(season)}
         aria-label="계절 선택"
       >
         {FASHION_ITEM_SEASONS.map(season => (
@@ -83,7 +83,7 @@ const ButtonGroupsForFilteringFashionItems = ({
       <ToggleButtonGroup
         value={category}
         exclusive
-        onChange={handleCategoryChange}
+        onChange={(e, category) => handleCategoryChange(category)}
         aria-label="카테고리 선택"
       >
         {FASHION_ITEM_CATEGORIES.map(category => (
@@ -99,7 +99,7 @@ const ButtonGroupsForFilteringFashionItems = ({
       <ToggleButtonGroup
         value={color}
         exclusive
-        onChange={handleColorChange}
+        onChange={(e, color) => handleColorChange(color)}
         aria-label="색상 선택"
       >
         {FASHION_ITEM_COLORS.map(color => (
