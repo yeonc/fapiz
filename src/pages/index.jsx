@@ -1,17 +1,17 @@
 import { useRouter } from 'next/router'
+import { useSWRConfig } from 'swr'
 import withHeader from 'hocs/withHeader'
+import withLogin from 'hocs/withLogin'
 import { css } from '@emotion/react'
 import ImageList from '@mui/material/ImageList'
 import ImageListItem from '@mui/material/ImageListItem'
 import ImageListItemBar from '@mui/material/ImageListItemBar'
-import IconButton from '@mui/material/IconButton'
 import LikeButton from 'components/common/buttons/likeButton'
 import useSnsPosts from 'hooks/useSnsPosts'
 import useMe from 'hooks/useMe'
 import createUrlQuery from 'utils/createUrlQuery'
 import getDaysBetweenTwoDate from 'utils/getDaysBetweenTwoDate'
 import { BACKEND_URL } from 'constants/constants'
-import { useSWRConfig } from 'swr'
 
 const queryForFetchingSnsPosts = createUrlQuery({
   'populate[0]': 'postImages',
@@ -206,6 +206,8 @@ const MainPage = () => {
   )
   snsPosts = randomizeSnsPosts(filteredSnsPostsByMyInfo)
 
+  const SnsPostLikeButtonWithLogin = withLogin(LikeButton)
+
   return (
     <>
       <ImageList variant="masonry" cols={3}>
@@ -214,16 +216,13 @@ const MainPage = () => {
             key={snsPost.id}
             cardItemData={snsPost}
             rightActionButton={
-              !!me ? (
-                <IconButton>
-                  <LikeButton
-                    myId={me.id}
-                    targetForLike={snsPost.object}
-                    afterLike={afterLike}
-                    isShowLikeUsersNumber={false}
-                  />
-                </IconButton>
-              ) : null
+              <SnsPostLikeButtonWithLogin
+                myId={me.id}
+                targetForLike={snsPost.object}
+                afterLike={afterLike}
+                isShowLikeUsersNumber={false}
+                isLoggedIn={!!me}
+              />
             }
           />
         ))}
