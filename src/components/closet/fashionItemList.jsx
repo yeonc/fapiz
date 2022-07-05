@@ -2,8 +2,6 @@ import styled from '@emotion/styled'
 import FashionItemListItem from 'components/closet/fashionItemListItem'
 
 const StyledFashionItemListWrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
   max-width: 800px;
 `
 

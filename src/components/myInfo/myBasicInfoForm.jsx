@@ -58,7 +58,7 @@ const MyBasicInfoForm = ({
       await editBasicInfo(uploadedImageId)
       afterEditBasicInfo()
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 

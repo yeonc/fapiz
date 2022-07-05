@@ -10,9 +10,7 @@ const LikeButton = ({
   afterLike,
   isShowLikeUsersNumber,
 }) => {
-  const likeUsers = targetForLike.attributes
-    ? targetForLike.attributes.likeUsers.data
-    : []
+  const likeUsers = targetForLike.attributes?.likeUsers?.data ?? []
   const isLiked = likeUsers.some(likeUser => likeUser.id === myId)
 
   const like = async () => {

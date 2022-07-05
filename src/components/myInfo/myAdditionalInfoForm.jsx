@@ -53,7 +53,7 @@ const MyAdditionalInfoForm = ({
       await editAdditionalInfo()
       afterSubmitAdditionalInfo()
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 

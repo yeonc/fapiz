@@ -5,11 +5,7 @@ const MyAdditionalInfoShowArea = ({ myAdditionalInfo }) => (
   <dl>
     <div>
       <dt>성별</dt>
-      <dd>
-        {myAdditionalInfo.gender
-          ? myAdditionalInfo.gender
-          : NOT_INFOMATION_TEXT}
-      </dd>
+      <dd>{myAdditionalInfo.gender ?? NOT_INFOMATION_TEXT}</dd>
     </div>
     <div>
       <dt>옷 스타일</dt>
@@ -23,11 +19,7 @@ const MyAdditionalInfoShowArea = ({ myAdditionalInfo }) => (
     </div>
     <div>
       <dt>체형</dt>
-      <dd>
-        {myAdditionalInfo.bodyShape
-          ? myAdditionalInfo.bodyShape
-          : NOT_INFOMATION_TEXT}
-      </dd>
+      <dd>{myAdditionalInfo.bodyShape ?? NOT_INFOMATION_TEXT}</dd>
     </div>
   </dl>
 )
