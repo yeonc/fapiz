@@ -59,6 +59,7 @@ const ImageCardItem = ({ cardItemData, rightActionButton }) => {
   )
 }
 
+// TODO: MainPage 컴포넌트 섹션별로 분리, filterSnsPostsByMyInfo 함수 쪼개기
 const MainPage = () => {
   const { mutate } = useSWRConfig()
 

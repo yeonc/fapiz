@@ -22,6 +22,7 @@ const FashionItemsInfo = ({
 }) => (
   <>
     <ul>
+      {/* TODO: map 내부 함수들이 어떤 역할 하는지 알아보기 쉽게 코드 정리하기 */}
       {fashionItemsInfo.map((fashionItemInfo, fashionItemInfoIndex) => {
         const changeFashionItemsInfo = fashionItemInfoToChange => {
           const changedFashionItemInfo = {

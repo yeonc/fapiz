@@ -33,6 +33,7 @@ const ButtonGroupsForFilteringFashionItems = ({
     setColor(color)
   }
 
+  // TODO: 가독성 개선하기
   const filter = (dataArray, queryArray) =>
     dataArray.filter(data => {
       const valuesOfData = Object.values(data)
