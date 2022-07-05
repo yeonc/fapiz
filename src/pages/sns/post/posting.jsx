@@ -17,7 +17,7 @@ const SnsPostPostingPage = () => {
 
   const [imageFiles, setImageFiles] = useState('')
 
-  const itemInfo = [
+  const fashionItemsInfo = [
     { itemType: category, itemPrice: price, itemPlace: buyingPlace },
   ]
 
@@ -52,7 +52,7 @@ const SnsPostPostingPage = () => {
       const postImageIds = responseAfterUploadImage.data.map(res => res.id)
       const responseAfterCreatePost = await createPost({
         postText,
-        itemInfo,
+        fashionItemsInfo,
         authorId: me.id,
         postImageIds,
       })

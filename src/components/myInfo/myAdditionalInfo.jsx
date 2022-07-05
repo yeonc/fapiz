@@ -12,9 +12,9 @@ const MyAdditionalInfo = () => {
 
   const myAdditionalInfo = {
     id: me.id,
-    gender: me.gender ?? null,
-    fashionStyles: me.fashionStyles ?? [],
-    bodyShape: me.bodyShape ?? null,
+    gender: me.gender || null,
+    fashionStyles: me.fashionStyles || [],
+    bodyShape: me.bodyShape || null,
   }
 
   const isExistMyAdditionalInfo = me.gender || me.fashionStyle || me.bodyShape

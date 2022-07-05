@@ -1,4 +1,4 @@
-import UserAvatar from '@mui/material/Avatar'
+import Avatar from '@mui/material/Avatar'
 import Typography from '@mui/material/Typography'
 
 const NOT_INFOMATION_TEXT =
@@ -6,7 +6,7 @@ const NOT_INFOMATION_TEXT =
 
 const MyBasicInfoShowArea = ({ myBasicInfo }) => (
   <>
-    <UserAvatar
+    <Avatar
       alt={myBasicInfo.username}
       src={myBasicInfo.imageUrl}
       sx={{ width: 100, height: 100 }}

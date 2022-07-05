@@ -3,15 +3,15 @@ import styled from '@emotion/styled'
 import ROUTE_URL from 'constants/routeUrl'
 import FapizLogo from 'components/layouts/header/fapizLogo'
 
-const FapizLogoWrapper = styled.div`
+const StyledFapizLogoWrapper = styled.div`
   margin-right: 28px;
 `
 
 const HeaderLogo = () => (
   <Link href={ROUTE_URL.HOME}>
-    <FapizLogoWrapper>
+    <StyledFapizLogoWrapper>
       <FapizLogo />
-    </FapizLogoWrapper>
+    </StyledFapizLogoWrapper>
   </Link>
 )
 

@@ -1,4 +1,4 @@
-import getDaysBetweenTwoDate from './getDaysBetweenTwoDate'
+import getDaysBetweenTwoDate from 'utils/getDaysBetweenTwoDate'
 import getFullDate from 'utils/getFullDate'
 import getFullTime from 'utils/getFullTime'
 

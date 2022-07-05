@@ -1,10 +1,10 @@
 import styled from '@emotion/styled'
-import UserAvatar from '@mui/material/Avatar'
+import Avatar from '@mui/material/Avatar'
 import UserProfileText from 'components/sns/userProfileText'
 import FollowerFollowing from 'components/sns/followerFollowing'
 import { BACKEND_URL } from 'constants/constants'
 
-const UserProfileWrapper = styled.div`
+const StyledUserProfileWrapper = styled.div`
   display: flex;
 `
 
@@ -17,8 +17,8 @@ const UserProfileContents = ({ userProfileText, followerFollowing }) => (
 
 const UserProfile = ({ user }) => {
   return (
-    <UserProfileWrapper>
-      <UserAvatar
+    <StyledUserProfileWrapper>
+      <Avatar
         alt={user.username}
         src={BACKEND_URL + user.profileImage.url}
         sx={{ width: 100, height: 100, marginRight: 4 }}
@@ -39,7 +39,7 @@ const UserProfile = ({ user }) => {
           />
         }
       />
-    </UserProfileWrapper>
+    </StyledUserProfileWrapper>
   )
 }
 
