@@ -24,37 +24,46 @@ const previewImageStyle = css`
   object-fit: cover;
 `
 
+type FashionItemPreviewImage = {
+  url: string
+  altText: string
+}
+
 const FashionItemEditForm = ({
   initialFashionItem,
   afterEditFashionItem,
   afterDeleteFashionItem,
 }) => {
-  const [imageFiles, setImageFiles] = useState(null)
-  const [previewImage, setPreviewImage] = useState(initialFashionItem.image)
-  const [season, setSeason] = useState(initialFashionItem.season)
-  const [category, setCategory] = useState(initialFashionItem.category)
-  const [color, setColor] = useState(initialFashionItem.color)
+  const [imageFiles, setImageFiles] = useState<File[] | null>(null)
+  const [previewImage, setPreviewImage] = useState<FashionItemPreviewImage>(
+    initialFashionItem.image
+  )
+  const [season, setSeason] = useState<string>(initialFashionItem.season)
+  const [category, setCategory] = useState<string>(initialFashionItem.category)
+  const [color, setColor] = useState<string>(initialFashionItem.color)
 
-  const handleImageFilesChange = imageFiles => {
+  const handleImageFilesChange = (imageFiles: File[]) => {
     setImageFiles(imageFiles)
     const previewImageFromImageFiles =
       changeImageFilesToPreviewImage(imageFiles)
     setPreviewImage(previewImageFromImageFiles)
   }
 
-  const handleSeasonChange = season => {
+  const handleSeasonChange = (season: string) => {
     setSeason(season)
   }
 
-  const handleCategoryChange = category => {
+  const handleCategoryChange = (category: string) => {
     setCategory(category)
   }
 
-  const handleColorChange = color => {
+  const handleColorChange = (color: string) => {
     setColor(color)
   }
 
-  const editFashionItemWithImage = async uploadedImageId => {
+  const editFashionItemInCloset = async (
+    uploadedImageId: number | undefined
+  ) => {
     await editFashionItem({
       fashionItemId: initialFashionItem.id,
       season,
@@ -64,27 +73,16 @@ const FashionItemEditForm = ({
     })
   }
 
-  const editFashionItemWithoutImage = async () => {
-    await editFashionItem({
-      fashionItemId: initialFashionItem.id,
-      season,
-      category,
-      color,
-    })
-  }
-
   const handleFashionItemEditButtonClick = async () => {
+    let uploadedImageId: number | undefined
+
     try {
       if (imageFiles) {
         const res = await uploadImage(imageFiles)
-        const uploadedImageId = res.data[0].id
-        await editFashionItemWithImage(uploadedImageId)
+        uploadedImageId = res.data[0].id
       }
 
-      if (!imageFiles) {
-        await editFashionItemWithoutImage()
-      }
-
+      await editFashionItemInCloset(uploadedImageId)
       afterEditFashionItem()
     } catch (error) {
       console.error(error)

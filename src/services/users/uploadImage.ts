@@ -1,7 +1,7 @@
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import { BACKEND_URL } from 'constants/constants'
 
-const createFormData = (imageFiles: any) => {
+const createFormData = (imageFiles: File[]): FormData => {
   const formData = new FormData()
   for (let i = 0; i < imageFiles.length; i++) {
     formData.append('files', imageFiles[i])
@@ -10,7 +10,7 @@ const createFormData = (imageFiles: any) => {
   return formData
 }
 
-const uploadImage = async (imageFiles: any) => {
+const uploadImage = async (imageFiles: File[]): Promise<AxiosResponse> => {
   const formData = createFormData(imageFiles)
 
   return axios({
