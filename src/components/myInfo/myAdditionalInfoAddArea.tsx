@@ -12,7 +12,7 @@ const MyAdditionalInfoAddArea = ({ myId }) => {
   return (
     <>
       <p>상세 정보를 입력하고 나와 같은 스타일의 유저들을 만나보세요!</p>
-      <Button varient="contained" onClick={handleMyAdditionalInfoAddModalOpen}>
+      <Button variant="contained" onClick={handleMyAdditionalInfoAddModalOpen}>
         상세 정보 입력하러 가기
       </Button>
       <MyAdditionalInfoAddModal
