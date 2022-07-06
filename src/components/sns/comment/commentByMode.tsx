@@ -23,10 +23,10 @@ const CommentByMode = ({ commentId, commentText, snsPostId, authorId }) => {
     mutate({ url: `/api/sns-comments?${query}` })
   }
 
-  const { me, isMeLoading } = useMe()
+  const { me, isLoading } = useMe()
   const [isCommentEditMode, setIsCommentEditMode] = useState(false)
 
-  if (isMeLoading) {
+  if (isLoading) {
     return <p>로그인 유저 정보를 불러오는 중입니다..</p>
   }
 
