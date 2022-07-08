@@ -8,7 +8,7 @@ import deletePost from 'services/users/deletePost'
 
 const PopoverMenu = ({ postId, myId }) => {
   const router = useRouter()
-  const menuButtonRef = useRef()
+  const menuButtonRef = useRef<HTMLButtonElement>(null)
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
@@ -20,16 +20,24 @@ const PopoverMenu = ({ postId, myId }) => {
     setIsMenuOpen(false)
   }
 
-  const handleEditClick = () => {
-    router.push(`/sns/post/edit/${postId}`)
+  const goToSnsPostEditPage = () => router.push(`/sns/post/edit/${postId}`)
+  const goToMySnsPage = () => router.push(`/sns/${myId}`)
+
+  const afterDeletePost = () => {
+    goToMySnsPage()
   }
 
-  const handleDeleteClick = () => {
-    deletePost(postId)
-      .then(() => {
-        router.push(`/sns/${myId}`)
-      })
-      .catch(console.error)
+  const handleEditClick = () => {
+    goToSnsPostEditPage()
+  }
+
+  const handleDeleteClick = async () => {
+    try {
+      await deletePost(postId)
+      afterDeletePost()
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   return (
