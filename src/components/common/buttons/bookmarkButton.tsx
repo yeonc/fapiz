@@ -6,18 +6,18 @@ import deleteBookmark from 'services/users/deleteBookmark'
 
 const BookmarkButton = ({
   myId,
-  targetForBookmark,
+  targetId,
+  bookmarkUsers,
   afterBookmark,
   isShowBookmarkUsersNumber,
 }) => {
-  const bookmarkUsers = targetForBookmark.bookmarkUsers.data
   const isBookmarked = bookmarkUsers.some(
     (bookmarkUser: any) => bookmarkUser.id === myId
   )
 
   const bookmark = async () => {
     await createBookmark({
-      snsPostId: targetForBookmark.id,
+      snsPostId: targetId,
       bookmarkUserId: myId,
     })
   }
@@ -27,7 +27,7 @@ const BookmarkButton = ({
       (bookmarkUser: any) => bookmarkUser.id
     )
     await deleteBookmark({
-      snsPostId: targetForBookmark.id,
+      snsPostId: targetId,
       bookmarkUserIds,
       deleteBookmarkUserId: myId,
     })

@@ -6,21 +6,21 @@ import unlikePost from 'services/users/unlikePost'
 
 const LikeButton = ({
   myId,
-  targetForLike,
+  targetId,
+  likeUsers,
   afterLike,
   isShowLikeUsersNumber,
 }) => {
-  const likeUsers = targetForLike.attributes?.likeUsers?.data ?? []
   const isLiked = likeUsers.some((likeUser: any) => likeUser.id === myId)
 
   const like = async () => {
-    await likePost({ snsPostId: targetForLike.id, likeUserId: myId })
+    await likePost({ snsPostId: targetId, likeUserId: myId })
   }
 
   const unlike = async () => {
     const likePostUserIds = likeUsers.map((likeUser: any) => likeUser.id)
     await unlikePost({
-      snsPostId: targetForLike.id,
+      snsPostId: targetId,
       likePostUserIds,
       unlikeUserId: myId,
     })
