@@ -1,15 +1,25 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import GoogleAuth from 'services/auth/google'
 import ROUTE_URL from 'constants/routeUrl'
 import { IS_SERVER } from 'constants/constants'
+import { LoginSuccessResponseData } from 'types/auth'
 
 const GoogleLoginRedirectPage = () => {
   const router = useRouter()
 
-  let accessToken
+  const afterLogin = () => {
+    router.push(ROUTE_URL.HOME)
+  }
+
+  const setUserDataToLocalStorage = (data: LoginSuccessResponseData) => {
+    localStorage.setItem('jwt', data.jwt)
+    localStorage.setItem('username', data.user.username)
+  }
+
+  let accessToken: string | null
   if (!IS_SERVER) {
-    function searchParam(key) {
+    const searchParam = (key: string): string | null => {
       const URLSearch = new URLSearchParams(location.search)
       const accessTokenValue = URLSearch.get(key)
       return accessTokenValue
@@ -21,9 +31,8 @@ const GoogleLoginRedirectPage = () => {
     GoogleAuth.login(accessToken)
       .then(response => {
         const data = response.data
-        localStorage.setItem('jwt', data.jwt)
-        localStorage.setItem('username', data.user.username)
-        router.push(ROUTE_URL.HOME)
+        setUserDataToLocalStorage(data)
+        afterLogin()
       })
       .catch(console.error)
   }, [])
