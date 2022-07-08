@@ -92,7 +92,6 @@ const PostEdit = ({ snsPost, afterEditPost, children }) => {
   }
 
   return children({
-    imageFiles,
     previewImages,
     fashionItemsInfo,
     postText,

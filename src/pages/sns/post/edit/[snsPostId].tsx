@@ -29,7 +29,6 @@ const SnsPostEditPage = () => {
   return (
     <PostEdit snsPost={snsPost} afterEditPost={afterEditPost}>
       {({
-        imageFiles,
         previewImages,
         fashionItemsInfo,
         postText,

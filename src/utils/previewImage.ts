@@ -1,4 +1,5 @@
 import { PreviewImage } from 'types'
+
 export const changeImageFilesToPreviewImage = (
   imageFiles: File[]
 ): PreviewImage => ({
