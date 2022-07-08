@@ -1,40 +1,45 @@
-import { useState } from 'react'
-import editSnsPost from 'services/users/editSnsPost'
+import { FormEvent, useState } from 'react'
+import editPost from 'services/users/editPost'
 import uploadImage from 'services/users/uploadImage'
 import generateIdIntoObject from 'utils/generateIdIntoObject'
 import { changeImageFilesToPreviewImages } from 'utils/previewImage'
 import { BACKEND_URL } from 'constants/constants'
+import { FashionItemInfo, PreviewImage } from 'types'
+
+type UploadedImageIds = number[] | undefined
 
 const EMPTY_FASHION_ITEM_INFO = { category: '', price: '', buyingPlace: '' }
 
 const PostEdit = ({ snsPost, afterEditPost, children }) => {
-  const initialPreviewImages = snsPost.attributes.postImages.data.map(
-    image => ({
+  // TODO: map 함수 image 인자 타입 정의
+  const initialPreviewImages: PreviewImage[] =
+    snsPost.attributes.postImages.data.map((image: any) => ({
       url: BACKEND_URL + image.attributes.url,
       altText: image.attributes.alternativeText,
-    })
-  )
+    }))
   const newEmptyFashionItemInfo = generateIdIntoObject(EMPTY_FASHION_ITEM_INFO)
-  const initialFashionItemsInfo = snsPost.attributes.fashionIemsInfo ?? [
-    newEmptyFashionItemInfo,
-  ]
-  const initialPostText = snsPost.attributes.content
+  const initialFashionItemsInfo: FashionItemInfo[] = snsPost.attributes
+    .fashionItemsInfo ?? [newEmptyFashionItemInfo]
+  const initialPostText: string = snsPost.attributes.content
 
-  const [imageFiles, setImageFiles] = useState(null)
-  const [previewImages, setPreviewImages] = useState(initialPreviewImages)
-  const [fashionItemsInfo, setFashionItemsInfo] = useState(
+  const [imageFiles, setImageFiles] = useState<File[] | null>(null)
+  const [previewImages, setPreviewImages] =
+    useState<PreviewImage[]>(initialPreviewImages)
+  const [fashionItemsInfo, setFashionItemsInfo] = useState<FashionItemInfo[]>(
     initialFashionItemsInfo
   )
   const [postText, setPostText] = useState(initialPostText)
 
-  const handleImageFilesChange = imageFiles => {
+  const handleImageFilesChange = (imageFiles: File[]) => {
     setImageFiles(imageFiles)
     const previewImagesFromImageFiles =
       changeImageFilesToPreviewImages(imageFiles)
     setPreviewImages(previewImagesFromImageFiles)
   }
 
-  const handleFashionItemsInfoChange = fashionItemsInfo => {
+  const handleFashionItemsInfoChange = (
+    fashionItemsInfo: FashionItemInfo[]
+  ) => {
     setFashionItemsInfo(fashionItemsInfo)
   }
 
@@ -42,23 +47,25 @@ const PostEdit = ({ snsPost, afterEditPost, children }) => {
     setFashionItemsInfo(prev => {
       const newEmptyFashionItemInfo = generateIdIntoObject(
         EMPTY_FASHION_ITEM_INFO
-      )
+      ) as FashionItemInfo
       return prev.concat(newEmptyFashionItemInfo)
     })
   }
 
-  const handleFashionItemInfoDeleteButtonClick = fashionItemInfoIdToDelete => {
+  const handleFashionItemInfoDeleteButtonClick = (
+    fashionItemInfoIdToDelete: number
+  ) => {
     setFashionItemsInfo(prev => {
       return prev.filter(prev => prev.id !== fashionItemInfoIdToDelete)
     })
   }
 
-  const handlePostTextChange = postText => {
+  const handlePostTextChange = (postText: string) => {
     setPostText(postText)
   }
 
-  const editPostWithImage = async uploadedImageIds => {
-    return editSnsPost({
+  const editSnsPost = async (uploadedImageIds: UploadedImageIds) => {
+    return editPost({
       postId: snsPost.id,
       content: postText,
       imageIds: uploadedImageIds,
@@ -66,28 +73,18 @@ const PostEdit = ({ snsPost, afterEditPost, children }) => {
     })
   }
 
-  const editPostWithoutImage = async () => {
-    return editSnsPost({
-      postId: snsPost.id,
-      content: postText,
-      fashionItemsInfo,
-    })
-  }
-
-  const handleSubmit = async e => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    let uploadedImageIds: UploadedImageIds
 
+    // TODO: map 함수 image 인자 타입 정의
     try {
-      if (!imageFiles) {
-        await editPostWithoutImage()
-      }
-
       if (imageFiles) {
         const res = await uploadImage(imageFiles)
-        const uploadedImageIds = res.data.map(image => image.id)
-        await editPostWithImage(uploadedImageIds)
+        uploadedImageIds = res.data.map((image: any) => image.id)
       }
 
+      await editSnsPost(uploadedImageIds)
       afterEditPost()
     } catch (error) {
       console.error(error)

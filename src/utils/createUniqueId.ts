@@ -1,4 +1,4 @@
-const createUniqueId = () => {
+const createUniqueId = (): number => {
   return Math.random() + new Date().getTime()
 }
 
