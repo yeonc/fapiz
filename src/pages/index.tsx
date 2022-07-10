@@ -72,6 +72,8 @@ const MainPage = () => {
   const { snsPosts: snsPostsFromStrapi, isLoading: isSnsPostsLoading } =
     useSnsPosts(queryForFetchingSnsPosts)
 
+  const SnsPostLikeButtonWithLogin = withLogin(LikeButton)
+
   if (isMeLoading) {
     return <p>유저 정보를 받아오는 중입니다.</p>
   }
@@ -208,8 +210,6 @@ const MainPage = () => {
   )
   snsPosts = randomizeSnsPosts(filteredSnsPostsByMyInfo)
 
-  const SnsPostLikeButtonWithLogin = withLogin(LikeButton)
-
   return (
     <>
       <ImageList variant="masonry" cols={3}>
@@ -224,7 +224,6 @@ const MainPage = () => {
                 likeUsers={snsPost.likeUsers}
                 afterLike={afterLike}
                 isShowLikeUsersNumber={false}
-                isLoggedIn={!!me}
               />
             }
           />

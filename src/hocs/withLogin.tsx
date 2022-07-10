@@ -1,5 +1,10 @@
+import useMe from 'hooks/useMe'
+
 const withLogin = (Component: any) => {
-  return ({ isLoggedIn, ...props }) => isLoggedIn && <Component {...props} />
+  const { me } = useMe()
+  const isLoggedIn = !!me
+
+  return ({ ...props }) => isLoggedIn && <Component {...props} />
 }
 
 export default withLogin
