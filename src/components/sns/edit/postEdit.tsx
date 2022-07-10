@@ -4,7 +4,7 @@ import uploadImage from 'services/users/uploadImage'
 import generateIdIntoObject from 'utils/generateIdIntoObject'
 import { changeImageFilesToPreviewImages } from 'utils/previewImage'
 import { BACKEND_URL } from 'constants/constants'
-import { FashionItemInfo, PreviewImage } from 'types'
+import { FashionItemInfo, PreviewImage, ImageFiles } from 'types'
 
 const EMPTY_FASHION_ITEM_INFO = { category: '', price: '', buyingPlace: '' }
 
@@ -22,7 +22,7 @@ const PostEdit = ({ snsPost, afterEditPost, children }) => {
     .fashionItemsInfo ?? [newEmptyFashionItemInfo]
   const initialPostText: string = snsPost.attributes.content
 
-  const [imageFiles, setImageFiles] = useState<File[] | null>(null)
+  const [imageFiles, setImageFiles] = useState<ImageFiles>(null)
   const [previewImages, setPreviewImages] =
     useState<PreviewImage[]>(initialPreviewImages)
   const [fashionItemsInfo, setFashionItemsInfo] = useState<FashionItemInfo[]>(

@@ -15,6 +15,7 @@ import {
   FASHION_ITEM_CATEGORIES,
   FASHION_ITEM_COLORS,
 } from 'constants/fashionItem'
+import { Nullable } from 'types'
 
 const previewImageStyle = css`
   width: 250px;
@@ -29,6 +30,7 @@ type FashionItemPreviewImage = {
   altText: string
 }
 
+type ImageFiles = Nullable<File[]>
 type UploadedImageId = number | undefined
 
 const FashionItemEditForm = ({
@@ -36,7 +38,7 @@ const FashionItemEditForm = ({
   afterEditFashionItem,
   afterDeleteFashionItem,
 }) => {
-  const [imageFiles, setImageFiles] = useState<File[] | null>(null)
+  const [imageFiles, setImageFiles] = useState<ImageFiles>(null)
   const [previewImage, setPreviewImage] = useState<FashionItemPreviewImage>(
     initialFashionItem.image
   )

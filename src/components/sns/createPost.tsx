@@ -3,15 +3,13 @@ import createPost from 'services/users/createPost'
 import uploadImage from 'services/users/uploadImage'
 import { changeImageFilesToPreviewImages } from 'utils/previewImage'
 import generateIdIntoObject from 'utils/generateIdIntoObject'
-import { FashionItemInfo, PreviewImage } from 'types'
+import { FashionItemInfo, ImageFiles, PreviewImages } from 'types'
 
 const EMPTY_FASHION_ITEM_INFO = { category: '', price: '', buyingPlace: '' }
 const newEmptyFashionItemInfo = generateIdIntoObject(
   EMPTY_FASHION_ITEM_INFO
 ) as FashionItemInfo
 
-type ImageFiles = File[] | null
-type PreviewImages = PreviewImage[] | null
 type CreatedPostId = number
 
 const CreatePost = ({ authorId, afterCreatePost, children }) => {

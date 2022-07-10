@@ -1,5 +1,7 @@
 import { FashionStyle, Nullable } from 'types'
 
+export type AccessToken = Nullable<string>
+
 export type LoginSuccessResponseData = {
   jwt: string
   user: {

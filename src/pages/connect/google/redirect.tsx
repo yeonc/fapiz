@@ -3,7 +3,10 @@ import { useRouter } from 'next/router'
 import GoogleAuth from 'services/auth/google'
 import ROUTE_URL from 'constants/routeUrl'
 import { IS_SERVER } from 'constants/constants'
-import { LoginSuccessResponseData } from 'types/auth'
+import { Nullable } from 'types'
+import { LoginSuccessResponseData, AccessToken } from 'types/auth'
+
+type Value = Nullable<string>
 
 const GoogleLoginRedirectPage = () => {
   const router = useRouter()
@@ -17,9 +20,9 @@ const GoogleLoginRedirectPage = () => {
     localStorage.setItem('username', data.user.username)
   }
 
-  let accessToken: string | null
+  let accessToken: AccessToken
   if (!IS_SERVER) {
-    const searchParam = (key: string): string | null => {
+    const searchParam = (key: string): Value => {
       const URLSearch = new URLSearchParams(location.search)
       const accessTokenValue = URLSearch.get(key)
       return accessTokenValue

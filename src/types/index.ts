@@ -10,6 +10,9 @@ export type ObjectWithId = Object & Id
 
 export type Nullable<T> = T | null
 
+export type ImageFiles = Nullable<File[]>
+export type PreviewImages = Nullable<PreviewImage[]>
+
 export type PreviewImage = {
   url: string
   altText: string
