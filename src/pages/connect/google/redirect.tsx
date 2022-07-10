@@ -1,12 +1,33 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import GoogleAuth from 'services/auth/google'
+import googleLogin from 'services/auth/googleLogin'
 import ROUTE_URL from 'constants/routeUrl'
-import { IS_SERVER } from 'constants/constants'
-import { Nullable } from 'types'
+import getValueOfKeyFromQueryString from 'utils/getValueOfKeyFromQueryString'
 import { LoginSuccessResponseData, AccessToken } from 'types/auth'
 
-type Value = Nullable<string>
+const ACCESS_TOKEN_KEY = 'access_token'
+
+const getAccessTokenFromQueryString = (queryString: string): AccessToken => {
+  const accessToken = getValueOfKeyFromQueryString({
+    queryString,
+    key: ACCESS_TOKEN_KEY,
+  })
+  return accessToken
+}
+
+const setUserDataToLocalStorage = (data: LoginSuccessResponseData) => {
+  localStorage.setItem('jwt', data.jwt)
+  localStorage.setItem('username', data.user.username)
+}
+
+const login = async (accessToken: AccessToken) => {
+  try {
+    const res = await googleLogin(accessToken)
+    setUserDataToLocalStorage(res.data)
+  } catch (error) {
+    console.error(error)
+  }
+}
 
 const GoogleLoginRedirectPage = () => {
   const router = useRouter()
@@ -15,28 +36,11 @@ const GoogleLoginRedirectPage = () => {
     router.push(ROUTE_URL.HOME)
   }
 
-  const setUserDataToLocalStorage = (data: LoginSuccessResponseData) => {
-    localStorage.setItem('jwt', data.jwt)
-    localStorage.setItem('username', data.user.username)
-  }
-
-  let accessToken: AccessToken
-  if (!IS_SERVER) {
-    const searchParam = (key: string): Value => {
-      const URLSearch = new URLSearchParams(location.search)
-      const accessTokenValue = URLSearch.get(key)
-      return accessTokenValue
-    }
-    accessToken = searchParam('access_token')
-  }
-
   useEffect(() => {
-    GoogleAuth.login(accessToken)
-      .then(response => {
-        const data = response.data
-        setUserDataToLocalStorage(data)
-        afterLogin()
-      })
+    const queryString = location.search
+    const accessToken = getAccessTokenFromQueryString(queryString)
+    login(accessToken)
+      .then(() => afterLogin())
       .catch(console.error)
   }, [])
 
