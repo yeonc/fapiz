@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useSWRConfig } from 'swr'
-import PostImages from 'components/sns/postImages'
+import { css } from '@emotion/react'
 import PostAuthorHeader from 'components/sns/postAuthorHeader'
 import PopoverMenu from 'components/common/menus/popoverMenu'
 import LikeButton from 'components/common/buttons/likeButton'
@@ -9,6 +9,11 @@ import useSnsPost from 'hooks/useSnsPost'
 import useMe from 'hooks/useMe'
 import createUrlQuery from 'utils/createUrlQuery'
 import getFormattedDate from 'utils/getFormattedDate'
+import { BACKEND_URL } from 'constants/constants'
+
+const snsPostImagesStyle = css`
+  width: 200px;
+`
 
 const queryForFetchingSnsPostByPostId = createUrlQuery({
   'populate[0]': 'author.profileImage',
@@ -29,29 +34,11 @@ const mutateKeyForFetchingSnsPosts = {
   url: `/api/sns-posts?${queryForFetchingSnsPosts}`,
 }
 
-const PostText = ({ text, createdDate }) => (
-  <>
-    <p>{text}</p>
-    <span>{createdDate}</span>
-  </>
-)
-
-const PostFashionItemInfo = ({ fashionItems }) => (
-  <>
-    <h3>착용한 제품 정보</h3>
-    <ul>
-      {fashionItems?.map((item: any, index: any) => (
-        <li key={index.toString()}>
-          {item.category}: {item.price}원 / {item.buyingPlace}
-        </li>
-      ))}
-    </ul>
-  </>
-)
-
 const PostDescriptionContents = () => {
   const router = useRouter()
   const { snsPostId } = router.query
+
+  const { mutate } = useSWRConfig()
 
   const {
     snsPost: snsPostFromStrapi,
@@ -69,28 +56,30 @@ const PostDescriptionContents = () => {
     return <p>페이지를 표시할 수 없습니다.</p>
   }
 
-  const snsPost = snsPostFromStrapi.attributes
-  const snsPostImagesFromStrapi = snsPost.postImages.data
-  const snsPostImages = snsPostImagesFromStrapi
-    ? snsPostImagesFromStrapi.map((image: any) => ({
-        id: image.id,
-        altText: image.attributes.alternativeText,
-        url: image.attributes.url,
-      }))
-    : []
-
-  const author = snsPost.author.data.attributes
-  const userInfo = {
-    username: author.username,
-    height: author.height,
-    weight: author.weight,
-    avatarUrl: author.profileImage.data.attributes.url,
+  const snsPost = {
+    id: snsPostFromStrapi.id,
+    createdAt: snsPostFromStrapi.attributes.createdAt,
+    images: snsPostFromStrapi.attributes.postImages.data.map((image: any) => ({
+      url: BACKEND_URL + image.attributes.url,
+      altText: image.attributes.alternativeText,
+    })),
+    author: {
+      id: snsPostFromStrapi.attributes.author.data.id,
+      username: snsPostFromStrapi.attributes.author.data.attributes.username,
+      height: snsPostFromStrapi.attributes.author.data.attributes.height,
+      weight: snsPostFromStrapi.attributes.author.data.attributes.weight,
+      avatarUrl:
+        snsPostFromStrapi.attributes.author.data.attributes.profileImage.data
+          .attributes.url,
+    },
+    likeUsers: snsPostFromStrapi.attributes.likeUsers.data,
+    bookmarkUsers: snsPostFromStrapi.attributes.bookmarkUsers.data,
+    content: snsPostFromStrapi.attributes.content,
+    fashionItemsInfo: snsPostFromStrapi.attributes.fashionItemsInfo,
   }
 
   const createdDate = new Date(snsPost.createdAt)
   const dateFormat = getFormattedDate(createdDate)
-
-  const { mutate } = useSWRConfig()
 
   const afterBookmark = () => {
     mutate(mutateKeyForFetchingSnsPostByPostId(snsPost.id))
@@ -103,29 +92,52 @@ const PostDescriptionContents = () => {
   return (
     <>
       <PostAuthorHeader
-        author={userInfo}
+        author={snsPost.author}
         popoverMenu={<PopoverMenu postId={snsPostId} myId={me && me.id} />}
       />
-      {snsPostImagesFromStrapi && <PostImages images={snsPostImages} />}
-      {!!me ? (
-        <LikeButton
-          myId={me.id}
-          targetForLike={snsPost}
-          afterLike={afterLike}
-          isShowLikeUsersNumber={true}
+      {snsPost.images.map(snsPostImage => (
+        <img
+          css={snsPostImagesStyle}
+          key={snsPostImage.url}
+          src={snsPostImage.url}
+          alt={snsPostImage.altText}
         />
-      ) : null}
-      {!!me ? (
-        <BookmarkButton
-          myId={me.id}
-          targetForBookmark={snsPost}
-          afterBookmark={afterBookmark}
-          isShowBookmarkUsersNumber={true}
-        />
-      ) : null}
-      <PostText text={snsPost.content} createdDate={dateFormat} />
+      ))}
+      <div>
+        {!!me ? (
+          <LikeButton
+            myId={me.id}
+            targetId={snsPost.id}
+            likeUsers={snsPost.likeUsers}
+            afterLike={afterLike}
+            isShowLikeUsersNumber={true}
+          />
+        ) : null}
+        {!!me ? (
+          <BookmarkButton
+            myId={me.id}
+            targetId={snsPost.id}
+            bookmarkUsers={snsPost.bookmarkUsers}
+            afterBookmark={afterBookmark}
+            isShowBookmarkUsersNumber={true}
+          />
+        ) : null}
+      </div>
+      <p>{snsPost.content}</p>
+      <span>{dateFormat}</span>
       {snsPost.fashionItemsInfo && (
-        <PostFashionItemInfo fashionItems={snsPost.fashionItemsInfo} />
+        <>
+          <h3>착용한 제품 정보</h3>
+          <ul>
+            {snsPost.fashionItemsInfo?.map(
+              (fashionItemInfo: any, index: number) => (
+                <li key={index.toString()}>
+                  {`${fashionItemInfo.category}: ${fashionItemInfo.price}원 / ${fashionItemInfo.buyingPlace}`}
+                </li>
+              )
+            )}
+          </ul>
+        </>
       )}
     </>
   )
