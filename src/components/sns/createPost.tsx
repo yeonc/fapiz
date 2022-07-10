@@ -56,25 +56,26 @@ const CreatePost = ({ authorId, afterCreatePost, children }) => {
     setPostText(postText)
   }
 
+  const createSnsPost = async (
+    uploadedImageIds: number[]
+  ): Promise<CreatedPostId> => {
+    const res = await createPost({
+      postText,
+      fashionItemsInfo,
+      authorId,
+      postImageIds: uploadedImageIds,
+    })
+
+    const createdPostId: number = res.data.data.id
+    return createdPostId
+  }
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!imageFiles) return
 
-    const createSnsPost = async (
-      uploadedImageIds: number[]
-    ): Promise<CreatedPostId> => {
-      const res = await createPost({
-        postText,
-        fashionItemsInfo,
-        authorId,
-        postImageIds: uploadedImageIds,
-      })
-
-      const createdPostId: number = res.data.data.id
-      return createdPostId
-    }
-
     // TODO: map 함수 image 인자 타입 정의
+    // TODO: uploadedImageIds 가져오는 과정 함수로 빼기
     try {
       const res = await uploadImage(imageFiles)
       const uploadedImageIds: number[] = res.data.map((image: any) => image.id)

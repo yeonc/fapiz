@@ -6,6 +6,8 @@ import ImageUploadButton from 'components/common/buttons/imageUploadButton'
 import uploadImage from 'services/users/uploadImage'
 import editMyBasicInfo from 'services/users/editMyBasicInfo'
 
+type UploadedImageId = number | undefined
+
 const MyBasicInfoForm = ({
   myId,
   initialUsername,
@@ -39,13 +41,26 @@ const MyBasicInfoForm = ({
     setWeight(weight)
   }
 
-  const editBasicInfo = async (uploadedImageId: any) => {
+  const getUploadedImageId = async (): Promise<UploadedImageId> => {
+    if (!imageFiles) {
+      return
+    }
+
+    const res = await uploadImage(imageFiles)
+    const uploadedImageId: number = res.data[0].id
+
+    return uploadedImageId
+  }
+
+  const editBasicInfo = async () => {
+    const profileImageId = await getUploadedImageId()
+
     await editMyBasicInfo({
       myId,
       username,
       weight,
       height,
-      profileImageId: uploadedImageId,
+      profileImageId,
     })
   }
 
@@ -53,9 +68,7 @@ const MyBasicInfoForm = ({
     e.preventDefault()
 
     try {
-      const res = await uploadImage(imageFiles)
-      const uploadedImageId = res.data[0].id
-      await editBasicInfo(uploadedImageId)
+      await editBasicInfo()
       afterEditBasicInfo()
     } catch (error) {
       console.error(error)

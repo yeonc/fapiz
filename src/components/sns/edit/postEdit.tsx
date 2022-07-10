@@ -6,9 +6,9 @@ import { changeImageFilesToPreviewImages } from 'utils/previewImage'
 import { BACKEND_URL } from 'constants/constants'
 import { FashionItemInfo, PreviewImage } from 'types'
 
-type UploadedImageIds = number[] | undefined
-
 const EMPTY_FASHION_ITEM_INFO = { category: '', price: '', buyingPlace: '' }
+
+type UploadedImageIds = number[]
 
 const PostEdit = ({ snsPost, afterEditPost, children }) => {
   // TODO: map 함수 image 인자 타입 정의
@@ -64,27 +64,38 @@ const PostEdit = ({ snsPost, afterEditPost, children }) => {
     setPostText(postText)
   }
 
-  const editSnsPost = async (uploadedImageIds: UploadedImageIds) => {
-    return editPost({
+  const getUploadedImageIds = async (): Promise<
+    UploadedImageIds | undefined
+  > => {
+    if (!imageFiles) {
+      return
+    }
+
+    const res = await uploadImage(imageFiles)
+    const uploadedImageIds: UploadedImageIds = res.data.map(
+      (image: any) => image.id
+    )
+
+    return uploadedImageIds
+  }
+
+  const editSnsPost = async () => {
+    const imageIds = await getUploadedImageIds()
+
+    await editPost({
       postId: snsPost.id,
       content: postText,
-      imageIds: uploadedImageIds,
+      imageIds,
       fashionItemsInfo,
     })
   }
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    let uploadedImageIds: UploadedImageIds
 
     // TODO: map 함수 image 인자 타입 정의
     try {
-      if (imageFiles) {
-        const res = await uploadImage(imageFiles)
-        uploadedImageIds = res.data.map((image: any) => image.id)
-      }
-
-      await editSnsPost(uploadedImageIds)
+      await editSnsPost()
       afterEditPost()
     } catch (error) {
       console.error(error)

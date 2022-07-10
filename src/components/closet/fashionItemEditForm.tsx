@@ -29,6 +29,8 @@ type FashionItemPreviewImage = {
   altText: string
 }
 
+type UploadedImageId = number | undefined
+
 const FashionItemEditForm = ({
   initialFashionItem,
   afterEditFashionItem,
@@ -61,28 +63,32 @@ const FashionItemEditForm = ({
     setColor(color)
   }
 
-  const editFashionItemInCloset = async (
-    uploadedImageId: number | undefined
-  ) => {
+  const getUploadedImageId = async (): Promise<UploadedImageId> => {
+    if (!imageFiles) {
+      return
+    }
+
+    const res = await uploadImage(imageFiles)
+    const uploadedImageId: number = res.data[0].id
+
+    return uploadedImageId
+  }
+
+  const editFashionItemInCloset = async () => {
+    const imageId = await getUploadedImageId()
+
     await editFashionItem({
       fashionItemId: initialFashionItem.id,
       season,
       category,
       color,
-      imageId: uploadedImageId,
+      imageId,
     })
   }
 
   const handleFashionItemEditButtonClick = async () => {
-    let uploadedImageId: number | undefined
-
     try {
-      if (imageFiles) {
-        const res = await uploadImage(imageFiles)
-        uploadedImageId = res.data[0].id
-      }
-
-      await editFashionItemInCloset(uploadedImageId)
+      await editFashionItemInCloset()
       afterEditFashionItem()
     } catch (error) {
       console.error(error)

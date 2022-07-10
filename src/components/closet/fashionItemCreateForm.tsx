@@ -75,6 +75,7 @@ const FashionItemCreateForm = ({ afterCreateFashionItem }) => {
       return
     }
 
+    // TODO: uploadedImageId 가져오는 과정 함수로 빼기
     try {
       const res = await uploadImage(imageFiles)
       const uploadedImageId = res.data[0].id
