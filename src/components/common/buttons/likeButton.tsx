@@ -4,6 +4,8 @@ import Favorite from '@mui/icons-material/Favorite'
 import likePost from 'services/users/likePost'
 import unlikePost from 'services/users/unlikePost'
 
+const LIKE_BUTTON_ID = 'like-button'
+
 const LikeButton = ({
   myId,
   targetId,
@@ -39,6 +41,7 @@ const LikeButton = ({
   return (
     <>
       <Checkbox
+        id={LIKE_BUTTON_ID}
         icon={<FavoriteBorder />}
         checkedIcon={<Favorite />}
         checked={isLiked}
@@ -48,5 +51,7 @@ const LikeButton = ({
     </>
   )
 }
+
+LikeButton.id = LIKE_BUTTON_ID
 
 export default LikeButton

@@ -38,7 +38,7 @@ const ImageCardItem = ({ cardItemData, rightActionButton }) => {
   const goToSnsPost = (snsPostId: any) => router.push(`/sns/post/${snsPostId}`)
 
   const handleImageListItemClick = (e: any) => {
-    const isLikeButtonClicked = e.target.tagName === 'INPUT'
+    const isLikeButtonClicked = e.target.id === LikeButton.id
     if (isLikeButtonClicked) {
       return
     }
@@ -92,7 +92,7 @@ const MainPage = () => {
       BACKEND_URL + snsPost.attributes.postImages.data[0].attributes.url,
     imageAltText:
       snsPost.attributes.postImages.data[0].attributes.alternativeText,
-    object: snsPost,
+    likeUsers: snsPost.attributes.likeUsers.data,
   }))
 
   const filterRecentlyCreatedSnsPosts = (snsPosts: any) => {
@@ -220,7 +220,8 @@ const MainPage = () => {
             rightActionButton={
               <SnsPostLikeButtonWithLogin
                 myId={me.id}
-                targetForLike={snsPost.object}
+                targetId={snsPost.id}
+                likeUsers={snsPost.likeUsers}
                 afterLike={afterLike}
                 isShowLikeUsersNumber={false}
                 isLoggedIn={!!me}
