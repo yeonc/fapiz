@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios'
 import { BACKEND_URL } from 'constants/constants'
 
-type EditFashionItemProps = {
+type EditFashionItemArgs = {
   fashionItemId: number
   season: string
   category: string
@@ -9,13 +9,15 @@ type EditFashionItemProps = {
   imageId?: number
 }
 
-const editFashionItem = async ({
+type EditFashionItem = (args: EditFashionItemArgs) => Promise<AxiosResponse>
+
+const editFashionItem: EditFashionItem = async ({
   fashionItemId,
   season,
   category,
   color,
   imageId,
-}: EditFashionItemProps): Promise<AxiosResponse> => {
+}) => {
   return axios({
     method: 'put',
     url: `${BACKEND_URL}/api/fashion-items/${fashionItemId}`,

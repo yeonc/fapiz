@@ -2,19 +2,21 @@ import axios, { AxiosResponse } from 'axios'
 import { BACKEND_URL } from 'constants/constants'
 import { FashionItemInfo } from 'types'
 
-type CreatePostProps = {
+type CreatePostArgs = {
   postText?: string
   fashionItemsInfo: FashionItemInfo[] | []
   authorId: number
   postImageIds: number[]
 }
 
-const createPost = async ({
+type CreatePost = (args: CreatePostArgs) => Promise<AxiosResponse>
+
+const createPost: CreatePost = async ({
   postText,
   fashionItemsInfo,
   authorId,
   postImageIds,
-}: CreatePostProps): Promise<AxiosResponse> => {
+}) => {
   return axios({
     method: 'post',
     url: `${BACKEND_URL}/api/sns-posts`,

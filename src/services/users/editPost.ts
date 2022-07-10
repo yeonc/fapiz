@@ -2,19 +2,21 @@ import axios, { AxiosResponse } from 'axios'
 import { BACKEND_URL } from 'constants/constants'
 import { FashionItemInfo } from 'types'
 
-type EditPostProps = {
+type EditPostArgs = {
   postId: number
   content?: string
   imageIds?: number[]
   fashionItemsInfo?: FashionItemInfo[]
 }
 
-const editPost = async ({
+type EditPost = (args: EditPostArgs) => Promise<AxiosResponse>
+
+const editPost: EditPost = async ({
   postId,
   content,
   imageIds,
   fashionItemsInfo,
-}: EditPostProps): Promise<AxiosResponse> => {
+}) => {
   return axios({
     method: 'put',
     url: `${BACKEND_URL}/api/sns-posts/${postId}`,
