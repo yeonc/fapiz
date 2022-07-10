@@ -1,4 +1,4 @@
-import { FashionStyle } from 'types'
+import { FashionStyle, Nullable } from 'types'
 
 export type LoginSuccessResponseData = {
   jwt: string
@@ -6,13 +6,13 @@ export type LoginSuccessResponseData = {
     id: number
     username: string
     email: string
-    gender?: string
-    height?: number
-    weight?: number
-    bodyShape?: string
-    fashionStyles?: FashionStyle[]
-    level?: number
-    points?: number
+    gender: Nullable<string>
+    height: Nullable<number>
+    weight: Nullable<number>
+    bodyShape: Nullable<string>
+    fashionStyles: Nullable<FashionStyle[]>
+    level: Nullable<number>
+    points: Nullable<number>
     provider: string
     confirmed: boolean
     blocked: boolean
