@@ -4,9 +4,14 @@ import uploadImage from 'services/users/uploadImage'
 import generateIdIntoObject from 'utils/generateIdIntoObject'
 import { changeImageFilesToPreviewImages } from 'utils/previewImage'
 import { BACKEND_URL } from 'constants/constants'
-import { FashionItemInfo, PreviewImage, ImageFiles } from 'types'
+import { FashionItemInfo, PreviewImage, ImageFiles, ObjectWithId } from 'types'
 
 const EMPTY_FASHION_ITEM_INFO = { category: '', price: '', buyingPlace: '' }
+
+const createNewEmptyFashionItemInfo = (): ObjectWithId => {
+  return generateIdIntoObject(EMPTY_FASHION_ITEM_INFO)
+}
+const emptyFashionItemInfo = createNewEmptyFashionItemInfo() as FashionItemInfo
 
 type UploadedImageIds = number[]
 
@@ -17,9 +22,8 @@ const PostEdit = ({ snsPost, afterEditPost, children }) => {
       url: BACKEND_URL + image.attributes.url,
       altText: image.attributes.alternativeText,
     }))
-  const newEmptyFashionItemInfo = generateIdIntoObject(EMPTY_FASHION_ITEM_INFO)
   const initialFashionItemsInfo: FashionItemInfo[] = snsPost.attributes
-    .fashionItemsInfo ?? [newEmptyFashionItemInfo]
+    .fashionItemsInfo ?? [emptyFashionItemInfo]
   const initialPostText: string = snsPost.attributes.content
 
   const [imageFiles, setImageFiles] = useState<ImageFiles>(null)
@@ -44,10 +48,9 @@ const PostEdit = ({ snsPost, afterEditPost, children }) => {
 
   const handleFashionItemInfoAddMoreButtonClick = () => {
     setFashionItemsInfo(prev => {
-      const newEmptyFashionItemInfo = generateIdIntoObject(
-        EMPTY_FASHION_ITEM_INFO
-      ) as FashionItemInfo
-      return prev.concat(newEmptyFashionItemInfo)
+      const emptyFashionItemInfo =
+        createNewEmptyFashionItemInfo() as FashionItemInfo
+      return prev.concat(emptyFashionItemInfo)
     })
   }
 
