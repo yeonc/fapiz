@@ -40,9 +40,8 @@ const FashionItemCreateForm = ({ afterCreateFashionItem }) => {
 
   const handleImageFilesChange = (imageFiles: any) => {
     setImageFiles(imageFiles)
-    const previewImageFromImageFiles =
-      changeImageFilesToPreviewImage(imageFiles)
-    setPreviewImage(previewImageFromImageFiles)
+    const previewImage = changeImageFilesToPreviewImage(imageFiles)
+    setPreviewImage(previewImage)
   }
 
   const handleSeasonChange = (season: any) => {

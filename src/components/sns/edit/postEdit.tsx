@@ -32,9 +32,8 @@ const PostEdit = ({ snsPost, afterEditPost, children }) => {
 
   const handleImageFilesChange = (imageFiles: File[]) => {
     setImageFiles(imageFiles)
-    const previewImagesFromImageFiles =
-      changeImageFilesToPreviewImages(imageFiles)
-    setPreviewImages(previewImagesFromImageFiles)
+    const previewImages = changeImageFilesToPreviewImages(imageFiles)
+    setPreviewImages(previewImages)
   }
 
   const handleFashionItemsInfoChange = (

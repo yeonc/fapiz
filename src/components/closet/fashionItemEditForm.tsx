@@ -48,9 +48,8 @@ const FashionItemEditForm = ({
 
   const handleImageFilesChange = (imageFiles: File[]) => {
     setImageFiles(imageFiles)
-    const previewImageFromImageFiles =
-      changeImageFilesToPreviewImage(imageFiles)
-    setPreviewImage(previewImageFromImageFiles)
+    const previewImage = changeImageFilesToPreviewImage(imageFiles)
+    setPreviewImage(previewImage)
   }
 
   const handleSeasonChange = (season: string) => {
