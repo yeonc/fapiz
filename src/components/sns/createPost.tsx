@@ -3,7 +3,7 @@ import createPost from 'services/users/createPost'
 import uploadImage from 'services/users/uploadImage'
 import { changeImageFilesToPreviewImages } from 'utils/previewImage'
 import generateIdIntoObject from 'utils/generateIdIntoObject'
-import { FashionItemInfo, ImageFiles, Obj, WithId, PreviewImages } from 'types'
+import { FashionItemInfo, ImageFiles, Obj, WithId, PreviewImage } from 'types'
 
 const EMPTY_FASHION_ITEM_INFO = { category: '', price: '', buyingPlace: '' }
 
@@ -16,7 +16,9 @@ type CreatedPostId = number
 
 const CreatePost = ({ authorId, afterCreatePost, children }) => {
   const [imageFiles, setImageFiles] = useState<ImageFiles>(null)
-  const [previewImages, setPreviewImages] = useState<PreviewImages>(null)
+  const [previewImages, setPreviewImages] = useState<PreviewImage[] | null>(
+    null
+  )
   const [fashionItemsInfo, setFashionItemsInfo] = useState<FashionItemInfo[]>([
     emptyFashionItemInfo,
   ])
