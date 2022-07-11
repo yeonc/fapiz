@@ -3,11 +3,11 @@ import createPost from 'services/users/createPost'
 import uploadImage from 'services/users/uploadImage'
 import { changeImageFilesToPreviewImages } from 'utils/previewImage'
 import generateIdIntoObject from 'utils/generateIdIntoObject'
-import { FashionItemInfo, ImageFiles, ObjectWithId, PreviewImages } from 'types'
+import { FashionItemInfo, ImageFiles, Obj, WithId, PreviewImages } from 'types'
 
 const EMPTY_FASHION_ITEM_INFO = { category: '', price: '', buyingPlace: '' }
 
-const createNewEmptyFashionItemInfo = (): ObjectWithId => {
+const createNewEmptyFashionItemInfo = (): WithId<Obj> => {
   return generateIdIntoObject(EMPTY_FASHION_ITEM_INFO)
 }
 const emptyFashionItemInfo = createNewEmptyFashionItemInfo() as FashionItemInfo

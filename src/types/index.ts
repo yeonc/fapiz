@@ -1,12 +1,6 @@
-export type Object = {
-  [key: string]: any
-}
+export type Obj = Record<string, any>
 
-export type Id = {
-  id: number
-}
-
-export type ObjectWithId = Object & Id
+export type WithId<T> = T & {id: number}
 
 export type Nullable<T> = T | null
 
