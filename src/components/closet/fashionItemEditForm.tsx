@@ -9,13 +9,13 @@ import ImageUploadButton from 'components/common/buttons/imageUploadButton'
 import uploadImage from 'services/users/uploadImage'
 import editFashionItem from 'services/users/editFashionItem'
 import deleteFashionItem from 'services/users/deleteFashionItem'
-import { changeImageFilesToPreviewImage } from 'utils/previewImage'
+import { changeImageFileToPreviewImage } from 'utils/previewImage'
 import {
   FASHION_ITEM_SEASONS,
   FASHION_ITEM_CATEGORIES,
   FASHION_ITEM_COLORS,
 } from 'constants/fashionItem'
-import { Nullable } from 'types'
+import { ImageFiles, PreviewImage } from 'types'
 
 const previewImageStyle = css`
   width: 250px;
@@ -25,12 +25,6 @@ const previewImageStyle = css`
   object-fit: cover;
 `
 
-type FashionItemPreviewImage = {
-  url: string
-  altText: string
-}
-
-type ImageFiles = Nullable<File[]>
 type UploadedImageId = number | undefined
 
 const FashionItemEditForm = ({
@@ -39,7 +33,7 @@ const FashionItemEditForm = ({
   afterDeleteFashionItem,
 }) => {
   const [imageFiles, setImageFiles] = useState<ImageFiles>(null)
-  const [previewImage, setPreviewImage] = useState<FashionItemPreviewImage>(
+  const [previewImage, setPreviewImage] = useState<PreviewImage>(
     initialFashionItem.image
   )
   const [season, setSeason] = useState<string>(initialFashionItem.season)
@@ -48,7 +42,7 @@ const FashionItemEditForm = ({
 
   const handleImageFilesChange = (imageFiles: File[]) => {
     setImageFiles(imageFiles)
-    const previewImage = changeImageFilesToPreviewImage(imageFiles)
+    const previewImage = changeImageFileToPreviewImage(imageFiles[0])
     setPreviewImage(previewImage)
   }
 

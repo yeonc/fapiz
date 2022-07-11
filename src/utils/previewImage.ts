@@ -1,10 +1,10 @@
 import { PreviewImage } from 'types'
 
-export const changeImageFilesToPreviewImage = (
-  imageFiles: File[]
+export const changeImageFileToPreviewImage = (
+  imageFile: File
 ): PreviewImage => ({
-  url: URL.createObjectURL(imageFiles[0]),
-  altText: imageFiles[0].name,
+  url: URL.createObjectURL(imageFile),
+  altText: imageFile.name,
 })
 
 export const changeImageFilesToPreviewImages = (

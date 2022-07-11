@@ -9,12 +9,13 @@ import ImageUploadButton from 'components/common/buttons/imageUploadButton'
 import uploadImage from 'services/users/uploadImage'
 import createFashionItem from 'services/users/createFashionItem'
 import useMe from 'hooks/useMe'
-import { changeImageFilesToPreviewImage } from 'utils/previewImage'
+import { changeImageFileToPreviewImage } from 'utils/previewImage'
 import {
   FASHION_ITEM_SEASONS,
   FASHION_ITEM_CATEGORIES,
   FASHION_ITEM_COLORS,
 } from 'constants/fashionItem'
+import { ImageFiles, PreviewImage } from 'types'
 
 const previewImageStyle = css`
   width: 250px;
@@ -32,15 +33,17 @@ const DEFAULT_PREVIEW_IMAGE = {
 const FashionItemCreateForm = ({ afterCreateFashionItem }) => {
   const { me } = useMe()
 
-  const [imageFiles, setImageFiles] = useState(null)
-  const [previewImage, setPreviewImage] = useState(DEFAULT_PREVIEW_IMAGE)
+  const [imageFiles, setImageFiles] = useState<ImageFiles>(null)
+  const [previewImage, setPreviewImage] = useState<PreviewImage>(
+    DEFAULT_PREVIEW_IMAGE
+  )
   const [season, setSeason] = useState('')
   const [category, setCategory] = useState('')
   const [color, setColor] = useState('')
 
-  const handleImageFilesChange = (imageFiles: any) => {
+  const handleImageFilesChange = (imageFiles: File[]) => {
     setImageFiles(imageFiles)
-    const previewImage = changeImageFilesToPreviewImage(imageFiles)
+    const previewImage = changeImageFileToPreviewImage(imageFiles[0])
     setPreviewImage(previewImage)
   }
 
