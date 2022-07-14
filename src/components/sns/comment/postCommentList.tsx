@@ -19,10 +19,12 @@ const PostCommentList = ({ snsPostId }) => {
     content: snsComment.attributes.content,
     author: snsComment.attributes.author.data.attributes.username,
     authorId: snsComment.attributes.author.data.id,
-    authorProfileImageUrl:
-      BACKEND_URL +
-      snsComment.attributes.author.data.attributes.profileImage.data.attributes
-        .url,
+    authorProfileImageUrl: snsComment.attributes.author.data.attributes
+      .profileImage.data
+      ? BACKEND_URL +
+        snsComment.attributes.author.data.attributes.profileImage.data
+          .attributes.url
+      : undefined,
   }))
 
   return (

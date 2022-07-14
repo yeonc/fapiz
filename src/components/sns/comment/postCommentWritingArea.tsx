@@ -37,11 +37,15 @@ const PostCommentWritingArea = ({ snsPostId, afterPostCommentSubmit }) => {
     }
   }
 
+  const myAvatarImage = me.profileImage
+    ? BACKEND_URL + me.profileImage.url
+    : undefined
+
   return (
     <StyledPostCommentWritingAreaWrapper>
       <Avatar
         alt={me.username}
-        src={BACKEND_URL + me.profileImage.url}
+        src={myAvatarImage}
         sx={{ width: 30, height: 30, marginRight: 1 }}
       />
       <form onSubmit={handleCommentSubmit} css={horizontal}>
