@@ -68,22 +68,18 @@ const MainPage = () => {
     mutate(mutateKeyForFetchingSnsPosts)
   }
 
-  const { me, isLoading: isMeLoading } = useMe()
+  const { me } = useMe()
 
   const { snsPosts: snsPostsFromStrapi, isLoading: isSnsPostsLoading } =
     useSnsPosts(queryForFetchingSnsPosts)
 
   const SnsPostLikeButtonWithLogin = withLogin(LikeButton)
 
-  if (isMeLoading) {
-    return <p>유저 정보를 받아오는 중입니다.</p>
-  }
-
   if (isSnsPostsLoading) {
     return <p>포스트를 받아오는 중입니다.</p>
   }
 
-  let snsPosts = snsPostsFromStrapi.map(snsPost => ({
+  const snsPosts = snsPostsFromStrapi.map(snsPost => ({
     id: snsPost.id,
     createdAt: snsPost.attributes.createdAt,
     author: snsPost.attributes.author.data.attributes.username,
@@ -205,22 +201,24 @@ const MainPage = () => {
     }
   }
 
-  const recentlyCreatedSnsPosts = filterRecentlyCreatedSnsPosts(snsPosts)
-  const filteredSnsPostsByMyInfo = filterSnsPostsByMyInfo(
-    recentlyCreatedSnsPosts
+  const filteredSnsPostsByMyInfo = me
+    ? filterSnsPostsByMyInfo(snsPosts)
+    : snsPosts
+  const recentlyCreatedSnsPosts = filterRecentlyCreatedSnsPosts(
+    filteredSnsPostsByMyInfo
   )
-  snsPosts = randomizeSnsPosts(filteredSnsPostsByMyInfo)
+  const snsPostsToShow = randomizeSnsPosts(recentlyCreatedSnsPosts)
 
   return (
     <>
       <ImageList variant="masonry" cols={3}>
-        {snsPosts.map((snsPost: any) => (
+        {snsPostsToShow.map((snsPost: any) => (
           <ImageCardItem
             key={snsPost.id}
             cardItemData={snsPost}
             rightActionButton={
               <SnsPostLikeButtonWithLogin
-                myId={me.id}
+                myId={me?.id}
                 targetId={snsPost.id}
                 likeUsers={snsPost.likeUsers}
                 afterLike={afterLike}
