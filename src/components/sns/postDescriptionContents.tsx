@@ -83,12 +83,14 @@ const PostDescriptionContents = () => {
     refetch()
   }
 
+  const snsPostEditMenu =
+    snsPost.author.id === me.id ? (
+      <PopoverMenu postId={snsPostId} myId={me?.id} />
+    ) : null
+
   return (
     <>
-      <PostAuthorHeader
-        author={snsPost.author}
-        popoverMenu={<PopoverMenu postId={snsPostId} myId={me?.id} />}
-      />
+      <PostAuthorHeader author={snsPost.author} popoverMenu={snsPostEditMenu} />
       {snsPost.images.map(snsPostImage => (
         <img
           css={snsPostImagesStyle}
