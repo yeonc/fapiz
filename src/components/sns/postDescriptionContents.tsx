@@ -15,24 +15,12 @@ const snsPostImagesStyle = css`
   width: 200px;
 `
 
-const queryForFetchingSnsPostByPostId = createUrlQuery({
+const query = createUrlQuery({
   'populate[0]': 'author.profileImage',
   'populate[1]': 'likeUsers',
   'populate[2]': 'bookmarkUsers',
   'populate[3]': 'postImages',
 })
-const mutateKeyForFetchingSnsPostByPostId = (postId: any) => ({
-  url: `/api/sns-posts/${postId}?${queryForFetchingSnsPostByPostId}`,
-})
-
-const queryForFetchingSnsPosts = createUrlQuery({
-  'populate[0]': 'postImages',
-  'populate[1]': 'likeUsers',
-  'populate[2]': 'author',
-})
-const mutateKeyForFetchingSnsPosts = {
-  url: `/api/sns-posts?${queryForFetchingSnsPosts}`,
-}
 
 const PostDescriptionContents = () => {
   const router = useRouter()
@@ -44,9 +32,7 @@ const PostDescriptionContents = () => {
     snsPost: snsPostFromStrapi,
     isLoading,
     error,
-  } = useSnsPost(snsPostId, queryForFetchingSnsPostByPostId)
-
-  const { me } = useMe()
+  } = useSnsPost(snsPostId, query)
 
   if (isLoading) {
     return <p>로딩중..</p>
@@ -81,12 +67,14 @@ const PostDescriptionContents = () => {
   const createdDate = new Date(snsPost.createdAt)
   const dateFormat = getFormattedDate(createdDate)
 
+  const refetch = () => mutate({ url: `/api/sns-posts/${snsPost.id}?${query}` })
+
   const afterBookmark = () => {
-    mutate(mutateKeyForFetchingSnsPostByPostId(snsPost.id))
+    refetch()
   }
 
   const afterLike = () => {
-    mutate(mutateKeyForFetchingSnsPosts)
+    refetch()
   }
 
   return (
