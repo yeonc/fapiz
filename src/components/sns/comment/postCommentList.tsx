@@ -31,26 +31,30 @@ const PostCommentList = ({ snsPostId }) => {
 
   return (
     <ul>
-      {comments.map((comment: any) => (
-        <li key={comment.id} css={horizontal}>
-          <Link href={`${ROUTE_URL.SNS}/${comment.authorId}`}>
-            <Avatar
-              alt={comment.authorProfileImageUrl}
-              src={comment.authorProfileImageUrl}
-              sx={{ width: 30, height: 30, marginRight: 1 }}
+      {comments.length === 0 ? (
+        <p>댓글이 없습니다. 첫 댓글을 입력해 보세요!</p>
+      ) : (
+        comments.map((comment: any) => (
+          <li key={comment.id} css={horizontal}>
+            <Link href={`${ROUTE_URL.SNS}/${comment.authorId}`}>
+              <Avatar
+                alt={comment.authorProfileImageUrl}
+                src={comment.authorProfileImageUrl}
+                sx={{ width: 30, height: 30, marginRight: 1 }}
+              />
+            </Link>
+            <Link href={`${ROUTE_URL.SNS}/${comment.authorId}`}>
+              <span>{comment.author}</span>
+            </Link>
+            <CommentByMode
+              commentId={comment.id}
+              commentText={comment.content}
+              snsPostId={snsPostId}
+              authorId={comment.authorId}
             />
-          </Link>
-          <Link href={`${ROUTE_URL.SNS}/${comment.authorId}`}>
-            <span>{comment.author}</span>
-          </Link>
-          <CommentByMode
-            commentId={comment.id}
-            commentText={comment.content}
-            snsPostId={snsPostId}
-            authorId={comment.authorId}
-          />
-        </li>
-      ))}
+          </li>
+        ))
+      )}
     </ul>
   )
 }

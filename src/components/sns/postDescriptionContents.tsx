@@ -1,10 +1,11 @@
 import { useRouter } from 'next/router'
 import { useSWRConfig } from 'swr'
+import withLogin from 'hocs/withLogin'
 import { css } from '@emotion/react'
-import PostAuthorHeader from 'components/sns/postAuthorHeader'
 import PopoverMenu from 'components/common/menus/popoverMenu'
-import LikeButton from 'components/common/buttons/likeButton'
 import BookmarkButton from 'components/common/buttons/bookmarkButton'
+import LikeButton from 'components/common/buttons/likeButton'
+import PostAuthorHeader from 'components/sns/postAuthorHeader'
 import useSnsPost from 'hooks/useSnsPost'
 import useMe from 'hooks/useMe'
 import createUrlQuery from 'utils/createUrlQuery'
@@ -27,6 +28,11 @@ const PostDescriptionContents = () => {
   const { snsPostId } = router.query
 
   const { mutate } = useSWRConfig()
+
+  const LikeButtonWithLogin = withLogin(LikeButton)
+  const BookmarkButtonWithLogin = withLogin(BookmarkButton)
+
+  const { me } = useMe()
 
   const {
     snsPost: snsPostFromStrapi,
@@ -81,7 +87,7 @@ const PostDescriptionContents = () => {
     <>
       <PostAuthorHeader
         author={snsPost.author}
-        popoverMenu={<PopoverMenu postId={snsPostId} myId={me && me.id} />}
+        popoverMenu={<PopoverMenu postId={snsPostId} myId={me?.id} />}
       />
       {snsPost.images.map(snsPostImage => (
         <img
@@ -92,24 +98,21 @@ const PostDescriptionContents = () => {
         />
       ))}
       <div>
-        {!!me ? (
-          <LikeButton
-            myId={me.id}
-            targetId={snsPost.id}
-            likeUsers={snsPost.likeUsers}
-            afterLike={afterLike}
-            isShowLikeUsersNumber={true}
-          />
-        ) : null}
-        {!!me ? (
-          <BookmarkButton
-            myId={me.id}
-            targetId={snsPost.id}
-            bookmarkUsers={snsPost.bookmarkUsers}
-            afterBookmark={afterBookmark}
-            isShowBookmarkUsersNumber={true}
-          />
-        ) : null}
+        <LikeButtonWithLogin
+          myId={me?.id}
+          targetId={snsPost.id}
+          likeUsers={snsPost.likeUsers}
+          afterLike={afterLike}
+          isShowLikeUsersNumber={true}
+        />
+
+        <BookmarkButtonWithLogin
+          myId={me?.id}
+          targetId={snsPost.id}
+          bookmarkUsers={snsPost.bookmarkUsers}
+          afterBookmark={afterBookmark}
+          isShowBookmarkUsersNumber={true}
+        />
       </div>
       <p>{snsPost.content}</p>
       <span>{dateFormat}</span>
