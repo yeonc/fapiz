@@ -20,6 +20,7 @@ const PostCommentList = ({ snsPostId }) => {
     id: snsComment.id,
     content: snsComment.attributes.content,
     author: snsComment.attributes.author.data.attributes.username,
+    isAuthorNotExist: snsComment.attributes.author.data.attributes.isHidden,
     authorId: snsComment.attributes.author.data.id,
     authorProfileImageUrl: snsComment.attributes.author.data.attributes
       .profileImage.data
@@ -44,7 +45,9 @@ const PostCommentList = ({ snsPostId }) => {
               />
             </Link>
             <Link href={`${ROUTE_URL.SNS}/${comment.authorId}`}>
-              <span>{comment.author}</span>
+              <span>
+                {comment.isAuthorNotExist ? '탈퇴한 유저' : comment.author}
+              </span>
             </Link>
             <CommentByMode
               commentId={comment.id}
