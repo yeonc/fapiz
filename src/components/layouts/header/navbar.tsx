@@ -55,12 +55,8 @@ const Navbar = () => {
   const { me } = useMe()
 
   const PAGE_LINK_LIST = [
-    {
-      href: me ? `${ROUTE_URL.SNS}/${me.id}` : ROUTE_URL.LOGIN,
-      content: 'SNS',
-    },
-    { href: ROUTE_URL.COMMUNITY, content: '커뮤니티' },
-    { href: ROUTE_URL.CLOSET, content: '마이페이지' },
+    { href: `${ROUTE_URL.SNS}/${me?.id}`, content: 'SNS' },
+    { href: ROUTE_URL.CLOSET, content: '옷장' },
     { href: ROUTE_URL.SEARCH, content: searchIcon },
     { href: ROUTE_URL.CHAT_LIST, content: chatIcon },
     { href: ROUTE_URL.MY_INFO, content: '내정보' },
