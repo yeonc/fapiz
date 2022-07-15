@@ -40,7 +40,9 @@ const UserInfo = ({ user }) => {
   const isMySnsPage = user.id === me?.id
   const isButtonsShow = me && !isMySnsPage
 
-  const refetch = () => mutate({ url: `/api/users/${user.id}` })
+  const refetch = () =>
+    mutate(user.id ? { url: `/api/users/${user.id}` } : null)
+
   const afterFollow = () => {
     refetch()
   }
@@ -73,8 +75,8 @@ const UserInfo = ({ user }) => {
           </dl>
         </StyledUserProfileTextWrapper>
         <StyledFollowWrapper>
-          <Follower followers={user.followers} />
-          <Following followings={user.followings} />
+          <Follower followers={user.followers} afterFollow={afterFollow} />
+          <Following followings={user.followings} afterFollow={afterFollow} />
         </StyledFollowWrapper>
         <StyledButtonsWrapper>
           {isButtonsShow && (

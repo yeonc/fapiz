@@ -11,7 +11,7 @@ const StyledFollowerWrapper = styled.dl`
   align-items: center;
 `
 
-const Follower = ({ followers }) => {
+const Follower = ({ followers, afterFollow }) => {
   const { me } = useMe()
 
   const {
@@ -29,7 +29,9 @@ const Follower = ({ followers }) => {
         </Button>
         <FollowerListModal
           title="Followers"
-          contents={<UserList users={followers} me={me} />}
+          contents={
+            <UserList users={followers} me={me} afterFollow={afterFollow} />
+          }
           open={isFollowerModalOpen}
           onClose={handleFollowerModalClose}
         />

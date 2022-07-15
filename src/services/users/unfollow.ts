@@ -11,7 +11,7 @@ const unfollow = async ({ myId, targetUserId, myFollowingUserIds }) => {
     method: 'put',
     url,
     data: {
-      following: null,
+      followings: null,
     },
   })
     // 2. 첫 번째 put 요청에서 에러 발생 시, following을 원래 들어있던 데이터로 복구해 줌
@@ -20,7 +20,7 @@ const unfollow = async ({ myId, targetUserId, myFollowingUserIds }) => {
         method: 'put',
         url,
         data: {
-          following: myFollowingUserIds,
+          followings: myFollowingUserIds,
         },
       })
     })
@@ -30,7 +30,7 @@ const unfollow = async ({ myId, targetUserId, myFollowingUserIds }) => {
         method: 'put',
         url,
         data: {
-          following: myFollowingUserIds.filter(
+          followings: myFollowingUserIds.filter(
             (id: any) => id !== targetUserId
           ),
         },

@@ -20,7 +20,7 @@ const FollowToggleButton = ({
     try {
       const myFollowingUserIds = myFollowings.map((user: any) => user.id)
       await unfollow({
-        myId: myId,
+        myId,
         targetUserId,
         myFollowingUserIds,
       })
