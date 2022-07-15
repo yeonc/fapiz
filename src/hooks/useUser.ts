@@ -1,7 +1,9 @@
 import useSWR from 'swr'
 
-const useUser = (id: any) => {
-  const { data, error } = useSWR({ url: `/api/users/${id}` })
+const useUser = (userId: any) => {
+  const { data, error } = useSWR(
+    userId ? { url: `/api/users/${userId}` } : null
+  )
 
   return {
     user: data,

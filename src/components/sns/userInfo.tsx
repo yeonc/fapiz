@@ -1,32 +1,95 @@
-import UserProfile from 'components/sns/userProfile'
-import ButtonsForUserCommunication from 'components/sns/buttonsForUserCommunication'
+import { useSWRConfig } from 'swr'
+import styled from '@emotion/styled'
+import Avatar from '@mui/material/Avatar'
+import Typography from '@mui/material/Typography'
 import FollowToggleButton from 'components/common/buttons/followToggleButton'
 import MessageButton from 'components/common/buttons/messageButton'
+import Follower from 'components/sns/follower'
+import Following from 'components/sns/following'
+import { horizontal, mgRight } from 'styles/layout'
+import visuallyHidden from 'styles/visuallyHidden'
 import useMe from 'hooks/useMe'
 
+const StyledUserInfoWrapper = styled.header`
+  display: flex;
+  align-items: center;
+`
+
+const StyledUserInfoRightWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+const StyledUserProfileTextWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+const StyledFollowWrapper = styled.div`
+  display: flex;
+`
+
+const StyledButtonsWrapper = styled.div`
+  display: flex;
+`
+
 const UserInfo = ({ user }) => {
-  const { me, isLoading, error } = useMe()
+  const { mutate } = useSWRConfig()
 
-  if (isLoading) {
-    return <p>로딩중...</p>
-  }
-
-  if (error) {
-    return <p>에러가 발생했습니다. 홈으로 돌아가세요</p>
-  }
+  const { me } = useMe()
 
   const isMe = user.id === me?.id
 
+  const refetch = () => mutate({ url: `/api/users/${user.id}` })
+  const afterFollow = () => {
+    refetch()
+  }
+
   return (
-    <header>
-      <UserProfile user={user} />
-      {!isMe && (
-        <ButtonsForUserCommunication
-          followToggleButton={<FollowToggleButton me={me} targetUser={user} />}
-          messageButton={<MessageButton userId={user.id} />}
-        />
-      )}
-    </header>
+    <StyledUserInfoWrapper>
+      <Avatar
+        alt={user.username}
+        src={user.profileImageUrl}
+        sx={{ width: 130, height: 130, marginRight: 4 }}
+      />
+      <StyledUserInfoRightWrapper>
+        <StyledUserProfileTextWrapper>
+          <Typography variant="h4" component="h1">
+            {user.username}
+          </Typography>
+          <dl css={horizontal}>
+            {user.height && (
+              <div css={mgRight(8)}>
+                <dt css={visuallyHidden}>키</dt>
+                <dd>{user.height}cm</dd>
+              </div>
+            )}
+            {user.weight && (
+              <div>
+                <dt css={visuallyHidden}>몸무게</dt>
+                <dd>{user.weight}kg</dd>
+              </div>
+            )}
+          </dl>
+        </StyledUserProfileTextWrapper>
+        <StyledFollowWrapper>
+          <Follower followers={user.followers} />
+          <Following followings={user.followings} />
+        </StyledFollowWrapper>
+        <StyledButtonsWrapper>
+          {!isMe && (
+            <>
+              <FollowToggleButton
+                myId={me.id}
+                myFollowings={me.followings}
+                targetUserId={user.id}
+                afterFollow={afterFollow}
+              />
+              <MessageButton userId={user.id} />
+            </>
+          )}
+        </StyledButtonsWrapper>
+      </StyledUserInfoRightWrapper>
+    </StyledUserInfoWrapper>
   )
 }
 

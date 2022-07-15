@@ -1,9 +1,11 @@
 import Avatar from '@mui/material/Avatar'
+import Link from '@mui/material/Link'
 import CommentByMode from 'components/sns/comment/commentByMode'
 import { horizontal } from 'styles/layout'
 import useSnsComments from 'hooks/useSnsComments'
 import createUrlQuery from 'utils/createUrlQuery'
 import { BACKEND_URL } from 'constants/constants'
+import ROUTE_URL from 'constants/routeUrl'
 
 const PostCommentList = ({ snsPostId }) => {
   const query = createUrlQuery({
@@ -31,12 +33,16 @@ const PostCommentList = ({ snsPostId }) => {
     <ul>
       {comments.map((comment: any) => (
         <li key={comment.id} css={horizontal}>
-          <Avatar
-            alt={comment.authorProfileImageUrl}
-            src={comment.authorProfileImageUrl}
-            sx={{ width: 30, height: 30, marginRight: 1 }}
-          />
-          <span>{comment.author}</span>
+          <Link href={`${ROUTE_URL.SNS}/${comment.authorId}`}>
+            <Avatar
+              alt={comment.authorProfileImageUrl}
+              src={comment.authorProfileImageUrl}
+              sx={{ width: 30, height: 30, marginRight: 1 }}
+            />
+          </Link>
+          <Link href={`${ROUTE_URL.SNS}/${comment.authorId}`}>
+            <span>{comment.author}</span>
+          </Link>
           <CommentByMode
             commentId={comment.id}
             commentText={comment.content}

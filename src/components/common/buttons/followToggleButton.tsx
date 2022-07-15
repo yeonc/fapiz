@@ -1,14 +1,16 @@
-import { useSWRConfig } from 'swr'
 import Button from '@mui/material/Button'
 import follow from 'services/users/follow'
 import unfollow from 'services/users/unfollow'
 
-const FollowToggleButton = ({ me, targetUser }) => {
-  const { mutate } = useSWRConfig()
-
+const FollowToggleButton = ({
+  myId,
+  myFollowings,
+  targetUserId,
+  afterFollow,
+}) => {
   const followUser = async () => {
     try {
-      await follow({ myId: me?.id, targetUserId: targetUser.id })
+      await follow({ myId, targetUserId })
     } catch (error) {
       console.error(error)
     }
@@ -16,10 +18,10 @@ const FollowToggleButton = ({ me, targetUser }) => {
 
   const unfollowUser = async () => {
     try {
-      const myFollowingUserIds = me.following.map((user: any) => user.id)
+      const myFollowingUserIds = myFollowings.map((user: any) => user.id)
       await unfollow({
-        myId: me.id,
-        targetUserId: targetUser.id,
+        myId: myId,
+        targetUserId,
         myFollowingUserIds,
       })
     } catch (error) {
@@ -27,8 +29,8 @@ const FollowToggleButton = ({ me, targetUser }) => {
     }
   }
 
-  const isFollowing = targetUser.follower?.some(
-    (person: any) => person.id === me?.id
+  const isFollowing = myFollowings.some(
+    (following: any) => following.id === targetUserId
   )
 
   const buttonText = isFollowing ? '팔로우 취소하기' : '팔로우하기'
@@ -36,7 +38,7 @@ const FollowToggleButton = ({ me, targetUser }) => {
 
   const handleClick = async () => {
     await handleFollow()
-    mutate({ url: `/api/users/${targetUser.id}` })
+    afterFollow()
   }
 
   return <Button onClick={handleClick}>{buttonText}</Button>
