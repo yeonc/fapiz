@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import withHeader from 'hocs/withHeader'
 import { css } from '@emotion/react'
 import Fab from '@mui/material/Fab'
@@ -11,6 +11,7 @@ import useFashionItems from 'hooks/useFashionItems'
 import useModalState from 'hooks/useModalState'
 import createUrlQuery from 'utils/createUrlQuery'
 import { BACKEND_URL } from 'constants/constants'
+import LoginPageRedirect from 'components/common/redirect/loginPageRedirect'
 
 const fabPositionFixed = css`
   position: fixed;
@@ -30,7 +31,7 @@ const ClosetPage = () => {
     setfilteredFashionItems(filteredFashionItems)
   }
 
-  const { me } = useMe()
+  const { me, isLoading } = useMe()
 
   const query = createUrlQuery({
     'populate[0]': 'image',
@@ -55,25 +56,36 @@ const ClosetPage = () => {
   const fashionItemsToShowed =
     filteredFashionItems === [] ? fashionItems : filteredFashionItems
 
+  // TODO: 로그인 상태에서는 화면 잘 나오는데 로그아웃했을 땐 로딩중 문구 떠있는 문제 해결하기
+  if (isLoading) {
+    return <p>로딩중...</p>
+  }
+
   return (
     <>
-      <ButtonGroupsForFilteringFashionItems
-        fashionItemsToFiltered={fashionItems}
-        afterFashionItemsFiltered={afterFashionItemsFiltered}
-      />
-      <FashionItemList fashionItems={fashionItemsToShowed} />
-      <Fab
-        color="primary"
-        aria-label="옷장에 패션 아이템 등록"
-        css={fabPositionFixed}
-        onClick={handleFashionItemCreateModalOpen}
-      >
-        <CheckroomIcon />
-      </Fab>
-      <FashionItemCreatingModal
-        isFashionItemCreateModalOpen={isFashionItemCreateModalOpen}
-        onFashionItemCreateModalClose={handleFashionItemCreateModalClose}
-      />
+      {me ? (
+        <>
+          <ButtonGroupsForFilteringFashionItems
+            fashionItemsToFiltered={fashionItems}
+            afterFashionItemsFiltered={afterFashionItemsFiltered}
+          />
+          <FashionItemList fashionItems={fashionItemsToShowed} />
+          <Fab
+            color="primary"
+            aria-label="옷장에 패션 아이템 등록"
+            css={fabPositionFixed}
+            onClick={handleFashionItemCreateModalOpen}
+          >
+            <CheckroomIcon />
+          </Fab>
+          <FashionItemCreatingModal
+            isFashionItemCreateModalOpen={isFashionItemCreateModalOpen}
+            onFashionItemCreateModalClose={handleFashionItemCreateModalClose}
+          />
+        </>
+      ) : (
+        <LoginPageRedirect />
+      )}
     </>
   )
 }

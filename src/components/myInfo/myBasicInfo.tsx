@@ -4,11 +4,7 @@ import useMe from 'hooks/useMe'
 import { BACKEND_URL } from 'constants/constants'
 
 const MyBasicInfo = () => {
-  const { me, isLoading } = useMe()
-
-  if (isLoading) {
-    return <p>유저 정보를 불러오는 중입니다...</p>
-  }
+  const { me } = useMe()
 
   const myBasicInfo = {
     id: me.id,

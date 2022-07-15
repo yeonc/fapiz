@@ -37,8 +37,8 @@ const UserInfo = ({ user }) => {
 
   const { me } = useMe()
 
-  const isNotMySnsPage = user.id !== me?.id
-  const isButtonsShow = me && isNotMySnsPage
+  const isMySnsPage = user.id === me?.id
+  const isButtonsShow = me && !isMySnsPage
 
   const refetch = () => mutate({ url: `/api/users/${user.id}` })
   const afterFollow = () => {

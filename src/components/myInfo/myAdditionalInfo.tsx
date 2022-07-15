@@ -4,11 +4,7 @@ import MyAdditionalInfoAddArea from 'components/myInfo/myAdditionalInfoAddArea'
 import useMe from 'hooks/useMe'
 
 const MyAdditionalInfo = () => {
-  const { me, isLoading } = useMe()
-
-  if (isLoading) {
-    return <p>내 추가 정보 불러오는 중...</p>
-  }
+  const { me } = useMe()
 
   const myAdditionalInfo = {
     id: me.id,
