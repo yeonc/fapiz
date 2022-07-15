@@ -1,18 +1,21 @@
 import { useRouter } from 'next/router'
 import withHeader from 'hocs/withHeader'
+import withLogin from 'hocs/withLogin'
+import { css } from '@emotion/react'
 import Fab from '@mui/material/Fab'
 import CreateIcon from '@mui/icons-material/Create'
 import UserInfo from 'components/sns/userInfo'
 import SnsPosts from 'components/sns/snsPosts'
 import PreviousPageRedirect from 'components/common/redirect/previousPageRedirect'
 import useUser from 'hooks/useUser'
+import useMe from 'hooks/useMe'
 import { BACKEND_URL } from 'constants/constants'
 
-const positionOfCreateSnsPostButton = {
-  position: 'fixed',
-  bottom: 30,
-  right: 30,
-}
+const positionOfSnsPostCreateButton = css`
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+`
 
 const REDIRECT_TO_PREVIOUS_PAGE_ALERT_MESSAGE =
   '존재하지 않는 유저입니다. 이전 페이지로 이동합니다'
@@ -22,6 +25,7 @@ const SnsPage = () => {
   const { userId } = router.query
 
   const { user: userFromStrapi } = useUser(userId)
+  const { me } = useMe()
 
   if (!userFromStrapi) {
     return null
@@ -40,9 +44,11 @@ const SnsPage = () => {
     followings: userFromStrapi?.followings ?? [],
   }
 
-  const handleCreateSnsPostButtonClick = () => {
+  const handleSnsPostCreateButtonClick = () => {
     router.push(`/sns/post/posting`)
   }
+
+  const isMySnsPage = me?.id === user.id
 
   return (
     <>
@@ -54,14 +60,16 @@ const SnsPage = () => {
         <>
           <UserInfo user={user} />
           <SnsPosts userId={user.id} />
-          <Fab
-            color="primary"
-            aria-label="SNS 게시물 등록"
-            sx={positionOfCreateSnsPostButton}
-            onClick={handleCreateSnsPostButtonClick}
-          >
-            <CreateIcon />
-          </Fab>
+          {isMySnsPage && (
+            <Fab
+              color="primary"
+              aria-label="SNS 게시물 등록"
+              css={positionOfSnsPostCreateButton}
+              onClick={handleSnsPostCreateButtonClick}
+            >
+              <CreateIcon />
+            </Fab>
+          )}
         </>
       )}
     </>
