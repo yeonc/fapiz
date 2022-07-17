@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router'
 import withHeader from 'hocs/withHeader'
-import withLogin from 'hocs/withLogin'
 import { css } from '@emotion/react'
 import Fab from '@mui/material/Fab'
 import CreateIcon from '@mui/icons-material/Create'
@@ -9,7 +8,7 @@ import SnsPosts from 'components/sns/snsPosts'
 import PreviousPageRedirect from 'components/common/redirect/previousPageRedirect'
 import useUser from 'hooks/useUser'
 import useMe from 'hooks/useMe'
-import { BACKEND_URL } from 'constants/constants'
+import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 
 const positionOfSnsPostCreateButton = css`
   position: fixed;
@@ -32,16 +31,14 @@ const SnsPage = () => {
   }
 
   const user = {
-    id: userFromStrapi?.id,
-    isHidden: userFromStrapi?.isHidden,
-    username: userFromStrapi?.username,
-    height: userFromStrapi?.height,
-    weight: userFromStrapi?.weight,
-    profileImageUrl: userFromStrapi?.profileImage
-      ? BACKEND_URL + userFromStrapi?.profileImage.url
-      : undefined,
-    followers: userFromStrapi?.followers ?? [],
-    followings: userFromStrapi?.followings ?? [],
+    id: userFromStrapi.id,
+    isHidden: userFromStrapi.isHidden,
+    username: userFromStrapi.username,
+    height: userFromStrapi.height,
+    weight: userFromStrapi.weight,
+    profileImageUrl: addBackendUrlToImageUrl(userFromStrapi.profileImage?.url),
+    followers: userFromStrapi.followers ?? [],
+    followings: userFromStrapi.followings ?? [],
   }
 
   const handleSnsPostCreateButtonClick = () => {

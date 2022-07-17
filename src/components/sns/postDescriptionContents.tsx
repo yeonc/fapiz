@@ -10,7 +10,7 @@ import useSnsPost from 'hooks/useSnsPost'
 import useMe from 'hooks/useMe'
 import createUrlQuery from 'utils/createUrlQuery'
 import getFormattedDate from 'utils/getFormattedDate'
-import { BACKEND_URL } from 'constants/constants'
+import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 
 const snsPostImagesStyle = css`
   width: 200px;
@@ -52,7 +52,7 @@ const PostDescriptionContents = () => {
     id: snsPostFromStrapi.id,
     createdAt: snsPostFromStrapi.attributes.createdAt,
     images: snsPostFromStrapi.attributes.postImages.data.map((image: any) => ({
-      url: BACKEND_URL + image.attributes.url,
+      url: addBackendUrlToImageUrl(image.attributes.url),
       altText: image.attributes.alternativeText,
     })),
     author: {
@@ -62,7 +62,7 @@ const PostDescriptionContents = () => {
       weight: snsPostFromStrapi.attributes.author.data.attributes.weight,
       avatarUrl:
         snsPostFromStrapi.attributes.author.data.attributes.profileImage.data
-          .attributes.url,
+          ?.attributes.url,
     },
     likeUsers: snsPostFromStrapi.attributes.likeUsers.data,
     bookmarkUsers: snsPostFromStrapi.attributes.bookmarkUsers.data,

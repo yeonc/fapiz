@@ -4,9 +4,9 @@ import Button from '@mui/material/Button'
 import Avatar from '@mui/material/Avatar'
 import styled from '@emotion/styled'
 import { horizontal } from 'styles/layout'
-import createComment from 'services/users/createComment'
 import useMe from 'hooks/useMe'
-import { BACKEND_URL } from 'constants/constants'
+import createComment from 'services/users/createComment'
+import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 
 const StyledPostCommentWritingAreaWrapper = styled.div`
   display: flex;
@@ -37,15 +37,11 @@ const PostCommentWritingArea = ({ snsPostId, afterPostCommentSubmit }) => {
     }
   }
 
-  const myAvatarImage = me.profileImage
-    ? BACKEND_URL + me.profileImage.url
-    : undefined
-
   return (
     <StyledPostCommentWritingAreaWrapper>
       <Avatar
         alt={me.username}
-        src={myAvatarImage}
+        src={addBackendUrlToImageUrl(me.profileImage?.url)}
         sx={{ width: 30, height: 30, marginRight: 1 }}
       />
       <form onSubmit={handleCommentSubmit} css={horizontal}>

@@ -1,14 +1,14 @@
 import MyBasicInfoShowArea from 'components/myInfo/myBasicInfoShowArea'
 import MyBasicInfoEditArea from 'components/myInfo/myBasicInfoEditArea'
 import useMe from 'hooks/useMe'
-import { BACKEND_URL } from 'constants/constants'
+import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 
 const MyBasicInfo = () => {
   const { me } = useMe()
 
   const myBasicInfo = {
     id: me.id,
-    imageUrl: me.profileImage.url ? BACKEND_URL + me.profileImage.url : null,
+    imageUrl: addBackendUrlToImageUrl(me.profileImage?.url),
     username: me.username ?? null,
     height: me.height ?? null,
     weight: me.weight ?? null,

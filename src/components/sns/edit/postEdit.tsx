@@ -3,7 +3,7 @@ import editPost from 'services/users/editPost'
 import uploadImage from 'services/users/uploadImage'
 import generateIdIntoObject from 'utils/generateIdIntoObject'
 import { changeImageFilesToPreviewImages } from 'utils/previewImage'
-import { BACKEND_URL } from 'constants/constants'
+import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 import { FashionItemInfo, PreviewImage, ImageFiles, Obj, WithId } from 'types'
 
 const EMPTY_FASHION_ITEM_INFO = { category: '', price: '', buyingPlace: '' }
@@ -19,7 +19,7 @@ const PostEdit = ({ snsPost, afterEditPost, children }) => {
   // TODO: map 함수 image 인자 타입 정의
   const initialPreviewImages: PreviewImage[] =
     snsPost.attributes.postImages.data.map((image: any) => ({
-      url: BACKEND_URL + image.attributes.url,
+      url: addBackendUrlToImageUrl(image.attributes.url),
       altText: image.attributes.alternativeText,
     }))
   const initialFashionItemsInfo: FashionItemInfo[] = snsPost.attributes

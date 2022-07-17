@@ -5,7 +5,7 @@ import CommentByMode from 'components/sns/comment/commentByMode'
 import { horizontal } from 'styles/layout'
 import useSnsComments from 'hooks/useSnsComments'
 import createUrlQuery from 'utils/createUrlQuery'
-import { BACKEND_URL } from 'constants/constants'
+import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 import ROUTE_URL from 'constants/routeUrl'
 
 const StyledCommentAuthorWrapper = styled.div`
@@ -31,9 +31,9 @@ const PostCommentList = ({ snsPostId }) => {
       content: snsComment.attributes.content,
       authorId: author.id,
       authorName: author.attributes.username,
-      authorProfileImageUrl: author.attributes.profileImage.data
-        ? BACKEND_URL + author.attributes.profileImage.data.attributes.url
-        : undefined,
+      authorProfileImageUrl: addBackendUrlToImageUrl(
+        author.attributes.profileImage.data?.attributes.url
+      ),
     }
   })
 
@@ -48,7 +48,7 @@ const PostCommentList = ({ snsPostId }) => {
           <Link href={`${ROUTE_URL.SNS}/${comment.authorId}`}>
             <StyledCommentAuthorWrapper>
               <Avatar
-                alt={comment.authorProfileImageUrl}
+                alt={comment.authorName}
                 src={comment.authorProfileImageUrl}
                 sx={{ width: 30, height: 30, marginRight: 1 }}
               />

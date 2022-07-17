@@ -12,6 +12,7 @@ import useMe from 'hooks/useMe'
 import createUrlQuery from 'utils/createUrlQuery'
 import getDaysBetweenTwoDate from 'utils/getDaysBetweenTwoDate'
 import { BACKEND_URL } from 'constants/constants'
+import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 
 const queryForFetchingSnsPosts = createUrlQuery({
   'populate[0]': 'postImages',
@@ -87,8 +88,9 @@ const MainPage = () => {
     authorBodyShape: snsPost.attributes.author.data.attributes.bodyShape,
     authorFashionStyles:
       snsPost.attributes.author.data.attributes.fashionStyles,
-    imageUrl:
-      BACKEND_URL + snsPost.attributes.postImages.data[0].attributes.url,
+    imageUrl: addBackendUrlToImageUrl(
+      snsPost.attributes.postImages.data[0].attributes.url
+    ),
     imageAltText:
       snsPost.attributes.postImages.data[0].attributes.alternativeText,
     likeUsers: snsPost.attributes.likeUsers.data,

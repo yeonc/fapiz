@@ -4,7 +4,7 @@ import SnsPostItem from '@mui/material/ImageListItem'
 import { css } from '@emotion/react'
 import useSnsPosts from 'hooks/useSnsPosts'
 import createUrlQuery from 'utils/createUrlQuery'
-import { BACKEND_URL } from 'constants/constants'
+import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 
 export const cursorPointer = css`
   cursor: pointer;
@@ -43,7 +43,7 @@ const SnsPosts = ({ userId }) => {
     <SnsPostList sx={{ width: 650 }} cols={3}>
       {sanitizedSnsPosts.map((post: any) => {
         const firstImage = post.postImages[0]
-        const firstImageUrl = firstImage && BACKEND_URL + firstImage.url
+        const firstImageUrl = addBackendUrlToImageUrl(firstImage.url)
         const goToSnsPost = () => {
           router.push(`/sns/post/${post.postId}`)
         }
