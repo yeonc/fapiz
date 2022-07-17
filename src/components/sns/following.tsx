@@ -21,22 +21,24 @@ const Following = ({ followings, afterFollow }) => {
   } = useModalState()
 
   return (
-    <StyledFollowingWrapper>
-      <dt css={mgRight(4)}>팔로잉</dt>
-      <dd>
-        <Button variant="text" onClick={handleFollowingModalOpen}>
-          {followings?.length}
-        </Button>
-        <FollowingListModal
-          title="Followings"
-          contents={
-            <UserList users={followings} me={me} afterFollow={afterFollow} />
-          }
-          open={isFollowingModalOpen}
-          onClose={handleFollowingModalClose}
-        />
-      </dd>
-    </StyledFollowingWrapper>
+    <>
+      <StyledFollowingWrapper>
+        <dt css={mgRight(4)}>팔로잉</dt>
+        <dd>
+          <Button variant="text" onClick={handleFollowingModalOpen}>
+            {followings.length}
+          </Button>
+        </dd>
+      </StyledFollowingWrapper>
+      <FollowingListModal
+        title="Followings"
+        contents={
+          <UserList users={followings} me={me} afterFollow={afterFollow} />
+        }
+        open={isFollowingModalOpen}
+        onClose={handleFollowingModalClose}
+      />
+    </>
   )
 }
 
