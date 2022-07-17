@@ -23,14 +23,14 @@ const query = createUrlQuery({
   'populate[3]': 'postImages',
 })
 
+const LikeButtonWithLogin = withLogin(LikeButton)
+const BookmarkButtonWithLogin = withLogin(BookmarkButton)
+
 const PostDescriptionContents = () => {
   const router = useRouter()
   const { snsPostId } = router.query
 
   const { mutate } = useSWRConfig()
-
-  const LikeButtonWithLogin = withLogin(LikeButton)
-  const BookmarkButtonWithLogin = withLogin(BookmarkButton)
 
   const { me } = useMe()
 

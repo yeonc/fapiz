@@ -5,13 +5,13 @@ import PostCommentWritingArea from 'components/sns/comment/postCommentWritingAre
 import PostCommentList from 'components/sns/comment/postCommentList'
 import createUrlQuery from 'utils/createUrlQuery'
 
+const PostCommentWritingAreaWithLogin = withLogin(PostCommentWritingArea)
+
 const PostCommentContents = () => {
   const router = useRouter()
   const { snsPostId } = router.query
 
   const { mutate } = useSWRConfig()
-
-  const PostCommentWritingAreaWithLogin = withLogin(PostCommentWritingArea)
 
   const query = createUrlQuery({
     'populate[0]': 'author',

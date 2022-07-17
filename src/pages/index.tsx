@@ -11,7 +11,6 @@ import useSnsPosts from 'hooks/useSnsPosts'
 import useMe from 'hooks/useMe'
 import createUrlQuery from 'utils/createUrlQuery'
 import getDaysBetweenTwoDate from 'utils/getDaysBetweenTwoDate'
-import { BACKEND_URL } from 'constants/constants'
 import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 
 const queryForFetchingSnsPosts = createUrlQuery({
@@ -33,6 +32,8 @@ const TWO_DAYS = 2
 
 const ADD_ADDITIONAL_INFO_MESSAGE =
   '추가 정보 세 개 중 하나밖에 작성되지 않았네요! 두 가지 이상을 작성하시면 맞춤형 게시물을 보실 수 있습니다! 지금 정보를 수정하러 가 볼까요?'
+
+const SnsPostLikeButtonWithLogin = withLogin(LikeButton)
 
 const ImageCardItem = ({ cardItemData, rightActionButton }) => {
   const router = useRouter()
@@ -73,8 +74,6 @@ const MainPage = () => {
 
   const { snsPosts: snsPostsFromStrapi, isLoading: isSnsPostsLoading } =
     useSnsPosts(queryForFetchingSnsPosts)
-
-  const SnsPostLikeButtonWithLogin = withLogin(LikeButton)
 
   if (isSnsPostsLoading) {
     return <p>포스트를 받아오는 중입니다.</p>
