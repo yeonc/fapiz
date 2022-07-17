@@ -7,18 +7,12 @@ import styled from '@emotion/styled'
 import ROUTE_URL from 'constants/routeUrl'
 import useMe from 'hooks/useMe'
 
-const StyledNavWrapper = styled.nav`
-  display: flex;
-  align-items: center;
-`
-
 const StyledPageLinkList = styled.ul`
-  display: flex;
-  align-items: center;
+  display: inline-flex;
 `
 
 const StyledPageLink = styled.li`
-  margin-right: 20px;
+  margin-right: 24px;
 `
 
 const AuthButton = () => {
@@ -27,29 +21,27 @@ const AuthButton = () => {
   const { me } = useMe()
 
   const goToLoginPage = () => router.push(ROUTE_URL.LOGIN)
+  const goToHomePage = () => router.push(ROUTE_URL.HOME)
 
   const logout = () => {
     localStorage.removeItem('jwt')
     localStorage.removeItem('username')
   }
 
-  const text = me ? '로그아웃' : '로그인'
+  const authButtonText = me ? '로그아웃' : '로그인'
   const handleClick = me
     ? () => {
         logout()
-        router.push(ROUTE_URL.HOME)
+        goToHomePage()
       }
     : goToLoginPage
 
   return (
     <Button variant="contained" size="medium" onClick={handleClick}>
-      {text}
+      {authButtonText}
     </Button>
   )
 }
-
-const searchIcon = <SearchIcon />
-const chatIcon = <ChatIcon />
 
 const Navbar = () => {
   const { me } = useMe()
@@ -60,13 +52,13 @@ const Navbar = () => {
       content: 'SNS',
     },
     { href: ROUTE_URL.CLOSET, content: '옷장' },
-    { href: ROUTE_URL.SEARCH, content: searchIcon },
-    { href: ROUTE_URL.CHAT_LIST, content: chatIcon },
+    { href: ROUTE_URL.SEARCH, content: <SearchIcon /> },
+    { href: ROUTE_URL.CHAT_LIST, content: <ChatIcon /> },
     { href: ROUTE_URL.MY_INFO, content: '내정보' },
   ]
 
   return (
-    <StyledNavWrapper>
+    <nav>
       <StyledPageLinkList>
         {PAGE_LINK_LIST.map(link => (
           <StyledPageLink key={link.href}>
@@ -75,7 +67,7 @@ const Navbar = () => {
         ))}
       </StyledPageLinkList>
       <AuthButton />
-    </StyledNavWrapper>
+    </nav>
   )
 }
 
