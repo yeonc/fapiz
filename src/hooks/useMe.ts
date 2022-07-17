@@ -1,9 +1,14 @@
 import useSWR from 'swr'
 import { BACKEND_URL, IS_SERVER } from 'constants/constants'
 
-const token = !IS_SERVER && localStorage.getItem('jwt')
+const getToken = () => {
+  const token = !IS_SERVER ? localStorage.getItem('jwt') : null
+  return token
+}
 
 const useMe = () => {
+  const token = getToken()
+
   const { data, error } = useSWR(
     token
       ? {
@@ -18,9 +23,9 @@ const useMe = () => {
   )
 
   return {
-    me: data,
-    isLoading: !data && !error,
-    error,
+    me: data ?? null,
+    isLoading: token && !error && !data,
+    error: error ?? null,
   }
 }
 
