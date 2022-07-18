@@ -5,6 +5,14 @@ const useUser = (userId: any) => {
     userId ? { url: `/api/users/${userId}` } : null
   )
 
+  if (!userId) {
+    return {
+      user: null,
+      isLoading: false,
+      error: null,
+    }
+  }
+
   return {
     user: data,
     isLoading: !data && !error,
