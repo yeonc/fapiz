@@ -63,6 +63,7 @@ const ImageCardItem = ({ cardItemData, rightActionButton }) => {
 }
 
 // TODO: MainPage 컴포넌트 섹션별로 분리, filterSnsPostsByMyInfo 함수 쪼개기
+// TODO: 페이지 렌더링 될 때마다 SNS 포스트 순서 랜덤하게 섞이는 것에 대한 처리 어떻게 해야 할지 결정하고 반영하기
 const MainPage = () => {
   const { mutate } = useSWRConfig()
 

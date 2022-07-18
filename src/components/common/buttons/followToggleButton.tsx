@@ -2,6 +2,8 @@ import Button from '@mui/material/Button'
 import follow from 'services/users/follow'
 import unfollow from 'services/users/unfollow'
 
+// TODO: 팔로우 버튼 눌렀을 때 UI에 느리게 반영되는 것 개선하기
+// TODO: 팔로우 버튼 눌렀을 때 버튼 텍스트가 바로 바뀌지 않는 현상 고치기
 const FollowToggleButton = ({
   myId,
   myFollowings,
