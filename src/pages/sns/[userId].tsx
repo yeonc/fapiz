@@ -33,8 +33,8 @@ const SnsPage = () => {
     height: userFromStrapi.height,
     weight: userFromStrapi.weight,
     profileImageUrl: addBackendUrlToImageUrl(userFromStrapi.profileImage?.url),
-    followers: userFromStrapi.followers ?? [],
-    followings: userFromStrapi.followings ?? [],
+    followers: userFromStrapi.followers,
+    followings: userFromStrapi.followings,
   }
 
   const handleSnsPostCreateButtonClick = () => {
