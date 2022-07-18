@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import withHeader from 'hocs/withHeader'
+import withLoginPageRedirect from 'hocs/withLoginPageRedirect'
 import { css } from '@emotion/react'
 import Fab from '@mui/material/Fab'
 import CheckroomIcon from '@mui/icons-material/Checkroom'
 import FashionItemList from 'components/closet/fashionItemList'
 import ButtonGroupsForFilteringFashionItems from 'components/closet/buttonGroupsForFilteringFashionItems'
 import FashionItemCreatingModal from 'components/closet/fashionItemCreatingModal'
-import LoginPageRedirect from 'components/common/redirect/loginPageRedirect'
 import useMe from 'hooks/useMe'
 import useFashionItems from 'hooks/useFashionItems'
 import useModalState from 'hooks/useModalState'
@@ -31,7 +31,7 @@ const ClosetPage = () => {
     setfilteredFashionItems(filteredFashionItems)
   }
 
-  const { me, isLoading } = useMe()
+  const { me } = useMe()
 
   const query = createUrlQuery({
     'populate[0]': 'image',
@@ -58,38 +58,27 @@ const ClosetPage = () => {
   const fashionItemsToShowed =
     filteredFashionItems === [] ? fashionItems : filteredFashionItems
 
-  // TODO: 로그인 상태에서는 화면 잘 나오는데 로그아웃했을 땐 로딩중 문구 떠있는 문제 해결하기
-  if (isLoading) {
-    return <p>로딩중...</p>
-  }
-
   return (
     <>
-      {me ? (
-        <>
-          <ButtonGroupsForFilteringFashionItems
-            fashionItemsToFiltered={fashionItems}
-            afterFashionItemsFiltered={afterFashionItemsFiltered}
-          />
-          <FashionItemList fashionItems={fashionItemsToShowed} />
-          <Fab
-            color="primary"
-            aria-label="옷장에 패션 아이템 등록"
-            css={fabPositionFixed}
-            onClick={handleFashionItemCreateModalOpen}
-          >
-            <CheckroomIcon />
-          </Fab>
-          <FashionItemCreatingModal
-            isFashionItemCreateModalOpen={isFashionItemCreateModalOpen}
-            onFashionItemCreateModalClose={handleFashionItemCreateModalClose}
-          />
-        </>
-      ) : (
-        <LoginPageRedirect />
-      )}
+      <ButtonGroupsForFilteringFashionItems
+        fashionItemsToFiltered={fashionItems}
+        afterFashionItemsFiltered={afterFashionItemsFiltered}
+      />
+      <FashionItemList fashionItems={fashionItemsToShowed} />
+      <Fab
+        color="primary"
+        aria-label="옷장에 패션 아이템 등록"
+        css={fabPositionFixed}
+        onClick={handleFashionItemCreateModalOpen}
+      >
+        <CheckroomIcon />
+      </Fab>
+      <FashionItemCreatingModal
+        isFashionItemCreateModalOpen={isFashionItemCreateModalOpen}
+        onFashionItemCreateModalClose={handleFashionItemCreateModalClose}
+      />
     </>
   )
 }
 
-export default withHeader(ClosetPage)
+export default withHeader(withLoginPageRedirect(ClosetPage))
