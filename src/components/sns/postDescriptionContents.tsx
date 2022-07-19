@@ -1,38 +1,30 @@
 import { useRouter } from 'next/router'
 import { useSWRConfig } from 'swr'
+import withLogin from 'hocs/withLogin'
 import { css } from '@emotion/react'
-import PostAuthorHeader from 'components/sns/postAuthorHeader'
 import PopoverMenu from 'components/common/menus/popoverMenu'
-import LikeButton from 'components/common/buttons/likeButton'
 import BookmarkButton from 'components/common/buttons/bookmarkButton'
+import LikeButton from 'components/common/buttons/likeButton'
+import PostAuthorHeader from 'components/sns/postAuthorHeader'
 import useSnsPost from 'hooks/useSnsPost'
 import useMe from 'hooks/useMe'
 import createUrlQuery from 'utils/createUrlQuery'
 import getFormattedDate from 'utils/getFormattedDate'
-import { BACKEND_URL } from 'constants/constants'
+import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 
 const snsPostImagesStyle = css`
   width: 200px;
 `
 
-const queryForFetchingSnsPostByPostId = createUrlQuery({
+const query = createUrlQuery({
   'populate[0]': 'author.profileImage',
   'populate[1]': 'likeUsers',
   'populate[2]': 'bookmarkUsers',
   'populate[3]': 'postImages',
 })
-const mutateKeyForFetchingSnsPostByPostId = (postId: any) => ({
-  url: `/api/sns-posts/${postId}?${queryForFetchingSnsPostByPostId}`,
-})
 
-const queryForFetchingSnsPosts = createUrlQuery({
-  'populate[0]': 'postImages',
-  'populate[1]': 'likeUsers',
-  'populate[2]': 'author',
-})
-const mutateKeyForFetchingSnsPosts = {
-  url: `/api/sns-posts?${queryForFetchingSnsPosts}`,
-}
+const LikeButtonWithLogin = withLogin(LikeButton)
+const BookmarkButtonWithLogin = withLogin(BookmarkButton)
 
 const PostDescriptionContents = () => {
   const router = useRouter()
@@ -40,13 +32,13 @@ const PostDescriptionContents = () => {
 
   const { mutate } = useSWRConfig()
 
+  const { me } = useMe()
+
   const {
     snsPost: snsPostFromStrapi,
     isLoading,
     error,
-  } = useSnsPost(snsPostId, queryForFetchingSnsPostByPostId)
-
-  const { me } = useMe()
+  } = useSnsPost(snsPostId, query)
 
   if (isLoading) {
     return <p>로딩중..</p>
@@ -60,7 +52,7 @@ const PostDescriptionContents = () => {
     id: snsPostFromStrapi.id,
     createdAt: snsPostFromStrapi.attributes.createdAt,
     images: snsPostFromStrapi.attributes.postImages.data.map((image: any) => ({
-      url: BACKEND_URL + image.attributes.url,
+      url: addBackendUrlToImageUrl(image.attributes.url),
       altText: image.attributes.alternativeText,
     })),
     author: {
@@ -70,7 +62,7 @@ const PostDescriptionContents = () => {
       weight: snsPostFromStrapi.attributes.author.data.attributes.weight,
       avatarUrl:
         snsPostFromStrapi.attributes.author.data.attributes.profileImage.data
-          .attributes.url,
+          ?.attributes.url,
     },
     likeUsers: snsPostFromStrapi.attributes.likeUsers.data,
     bookmarkUsers: snsPostFromStrapi.attributes.bookmarkUsers.data,
@@ -81,20 +73,24 @@ const PostDescriptionContents = () => {
   const createdDate = new Date(snsPost.createdAt)
   const dateFormat = getFormattedDate(createdDate)
 
+  const refetch = () => mutate({ url: `/api/sns-posts/${snsPost.id}?${query}` })
+
   const afterBookmark = () => {
-    mutate(mutateKeyForFetchingSnsPostByPostId(snsPost.id))
+    refetch()
   }
 
   const afterLike = () => {
-    mutate(mutateKeyForFetchingSnsPosts)
+    refetch()
   }
+
+  const snsPostEditMenu =
+    snsPost.author.id === me.id ? (
+      <PopoverMenu postId={snsPostId} myId={me?.id} />
+    ) : null
 
   return (
     <>
-      <PostAuthorHeader
-        author={snsPost.author}
-        popoverMenu={<PopoverMenu postId={snsPostId} myId={me && me.id} />}
-      />
+      <PostAuthorHeader author={snsPost.author} popoverMenu={snsPostEditMenu} />
       {snsPost.images.map(snsPostImage => (
         <img
           css={snsPostImagesStyle}
@@ -104,24 +100,21 @@ const PostDescriptionContents = () => {
         />
       ))}
       <div>
-        {!!me ? (
-          <LikeButton
-            myId={me.id}
-            targetId={snsPost.id}
-            likeUsers={snsPost.likeUsers}
-            afterLike={afterLike}
-            isShowLikeUsersNumber={true}
-          />
-        ) : null}
-        {!!me ? (
-          <BookmarkButton
-            myId={me.id}
-            targetId={snsPost.id}
-            bookmarkUsers={snsPost.bookmarkUsers}
-            afterBookmark={afterBookmark}
-            isShowBookmarkUsersNumber={true}
-          />
-        ) : null}
+        <LikeButtonWithLogin
+          myId={me?.id}
+          targetId={snsPost.id}
+          likeUsers={snsPost.likeUsers}
+          afterLike={afterLike}
+          isShowLikeUsersNumber={true}
+        />
+
+        <BookmarkButtonWithLogin
+          myId={me?.id}
+          targetId={snsPost.id}
+          bookmarkUsers={snsPost.bookmarkUsers}
+          afterBookmark={afterBookmark}
+          isShowBookmarkUsersNumber={true}
+        />
       </div>
       <p>{snsPost.content}</p>
       <span>{dateFormat}</span>

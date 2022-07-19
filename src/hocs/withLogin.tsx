@@ -1,10 +1,17 @@
+import { FunctionComponent } from 'react'
 import useMe from 'hooks/useMe'
 
-const withLogin = (Component: any) => {
-  const { me } = useMe()
-  const isLoggedIn = !!me
+const withLogin = <T,>(Component: FunctionComponent<T>) => {
+  return ({ ...props }: T) => {
+    const { me } = useMe()
+    const isLoggedIn = !!me
 
-  return ({ ...props }) => (isLoggedIn ? <Component {...props} /> : null)
+    if (!isLoggedIn) {
+      return null
+    }
+
+    return <Component {...props} />
+  }
 }
 
 export default withLogin

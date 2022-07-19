@@ -4,6 +4,7 @@ import BookmarkIcon from '@mui/icons-material/Bookmark'
 import createBookmark from 'services/users/createBookmark'
 import deleteBookmark from 'services/users/deleteBookmark'
 
+// TODO: 북마크 버튼 눌렀을 때 UI에 느리게 반영되는 것 개선하기
 const BookmarkButton = ({
   myId,
   targetId,

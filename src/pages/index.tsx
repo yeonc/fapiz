@@ -11,13 +11,14 @@ import useSnsPosts from 'hooks/useSnsPosts'
 import useMe from 'hooks/useMe'
 import createUrlQuery from 'utils/createUrlQuery'
 import getDaysBetweenTwoDate from 'utils/getDaysBetweenTwoDate'
-import { BACKEND_URL } from 'constants/constants'
+import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 
 const queryForFetchingSnsPosts = createUrlQuery({
   'populate[0]': 'postImages',
   'populate[1]': 'likeUsers',
   'populate[2]': 'author',
   'pagination[limit]': 200,
+  'filters[author][isHidden][$eq]': false,
 })
 const mutateKeyForFetchingSnsPosts = {
   url: `/api/sns-posts?${queryForFetchingSnsPosts}`,
@@ -31,6 +32,8 @@ const TWO_DAYS = 2
 
 const ADD_ADDITIONAL_INFO_MESSAGE =
   '추가 정보 세 개 중 하나밖에 작성되지 않았네요! 두 가지 이상을 작성하시면 맞춤형 게시물을 보실 수 있습니다! 지금 정보를 수정하러 가 볼까요?'
+
+const SnsPostLikeButtonWithLogin = withLogin(LikeButton)
 
 const ImageCardItem = ({ cardItemData, rightActionButton }) => {
   const router = useRouter()
@@ -60,6 +63,7 @@ const ImageCardItem = ({ cardItemData, rightActionButton }) => {
 }
 
 // TODO: MainPage 컴포넌트 섹션별로 분리, filterSnsPostsByMyInfo 함수 쪼개기
+// TODO: 페이지 렌더링 될 때마다 SNS 포스트 순서 랜덤하게 섞이는 것에 대한 처리 어떻게 해야 할지 결정하고 반영하기
 const MainPage = () => {
   const { mutate } = useSWRConfig()
 
@@ -67,22 +71,16 @@ const MainPage = () => {
     mutate(mutateKeyForFetchingSnsPosts)
   }
 
-  const { me, isLoading: isMeLoading } = useMe()
+  const { me } = useMe()
 
   const { snsPosts: snsPostsFromStrapi, isLoading: isSnsPostsLoading } =
     useSnsPosts(queryForFetchingSnsPosts)
-
-  const SnsPostLikeButtonWithLogin = withLogin(LikeButton)
-
-  if (isMeLoading) {
-    return <p>유저 정보를 받아오는 중입니다.</p>
-  }
 
   if (isSnsPostsLoading) {
     return <p>포스트를 받아오는 중입니다.</p>
   }
 
-  let snsPosts = snsPostsFromStrapi.map(snsPost => ({
+  const snsPosts = snsPostsFromStrapi.map(snsPost => ({
     id: snsPost.id,
     createdAt: snsPost.attributes.createdAt,
     author: snsPost.attributes.author.data.attributes.username,
@@ -90,8 +88,9 @@ const MainPage = () => {
     authorBodyShape: snsPost.attributes.author.data.attributes.bodyShape,
     authorFashionStyles:
       snsPost.attributes.author.data.attributes.fashionStyles,
-    imageUrl:
-      BACKEND_URL + snsPost.attributes.postImages.data[0].attributes.url,
+    imageUrl: addBackendUrlToImageUrl(
+      snsPost.attributes.postImages.data[0].attributes.url
+    ),
     imageAltText:
       snsPost.attributes.postImages.data[0].attributes.alternativeText,
     likeUsers: snsPost.attributes.likeUsers.data,
@@ -204,22 +203,24 @@ const MainPage = () => {
     }
   }
 
-  const recentlyCreatedSnsPosts = filterRecentlyCreatedSnsPosts(snsPosts)
-  const filteredSnsPostsByMyInfo = filterSnsPostsByMyInfo(
-    recentlyCreatedSnsPosts
+  const filteredSnsPostsByMyInfo = me
+    ? filterSnsPostsByMyInfo(snsPosts)
+    : snsPosts
+  const recentlyCreatedSnsPosts = filterRecentlyCreatedSnsPosts(
+    filteredSnsPostsByMyInfo
   )
-  snsPosts = randomizeSnsPosts(filteredSnsPostsByMyInfo)
+  const snsPostsToShow = randomizeSnsPosts(recentlyCreatedSnsPosts)
 
   return (
     <>
       <ImageList variant="masonry" cols={3}>
-        {snsPosts.map((snsPost: any) => (
+        {snsPostsToShow.map((snsPost: any) => (
           <ImageCardItem
             key={snsPost.id}
             cardItemData={snsPost}
             rightActionButton={
               <SnsPostLikeButtonWithLogin
-                myId={me.id}
+                myId={me?.id}
                 targetId={snsPost.id}
                 likeUsers={snsPost.likeUsers}
                 afterLike={afterLike}

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import withHeader from 'hocs/withHeader'
+import withLoginPageRedirect from 'hocs/withLoginPageRedirect'
 import { css } from '@emotion/react'
 import Fab from '@mui/material/Fab'
 import CheckroomIcon from '@mui/icons-material/Checkroom'
@@ -10,7 +11,7 @@ import useMe from 'hooks/useMe'
 import useFashionItems from 'hooks/useFashionItems'
 import useModalState from 'hooks/useModalState'
 import createUrlQuery from 'utils/createUrlQuery'
-import { BACKEND_URL } from 'constants/constants'
+import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 
 const fabPositionFixed = css`
   position: fixed;
@@ -47,7 +48,9 @@ const ClosetPage = () => {
     category: fashionItem.attributes.category,
     color: fashionItem.attributes.color,
     image: {
-      url: BACKEND_URL + fashionItem.attributes.image.data.attributes.url,
+      url: addBackendUrlToImageUrl(
+        fashionItem.attributes.image.data.attributes.url
+      ),
       altText: fashionItem.attributes.image.data.attributes.alternativeText,
     },
   }))
@@ -78,4 +81,4 @@ const ClosetPage = () => {
   )
 }
 
-export default withHeader(ClosetPage)
+export default withHeader(withLoginPageRedirect(ClosetPage))

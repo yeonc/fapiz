@@ -1,8 +1,11 @@
 import { useRouter } from 'next/router'
 import { useSWRConfig } from 'swr'
+import withLogin from 'hocs/withLogin'
 import PostCommentWritingArea from 'components/sns/comment/postCommentWritingArea'
 import PostCommentList from 'components/sns/comment/postCommentList'
 import createUrlQuery from 'utils/createUrlQuery'
+
+const PostCommentWritingAreaWithLogin = withLogin(PostCommentWritingArea)
 
 const PostCommentContents = () => {
   const router = useRouter()
@@ -27,7 +30,7 @@ const PostCommentContents = () => {
 
   return (
     <>
-      <PostCommentWritingArea
+      <PostCommentWritingAreaWithLogin
         snsPostId={snsPostId}
         afterPostCommentSubmit={afterPostCommentSubmit}
       />

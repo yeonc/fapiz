@@ -6,6 +6,7 @@ import unlikePost from 'services/users/unlikePost'
 
 const LIKE_BUTTON_ID = 'like-button'
 
+// TODO: 좋아요 버튼 눌렀을 때 UI에 느리게 반영되는 것 개선하기
 const LikeButton = ({
   myId,
   targetId,

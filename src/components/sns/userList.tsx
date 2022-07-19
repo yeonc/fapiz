@@ -6,7 +6,7 @@ import Avatar from '@mui/material/Avatar'
 import Link from '@mui/material/Link'
 import FollowToggleButton from 'components/common/buttons/followToggleButton'
 
-const UserList = ({ users, me }) =>
+const UserList = ({ users, me, afterFollow }) =>
   users.length === 0 ? (
     <p>해당하는 유저가 존재하지 않습니다.</p>
   ) : (
@@ -14,7 +14,14 @@ const UserList = ({ users, me }) =>
       {users.map((user: any) => (
         <ListItem
           key={user.id}
-          secondaryAction={<FollowToggleButton me={me} targetUser={user} />}
+          secondaryAction={
+            <FollowToggleButton
+              myId={me.id}
+              myFollowings={me.followings}
+              targetUserId={user.id}
+              afterFollow={afterFollow}
+            />
+          }
         >
           <ListItemAvatar>
             <Avatar

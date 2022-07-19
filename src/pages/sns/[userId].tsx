@@ -1,47 +1,62 @@
 import { useRouter } from 'next/router'
 import withHeader from 'hocs/withHeader'
+import { css } from '@emotion/react'
 import Fab from '@mui/material/Fab'
 import CreateIcon from '@mui/icons-material/Create'
 import UserInfo from 'components/sns/userInfo'
 import SnsPosts from 'components/sns/snsPosts'
 import useUser from 'hooks/useUser'
+import useMe from 'hooks/useMe'
+import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 
-const positionOfCreateSnsPostButton = {
-  position: 'fixed',
-  bottom: 30,
-  right: 30,
-}
+const positionOfSnsPostCreateButton = css`
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+`
 
 const SnsPage = () => {
   const router = useRouter()
   const { userId } = router.query
 
-  const { user, error, isLoading } = useUser(userId)
+  const { user: userFromStrapi } = useUser(userId)
+  const { me } = useMe()
 
-  const handleCreateSnsPostButtonClick = () => {
+  if (!userFromStrapi) {
+    return null
+  }
+
+  const user = {
+    id: userFromStrapi.id,
+    isHidden: userFromStrapi.isHidden,
+    username: userFromStrapi.username,
+    height: userFromStrapi.height,
+    weight: userFromStrapi.weight,
+    profileImageUrl: addBackendUrlToImageUrl(userFromStrapi.profileImage?.url),
+    followers: userFromStrapi.followers,
+    followings: userFromStrapi.followings,
+  }
+
+  const handleSnsPostCreateButtonClick = () => {
     router.push(`/sns/post/posting`)
   }
 
-  if (isLoading) {
-    return <p>로딩중...</p>
-  }
-
-  if (error) {
-    return <p>에러가 발생했습니다. 홈으로 돌아가세요</p>
-  }
+  const isMySnsPage = me?.id === user.id
 
   return (
     <>
       <UserInfo user={user} />
       <SnsPosts userId={user.id} />
-      <Fab
-        color="primary"
-        aria-label="SNS 게시물 등록"
-        sx={positionOfCreateSnsPostButton}
-        onClick={handleCreateSnsPostButtonClick}
-      >
-        <CreateIcon />
-      </Fab>
+      {isMySnsPage && (
+        <Fab
+          color="primary"
+          aria-label="SNS 게시물 등록"
+          css={positionOfSnsPostCreateButton}
+          onClick={handleSnsPostCreateButtonClick}
+        >
+          <CreateIcon />
+        </Fab>
+      )}
     </>
   )
 }

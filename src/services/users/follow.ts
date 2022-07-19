@@ -6,7 +6,7 @@ const follow = async ({ myId, targetUserId }) => {
     method: 'put',
     url: `${BACKEND_URL}/api/users/${myId}`,
     data: {
-      following: targetUserId,
+      followings: targetUserId,
     },
   })
 }
