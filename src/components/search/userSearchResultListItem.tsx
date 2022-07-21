@@ -32,17 +32,19 @@ const fashionStyleTagStyle = css`
   background-color: #6feeff83;
 `
 
-const UserSearchResultListItem = () => (
+const UserSearchResultListItem = ({ user }) => (
   <StyledUserSearchResultListItem>
-    <Avatar src="" alt="avatar-alt-text" css={avatarStyle} />
+    <Avatar src={user.avatarUrl} alt={user.username} css={avatarStyle} />
     <div css={usernameAndGenderWrapperStyle}>
-      <h3 css={usernameStyle}>yeon</h3>
-      <span>여</span>
+      <h3 css={usernameStyle}>{user.username}</h3>
+      <span>{user.gender}</span>
     </div>
     <ul>
-      <li css={fashionStyleTagStyle}>#스포티</li>
-      <li css={fashionStyleTagStyle}>#아메카지</li>
-      <li css={fashionStyleTagStyle}>#댄디</li>
+      {user.fashionStyles.map(fashionStyle => (
+        <li key={fashionStyle.id} css={fashionStyleTagStyle}>
+          #{fashionStyle.name}
+        </li>
+      ))}
     </ul>
   </StyledUserSearchResultListItem>
 )

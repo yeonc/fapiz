@@ -15,8 +15,8 @@ const SearchPage = () => {
   return (
     <>
       <SearchForm onSearchKeywordSubmit={onSearchKeywordSubmit} />
-      <SnsPostSearchResult searchKeyword={searchKeyword} />
-      <UserSearchResult searchKeyword={searchKeyword} />
+      {/* <SnsPostSearchResult searchKeyword={searchKeyword} />
+      <UserSearchResult searchKeyword={searchKeyword} /> */}
     </>
   )
 }

@@ -16,24 +16,24 @@ const avatarStyle = css`
   margin-right: 8px;
 `
 
-const SnsPostSearchResultListItem = () => (
+const SnsPostSearchResultListItem = ({ snsPost }) => (
   <StyledSnsPostResultListItem>
     <Image
-      src="/sample-image.jpg"
-      alt="image-alt-text"
-      width={200}
-      height={200}
+      src={snsPost.firstImage.url}
+      alt={snsPost.firstImage.altText}
+      width={150}
+      height={150}
     />
     <div>
-      <p>
-        Lorem Ipsum is simply dummy text of the printing and typesetting
-        industry. Lorem Ipsum has been the industry's standard dummy text ever
-        since the 1500s
-      </p>
-      <Avatar src="" alt="avatar-alt-text" css={avatarStyle} />
-      <span css={mgRight(8)}>yeonee</span>
-      <span css={mgRight(8)}>2022-07-19</span>
-      <span>좋아요 30</span>
+      <p>{snsPost.content}</p>
+      <Avatar
+        src={snsPost.author.avatarUrl}
+        alt={snsPost.author.username}
+        css={avatarStyle}
+      />
+      <span css={mgRight(8)}>{snsPost.author.username}</span>
+      <span css={mgRight(8)}>{snsPost.createdAt}</span>
+      <span>좋아요 {snsPost.likeNumbers}</span>
     </div>
   </StyledSnsPostResultListItem>
 )
