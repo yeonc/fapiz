@@ -1,13 +1,16 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import Avatar from '@mui/material/Avatar'
+import Link from '@mui/material/Link'
+import ROUTE_URL from 'constants/routeUrl'
 import { UserForSearching } from 'types/user'
 
-const StyledUserSearchResultListItem = styled.li`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+const StyledUserSearchResultListItemWrapper = styled.li`
   margin-right: 30px;
+
+  &:hover {
+    background-color: #f1f1f1f5;
+  }
 `
 
 const avatarStyle = css`
@@ -38,22 +41,24 @@ type UserSearchResultListItemProps = {
 }
 
 const UserSearchResultListItem = ({ user }: UserSearchResultListItemProps) => (
-  <StyledUserSearchResultListItem>
-    <Avatar src={user.avatarUrl} alt={user.username} css={avatarStyle} />
-    <div css={usernameAndGenderWrapperStyle}>
-      <h3 css={usernameStyle}>{user.username}</h3>
-      <span>{user.gender}</span>
-    </div>
-    <ul>
-      {user.fashionStyles
-        ? user.fashionStyles.map(fashionStyle => (
-            <li key={fashionStyle.id} css={fashionStyleTagStyle}>
-              #{fashionStyle.name}
-            </li>
-          ))
-        : null}
-    </ul>
-  </StyledUserSearchResultListItem>
+  <StyledUserSearchResultListItemWrapper>
+    <Link href={`${ROUTE_URL.SNS}/${user.id}`}>
+      <Avatar src={user.avatarUrl} alt={user.username} css={avatarStyle} />
+      <div css={usernameAndGenderWrapperStyle}>
+        <h3 css={usernameStyle}>{user.username}</h3>
+        <span>{user.gender}</span>
+      </div>
+      <ul>
+        {user.fashionStyles
+          ? user.fashionStyles.map(fashionStyle => (
+              <li key={fashionStyle.id} css={fashionStyleTagStyle}>
+                #{fashionStyle.name}
+              </li>
+            ))
+          : null}
+      </ul>
+    </Link>
+  </StyledUserSearchResultListItemWrapper>
 )
 
 export default UserSearchResultListItem
