@@ -12,11 +12,17 @@ const SearchPage = () => {
     setSearchKeyword(keyword)
   }
 
+  console.log('searchKeyword - ' + searchKeyword)
+
   return (
     <>
       <SearchForm onSearchKeywordSubmit={onSearchKeywordSubmit} />
-      {/* <SnsPostSearchResult searchKeyword={searchKeyword} />
-      <UserSearchResult searchKeyword={searchKeyword} /> */}
+      {searchKeyword ? (
+        <>
+          <SnsPostSearchResult searchKeyword={searchKeyword} />
+          <UserSearchResult searchKeyword={searchKeyword} />
+        </>
+      ) : null}
     </>
   )
 }
