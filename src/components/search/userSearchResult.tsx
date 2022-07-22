@@ -6,26 +6,29 @@ import useUsers from 'hooks/useUsers'
 import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 import createSearchKeywordsArray from 'utils/createSearchKeywordsArray'
 import { FashionStyle } from 'types'
+import { UserForSearching } from 'types/user'
 
 const StyledUserSearchResultList = styled.ul`
   display: flex;
 `
 
 type FilterUserArgs = {
-  initialUsers: any
+  initialUsers: UserForSearching[]
   searchKeywordRegex: RegExp
 }
 
-type FilterUser = (args: FilterUserArgs) => any
+type FilterUser = (args: FilterUserArgs) => UserForSearching[]
 
 const filterUser: FilterUser = ({ initialUsers, searchKeywordRegex }) => {
-  const filteredUsers = initialUsers.filter((user: any) => {
+  const filteredUsers = initialUsers.filter(user => {
     const username = user.username.toLowerCase().trim()
     const matchedUsername = username.match(searchKeywordRegex)
 
-    const fashionStylesArray = user.fashionStyles.map(
-      (fashionStyle: FashionStyle) => fashionStyle.name
-    )
+    const fashionStylesArray = user.fashionStyles
+      ? user.fashionStyles.map(
+          (fashionStyle: FashionStyle) => fashionStyle.name
+        )
+      : []
     const fashionStyleString = fashionStylesArray.join(' ')
     const matchedFashionItems = fashionStyleString.match(searchKeywordRegex)
 
@@ -37,10 +40,10 @@ const filterUser: FilterUser = ({ initialUsers, searchKeywordRegex }) => {
 
 type SearchUserArgs = {
   searchKeyword: string
-  initialUsers: any
+  initialUsers: UserForSearching[]
 }
 
-type SearchUser = (args: SearchUserArgs) => any
+type SearchUser = (args: SearchUserArgs) => UserForSearching[]
 
 const searchUser: SearchUser = ({ searchKeyword, initialUsers }) => {
   const searchKeywords = createSearchKeywordsArray(searchKeyword)
@@ -56,7 +59,7 @@ const UserSearchResult = ({ searchKeyword }) => {
     return <p>로딩중...</p>
   }
 
-  const users = usersFromStrapi.map((userFromStrapi: any) => ({
+  const users: UserForSearching[] = usersFromStrapi.map(userFromStrapi => ({
     id: userFromStrapi.id,
     username: userFromStrapi.username,
     gender: userFromStrapi.gender,
@@ -75,7 +78,7 @@ const UserSearchResult = ({ searchKeyword }) => {
         {searchedUsers.length === 0 ? (
           <NoSearchResult />
         ) : (
-          searchedUsers.map((user: any) => (
+          searchedUsers.map(user => (
             <UserSearchResultListItem key={user.id} user={user} />
           ))
         )}

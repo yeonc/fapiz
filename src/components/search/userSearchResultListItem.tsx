@@ -1,6 +1,7 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import Avatar from '@mui/material/Avatar'
+import { UserForSearching } from 'types/user'
 
 const StyledUserSearchResultListItem = styled.li`
   display: flex;
@@ -32,7 +33,11 @@ const fashionStyleTagStyle = css`
   background-color: #6feeff83;
 `
 
-const UserSearchResultListItem = ({ user }) => (
+type UserSearchResultListItemProps = {
+  user: UserForSearching
+}
+
+const UserSearchResultListItem = ({ user }: UserSearchResultListItemProps) => (
   <StyledUserSearchResultListItem>
     <Avatar src={user.avatarUrl} alt={user.username} css={avatarStyle} />
     <div css={usernameAndGenderWrapperStyle}>
@@ -40,11 +45,13 @@ const UserSearchResultListItem = ({ user }) => (
       <span>{user.gender}</span>
     </div>
     <ul>
-      {user.fashionStyles.map(fashionStyle => (
-        <li key={fashionStyle.id} css={fashionStyleTagStyle}>
-          #{fashionStyle.name}
-        </li>
-      ))}
+      {user.fashionStyles
+        ? user.fashionStyles.map(fashionStyle => (
+            <li key={fashionStyle.id} css={fashionStyleTagStyle}>
+              #{fashionStyle.name}
+            </li>
+          ))
+        : null}
     </ul>
   </StyledUserSearchResultListItem>
 )

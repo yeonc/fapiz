@@ -6,19 +6,20 @@ import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 import createUrlQuery from 'utils/createUrlQuery'
 import getFormattedDate from 'utils/getFormattedDate'
 import createSearchKeywordsArray from 'utils/createSearchKeywordsArray'
+import { SnsPostForSearching } from 'types/snsPost'
 
 type FilterSnsPostArgs = {
-  initialSnsPosts: any
+  initialSnsPosts: SnsPostForSearching[]
   searchKeywordRegex: RegExp
 }
 
-type FilterSnsPost = (args: FilterSnsPostArgs) => any
+type FilterSnsPost = (args: FilterSnsPostArgs) => SnsPostForSearching[]
 
 const filterSnsPost: FilterSnsPost = ({
   initialSnsPosts,
   searchKeywordRegex,
 }) => {
-  const filteredSnsPosts = initialSnsPosts.filter((snsPost: any) => {
+  const filteredSnsPosts = initialSnsPosts.filter(snsPost => {
     if (!snsPost.content) {
       return
     }
@@ -32,10 +33,10 @@ const filterSnsPost: FilterSnsPost = ({
 
 type SearchSnsPostArgs = {
   searchKeyword: string
-  initialSnsPosts: any
+  initialSnsPosts: SnsPostForSearching[]
 }
 
-type SearchSnsPost = (args: SearchSnsPostArgs) => any
+type SearchSnsPost = (args: SearchSnsPostArgs) => SnsPostForSearching[]
 
 const searchSnsPost: SearchSnsPost = ({ searchKeyword, initialSnsPosts }) => {
   const searchKeywords = createSearchKeywordsArray(searchKeyword)
@@ -67,33 +68,33 @@ const SnsPostSearchResult = ({ searchKeyword }: SnsPostSearchResultProps) => {
     return <p>로딩중...</p>
   }
 
-  const snsPosts = snsPostsFromStrapi.map((snsPostFromStrapi: any) => {
-    const author = snsPostFromStrapi.attributes.author.data.attributes
-    const createdDate = new Date(snsPostFromStrapi.attributes.createdAt)
+  const snsPosts: SnsPostForSearching[] = snsPostsFromStrapi.map(
+    snsPostFromStrapi => {
+      const author = snsPostFromStrapi.attributes.author.data.attributes
+      const createdDate = new Date(snsPostFromStrapi.attributes.createdAt)
 
-    return {
-      id: snsPostFromStrapi.id,
-      createdAt: getFormattedDate(createdDate),
-      firstImage: {
-        url: addBackendUrlToImageUrl(
-          snsPostFromStrapi.attributes.postImages.data[0].attributes.url
-        ),
-        altText:
-          snsPostFromStrapi.attributes.postImages.data[0].attributes
-            .alternativeText,
-      },
-      content: snsPostFromStrapi.attributes.content,
-      likeNumbers: snsPostFromStrapi.attributes.likeUsers.data.length,
-      author: {
-        username: author.username,
-        avatarUrl: addBackendUrlToImageUrl(
-          author.profileImage.data?.attributes.url
-        ),
-      },
+      return {
+        id: snsPostFromStrapi.id,
+        createdAt: getFormattedDate(createdDate),
+        firstImage: {
+          url: addBackendUrlToImageUrl(
+            snsPostFromStrapi.attributes.postImages.data[0].attributes.url
+          ),
+          altText:
+            snsPostFromStrapi.attributes.postImages.data[0].attributes
+              .alternativeText,
+        },
+        content: snsPostFromStrapi.attributes.content,
+        likeNumbers: snsPostFromStrapi.attributes.likeUsers.data.length,
+        author: {
+          username: author.username,
+          avatarUrl: addBackendUrlToImageUrl(
+            author.profileImage.data?.attributes.url
+          ),
+        },
+      }
     }
-  })
-
-  console.log(snsPostsFromStrapi)
+  )
 
   const searchedSnsPosts = searchSnsPost({
     searchKeyword,
@@ -109,7 +110,7 @@ const SnsPostSearchResult = ({ searchKeyword }: SnsPostSearchResultProps) => {
         {searchedSnsPosts.length === 0 ? (
           <NoSearchResult />
         ) : (
-          searchedSnsPosts.map((snsPost: any) => (
+          searchedSnsPosts.map(snsPost => (
             <SnsPostSearchResultListItem key={snsPost.id} snsPost={snsPost} />
           ))
         )}

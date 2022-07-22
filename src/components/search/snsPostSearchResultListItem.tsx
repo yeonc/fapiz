@@ -3,6 +3,7 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import Avatar from '@mui/material/Avatar'
 import { mgRight } from 'styles/layout'
+import { SnsPostForSearching } from 'types/snsPost'
 
 const StyledSnsPostResultListItem = styled.li`
   display: flex;
@@ -16,7 +17,13 @@ const avatarStyle = css`
   margin-right: 8px;
 `
 
-const SnsPostSearchResultListItem = ({ snsPost }) => (
+type SnsPostSearchResultListItemProps = {
+  snsPost: SnsPostForSearching
+}
+
+const SnsPostSearchResultListItem = ({
+  snsPost,
+}: SnsPostSearchResultListItemProps) => (
   <StyledSnsPostResultListItem>
     <Image
       src={snsPost.firstImage.url}

@@ -12,8 +12,6 @@ const SearchPage = () => {
     setSearchKeyword(keyword)
   }
 
-  console.log('searchKeyword - ' + searchKeyword)
-
   return (
     <>
       <SearchForm onSearchKeywordSubmit={onSearchKeywordSubmit} />
