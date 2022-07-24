@@ -3,7 +3,9 @@ import createPost from 'services/users/createPost'
 import uploadImage from 'services/users/uploadImage'
 import { changeImageFilesToPreviewImages } from 'utils/previewImage'
 import generateIdIntoObject from 'utils/generateIdIntoObject'
-import { FashionItemInfo, ImageFiles, Obj, WithId, PreviewImage } from 'types'
+import { Obj, WithId } from 'types/common'
+import { FashionItemInfo } from 'types/fashion'
+import { ImageFiles, PreviewImage } from 'types/image'
 
 const EMPTY_FASHION_ITEM_INFO = { category: '', price: '', buyingPlace: '' }
 

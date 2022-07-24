@@ -1,4 +1,4 @@
-import { Obj } from 'types'
+import { Obj } from 'types/common'
 
 type QueryString = string
 

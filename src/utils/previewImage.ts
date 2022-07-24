@@ -1,4 +1,4 @@
-import { PreviewImage } from 'types'
+import { PreviewImage } from 'types/image'
 
 export const changeImageFileToPreviewImage = (
   imageFile: File

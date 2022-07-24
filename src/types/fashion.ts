@@ -1,16 +1,3 @@
-export type Obj = Record<string, any>
-
-export type WithId<T> = T & { id: number }
-
-export type Nullable<T> = T | null
-
-export type ImageFiles = Nullable<File[]>
-
-export type PreviewImage = {
-  url: string
-  altText: string
-}
-
 export type FashionItemInfo = {
   id: number
   category: string | ''

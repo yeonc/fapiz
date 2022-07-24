@@ -7,7 +7,7 @@ import ImageUploadButton from 'components/common/buttons/imageUploadButton'
 import FashionItemsInfo from 'components/sns/edit/fashionItemsInfo'
 import CreatePost from 'components/sns/createPost'
 import useMe from 'hooks/useMe'
-import { PreviewImage } from 'types'
+import { PreviewImage } from 'types/image'
 
 const postPreviewImagesSize = css`
   width: 200px;

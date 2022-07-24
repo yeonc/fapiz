@@ -4,7 +4,9 @@ import uploadImage from 'services/users/uploadImage'
 import generateIdIntoObject from 'utils/generateIdIntoObject'
 import { changeImageFilesToPreviewImages } from 'utils/previewImage'
 import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
-import { FashionItemInfo, PreviewImage, ImageFiles, Obj, WithId } from 'types'
+import { Obj, WithId } from 'types/common'
+import { FashionItemInfo } from 'types/fashion'
+import { PreviewImage, ImageFiles } from 'types/image'
 
 const EMPTY_FASHION_ITEM_INFO = { category: '', price: '', buyingPlace: '' }
 

@@ -5,7 +5,7 @@ import NoSearchResult from 'components/search/noSearchResult'
 import useUsers from 'hooks/useUsers'
 import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 import createSearchKeywordsArray from 'utils/createSearchKeywordsArray'
-import { FashionStyle } from 'types'
+import { FashionStyle } from 'types/fashion'
 import { UserForSearching } from 'types/user'
 
 const StyledUserSearchResultList = styled.ul`

@@ -1,5 +1,5 @@
 import createUniqueId from 'utils/createUniqueId'
-import { Obj, WithId } from 'types'
+import { Obj, WithId } from 'types/common'
 
 const generateIdIntoObject = (object: Obj): WithId<Obj> => {
   const id = createUniqueId()

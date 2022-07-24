@@ -1,4 +1,5 @@
-import { Nullable, FashionStyle } from 'types'
+import { Nullable } from 'types/common'
+import { FashionStyle } from 'types/fashion'
 
 export type UserForSearching = {
   id: number
