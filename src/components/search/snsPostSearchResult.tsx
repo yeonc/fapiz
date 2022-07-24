@@ -21,7 +21,7 @@ const filterSnsPost: FilterSnsPost = ({
 }) => {
   const filteredSnsPosts = initialSnsPosts.filter(snsPost => {
     if (!snsPost.content) {
-      return
+      return false
     }
 
     const snsPostContent = snsPost.content.toLowerCase().trim()
