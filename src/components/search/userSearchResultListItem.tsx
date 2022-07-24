@@ -24,7 +24,6 @@ const usernameAndGenderWrapperStyle = css`
 `
 
 const usernameStyle = css`
-  display: inline;
   margin-right: 10px;
 `
 
@@ -45,7 +44,7 @@ const UserSearchResultListItem = ({ user }: UserSearchResultListItemProps) => (
     <Link href={`${ROUTE_URL.SNS}/${user.id}`}>
       <Avatar src={user.avatarUrl} alt={user.username} css={avatarStyle} />
       <div css={usernameAndGenderWrapperStyle}>
-        <h3 css={usernameStyle}>{user.username}</h3>
+        <span css={usernameStyle}>{user.username}</span>
         <span>{user.gender}</span>
       </div>
       <ul>
