@@ -2,72 +2,22 @@ import styled from '@emotion/styled'
 import Typography from '@mui/material/Typography'
 import UserSearchResultListItem from 'components/search/userSearchResultListItem'
 import NoSearchResult from 'components/search/noSearchResult'
-import useUsers from 'hooks/useUsers'
-import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
-import createSearchKeywordsArray from 'utils/createSearchKeywordsArray'
-import { FashionStyle } from 'types/fashion'
-import { UserForSearching } from 'types/user'
+import useSearchedUsers from 'hooks/useSearchedUsers'
 
 const StyledUserSearchResultList = styled.ul`
   display: flex;
 `
 
-type FilterUserArgs = {
-  initialUsers: UserForSearching[]
-  searchKeywordRegex: RegExp
-}
-
-type FilterUser = (args: FilterUserArgs) => UserForSearching[]
-
-const filterUser: FilterUser = ({ initialUsers, searchKeywordRegex }) => {
-  const filteredUsers = initialUsers.filter(user => {
-    const username = user.username.toLowerCase().trim()
-    const matchedUsername = username.match(searchKeywordRegex)
-
-    const fashionStylesArray = user.fashionStyles
-      ? user.fashionStyles.map(
-          (fashionStyle: FashionStyle) => fashionStyle.name
-        )
-      : []
-    const fashionStyleString = fashionStylesArray.join(' ')
-    const matchedFashionItems = fashionStyleString.match(searchKeywordRegex)
-
-    return matchedUsername || matchedFashionItems
-  })
-
-  return filteredUsers
-}
-
-type SearchUserArgs = {
+type UserSearchResultProps = {
   searchKeyword: string
-  initialUsers: UserForSearching[]
 }
 
-type SearchUser = (args: SearchUserArgs) => UserForSearching[]
+const UserSearchResult = ({ searchKeyword }: UserSearchResultProps) => {
+  const { searchedUsers } = useSearchedUsers(searchKeyword)
 
-const searchUser: SearchUser = ({ searchKeyword, initialUsers }) => {
-  const searchKeywords = createSearchKeywordsArray(searchKeyword)
-  const searchKeywordRegex = new RegExp(searchKeywords.join('|'), 'gi')
-  const filteredUsers = filterUser({ initialUsers, searchKeywordRegex })
-  return filteredUsers
-}
-
-const UserSearchResult = ({ searchKeyword }) => {
-  const { users: usersFromStrapi, isLoading: isUsersLoading } = useUsers()
-
-  if (isUsersLoading) {
-    return <p>로딩중...</p>
+  if (!searchedUsers) {
+    return null
   }
-
-  const users: UserForSearching[] = usersFromStrapi.map(userFromStrapi => ({
-    id: userFromStrapi.id,
-    username: userFromStrapi.username,
-    gender: userFromStrapi.gender,
-    fashionStyles: userFromStrapi.fashionStyles ?? [],
-    avatarUrl: addBackendUrlToImageUrl(userFromStrapi.profileImage?.url),
-  }))
-
-  const searchedUsers = searchUser({ searchKeyword, initialUsers: users })
 
   return (
     <section>
