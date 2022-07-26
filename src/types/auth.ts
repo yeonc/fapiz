@@ -1,4 +1,5 @@
-import { FashionStyle, Nullable } from 'types'
+import { Nullable } from 'types/common'
+import { FashionStyle } from 'types/fashion'
 
 export type AccessToken = Nullable<string>
 

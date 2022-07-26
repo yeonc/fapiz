@@ -15,7 +15,7 @@ import {
   FASHION_ITEM_CATEGORIES,
   FASHION_ITEM_COLORS,
 } from 'constants/fashionItem'
-import { ImageFiles, PreviewImage } from 'types'
+import { ImageFiles, PreviewImage } from 'types/image'
 
 const previewImageStyle = css`
   width: 250px;

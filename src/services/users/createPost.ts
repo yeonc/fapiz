@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios'
 import { BACKEND_URL } from 'constants/constants'
-import { FashionItemInfo } from 'types'
+import { FashionItemInfo } from 'types/fashion'
 
 type CreatePostArgs = {
   postText?: string
