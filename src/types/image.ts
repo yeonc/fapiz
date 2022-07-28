@@ -6,3 +6,8 @@ export type PreviewImage = {
   url: string
   altText: string
 }
+
+export type SnsPostImage = {
+  url: string
+  altText: string
+}
