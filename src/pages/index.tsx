@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import useSWR, { useSWRConfig } from 'swr'
+import { useSWRConfig } from 'swr'
 import withHeader from 'hocs/withHeader'
 import withLogin from 'hocs/withLogin'
 import { css } from '@emotion/react'
@@ -8,20 +8,15 @@ import ImageListItem from '@mui/material/ImageListItem'
 import ImageListItemBar from '@mui/material/ImageListItemBar'
 import LikeButton from 'components/common/buttons/likeButton'
 import useMe from 'hooks/useMe'
+import useFilteredSnsPosts from 'hooks/useFilteredSnsPosts'
 import createUrlQuery from 'utils/createUrlQuery'
-import ROUTE_URL from 'constants/routeUrl'
-import { SnsPostForMainPage } from 'types/snsPost'
 
-const queryForFetchingSnsPosts = createUrlQuery({
+const query = createUrlQuery({
   'populate[0]': 'postImages',
   'populate[1]': 'likeUsers',
   'populate[2]': 'author',
   'pagination[limit]': 200,
 })
-
-const mutateKeyForFetchingSnsPosts = {
-  url: `/api/sns-posts?${queryForFetchingSnsPosts}`,
-}
 
 const cursorPointer = css`
   cursor: pointer;
@@ -63,51 +58,27 @@ const ImageCardItem = ({ cardItemData, rightActionButton }) => {
 const MainPage = () => {
   const { mutate } = useSWRConfig()
 
+  const refetch = () => mutate({ url: `/api/sns-posts?${query}` })
+
   const afterLike = () => {
-    mutate(mutateKeyForFetchingSnsPosts)
+    refetch()
   }
 
   const { me } = useMe()
 
-  const myFashionStyles = [
-    {
-      id: 7,
-      name: '모던',
-    },
-    {
-      id: 11,
-      name: '아메카지',
-    },
-  ]
-  const myFashionStylesString = JSON.stringify(myFashionStyles)
-  const encodedMyFashionStyles = encodeURIComponent(myFashionStylesString)
-
-  const { data: snsPostsToShow, error } = useSWR<SnsPostForMainPage[]>({
-    baseURL: ROUTE_URL.HOME,
-    url: '/api/filtered-sns-posts',
-    config: {
-      params: {
-        pageNumber: 1,
-        pageSize: 20,
-        isLoggedIn: false,
-        myGender: '남',
-        myBodyShape: '역삼각형',
-        myFashionStyles: encodedMyFashionStyles,
-      },
-    },
-  })
+  const { filteredSnsPosts, error } = useFilteredSnsPosts()
 
   if (error) {
     return <p>에러가 발생했습니다.</p>
   }
 
-  if (!snsPostsToShow) {
+  if (!filteredSnsPosts) {
     return <p>포스트 로딩 중..</p>
   }
 
   return (
     <ImageList variant="masonry" cols={3}>
-      {snsPostsToShow.map(snsPost => (
+      {filteredSnsPosts.map(snsPost => (
         <ImageCardItem
           key={snsPost.id}
           cardItemData={snsPost}
