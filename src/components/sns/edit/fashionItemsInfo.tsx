@@ -7,11 +7,43 @@ import FormControl from '@mui/material/FormControl'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { FASHION_ITEM_CATEGORIES } from 'constants/fashionItem'
+import { FashionItemInfo } from 'types/fashion'
 
-const FASHION_ITEM_INFO_TYPE = {
-  category: 'category',
-  price: 'price',
-  buyingPlace: 'buyingPlace',
+type FashionItemInfoToChange = Partial<FashionItemInfo>
+
+type ChangeFashionItemsInfoArgs = {
+  fashionItemInfoId: number
+  fashionItemInfoToChange: FashionItemInfoToChange
+}
+
+type ChangedFashionItemsInfo = FashionItemInfo[]
+
+type ChangeFashionItemsInfo = (
+  args: ChangeFashionItemsInfoArgs
+) => ChangedFashionItemsInfo
+
+type HandleCategoryChangeArgs = {
+  fashionItemInfoId: number
+  category: string
+}
+
+type handlePriceChangeArgs = {
+  fashionItemInfoId: number
+  price: number
+}
+
+type HandleBuyingPlaceChangeArgs = {
+  fashionItemInfoId: number
+  buyingPlace: string
+}
+
+type FashionItemsInfoProps = {
+  fashionItemsInfo: FashionItemInfo[]
+  onFashionItemsInfoChange: (fashionItemsInfo: FashionItemInfo[]) => void
+  onFashionItemInfoAddMoreButtonClick: () => void
+  onFashionItemInfoDeleteButtonClick: (
+    fashionItemInfoIdToDelete: number
+  ) => void
 }
 
 const FashionItemsInfo = ({
@@ -19,90 +51,117 @@ const FashionItemsInfo = ({
   onFashionItemsInfoChange,
   onFashionItemInfoAddMoreButtonClick,
   onFashionItemInfoDeleteButtonClick,
-}) => (
-  <>
-    <ul>
-      {/* TODO: map 내부 함수들이 어떤 역할 하는지 알아보기 쉽게 코드 정리하기 */}
-      {fashionItemsInfo.map(
-        (fashionItemInfo: any, fashionItemInfoIndex: any) => {
-          const changeFashionItemsInfo = (fashionItemInfoToChange: any) => {
-            const changedFashionItemInfo = {
-              ...fashionItemInfo,
-              [fashionItemInfoToChange.key]: fashionItemInfoToChange.value,
-            }
+}: FashionItemsInfoProps) => {
+  const changeFashionItemsInfo: ChangeFashionItemsInfo = ({
+    fashionItemInfoId,
+    fashionItemInfoToChange,
+  }) => {
+    const changedFashionItemsInfo = fashionItemsInfo.map(fashionItemInfo => {
+      if (fashionItemInfo.id === fashionItemInfoId) {
+        return {
+          ...fashionItemInfo,
+          ...fashionItemInfoToChange,
+        }
+      }
+      return fashionItemInfo
+    })
+    return changedFashionItemsInfo
+  }
 
-            fashionItemsInfo.splice(
-              fashionItemInfoIndex,
-              1,
-              changedFashionItemInfo
-            )
+  const handleCategoryChange = ({
+    fashionItemInfoId,
+    category,
+  }: HandleCategoryChangeArgs) => {
+    const changedFashionItemsInfo = changeFashionItemsInfo({
+      fashionItemInfoId,
+      fashionItemInfoToChange: { category },
+    })
+    onFashionItemsInfoChange(changedFashionItemsInfo)
+  }
 
-            const changedFashionItemsInfo = [...fashionItemsInfo]
-            return changedFashionItemsInfo
-          }
+  const handlePriceChange = ({
+    fashionItemInfoId,
+    price,
+  }: handlePriceChangeArgs) => {
+    const changedFashionItemsInfo = changeFashionItemsInfo({
+      fashionItemInfoId,
+      fashionItemInfoToChange: { price },
+    })
+    onFashionItemsInfoChange(changedFashionItemsInfo)
+  }
 
-          const handleFashionItemInfoInputChange =
-            (fashionItemInfoType: any) => (e: any) => {
-              const fashionItemInfoToChange = {
-                key: fashionItemInfoType,
-                value: e.target.value,
-              }
+  const handleBuyingPlaceChange = ({
+    fashionItemInfoId,
+    buyingPlace,
+  }: HandleBuyingPlaceChangeArgs) => {
+    const changedFashionItemsInfo = changeFashionItemsInfo({
+      fashionItemInfoId,
+      fashionItemInfoToChange: { buyingPlace },
+    })
+    onFashionItemsInfoChange(changedFashionItemsInfo)
+  }
 
-              onFashionItemsInfoChange(
-                changeFashionItemsInfo(fashionItemInfoToChange)
-              )
-            }
-
-          return (
-            <li key={fashionItemInfo.id}>
-              <FormControl sx={{ width: 150 }}>
-                <InputLabel>아이템 종류</InputLabel>
-                <Select
-                  label="아이템 종류"
-                  value={fashionItemInfo.category}
-                  onChange={handleFashionItemInfoInputChange(
-                    FASHION_ITEM_INFO_TYPE.category
-                  )}
-                >
-                  {FASHION_ITEM_CATEGORIES.map(category => (
-                    <MenuItem key={category.id} value={category.name}>
-                      {category.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <TextField
-                label="가격"
-                type="number"
-                value={fashionItemInfo.price}
-                onChange={handleFashionItemInfoInputChange(
-                  FASHION_ITEM_INFO_TYPE.price
-                )}
-              />
-              <TextField
-                label="구입처"
-                value={fashionItemInfo.buyingPlace}
-                onChange={handleFashionItemInfoInputChange(
-                  FASHION_ITEM_INFO_TYPE.buyingPlace
-                )}
-              />
-              <IconButton
-                color="primary"
-                onClick={() =>
-                  onFashionItemInfoDeleteButtonClick(fashionItemInfo.id)
+  return (
+    <>
+      <ul>
+        {fashionItemsInfo.map(fashionItemInfo => (
+          <li key={fashionItemInfo.id}>
+            <FormControl sx={{ width: 150 }}>
+              <InputLabel>아이템 종류</InputLabel>
+              <Select
+                label="아이템 종류"
+                value={fashionItemInfo.category}
+                onChange={e =>
+                  handleCategoryChange({
+                    fashionItemInfoId: fashionItemInfo.id,
+                    category: e.target.value,
+                  })
                 }
               >
-                <RemoveCircleOutlineIcon />
-              </IconButton>
-            </li>
-          )
-        }
-      )}
-    </ul>
-    <Button variant="contained" onClick={onFashionItemInfoAddMoreButtonClick}>
-      아이템 정보 더 추가
-    </Button>
-  </>
-)
+                {FASHION_ITEM_CATEGORIES.map(category => (
+                  <MenuItem key={category.id} value={category.name}>
+                    {category.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <TextField
+              label="가격"
+              type="number"
+              value={fashionItemInfo.price}
+              onChange={e =>
+                handlePriceChange({
+                  fashionItemInfoId: fashionItemInfo.id,
+                  price: Number(e.target.value),
+                })
+              }
+            />
+            <TextField
+              label="구입처"
+              value={fashionItemInfo.buyingPlace}
+              onChange={e =>
+                handleBuyingPlaceChange({
+                  fashionItemInfoId: fashionItemInfo.id,
+                  buyingPlace: e.target.value,
+                })
+              }
+            />
+            <IconButton
+              color="primary"
+              onClick={() =>
+                onFashionItemInfoDeleteButtonClick(fashionItemInfo.id)
+              }
+            >
+              <RemoveCircleOutlineIcon />
+            </IconButton>
+          </li>
+        ))}
+      </ul>
+      <Button variant="contained" onClick={onFashionItemInfoAddMoreButtonClick}>
+        아이템 정보 더 추가
+      </Button>
+    </>
+  )
+}
 
 export default FashionItemsInfo

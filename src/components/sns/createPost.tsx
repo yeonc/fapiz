@@ -7,7 +7,7 @@ import { Obj, WithId } from 'types/common'
 import { FashionItemInfo } from 'types/fashion'
 import { ImageFiles, PreviewImage } from 'types/image'
 
-const EMPTY_FASHION_ITEM_INFO = { category: '', price: '', buyingPlace: '' }
+const EMPTY_FASHION_ITEM_INFO = { category: '', price: 0, buyingPlace: '' }
 
 const createNewEmptyFashionItemInfo = (): WithId<Obj> => {
   return generateIdIntoObject(EMPTY_FASHION_ITEM_INFO)
