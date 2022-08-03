@@ -36,7 +36,7 @@ const PostEdit = ({ snsPost, afterEditPost, children }) => {
   )
   const [postText, setPostText] = useState(initialPostText)
 
-  const handleImageFilesChange = (imageFiles: File[]) => {
+  const handleImageFilesChange = (imageFiles: FileList) => {
     setImageFiles(imageFiles)
     const previewImages = changeImageFilesToPreviewImages(imageFiles)
     setPreviewImages(previewImages)

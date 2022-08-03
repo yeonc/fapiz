@@ -26,7 +26,7 @@ const CreatePost = ({ authorId, afterCreatePost, children }) => {
   ])
   const [postText, setPostText] = useState<string>('')
 
-  const handleImageFilesChange = (imageFiles: File[]) => {
+  const handleImageFilesChange = (imageFiles: FileList) => {
     setImageFiles(imageFiles)
     const previewImages = changeImageFilesToPreviewImages(imageFiles)
     setPreviewImages(previewImages)

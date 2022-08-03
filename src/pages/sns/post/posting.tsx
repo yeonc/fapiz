@@ -52,6 +52,7 @@ const SnsPostCreatingPage = () => {
           <ImageUploadButton
             onImageFilesChange={handleImageFilesChange}
             buttonAriaLabel="SNS 게시물 이미지 업로드"
+            isImageRequired={true}
           />
           <FashionItemsInfo
             fashionItemsInfo={fashionItemsInfo}

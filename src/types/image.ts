@@ -1,6 +1,6 @@
 import { Nullable } from 'types/common'
 
-export type ImageFiles = Nullable<File[]>
+export type ImageFiles = Nullable<FileList>
 
 export type PreviewImage = {
   url: string

@@ -40,7 +40,7 @@ const FashionItemEditForm = ({
   const [category, setCategory] = useState<string>(initialFashionItem.category)
   const [color, setColor] = useState<string>(initialFashionItem.color)
 
-  const handleImageFilesChange = (imageFiles: File[]) => {
+  const handleImageFilesChange = (imageFiles: FileList) => {
     setImageFiles(imageFiles)
     const previewImage = changeImageFileToPreviewImage(imageFiles[0])
     setPreviewImage(previewImage)
@@ -116,6 +116,7 @@ const FashionItemEditForm = ({
       <ImageUploadButton
         onImageFilesChange={handleImageFilesChange}
         buttonAriaLabel="패션 아이템 이미지 선택"
+        isImageRequired={false}
       />
       <FormControl fullWidth>
         <InputLabel>계절</InputLabel>
