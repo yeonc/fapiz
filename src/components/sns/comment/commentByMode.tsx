@@ -30,7 +30,7 @@ const CommentByMode = ({ commentId, commentText, snsPostId, authorId }) => {
     return <p>로그인 유저 정보를 불러오는 중입니다..</p>
   }
 
-  const isShowCommentEditButtonGroup = me.id === authorId ? true : false
+  const isShowCommentEditButtonGroup = me?.id === authorId ? true : false
 
   const handleCommentEditButtonClick = () => {
     setIsCommentEditMode(true)
