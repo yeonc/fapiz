@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import PostDescriptionContentsLayout from 'components/sns/postDescriptionContentsLayout'
+import PostDescriptionContentsLayout from 'components/sns/post/postDescriptionContentsLayout'
 import PostCommentList from 'components/sns/comment/postCommentList'
 import useSnsPost from 'hooks/useSnsPost'
 import createUrlQuery from 'utils/createUrlQuery'

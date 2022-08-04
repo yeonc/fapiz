@@ -3,7 +3,7 @@ import Button from '@mui/material/Button'
 import { mgRight } from 'styles/layout'
 import useModalState from 'hooks/useModalState'
 import FollowerListModal from 'components/common/modals/modal'
-import UserList from 'components/sns/userList'
+import UserList from 'components/sns/user/userList'
 import useMe from 'hooks/useMe'
 
 const StyledFollowerWrapper = styled.dl`

@@ -1,5 +1,5 @@
 import { css } from '@emotion/react'
-import PostAuthorHeader from 'components/sns/postAuthorHeader'
+import PostAuthorHeader from 'components/sns/post/postAuthorHeader'
 import getFormattedDate from 'utils/getFormattedDate'
 
 const snsPostImagesStyle = css`

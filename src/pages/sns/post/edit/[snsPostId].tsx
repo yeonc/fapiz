@@ -3,9 +3,9 @@ import withHeader from 'hocs/withHeader'
 import { css } from '@emotion/react'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
-import PostEdit from 'components/sns/edit/postEdit'
+import PostEdit from 'components/sns/post/postEdit'
 import ImageUploadButton from 'components/common/buttons/imageUploadButton'
-import FashionItemsInfo from 'components/sns/edit/fashionItemsInfo'
+import FashionItemsInfo from 'components/sns/post/fashionItemsInfo'
 import useSnsPost from 'hooks/useSnsPost'
 
 const postPreviewImagesSize = css`

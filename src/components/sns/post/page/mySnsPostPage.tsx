@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useSWRConfig } from 'swr'
-import PostDescriptionContentsLayout from 'components/sns/postDescriptionContentsLayout'
+import PostDescriptionContentsLayout from 'components/sns/post/postDescriptionContentsLayout'
 import PostCommentWritingArea from 'components/sns/comment/postCommentWritingArea'
 import PostCommentList from 'components/sns/comment/postCommentList'
 import PopoverMenu from 'components/common/menus/popoverMenu'
