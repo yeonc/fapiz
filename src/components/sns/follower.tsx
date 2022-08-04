@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import { mgRight } from 'styles/layout'
 import useModalState from 'hooks/useModalState'
-import FollowerListModal from 'components/modals/modal'
+import FollowerListModal from 'components/common/modals/modal'
 import UserList from 'components/sns/userList'
 import useMe from 'hooks/useMe'
 

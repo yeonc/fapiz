@@ -1,5 +1,5 @@
 import { useSWRConfig } from 'swr'
-import Modal from 'components/modals/modal'
+import Modal from 'components/common/modals/modal'
 import FashionItemEditForm from 'components/closet/fashionItemEditForm'
 import useMe from 'hooks/useMe'
 import createUrlQuery from 'utils/createUrlQuery'
