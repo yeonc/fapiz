@@ -8,7 +8,7 @@ import FormLabel from '@mui/material/FormLabel'
 import Checkbox from '@mui/material/Checkbox'
 import Button from '@mui/material/Button'
 import FormHelperText from '@mui/material/FormHelperText'
-import editMyAdditionalInfo from 'services/users/editMyAdditionalInfo'
+import editMyAdditionalInfo from 'services/myInfo/editMyAdditionalInfo'
 
 const MyAdditionalInfoForm = ({
   myId,

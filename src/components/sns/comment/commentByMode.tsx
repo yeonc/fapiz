@@ -6,7 +6,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import CommentEditInput from 'components/sns/comment/commentEditInput'
 import Comment from 'components/common/texts/comment'
 import useMe from 'hooks/useMe'
-import deleteComment from 'services/users/deleteComment'
+import deleteComment from 'services/comment/deleteComment'
 import createUrlQuery from 'utils/createUrlQuery'
 
 const CommentByMode = ({ commentId, commentText, snsPostId, authorId }) => {

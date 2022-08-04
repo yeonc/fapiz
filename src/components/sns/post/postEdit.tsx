@@ -1,6 +1,6 @@
 import { FormEvent, useState } from 'react'
-import editPost from 'services/users/editPost'
-import uploadImage from 'services/users/uploadImage'
+import editPost from 'services/snsPost/editPost'
+import uploadImage from 'services/upload/uploadImage'
 import generateIdIntoObject from 'utils/generateIdIntoObject'
 import { changeImageFilesToPreviewImages } from 'utils/previewImage'
 import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'

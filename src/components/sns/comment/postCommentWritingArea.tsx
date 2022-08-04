@@ -5,7 +5,7 @@ import Avatar from '@mui/material/Avatar'
 import styled from '@emotion/styled'
 import { horizontal } from 'styles/layout'
 import useMe from 'hooks/useMe'
-import createComment from 'services/users/createComment'
+import createComment from 'services/comment/createComment'
 import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 
 const StyledPostCommentWritingAreaWrapper = styled.div`

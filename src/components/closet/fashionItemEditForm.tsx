@@ -6,9 +6,9 @@ import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
 import ImageUploadButton from 'components/common/buttons/imageUploadButton'
-import uploadImage from 'services/users/uploadImage'
-import editFashionItem from 'services/users/editFashionItem'
-import deleteFashionItem from 'services/users/deleteFashionItem'
+import uploadImage from 'services/upload/uploadImage'
+import editFashionItem from 'services/fashionItem/editFashionItem'
+import deleteFashionItem from 'services/fashionItem/deleteFashionItem'
 import { changeImageFileToPreviewImage } from 'utils/previewImage'
 import {
   FASHION_ITEM_SEASONS,

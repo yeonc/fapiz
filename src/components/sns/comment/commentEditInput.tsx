@@ -3,7 +3,7 @@ import IconButton from '@mui/material/IconButton'
 import EditOffIcon from '@mui/icons-material/EditOff'
 import SendIcon from '@mui/icons-material/Send'
 import CommentInput from 'components/common/inputs/commentInput'
-import editComment from 'services/users/editComment'
+import editComment from 'services/comment/editComment'
 
 const CommentEditInput = ({
   commentId,
