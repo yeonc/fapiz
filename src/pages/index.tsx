@@ -30,13 +30,27 @@ const loadingTextStyle = css`
 const SnsPostLikeButtonWithLogin = withLogin(LikeButton)
 
 const MainPage = () => {
+  const { me } = useMe()
+
   const { snsPostsToShow, isSnsPostsLoading, lastSnsPostRef } =
     useInfiniteScroll({
       initialPageNumber: INITIAL_PAGE_NUMBER,
       pageSize: PAGE_SIZE,
+      isLoggedIn: true,
+      myGender: '남',
+      myBodyShape: '역삼각형',
+      myFashionStyles: [
+        {
+          id: 7,
+          name: '모던',
+        },
+        {
+          id: 11,
+          name: '아메카지',
+        },
+      ],
     })
 
-  const { me } = useMe()
   const { mutate } = useSWRConfig()
 
   const refetch = () => mutate({ url: `/api/sns-posts?${query}` })

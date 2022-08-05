@@ -6,11 +6,15 @@ import paginateData from 'utils/paginateData'
 import { BACKEND_URL } from 'constants/constants'
 import { SnsPostForMainPage } from 'types/snsPost'
 import { FashionStyle } from 'types/fashion'
+import { Nullable } from 'types/common'
 
 const TWO_DAYS = 2
 
 const ADD_ADDITIONAL_INFO_MESSAGE =
   '추가 정보 세 개 중 하나밖에 작성되지 않았네요! 두 가지 이상을 작성하시면 맞춤형 게시물을 보실 수 있습니다! 지금 정보를 수정하러 가 볼까요?'
+
+const showMessageAboutAddingAdditionalInfo = () =>
+  console.log(ADD_ADDITIONAL_INFO_MESSAGE) // 임시 코드 - console.log 말고 다른 형태로 메시지 보여줄 예정
 
 const fetchSnsPosts = async (): Promise<AxiosResponse> => {
   return axios({
@@ -25,7 +29,7 @@ const fetchSnsPosts = async (): Promise<AxiosResponse> => {
 }
 
 const sanitizedSnsPosts = (snsPostsFromStrapi: any): SnsPostForMainPage[] => {
-  return snsPostsFromStrapi.map(snsPost => ({
+  return snsPostsFromStrapi.map((snsPost: any) => ({
     id: snsPost.id,
     createdAt: snsPost.attributes.createdAt,
     author: {
@@ -49,18 +53,16 @@ const filterSnsPosts = async (
   res: NextApiResponse<SnsPostForMainPage[]>
 ) => {
   // 1. query 받아오기
-  const pageNumber = req.query.pageNumber
-    ? parseInt(req.query.pageNumber as string)
-    : undefined
-  const pageSize = req.query.pageSize
-    ? parseInt(req.query.pageSize as string)
-    : undefined
+  const pageNumber = req.query.pageNumber ? Number(req.query.pageNumber) : null
+  const pageSize = req.query.pageSize ? Number(req.query.pageSize) : null
   const isLoggedIn = req.query.isLoggedIn === 'true' ? true : false
-  const myGender = req.query.myGender as string | undefined
-  const myBodyShape = req.query.myBodyShape as string | undefined
-  const myFashionStyles: FashionStyle[] | undefined = JSON.parse(
-    decodeURIComponent(req.query.myFashionStyles as string)
-  )
+  const myGender = req.query.myGender ? String(req.query.myGender) : null
+  const myBodyShape = req.query.myBodyShape
+    ? String(req.query.myBodyShape)
+    : null
+  const myFashionStyles: Nullable<FashionStyle[]> = req.query.myFashionStyles
+    ? JSON.parse(decodeURIComponent(String(req.query.myFashionStyles)))
+    : null
 
   // 2. strapi에 모든 SNS 게시물 데이터 요청해서 받아오기
   let snsPostsFromStrapi
@@ -102,63 +104,21 @@ const filterSnsPosts = async (
   const filterSnsPostsByMyInfo = (
     snsPosts: SnsPostForMainPage[]
   ): SnsPostForMainPage[] => {
-    const isMyGenderInfoNotExist = myGender === null || myGender === ''
-    const isMyBodyShapeInfoNotExist = myBodyShape === null || myBodyShape === ''
-    const isMyFashionStylesInfoNotExist =
-      myFashionStyles === null || myFashionStyles.length === 0
-
-    const isAllOfMyAdditionalInfoNotExist =
-      isMyGenderInfoNotExist &&
-      isMyBodyShapeInfoNotExist &&
-      isMyFashionStylesInfoNotExist
-    const isOnlyGenderInfoExist =
-      myGender && isMyBodyShapeInfoNotExist && isMyFashionStylesInfoNotExist
-    const isOnlyBodyShapeInfoExist =
-      myBodyShape && isMyGenderInfoNotExist && isMyFashionStylesInfoNotExist
-    const isOnlyFashionStylesInfoExist =
-      myFashionStyles && isMyGenderInfoNotExist && isMyBodyShapeInfoNotExist
-
-    const isSnsPostAuthorFashionStylesMatchWithMyFashionStyles = (
-      myFashionStyles: FashionStyle[],
-      snsPostAuthorFashionStyles: FashionStyle[]
-    ) =>
-      snsPostAuthorFashionStyles !== null &&
-      snsPostAuthorFashionStyles.length > 0
-        ? snsPostAuthorFashionStyles.some(authorFashionStyle =>
-            myFashionStyles.some(
-              myFashionStyle => authorFashionStyle.id === myFashionStyle.id
-            )
-          )
-        : false
-
-    if (!isLoggedIn || isAllOfMyAdditionalInfoNotExist) {
-      return snsPosts
-    }
-
-    if (isOnlyGenderInfoExist) {
-      alert(ADD_ADDITIONAL_INFO_MESSAGE)
-      return snsPosts
-    }
-
-    if (isOnlyBodyShapeInfoExist) {
-      alert(ADD_ADDITIONAL_INFO_MESSAGE)
-      return snsPosts
-    }
-
-    if (isOnlyFashionStylesInfoExist) {
-      alert(ADD_ADDITIONAL_INFO_MESSAGE)
+    if (!isLoggedIn) {
       return snsPosts
     }
 
     if (myGender && myBodyShape && myFashionStyles) {
-      return snsPosts.filter(
-        snsPost =>
-          snsPost.author.gender === myGender &&
-          snsPost.author.bodyShape === myBodyShape &&
-          isSnsPostAuthorFashionStylesMatchWithMyFashionStyles(
-            myFashionStyles,
-            snsPost.author.fashionStyles
-          )
+      return snsPosts.filter(snsPost =>
+        snsPost.author.gender === myGender &&
+        snsPost.author.bodyShape === myBodyShape &&
+        snsPost.author.fashionStyles
+          ? snsPost.author.fashionStyles.some(authorFashionStyle =>
+              myFashionStyles.some(
+                myFashionStyle => authorFashionStyle.id === myFashionStyle.id
+              )
+            )
+          : false
       )
     }
 
@@ -171,31 +131,44 @@ const filterSnsPosts = async (
     }
 
     if (myGender && myFashionStyles) {
-      return snsPosts.filter(
-        snsPost =>
-          snsPost.author.gender === myGender &&
-          isSnsPostAuthorFashionStylesMatchWithMyFashionStyles(
-            myFashionStyles,
-            snsPost.author.fashionStyles
-          )
+      return snsPosts.filter(snsPost =>
+        snsPost.author.gender === myGender && //
+        snsPost.author.fashionStyles
+          ? snsPost.author.fashionStyles.some(authorFashionStyle =>
+              myFashionStyles.some(
+                myFashionStyle => authorFashionStyle.id === myFashionStyle.id
+              )
+            )
+          : false
       )
     }
 
     if (myBodyShape && myFashionStyles) {
-      return snsPosts.filter(
-        snsPost =>
-          snsPost.author.bodyShape === myBodyShape &&
-          isSnsPostAuthorFashionStylesMatchWithMyFashionStyles(
-            myFashionStyles,
-            snsPost.author.fashionStyles
-          )
+      return snsPosts.filter(snsPost =>
+        snsPost.author.bodyShape === myBodyShape && //
+        snsPost.author.fashionStyles
+          ? snsPost.author.fashionStyles.some(authorFashionStyle =>
+              myFashionStyles.some(
+                myFashionStyle => authorFashionStyle.id === myFashionStyle.id
+              )
+            )
+          : false
       )
     }
+
+    if (myGender || myBodyShape || myFashionStyles) {
+      showMessageAboutAddingAdditionalInfo()
+      return snsPosts
+    }
+
+    if (!myGender && !myBodyShape && !myFashionStyles) {
+      return snsPosts
+    }
+
+    return snsPosts // 타입 에러 막기 위한 임시 코드
   }
 
-  const filteredSnsPostsByMyInfo = isLoggedIn
-    ? filterSnsPostsByMyInfo(snsPosts)
-    : snsPosts
+  const filteredSnsPostsByMyInfo = filterSnsPostsByMyInfo(snsPosts)
   const recentlyCreatedSnsPosts = filterRecentlyCreatedSnsPosts(
     filteredSnsPostsByMyInfo
   )

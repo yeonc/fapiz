@@ -1,10 +1,16 @@
 import { useState, useEffect, useRef, RefObject } from 'react'
 import axios, { AxiosResponse } from 'axios'
 import { SnsPostForMainPage } from 'types/snsPost'
+import { Nullable } from 'types/common'
+import { FashionStyle } from 'types/fashion'
 
 type FetchFilteredSnsPostsArgs = {
   pageNumber: number
   pageSize: number
+  isLoggedIn: boolean
+  myGender: Nullable<string>
+  myBodyShape: Nullable<string>
+  myFashionStyles: Nullable<FashionStyle[]>
 }
 
 type FetchFilteredSnsPosts = (
@@ -14,13 +20,24 @@ type FetchFilteredSnsPosts = (
 const fetchFilteredSnsPosts: FetchFilteredSnsPosts = async ({
   pageNumber,
   pageSize,
+  isLoggedIn,
+  myGender,
+  myBodyShape,
+  myFashionStyles,
 }) => {
+  const myFashionStylesString = JSON.stringify(myFashionStyles)
+  const encodedMyFashonStyles = encodeURIComponent(myFashionStylesString)
+
   return axios({
     method: 'get',
     url: '/api/filtered-sns-posts',
     params: {
       pageNumber,
       pageSize,
+      isLoggedIn,
+      myGender,
+      myBodyShape,
+      myFashionStyles: encodedMyFashonStyles,
     },
   })
 }
@@ -28,6 +45,10 @@ const fetchFilteredSnsPosts: FetchFilteredSnsPosts = async ({
 type UseInfiniteScrollArgs = {
   initialPageNumber: number
   pageSize: number
+  isLoggedIn: boolean
+  myGender: Nullable<string>
+  myBodyShape: Nullable<string>
+  myFashionStyles: Nullable<FashionStyle[]>
 }
 
 type UseInfiniteScrollReturns = {
@@ -43,6 +64,10 @@ type UseInfiniteScroll = (
 const useInfiniteScroll: UseInfiniteScroll = ({
   initialPageNumber,
   pageSize,
+  isLoggedIn,
+  myGender,
+  myBodyShape,
+  myFashionStyles,
 }) => {
   const [snsPostsToShow, setSnsPostsToShow] = useState<SnsPostForMainPage[]>([])
   const [isSnsPostsLoading, setIsSnsPostsLoading] = useState(false)
@@ -60,7 +85,14 @@ const useInfiniteScroll: UseInfiniteScroll = ({
 
   useEffect(() => {
     setIsSnsPostsLoading(true)
-    fetchFilteredSnsPosts({ pageNumber, pageSize })
+    fetchFilteredSnsPosts({
+      pageNumber,
+      pageSize,
+      isLoggedIn,
+      myGender,
+      myBodyShape,
+      myFashionStyles,
+    })
       .then(response => setSnsPostsToShow(prev => [...prev, ...response.data]))
       .catch(console.error)
       .finally(() => setIsSnsPostsLoading(false))

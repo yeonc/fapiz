@@ -24,7 +24,7 @@ const useFilteredSnsPosts = () => {
       params: {
         pageNumber: 1,
         pageSize: 20,
-        isLoggedIn: false,
+        isLoggedIn: true,
         myGender: '남',
         myBodyShape: '역삼각형',
         myFashionStyles: encodedMyFashionStyles,
