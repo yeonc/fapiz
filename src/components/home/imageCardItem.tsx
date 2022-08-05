@@ -53,4 +53,6 @@ const ImageCardItem = React.forwardRef<HTMLLIElement, ImageCardItemProps>(
   }
 )
 
+ImageCardItem.displayName = 'ImageCardItem'
+
 export default ImageCardItem

@@ -27,7 +27,7 @@ const OtherSnsPostPage = () => {
     snsPost: snsPostFromStrapi,
     isLoading,
     error,
-  } = useSnsPost(snsPostId, queryForFetchingSnsPost)
+  } = useSnsPost(Number(snsPostId), queryForFetchingSnsPost)
 
   const { mutate } = useSWRConfig()
 
@@ -116,10 +116,10 @@ const OtherSnsPostPage = () => {
         postFashionItemsInfo={snsPost.fashionItemsInfo}
       />
       <PostCommentWritingArea
-        snsPostId={snsPostId}
+        snsPostId={snsPost.id}
         afterPostCommentSubmit={afterPostCommentSubmit}
       />
-      <PostCommentList snsPostId={snsPostId} />
+      <PostCommentList snsPostId={snsPost.id} />
     </>
   )
 }

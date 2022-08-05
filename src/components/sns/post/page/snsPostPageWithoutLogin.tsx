@@ -20,7 +20,7 @@ const SnsPostPageWithoutLogin = () => {
     snsPost: snsPostFromStrapi,
     isLoading,
     error,
-  } = useSnsPost(snsPostId, queryForFetchingSnsPost)
+  } = useSnsPost(Number(snsPostId), queryForFetchingSnsPost)
 
   if (isLoading) {
     return <p>로딩중..</p>
@@ -64,7 +64,7 @@ const SnsPostPageWithoutLogin = () => {
         postContent={snsPost.content}
         postFashionItemsInfo={snsPost.fashionItemsInfo}
       />
-      <PostCommentList snsPostId={snsPostId} />
+      <PostCommentList snsPostId={snsPost.id} />
     </>
   )
 }
