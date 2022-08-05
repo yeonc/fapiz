@@ -9,7 +9,19 @@ import useMe from 'hooks/useMe'
 import deleteComment from 'services/comment/deleteComment'
 import createUrlQuery from 'utils/createUrlQuery'
 
-const CommentByMode = ({ commentId, commentText, snsPostId, authorId }) => {
+type CommentByModeProps = {
+  commentId: number
+  commentText: string
+  snsPostId: number
+  commentAuthorId: number
+}
+
+const CommentByMode = ({
+  commentId,
+  commentText,
+  snsPostId,
+  commentAuthorId,
+}: CommentByModeProps) => {
   const { mutate } = useSWRConfig()
 
   const query = createUrlQuery({
@@ -30,7 +42,7 @@ const CommentByMode = ({ commentId, commentText, snsPostId, authorId }) => {
     return <p>로그인 유저 정보를 불러오는 중입니다..</p>
   }
 
-  const isShowCommentEditButtonGroup = me?.id === authorId ? true : false
+  const isShowCommentEditButtonGroup = me?.id === commentAuthorId ? true : false
 
   const handleCommentEditButtonClick = () => {
     setIsCommentEditMode(true)
@@ -87,7 +99,7 @@ const CommentByMode = ({ commentId, commentText, snsPostId, authorId }) => {
       ) : (
         <Comment
           text={commentText}
-          buttons={isShowCommentEditButtonGroup && commentEditButtons}
+          buttons={isShowCommentEditButtonGroup ? commentEditButtons : null}
         />
       )}
     </>

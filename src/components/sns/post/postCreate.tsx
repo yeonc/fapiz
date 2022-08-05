@@ -3,6 +3,7 @@ import createPost from 'services/snsPost/createPost'
 import uploadImage from 'services/upload/uploadImage'
 import { changeImageFilesToPreviewImages } from 'utils/previewImage'
 import generateIdIntoObject from 'utils/generateIdIntoObject'
+import { EmotionJSX } from '@emotion/react/types/jsx-namespace'
 import { Obj, WithId } from 'types/common'
 import { FashionItemInfo } from 'types/fashion'
 import { ImageFiles, PreviewImage } from 'types/image'
@@ -16,7 +17,31 @@ const emptyFashionItemInfo = createNewEmptyFashionItemInfo() as FashionItemInfo
 
 type CreatedPostId = number
 
-const CreatePost = ({ authorId, afterCreatePost, children }) => {
+type ChildrenProps = {
+  previewImages: PreviewImage[] | null
+  fashionItemsInfo: FashionItemInfo[]
+  postText: string
+  handleImageFilesChange: (imageFiles: FileList) => void
+  handleFashionItemsInfoChange: (fashionItemsInfo: FashionItemInfo[]) => void
+  handleFashionItemInfoAddMoreButtonClick: () => void
+  handleFashionItemInfoDeleteButtonClick: (
+    fashionItemInfoIdToDelete: number
+  ) => void
+  handlePostTextChange: (postText: string) => void
+  handleSubmit: (e: FormEvent<HTMLFormElement>) => Promise<void>
+}
+
+type CreatePostProps = {
+  authorId: number
+  afterCreatePost: (createdPostId: number) => void
+  children: (props: ChildrenProps) => EmotionJSX.Element
+}
+
+const CreatePost = ({
+  authorId,
+  afterCreatePost,
+  children,
+}: CreatePostProps) => {
   const [imageFiles, setImageFiles] = useState<ImageFiles>(null)
   const [previewImages, setPreviewImages] = useState<PreviewImage[] | null>(
     null
@@ -24,7 +49,7 @@ const CreatePost = ({ authorId, afterCreatePost, children }) => {
   const [fashionItemsInfo, setFashionItemsInfo] = useState<FashionItemInfo[]>([
     emptyFashionItemInfo,
   ])
-  const [postText, setPostText] = useState<string>('')
+  const [postText, setPostText] = useState('')
 
   const handleImageFilesChange = (imageFiles: FileList) => {
     setImageFiles(imageFiles)
@@ -58,9 +83,16 @@ const CreatePost = ({ authorId, afterCreatePost, children }) => {
     setPostText(postText)
   }
 
-  const createSnsPost = async (
-    uploadedImageIds: number[]
-  ): Promise<CreatedPostId> => {
+  const getUploadedImageIds = async (): Promise<number[]> => {
+    // TODO: map 함수 image 인자 타입 정의
+    const res = await uploadImage(imageFiles as FileList)
+    const uploadedImageIds: number[] = res.data.map((image: any) => image.id)
+    return uploadedImageIds
+  }
+
+  const createSnsPost = async (): Promise<CreatedPostId> => {
+    const uploadedImageIds = await getUploadedImageIds()
+
     const res = await createPost({
       postText,
       fashionItemsInfo,
@@ -74,14 +106,10 @@ const CreatePost = ({ authorId, afterCreatePost, children }) => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!imageFiles) return
 
     // TODO: map 함수 image 인자 타입 정의
-    // TODO: uploadedImageIds 가져오는 과정 함수로 빼기
     try {
-      const res = await uploadImage(imageFiles)
-      const uploadedImageIds: number[] = res.data.map((image: any) => image.id)
-      const createdPostId = await createSnsPost(uploadedImageIds)
+      const createdPostId = await createSnsPost()
       afterCreatePost(createdPostId)
     } catch (error) {
       console.error(error)

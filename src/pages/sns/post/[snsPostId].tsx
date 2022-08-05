@@ -1,20 +1,20 @@
-import withHeader from 'hocs/withHeader'
 import { useRouter } from 'next/router'
+import withHeader from 'hocs/withHeader'
+import SnsPostPageWithoutLogin from 'components/sns/post/page/snsPostPageWithoutLogin'
+import OtherSnsPostPage from 'components/sns/post/page/otherSnsPostPage'
+import MySnsPostPage from 'components/sns/post/page/mySnsPostPage'
 import useMe from 'hooks/useMe'
 import useSnsPost from 'hooks/useSnsPost'
-import SnsPostPageWithoutLogin from 'components/sns/post/page/snsPostPageWithoutLogin'
-import MySnsPostPage from 'components/sns/post/page/mySnsPostPage'
-import OtherSnsPostPage from 'components/sns/post/page/otherSnsPostPage'
 
 const SnsPostPage = () => {
   const router = useRouter()
   const { snsPostId } = router.query
 
-  const { snsPost } = useSnsPost(snsPostId)
+  const { snsPost } = useSnsPost(Number(snsPostId))
   const { me } = useMe()
 
   const isLoggedIn = !!me
-  const snsPostAuthorId = snsPost?.attributes.author.data.id
+  const snsPostAuthorId: number = snsPost?.attributes.author.data.id
   const isMySnsPostPage = me?.id === snsPostAuthorId
 
   if (!snsPost) {

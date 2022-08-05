@@ -6,10 +6,7 @@ import { SnsPostImage } from 'types/image'
 export type SnsPostForSearching = {
   id: number
   createdAt: string
-  firstImage: {
-    url: string | undefined
-    altText: string
-  }
+  firstImage: SnsPostImage
   content: string
   likeNumbers: number
   author: {
@@ -29,4 +26,9 @@ export type SnsPostForMainPage = {
   }
   postImage: SnsPostImage
   likeUsers: LikeUserForMainPage[]
+}
+
+export type SnsPostForSnsPostsPage = {
+  id: number
+  firstImage: SnsPostImage
 }

@@ -1,7 +1,15 @@
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import { BACKEND_URL } from 'constants/constants'
 
-const createComment = async ({ comment, postId, authorId }) => {
+type CreateCommentArgs = {
+  comment: string
+  postId: number
+  authorId: number
+}
+
+type CreateComment = (args: CreateCommentArgs) => Promise<AxiosResponse>
+
+const createComment: CreateComment = async ({ comment, postId, authorId }) => {
   return axios({
     method: 'post',
     url: `${BACKEND_URL}/api/sns-comments`,

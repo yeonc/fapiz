@@ -1,7 +1,14 @@
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import { BACKEND_URL } from 'constants/constants'
 
-const editComment = async ({ commentId, commentText }) => {
+type EditCommentArgs = {
+  commentId: number
+  commentText: string
+}
+
+type EditComment = (args: EditCommentArgs) => Promise<AxiosResponse>
+
+const editComment: EditComment = async ({ commentId, commentText }) => {
   return axios({
     method: 'put',
     url: `${BACKEND_URL}/api/sns-comments/${commentId}`,

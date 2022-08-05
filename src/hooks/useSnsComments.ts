@@ -1,6 +1,6 @@
 import useSWR from 'swr'
 
-const useSnsComments = (query: any) => {
+const useSnsComments = (query: string) => {
   const { data, error } = useSWR({ url: `/api/sns-comments?${query}` })
 
   const snsComments = data ? data.data : []

@@ -7,7 +7,6 @@ import ImageUploadButton from 'components/common/buttons/imageUploadButton'
 import FashionItemsInfo from 'components/sns/post/fashionItemsInfo'
 import PostCreate from 'components/sns/post/postCreate'
 import useMe from 'hooks/useMe'
-import { PreviewImage } from 'types/image'
 
 const postPreviewImagesSize = css`
   width: 200px;
@@ -41,7 +40,7 @@ const SnsPostCreatingPage = () => {
       }) => (
         <form onSubmit={handleSubmit}>
           {previewImages &&
-            previewImages.map((previewImage: PreviewImage) => (
+            previewImages.map(previewImage => (
               <img
                 key={previewImage.url}
                 src={previewImage.url}

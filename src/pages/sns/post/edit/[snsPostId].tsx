@@ -16,10 +16,12 @@ const SnsPostEditPage = () => {
   const router = useRouter()
   const { snsPostId } = router.query
 
-  const { snsPost } = useSnsPost(snsPostId)
+  const { snsPost } = useSnsPost(Number(snsPostId))
+
+  const goToEditedPostPage = () => router.push(`/sns/post/${snsPostId}`)
 
   const afterEditPost = () => {
-    router.push(`/sns/post/${snsPostId}`)
+    goToEditedPostPage()
   }
 
   if (!snsPost) {
@@ -40,7 +42,7 @@ const SnsPostEditPage = () => {
         handleSubmit,
       }) => (
         <form onSubmit={handleSubmit}>
-          {previewImages.map((previewImage: any) => (
+          {previewImages.map(previewImage => (
             <img
               key={previewImage.url}
               src={previewImage.url}

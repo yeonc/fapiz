@@ -3,7 +3,7 @@ import createUrlQuery from 'utils/createUrlQuery'
 
 const defaultQuery = createUrlQuery({ populate: '*' })
 
-const useSnsPost = (postId: any, query = defaultQuery) => {
+const useSnsPost = (postId: number, query = defaultQuery) => {
   const { data, error } = useSWR(
     postId
       ? {
@@ -14,4 +14,5 @@ const useSnsPost = (postId: any, query = defaultQuery) => {
 
   return { snsPost: data?.data, isLoading: !data && !error, error }
 }
+
 export default useSnsPost

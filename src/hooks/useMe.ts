@@ -1,7 +1,9 @@
 import useSWR from 'swr'
 import { BACKEND_URL, IS_SERVER } from 'constants/constants'
 
-const getToken = () => {
+type JwtToken = string | null
+
+const getToken = (): JwtToken => {
   const token = !IS_SERVER ? localStorage.getItem('jwt') : null
   return token
 }
