@@ -5,6 +5,44 @@ import createSearchKeywordsArray from 'utils/createSearchKeywordsArray'
 import { BACKEND_URL } from 'constants/constants'
 import { FashionStyle } from 'types/fashion'
 import { UserForSearching } from 'types/user'
+import { Nullable } from 'types/common'
+
+const searchUsers = async (
+  req: NextApiRequest,
+  res: NextApiResponse<Nullable<UserForSearching[]>>
+) => {
+  // 1. keyword 받아오기
+  const searchKeyword = getSafeStringFromQuery(req.query.keyword)
+
+  try {
+    // 2. strapi 데이터 받아오기
+    const response = await fetchUsers()
+    const usersFromStrapi = response.data
+
+    // 3. strapi에서 받아온 데이터 정제하기
+    const users = sanitizeUsers(usersFromStrapi)
+
+    // 4. 검색 로직 실행하기
+    const searchedUsers = searchUser({ searchKeyword, initialUsers: users })
+
+    // 5. 검색 결과 내려주기
+    res.status(200).json(searchedUsers)
+  } catch (error) {
+    res.status(400).json(error)
+  }
+}
+
+export default searchUsers
+
+const getSafeStringFromQuery = (
+  queryValue: string | string[]
+): Nullable<string> => {
+  if (typeof queryValue !== 'string') {
+    return null
+  }
+
+  return queryValue
+}
 
 const fetchUsers = async (): Promise<AxiosResponse> => {
   return axios({
@@ -23,6 +61,24 @@ const sanitizeUsers = (usersFromStrapi): UserForSearching[] => {
   }))
 
   return sanitizedUsers
+}
+
+type SearchUserArgs = {
+  searchKeyword: Nullable<string>
+  initialUsers: UserForSearching[]
+}
+
+type SearchUser = (args: SearchUserArgs) => Nullable<UserForSearching[]>
+
+const searchUser: SearchUser = ({ searchKeyword, initialUsers }) => {
+  if (!searchKeyword) {
+    return null
+  }
+
+  const searchKeywords = createSearchKeywordsArray(searchKeyword)
+  const searchKeywordRegex = new RegExp(searchKeywords.join('|'), 'gi')
+  const filteredUsers = filterUser({ initialUsers, searchKeywordRegex })
+  return filteredUsers
 }
 
 type FilterUserArgs = {
@@ -50,45 +106,3 @@ const filterUser: FilterUser = ({ initialUsers, searchKeywordRegex }) => {
 
   return filteredUsers
 }
-
-type SearchUserArgs = {
-  searchKeyword: string
-  initialUsers: UserForSearching[]
-}
-
-type SearchUser = (args: SearchUserArgs) => UserForSearching[]
-
-const searchUser: SearchUser = ({ searchKeyword, initialUsers }) => {
-  const searchKeywords = createSearchKeywordsArray(searchKeyword)
-  const searchKeywordRegex = new RegExp(searchKeywords.join('|'), 'gi')
-  const filteredUsers = filterUser({ initialUsers, searchKeywordRegex })
-  return filteredUsers
-}
-
-const searchUsers = async (
-  req: NextApiRequest,
-  res: NextApiResponse<UserForSearching[]>
-) => {
-  // 1. keyword 받아오기
-  const searchKeyword = req.query.keyword as string
-
-  // 2. strapi 데이터 받아오기
-  let usersFromStrapi
-  try {
-    const response = await fetchUsers()
-    usersFromStrapi = response.data
-  } catch (error) {
-    console.error(error)
-  }
-
-  // 3. strapi에서 받아온 데이터 정제하기
-  const users = sanitizeUsers(usersFromStrapi)
-
-  // 4. 검색 로직 실행하기
-  const searchedUsers = searchUser({ searchKeyword, initialUsers: users })
-
-  // 5. 검색 결과 내려주기
-  res.status(200).json(searchedUsers)
-}
-
-export default searchUsers
