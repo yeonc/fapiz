@@ -37,7 +37,7 @@ const fetchFilteredSnsPosts: FetchFilteredSnsPosts = async ({
       isLoggedIn,
       myGender,
       myBodyShape,
-      myFashionStyles: encodedMyFashonStyles,
+      myFashionStyles: myFashionStyles && encodedMyFashonStyles,
     },
   })
 }
