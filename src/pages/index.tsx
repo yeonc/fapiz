@@ -6,7 +6,7 @@ import ImageList from '@mui/material/ImageList'
 import LikeButton from 'components/common/buttons/likeButton'
 import ImageCardItem from 'components/home/imageCardItem'
 import useMe from 'hooks/useMe'
-import useInfiniteScroll from 'hooks/useInfiniteScroll'
+import useSnsPostInfiniteScroll from 'hooks/useSnsPostInfiniteScroll'
 import createUrlQuery from 'utils/createUrlQuery'
 
 const INITIAL_PAGE_NUMBER = 1
@@ -32,23 +32,14 @@ const SnsPostLikeButtonWithLogin = withLogin(LikeButton)
 const MainPage = () => {
   const { me } = useMe()
 
-  const { snsPostsToShow, isSnsPostsLoading, lastSnsPostRef } =
-    useInfiniteScroll({
+  const { snsPosts, isSnsPostsLoading, fetchTriggerRef } =
+    useSnsPostInfiniteScroll({
       initialPageNumber: INITIAL_PAGE_NUMBER,
       pageSize: PAGE_SIZE,
-      isLoggedIn: true,
-      myGender: '남',
-      myBodyShape: '역삼각형',
-      myFashionStyles: [
-        {
-          id: 7,
-          name: '모던',
-        },
-        {
-          id: 11,
-          name: '아메카지',
-        },
-      ],
+      isLoggedIn: me && !!me,
+      myGender: me?.gender,
+      myBodyShape: me?.bodyShape,
+      myFashionStyles: me?.fashionStyles,
     })
 
   const { mutate } = useSWRConfig()
@@ -62,13 +53,9 @@ const MainPage = () => {
   return (
     <>
       <ImageList variant="masonry" cols={3}>
-        {snsPostsToShow.map((snsPost, snsPostIndex) => {
-          const snsPostsLastIndex = snsPostsToShow.length - 1
-          const hasSnsPostLastIndex = snsPostIndex === snsPostsLastIndex
-
+        {snsPosts.map(snsPost => {
           return (
             <ImageCardItem
-              ref={hasSnsPostLastIndex ? lastSnsPostRef : undefined}
               key={snsPost.id}
               cardItemData={snsPost}
               rightActionButton={
@@ -84,6 +71,7 @@ const MainPage = () => {
           )
         })}
       </ImageList>
+      <span ref={fetchTriggerRef}>trigger</span>
       {isSnsPostsLoading && <p css={loadingTextStyle}>loading...</p>}
     </>
   )
