@@ -52,10 +52,9 @@ const filterSnsPosts = async (
       myBodyShape,
       myFashionStyles,
     })
-    const recentlyCreatedSnsPosts = filterRecentlyCreatedSnsPosts(
+    const filteredSnsPosts = filterRecentlyCreatedSnsPosts(
       filteredSnsPostsByMyInfo
     )
-    const filteredSnsPosts = randomizeSnsPosts(recentlyCreatedSnsPosts)
 
     // 5-1. 요청 쿼리에 pageNumber, pageSize 둘 다 있는 경우, 필터링 된 SNS 게시물 데이터에서 특정 페이지를 추출해서 내려주기
     if (pageNumber && pageSize) {
@@ -178,14 +177,6 @@ const filterRecentlyCreatedSnsPosts = (
       getDaysBetweenTwoDate(snsPostCreatedAt, today) < TWO_DAYS
     return isCreatedInLast2Days
   })
-}
-
-// TODO: 페이지 렌더링 될 때마다 SNS 포스트 순서 랜덤하게 섞이는 것에 대한 처리 어떻게 해야 할지 결정하고 반영하기
-// SNS 게시물들을 랜덤으로 섞어주는 함수
-const randomizeSnsPosts = (
-  snsPosts: SnsPostForMainPage[]
-): SnsPostForMainPage[] => {
-  return snsPosts.sort(() => Math.random() - 0.5)
 }
 
 type FilterSnsPostsByMyInfoArgs = {
