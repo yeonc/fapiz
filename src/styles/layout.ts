@@ -5,6 +5,6 @@ export const horizontal = css`
   align-items: center;
 `
 
-export const mgRight = (marginValue: any) => css`
+export const mgRight = (marginValue: number) => css`
   margin-right: ${marginValue}px;
 `

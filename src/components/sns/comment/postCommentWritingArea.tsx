@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import { FormEvent, useState } from 'react'
+import styled from '@emotion/styled'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import Avatar from '@mui/material/Avatar'
-import styled from '@emotion/styled'
 import { horizontal } from 'styles/layout'
 import useMe from 'hooks/useMe'
-import createComment from 'services/users/createComment'
+import createComment from 'services/comment/createComment'
 import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 
 const StyledPostCommentWritingAreaWrapper = styled.div`
@@ -13,7 +13,15 @@ const StyledPostCommentWritingAreaWrapper = styled.div`
   align-items: center;
 `
 
-const PostCommentWritingArea = ({ snsPostId, afterPostCommentSubmit }) => {
+type PostCommentWritingAreaProps = {
+  snsPostId: number
+  afterPostCommentSubmit: () => void
+}
+
+const PostCommentWritingArea = ({
+  snsPostId,
+  afterPostCommentSubmit,
+}: PostCommentWritingAreaProps) => {
   const [comment, setComment] = useState('')
 
   const { me, isLoading } = useMe()
@@ -22,12 +30,13 @@ const PostCommentWritingArea = ({ snsPostId, afterPostCommentSubmit }) => {
     return <p>로딩중</p>
   }
 
-  const handleCommentChange = (comment: any) => {
+  const handleCommentChange = (comment: string) => {
     setComment(comment)
   }
 
-  const handleCommentSubmit = async (e: any) => {
+  const handleCommentSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
     try {
       await createComment({ comment, postId: snsPostId, authorId: me.id })
       setComment('')

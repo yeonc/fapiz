@@ -4,21 +4,39 @@ import Avatar from '@mui/material/Avatar'
 import Typography from '@mui/material/Typography'
 import FollowToggleButton from 'components/common/buttons/followToggleButton'
 import MessageButton from 'components/common/buttons/messageButton'
-import Follower from 'components/sns/follower'
-import Following from 'components/sns/following'
+import Follower from 'components/sns/user/follower'
+import Following from 'components/sns/user/following'
 import { horizontal, mgRight } from 'styles/layout'
 import visuallyHidden from 'styles/visuallyHidden'
 import useMe from 'hooks/useMe'
+import useUser from 'hooks/useUser'
+import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
+import { UserForUserInfo } from 'types/user'
 
 const StyledUserInfoWrapper = styled.header`
   display: flex;
   align-items: center;
 `
 
-const UserInfo = ({ user }) => {
+const UserInfo = ({ userId }) => {
   const { mutate } = useSWRConfig()
 
   const { me } = useMe()
+  const { user: userFromStrapi } = useUser(Number(userId))
+
+  if (!userFromStrapi) {
+    return null
+  }
+
+  const user: UserForUserInfo = {
+    id: userFromStrapi.id,
+    username: userFromStrapi.username,
+    height: userFromStrapi.height,
+    weight: userFromStrapi.weight,
+    profileImageUrl: addBackendUrlToImageUrl(userFromStrapi.profileImage?.url),
+    followers: userFromStrapi.followers,
+    followings: userFromStrapi.followings,
+  }
 
   const isMySnsPage = user.id === me?.id
   const isLoggedIn = !!me

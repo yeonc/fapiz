@@ -1,5 +1,5 @@
 import { useSWRConfig } from 'swr'
-import Modal from 'components/modals/modal'
+import Modal from 'components/common/modals/modal'
 import MyBasicInfoForm from 'components/myInfo/myBasicInfoForm'
 import { BACKEND_URL, IS_SERVER } from 'constants/constants'
 

@@ -4,9 +4,9 @@ import { FashionItemInfo } from 'types/fashion'
 
 type EditPostArgs = {
   postId: number
-  content?: string
+  content: string
   imageIds?: number[]
-  fashionItemsInfo?: FashionItemInfo[]
+  fashionItemsInfo: FashionItemInfo[]
 }
 
 type EditPost = (args: EditPostArgs) => Promise<AxiosResponse>

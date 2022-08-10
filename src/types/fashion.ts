@@ -1,8 +1,8 @@
 export type FashionItemInfo = {
   id: number
-  category: string | ''
-  price: number | ''
-  buyingPlace: string | ''
+  category: string
+  price: number
+  buyingPlace: string
 }
 
 type FashionStyleName =

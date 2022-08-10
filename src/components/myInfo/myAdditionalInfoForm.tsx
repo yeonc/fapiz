@@ -8,7 +8,12 @@ import FormLabel from '@mui/material/FormLabel'
 import Checkbox from '@mui/material/Checkbox'
 import Button from '@mui/material/Button'
 import FormHelperText from '@mui/material/FormHelperText'
-import editMyAdditionalInfo from 'services/users/editMyAdditionalInfo'
+import editMyAdditionalInfo from 'services/myInfo/editMyAdditionalInfo'
+import {
+  USER_GENDERS,
+  USER_BODY_SHAPES,
+  USER_FASHION_STYLES,
+} from 'constants/user'
 
 const MyAdditionalInfoForm = ({
   myId,
@@ -66,7 +71,7 @@ const MyAdditionalInfoForm = ({
           value={gender}
           onChange={e => handleGenderChange(e.target.value)}
         >
-          {GENDER_LIST.map(genderItem => (
+          {USER_GENDERS.map(genderItem => (
             <FormControlLabel
               key={genderItem.id}
               value={genderItem.name}
@@ -83,7 +88,7 @@ const MyAdditionalInfoForm = ({
           value={bodyShape}
           onChange={e => handleBodyShapeChange(e.target.value)}
         >
-          {BODY_SHAPE_LIST.map(bodyShapeItem => (
+          {USER_BODY_SHAPES.map(bodyShapeItem => (
             <FormControlLabel
               key={bodyShapeItem.id}
               value={bodyShapeItem.name}
@@ -96,7 +101,7 @@ const MyAdditionalInfoForm = ({
       <FormControl>
         <FormLabel>패션 스타일</FormLabel>
         <FormGroup>
-          {FASHION_STYLE_LIST.map(fashionStyleItem => {
+          {USER_FASHION_STYLES.map(fashionStyleItem => {
             const isChecked =
               fashionStyles.length === 0
                 ? false
@@ -130,32 +135,3 @@ const MyAdditionalInfoForm = ({
 }
 
 export default MyAdditionalInfoForm
-
-const GENDER_LIST = [
-  { id: 1, name: '남' },
-  { id: 2, name: '여' },
-]
-
-const BODY_SHAPE_LIST = [
-  { id: 1, name: '삼각형' },
-  { id: 2, name: '역삼각형' },
-  { id: 3, name: '타원형' },
-  { id: 4, name: '직사각형' },
-  { id: 5, name: '모래시계형' },
-  { id: 6, name: '사다리꼴형' },
-]
-
-const FASHION_STYLE_LIST = [
-  { id: 1, name: '캐주얼' },
-  { id: 2, name: '스트릿' },
-  { id: 3, name: '빈티지' },
-  { id: 4, name: '시크' },
-  { id: 5, name: '페미닌' },
-  { id: 6, name: '스포티' },
-  { id: 7, name: '모던' },
-  { id: 8, name: '럭셔리' },
-  { id: 9, name: '댄디' },
-  { id: 10, name: '클래식' },
-  { id: 11, name: '아메카지' },
-  { id: 12, name: '힙스터' },
-]

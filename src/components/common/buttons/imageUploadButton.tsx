@@ -1,13 +1,23 @@
+import { useState } from 'react'
 import { css } from '@emotion/react'
 import IconButton from '@mui/material/IconButton'
 import PhotoCamera from '@mui/icons-material/PhotoCamera'
-import { useState } from 'react'
 
 const inputDisplayNone = css`
   display: none;
 `
 
-const ImageUploadButton = ({ onImageFilesChange, buttonAriaLabel }) => {
+type ImageUploadButtonProps = {
+  onImageFilesChange: (imageFiles: FileList) => void
+  buttonAriaLabel: string
+  isImageRequired: boolean
+}
+
+const ImageUploadButton = ({
+  onImageFilesChange,
+  buttonAriaLabel,
+  isImageRequired,
+}: ImageUploadButtonProps) => {
   const [isInvalid, setIsInvalid] = useState(false)
 
   const handleInvalid = () => {
@@ -20,10 +30,10 @@ const ImageUploadButton = ({ onImageFilesChange, buttonAriaLabel }) => {
         type="file"
         accept="image/*"
         multiple
-        required
+        required={isImageRequired}
         onInvalid={handleInvalid}
         css={inputDisplayNone}
-        onChange={e => onImageFilesChange(e.target.files)}
+        onChange={e => onImageFilesChange(e.target.files as FileList)}
       />
       <IconButton color="primary" aria-label={buttonAriaLabel} component="span">
         <PhotoCamera />

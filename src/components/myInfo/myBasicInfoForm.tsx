@@ -3,8 +3,9 @@ import Avatar from '@mui/material/Avatar'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import ImageUploadButton from 'components/common/buttons/imageUploadButton'
-import uploadImage from 'services/users/uploadImage'
-import editMyBasicInfo from 'services/users/editMyBasicInfo'
+import uploadImage from 'services/upload/uploadImage'
+import editMyBasicInfo from 'services/myInfo/editMyBasicInfo'
+import { ImageFiles } from 'types/image'
 
 type UploadedImageId = number | undefined
 
@@ -16,14 +17,14 @@ const MyBasicInfoForm = ({
   initialAvatarUrl,
   afterEditBasicInfo,
 }) => {
-  const [imageFiles, setImageFiles] = useState(null)
+  const [imageFiles, setImageFiles] = useState<ImageFiles>(null)
   const [userPreviewAvatarUrl, setUserPreviewAvatarUrl] =
     useState(initialAvatarUrl)
   const [username, setUsername] = useState(initialUsername)
   const [height, setHeight] = useState(initialHeight)
   const [weight, setWeight] = useState(initialWeight)
 
-  const handleImageFilesChange = (imageFiles: any) => {
+  const handleImageFilesChange = (imageFiles: FileList) => {
     setImageFiles(imageFiles)
     const imageUrl = URL.createObjectURL(imageFiles[0])
     setUserPreviewAvatarUrl(imageUrl)
@@ -85,6 +86,7 @@ const MyBasicInfoForm = ({
       <ImageUploadButton
         onImageFilesChange={handleImageFilesChange}
         buttonAriaLabel="프로필 사진 등록"
+        isImageRequired={false}
       />
       <TextField
         label="유저 이름"

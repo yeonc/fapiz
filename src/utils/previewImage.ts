@@ -8,9 +8,9 @@ export const changeImageFileToPreviewImage = (
 })
 
 export const changeImageFilesToPreviewImages = (
-  imageFiles: File[]
+  imageFiles: FileList
 ): PreviewImage[] =>
-  [...imageFiles].map(imageFile => ({
+  Array.from(imageFiles).map(imageFile => ({
     url: URL.createObjectURL(imageFile),
     altText: imageFile.name,
   }))

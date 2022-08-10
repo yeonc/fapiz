@@ -1,8 +1,8 @@
 import Checkbox from '@mui/material/Checkbox'
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder'
 import Favorite from '@mui/icons-material/Favorite'
-import likePost from 'services/users/likePost'
-import unlikePost from 'services/users/unlikePost'
+import likePost from 'services/snsPost/likePost'
+import unlikePost from 'services/snsPost/unlikePost'
 
 const LIKE_BUTTON_ID = 'like-button'
 

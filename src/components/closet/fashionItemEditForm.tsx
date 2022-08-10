@@ -6,9 +6,9 @@ import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
 import ImageUploadButton from 'components/common/buttons/imageUploadButton'
-import uploadImage from 'services/users/uploadImage'
-import editFashionItem from 'services/users/editFashionItem'
-import deleteFashionItem from 'services/users/deleteFashionItem'
+import uploadImage from 'services/upload/uploadImage'
+import editFashionItem from 'services/fashionItem/editFashionItem'
+import deleteFashionItem from 'services/fashionItem/deleteFashionItem'
 import { changeImageFileToPreviewImage } from 'utils/previewImage'
 import {
   FASHION_ITEM_SEASONS,
@@ -40,7 +40,7 @@ const FashionItemEditForm = ({
   const [category, setCategory] = useState<string>(initialFashionItem.category)
   const [color, setColor] = useState<string>(initialFashionItem.color)
 
-  const handleImageFilesChange = (imageFiles: File[]) => {
+  const handleImageFilesChange = (imageFiles: FileList) => {
     setImageFiles(imageFiles)
     const previewImage = changeImageFileToPreviewImage(imageFiles[0])
     setPreviewImage(previewImage)
@@ -116,6 +116,7 @@ const FashionItemEditForm = ({
       <ImageUploadButton
         onImageFilesChange={handleImageFilesChange}
         buttonAriaLabel="패션 아이템 이미지 선택"
+        isImageRequired={false}
       />
       <FormControl fullWidth>
         <InputLabel>계절</InputLabel>

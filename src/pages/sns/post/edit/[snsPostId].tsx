@@ -3,9 +3,9 @@ import withHeader from 'hocs/withHeader'
 import { css } from '@emotion/react'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
-import PostEdit from 'components/sns/edit/postEdit'
+import PostEdit from 'components/sns/post/postEdit'
 import ImageUploadButton from 'components/common/buttons/imageUploadButton'
-import FashionItemsInfo from 'components/sns/edit/fashionItemsInfo'
+import FashionItemsInfo from 'components/sns/post/fashionItemsInfo'
 import useSnsPost from 'hooks/useSnsPost'
 
 const postPreviewImagesSize = css`
@@ -16,10 +16,12 @@ const SnsPostEditPage = () => {
   const router = useRouter()
   const { snsPostId } = router.query
 
-  const { snsPost } = useSnsPost(snsPostId)
+  const { snsPost } = useSnsPost(Number(snsPostId))
+
+  const goToEditedPostPage = () => router.push(`/sns/post/${snsPostId}`)
 
   const afterEditPost = () => {
-    router.push(`/sns/post/${snsPostId}`)
+    goToEditedPostPage()
   }
 
   if (!snsPost) {
@@ -40,7 +42,7 @@ const SnsPostEditPage = () => {
         handleSubmit,
       }) => (
         <form onSubmit={handleSubmit}>
-          {previewImages.map((previewImage: any) => (
+          {previewImages.map(previewImage => (
             <img
               key={previewImage.url}
               src={previewImage.url}
@@ -51,6 +53,7 @@ const SnsPostEditPage = () => {
           <ImageUploadButton
             onImageFilesChange={handleImageFilesChange}
             buttonAriaLabel="SNS 게시물 이미지 수정"
+            isImageRequired={false}
           />
           <FashionItemsInfo
             fashionItemsInfo={fashionItemsInfo}

@@ -3,8 +3,8 @@ import { BACKEND_URL } from 'constants/constants'
 import { FashionItemInfo } from 'types/fashion'
 
 type CreatePostArgs = {
-  postText?: string
-  fashionItemsInfo: FashionItemInfo[] | []
+  postText: string
+  fashionItemsInfo: FashionItemInfo[]
   authorId: number
   postImageIds: number[]
 }

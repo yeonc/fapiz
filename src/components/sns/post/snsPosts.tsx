@@ -1,10 +1,11 @@
 import { useRouter } from 'next/router'
 import { css } from '@emotion/react'
-import SnsPostList from '@mui/material/ImageList'
-import SnsPostItem from '@mui/material/ImageListItem'
+import ImageList from '@mui/material/ImageList'
+import ImageListItem from '@mui/material/ImageListItem'
 import useSnsPosts from 'hooks/useSnsPosts'
 import createUrlQuery from 'utils/createUrlQuery'
 import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
+import { SnsPostForSnsPostsPage } from 'types/snsPost'
 
 export const cursorPointer = css`
   cursor: pointer;
@@ -24,17 +25,19 @@ const SnsPosts = ({ userId }) => {
     return <p>게시물을 불러오는 중입니다...</p>
   }
 
-  const snsPosts = snsPostsFromStrapi.map((post: any) => ({
-    id: post.id,
-    firstImage: {
-      url: addBackendUrlToImageUrl(
-        post.attributes.postImages.data[0].attributes.url
-      ),
-      altText: post.attributes.postImages.data[0].attributes.alternativeText,
-    },
-  }))
+  const snsPosts: SnsPostForSnsPostsPage[] = snsPostsFromStrapi.map(
+    (post: any) => ({
+      id: post.id,
+      firstImage: {
+        url: addBackendUrlToImageUrl(
+          post.attributes.postImages.data[0].attributes.url
+        ),
+        altText: post.attributes.postImages.data[0].attributes.alternativeText,
+      },
+    })
+  )
 
-  const goToSnsPost = postId => {
+  const goToSnsPost = (postId: number) => {
     router.push(`/sns/post/${postId}`)
   }
 
@@ -43,17 +46,17 @@ const SnsPosts = ({ userId }) => {
   }
 
   return (
-    <SnsPostList sx={{ width: 650 }} cols={3}>
-      {snsPosts.map((snsPost: any) => (
-        <SnsPostItem
+    <ImageList sx={{ width: 650 }} cols={3}>
+      {snsPosts.map(snsPost => (
+        <ImageListItem
           key={snsPost.firstImage.url}
           onClick={() => goToSnsPost(snsPost.id)}
           css={cursorPointer}
         >
           <img src={snsPost.firstImage.url} alt={snsPost.firstImage.altText} />
-        </SnsPostItem>
+        </ImageListItem>
       ))}
-    </SnsPostList>
+    </ImageList>
   )
 }
 

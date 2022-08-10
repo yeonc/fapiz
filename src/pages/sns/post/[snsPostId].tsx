@@ -1,14 +1,35 @@
+import { useRouter } from 'next/router'
 import withHeader from 'hocs/withHeader'
-import PostDescriptionContents from 'components/sns/postDescriptionContents'
-import PostCommentContents from 'components/sns/comment/postCommentContents'
+import SnsPostPageWithoutLogin from 'components/sns/post/page/snsPostPageWithoutLogin'
+import OtherSnsPostPage from 'components/sns/post/page/otherSnsPostPage'
+import MySnsPostPage from 'components/sns/post/page/mySnsPostPage'
+import useMe from 'hooks/useMe'
+import useSnsPost from 'hooks/useSnsPost'
 
-// TODO: SNSPostPage 컴포넌트 나누기
-// (1. 로그인 안 한 경우 2. 로그인 했는데 작성자인 경우 3. 로그인 했는데 작성자 아닌 경우)
-const SnsPostPage = () => (
-  <>
-    <PostDescriptionContents />
-    <PostCommentContents />
-  </>
-)
+const SnsPostPage = () => {
+  const router = useRouter()
+  const { snsPostId } = router.query
+
+  const { snsPost } = useSnsPost(Number(snsPostId))
+  const { me } = useMe()
+
+  const isLoggedIn = !!me
+  const snsPostAuthorId: number = snsPost?.attributes.author.data.id
+  const isMySnsPostPage = me?.id === snsPostAuthorId
+
+  if (!snsPost) {
+    return null
+  }
+
+  if (!isLoggedIn) {
+    return <SnsPostPageWithoutLogin />
+  }
+
+  if (isMySnsPostPage) {
+    return <MySnsPostPage />
+  }
+
+  return <OtherSnsPostPage />
+}
 
 export default withHeader(SnsPostPage)
