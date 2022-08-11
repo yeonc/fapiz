@@ -52,8 +52,7 @@ const Navbar = () => {
       content: 'SNS',
     },
     { href: ROUTE_URL.CLOSET, content: '옷장' },
-    { href: ROUTE_URL.SEARCH, content: <SearchIcon /> },
-    { href: ROUTE_URL.CHAT_LIST, content: <ChatIcon /> },
+    { href: ROUTE_URL.SEARCH, content: '검색' },
     { href: ROUTE_URL.MY_INFO, content: '내정보' },
   ]
 
