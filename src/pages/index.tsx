@@ -28,6 +28,10 @@ const loadingTextStyle = css`
   font-size: 30px;
 `
 
+const fetchTriggerStyle = css`
+  visibility: hidden;
+`
+
 const SnsPostLikeButtonWithLogin = withLogin(LikeButton)
 
 const MainPage = () => {
@@ -73,7 +77,9 @@ const MainPage = () => {
           )
         })}
       </ImageList>
-      <span ref={fetchTriggerRef}></span>
+      <span ref={fetchTriggerRef} css={fetchTriggerStyle}>
+        trigger
+      </span>
       {isSnsPostsLoading && <p css={loadingTextStyle}>loading...</p>}
     </>
   )

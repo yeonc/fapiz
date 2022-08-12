@@ -73,12 +73,22 @@ const useSnsPostInfiniteScroll: UseSnsPostInfiniteScroll = ({
   const [snsPosts, setSnsPosts] = useState<SnsPostForMainPage[]>([])
   const [isSnsPostsLoading, setIsSnsPostsLoading] = useState(false)
   const [pageNumber, setPageNumber] = useState(initialPageNumber)
+  const [pageNumberAlreadyFetched, setPageNumberAlreadyFetched] = useState(0)
 
   const increasePageNumber = () => setPageNumber(prev => prev + 1)
   const fetchTriggerRef = useInfiniteScroll(increasePageNumber)
 
   useEffect(() => {
+    if (isSnsPostsLoading) {
+      return
+    }
+
+    if (pageNumber === pageNumberAlreadyFetched) {
+      return
+    }
+
     setIsSnsPostsLoading(true)
+    setPageNumberAlreadyFetched(pageNumber)
     fetchFilteredSnsPosts({
       pageNumber,
       pageSize,
@@ -90,7 +100,7 @@ const useSnsPostInfiniteScroll: UseSnsPostInfiniteScroll = ({
       .then(response => setSnsPosts(prev => [...prev, ...response.data]))
       .catch(console.error)
       .finally(() => setIsSnsPostsLoading(false))
-  }, [pageNumber])
+  }, [pageNumber, isSnsPostsLoading, pageNumberAlreadyFetched])
 
   return {
     snsPosts,
