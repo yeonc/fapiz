@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
-import { mgRight } from 'styles/layout'
+import { setMarginRight } from 'styles/layout'
 import useModalState from 'hooks/useModalState'
 import FollowerListModal from 'components/common/modals/modal'
 import UserList from 'components/sns/user/userList'
@@ -23,7 +23,7 @@ const Follower = ({ followers, afterFollow }) => {
   return (
     <>
       <StyledFollowerWrapper>
-        <dt css={mgRight(4)}>팔로워</dt>
+        <dt css={setMarginRight(4)}>팔로워</dt>
         <dd>
           <Button variant="text" onClick={handleFollowerModalOpen}>
             {followers.length}

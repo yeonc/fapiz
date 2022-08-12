@@ -5,6 +5,10 @@ export const horizontal = css`
   align-items: center;
 `
 
-export const mgRight = (marginValue: number) => css`
+export const setMarginRight = (marginValue: number) => css`
   margin-right: ${marginValue}px;
+`
+
+export const setMarginBottom = (marginValue: number) => css`
+  margin-bottom: ${marginValue}px;
 `

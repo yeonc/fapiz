@@ -3,20 +3,24 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import Avatar from '@mui/material/Avatar'
 import Link from '@mui/material/Link'
-import { mgRight } from 'styles/layout'
-import { SnsPostForSearching } from 'types/snsPost'
 import ROUTE_URL from 'constants/routeUrl'
-
-const StyledSnsPostSearchResultListItemWrapper = styled.li`
-  margin-bottom: 20px;
-
-  &:hover {
-    background-color: #f1f1f1f5;
-  }
-`
+import { SnsPostForSearching } from 'types/snsPost'
+import { setMarginBottom, setMarginRight } from 'styles/layout'
 
 const StyledSnsPostSearchResultWrapper = styled.div`
   display: flex;
+  align-items: center;
+`
+
+const StyledPostImageWrapper = styled.div`
+  width: 120px;
+  height: 120px;
+  margin-right: 14px;
+`
+
+const StyledSnsPostInfoWrapper = styled.div`
+  display: flex;
+  align-items: center;
 `
 
 const avatarStyle = css`
@@ -27,35 +31,43 @@ const avatarStyle = css`
 `
 
 type SnsPostSearchResultListItemProps = {
+  className?: string
   snsPost: SnsPostForSearching
 }
 
 const SnsPostSearchResultListItem = ({
+  className,
   snsPost,
 }: SnsPostSearchResultListItemProps) => (
-  <StyledSnsPostSearchResultListItemWrapper>
+  <li className={className}>
     <Link href={`${ROUTE_URL.SNS}/post/${snsPost.id}`}>
       <StyledSnsPostSearchResultWrapper>
-        <Image
-          src={snsPost.firstImage.url}
-          alt={snsPost.firstImage.altText}
-          width={150}
-          height={150}
-        />
-        <div>
-          <p>{snsPost.content}</p>
-          <Avatar
-            src={snsPost.author.avatarUrl}
-            alt={snsPost.author.username}
-            css={avatarStyle}
+        <StyledPostImageWrapper>
+          <Image
+            src={snsPost.firstImage.url}
+            alt={snsPost.firstImage.altText}
+            width="120px"
+            height="120px"
+            layout="fixed"
           />
-          <span css={mgRight(8)}>{snsPost.author.username}</span>
-          <span css={mgRight(8)}>{snsPost.createdAt}</span>
-          <span>좋아요 {snsPost.likeNumbers}</span>
+        </StyledPostImageWrapper>
+        <div>
+          <p css={setMarginBottom(16)}>{snsPost.content}</p>
+          <StyledSnsPostInfoWrapper>
+            <Avatar
+              src={snsPost.author.avatarUrl}
+              alt={snsPost.author.username}
+              css={avatarStyle}
+            />
+            <span css={setMarginRight(8)}>{snsPost.author.username}</span>
+            <span css={setMarginRight(8)}>{snsPost.createdAt}</span>
+            <span css={setMarginRight(8)}>댓글 {snsPost.commentCount}</span>
+            <span>좋아요 {snsPost.likeNumbers}</span>
+          </StyledSnsPostInfoWrapper>
         </div>
       </StyledSnsPostSearchResultWrapper>
     </Link>
-  </StyledSnsPostSearchResultListItemWrapper>
+  </li>
 )
 
 export default SnsPostSearchResultListItem

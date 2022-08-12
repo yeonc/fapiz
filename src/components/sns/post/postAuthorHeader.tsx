@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import Link from '@mui/material/Link'
 import Avatar from '@mui/material/Avatar'
 import Typography from '@mui/material/Typography'
-import { horizontal, mgRight } from 'styles/layout'
+import { horizontal, setMarginRight } from 'styles/layout'
 import visuallyHidden from 'styles/visuallyHidden'
 import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 import ROUTE_URL from 'constants/routeUrl'
@@ -30,7 +30,7 @@ const PostAuthorHeader = ({ author, popoverMenu }) => (
       </Link>
       <dl css={horizontal}>
         {author.height && (
-          <div css={mgRight(8)}>
+          <div css={setMarginRight(8)}>
             <dt css={visuallyHidden}>키</dt>
             <dd>{author.height}cm</dd>
           </div>

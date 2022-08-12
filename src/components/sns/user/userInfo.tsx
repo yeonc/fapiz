@@ -6,12 +6,12 @@ import FollowToggleButton from 'components/common/buttons/followToggleButton'
 import MessageButton from 'components/common/buttons/messageButton'
 import Follower from 'components/sns/user/follower'
 import Following from 'components/sns/user/following'
-import { horizontal, mgRight } from 'styles/layout'
-import visuallyHidden from 'styles/visuallyHidden'
 import useMe from 'hooks/useMe'
 import useUser from 'hooks/useUser'
 import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 import { UserForUserInfo } from 'types/user'
+import { horizontal, setMarginRight } from 'styles/layout'
+import visuallyHidden from 'styles/visuallyHidden'
 
 const StyledUserInfoWrapper = styled.header`
   display: flex;
@@ -61,7 +61,7 @@ const UserInfo = ({ userId }) => {
         </Typography>
         <dl css={horizontal}>
           {user.height && (
-            <div css={mgRight(8)}>
+            <div css={setMarginRight(8)}>
               <dt css={visuallyHidden}>키</dt>
               <dd>{user.height}cm</dd>
             </div>

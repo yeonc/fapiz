@@ -73,7 +73,7 @@ const MainPage = () => {
           )
         })}
       </ImageList>
-      <span ref={fetchTriggerRef}>trigger</span>
+      <span ref={fetchTriggerRef}></span>
       {isSnsPostsLoading && <p css={loadingTextStyle}>loading...</p>}
     </>
   )

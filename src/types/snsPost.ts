@@ -13,6 +13,7 @@ export type SnsPostForSearching = {
     username: string
     avatarUrl: string | undefined
   }
+  commentCount: number
 }
 
 export type SnsPostForMainPage = {

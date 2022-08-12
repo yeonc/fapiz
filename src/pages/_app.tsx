@@ -6,6 +6,7 @@ import CssBaseline from '@mui/material/CssBaseline'
 import { CacheProvider, EmotionCache } from '@emotion/react'
 import GlobalContainer from 'components/common/containers/globalContainer'
 import globalResetStyles from 'styles/globalResetStyles'
+import globalFullHeightStyles from 'styles/globalFullHeightStyles'
 import theme from 'theme'
 import createEmotionCache from 'createEmotionCache'
 import axios from 'axios'
@@ -31,6 +32,7 @@ export default function MyApp(props: MyAppProps) {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           {globalResetStyles}
+          {globalFullHeightStyles}
           <SWRConfig
             value={{
               fetcher: ({ baseURL = BACKEND_URL, url, config }) => {

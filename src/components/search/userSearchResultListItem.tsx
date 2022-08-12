@@ -1,63 +1,57 @@
 import { css } from '@emotion/react'
-import styled from '@emotion/styled'
 import Avatar from '@mui/material/Avatar'
 import Link from '@mui/material/Link'
 import ROUTE_URL from 'constants/routeUrl'
 import { UserForSearching } from 'types/user'
+import { setMarginBottom, setMarginRight } from 'styles/layout'
 
-const StyledUserSearchResultListItemWrapper = styled.li`
-  margin-right: 30px;
-
-  &:hover {
-    background-color: #f1f1f1f5;
-  }
+const linkStyle = css`
+  display: block;
+  padding: 16px;
+  height: 200px;
+  text-align: center;
 `
 
 const avatarStyle = css`
   width: 100px;
   height: 100px;
-  margin-bottom: 6px;
-`
-
-const usernameAndGenderWrapperStyle = css`
-  margin-bottom: 6px;
-`
-
-const usernameStyle = css`
-  margin-right: 10px;
+  margin: 0 auto 6px;
 `
 
 const fashionStyleTagStyle = css`
   display: inline-block;
-  padding: 6px;
+  padding: 4px 8px;
   border-radius: 18px;
   font-size: 14px;
-  background-color: #6feeff83;
+  background-color: #a8b1ff83;
 `
 
 type UserSearchResultListItemProps = {
+  className?: string
   user: UserForSearching
 }
 
-const UserSearchResultListItem = ({ user }: UserSearchResultListItemProps) => (
-  <StyledUserSearchResultListItemWrapper>
-    <Link href={`${ROUTE_URL.SNS}/${user.id}`}>
+const UserSearchResultListItem = ({
+  className,
+  user,
+}: UserSearchResultListItemProps) => (
+  <li className={className}>
+    <Link href={`${ROUTE_URL.SNS}/${user.id}`} css={linkStyle}>
       <Avatar src={user.avatarUrl} alt={user.username} css={avatarStyle} />
-      <div css={usernameAndGenderWrapperStyle}>
-        <span css={usernameStyle}>{user.username}</span>
+      <div css={setMarginBottom(6)}>
+        <span css={setMarginRight(10)}>{user.username}</span>
         <span>{user.gender}</span>
       </div>
       <ul>
-        {user.fashionStyles
-          ? user.fashionStyles.map(fashionStyle => (
-              <li key={fashionStyle.id} css={fashionStyleTagStyle}>
-                #{fashionStyle.name}
-              </li>
-            ))
-          : null}
+        {user.fashionStyles &&
+          user.fashionStyles.map(fashionStyle => (
+            <li key={fashionStyle.id} css={fashionStyleTagStyle}>
+              #{fashionStyle.name}
+            </li>
+          ))}
       </ul>
     </Link>
-  </StyledUserSearchResultListItemWrapper>
+  </li>
 )
 
 export default UserSearchResultListItem

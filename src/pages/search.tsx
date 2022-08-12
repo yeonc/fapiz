@@ -1,8 +1,39 @@
 import { useState } from 'react'
+import styled from '@emotion/styled'
+import withHeader from 'hocs/withHeader'
 import SearchForm from 'components/search/searchForm'
 import SnsPostSearchResult from 'components/search/snsPostSearchResult'
 import UserSearchResult from 'components/search/userSearchResult'
-import withHeader from 'hocs/withHeader'
+import Typo from 'components/common/typo'
+import visuallyHidden from 'styles/visuallyHidden'
+
+const StyledSearchFormWrapper = styled.div`
+  text-align: center;
+`
+
+const StyledSearchResultWrapper = styled.section`
+  padding: 60px 0;
+`
+
+const MessageBeforeSearching = (
+  <Typo>검색어를 입력하여 SNS 게시물과 유저들을 찾아보세요!</Typo>
+)
+
+type SnsPostSearchResultComponentProps = {
+  className?: string
+  searchKeyword: string
+}
+
+const SnsPostSearchResultComponent = ({
+  className,
+  searchKeyword,
+}: SnsPostSearchResultComponentProps) => (
+  <SnsPostSearchResult className={className} searchKeyword={searchKeyword} />
+)
+
+const StyledSnsPostSearchResult = styled(SnsPostSearchResultComponent)`
+  margin-bottom: 60px;
+`
 
 const SearchPage = () => {
   const [searchKeyword, setSearchKeyword] = useState('')
@@ -13,13 +44,17 @@ const SearchPage = () => {
 
   return (
     <>
-      <SearchForm onSearchKeywordSubmit={onSearchKeywordSubmit} />
-      {searchKeyword ? (
-        <>
-          <SnsPostSearchResult searchKeyword={searchKeyword} />
+      <h1 css={visuallyHidden}>통합 검색 결과 페이지</h1>
+      <StyledSearchFormWrapper>
+        {!searchKeyword && MessageBeforeSearching}
+        <SearchForm onSearchKeywordSubmit={onSearchKeywordSubmit} />
+      </StyledSearchFormWrapper>
+      {searchKeyword && (
+        <StyledSearchResultWrapper>
+          <StyledSnsPostSearchResult searchKeyword={searchKeyword} />
           <UserSearchResult searchKeyword={searchKeyword} />
-        </>
-      ) : null}
+        </StyledSearchResultWrapper>
+      )}
     </>
   )
 }
