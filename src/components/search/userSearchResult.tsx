@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import UserSearchResultListItem from 'components/search/userSearchResultListItem'
+import UserSearchResultListItemSkeleton from 'components/search/userSearchResultListItemSkeleton'
 import NoSearchResult from 'components/search/noSearchResult'
 import Typo from 'components/common/typo'
 import useSearchedUsers from 'hooks/useSearchedUsers'
@@ -26,11 +27,35 @@ const UserSearchResultListItemComponent = ({
 const StyledUserSearchResultListItem = styled(
   UserSearchResultListItemComponent
 )`
-  margin-right: 30px;
+  margin-right: 20px;
 
   &:hover {
     background-color: ${GRAY_HOVER_BACKGROUND};
   }
+`
+
+type UserSearchResultListItemSkeletonComponentProps = {
+  className?: string
+}
+
+const UserSearchResultListItemSkeletonComponent = ({
+  className,
+}: UserSearchResultListItemSkeletonComponentProps) => (
+  <UserSearchResultListItemSkeleton className={className} />
+)
+
+const StyledUserSearchResultListItemSkeleton = styled(
+  UserSearchResultListItemSkeletonComponent
+)`
+  margin-right: 20px;
+
+  &:hover {
+    background-color: ${GRAY_HOVER_BACKGROUND};
+  }
+`
+
+const StyledUserSearchResultListItemSkeletonWrapper = styled.ul`
+  display: flex;
 `
 
 type UserSearchResultProps = {
@@ -40,22 +65,24 @@ type UserSearchResultProps = {
 const UserSearchResult = ({ searchKeyword }: UserSearchResultProps) => {
   const { searchedUsers } = useSearchedUsers(searchKeyword)
 
-  if (!searchedUsers) {
-    return null
-  }
-
   return (
     <section>
       <Typo {...searchResultHeadingTypoProps}>유저 검색 결과</Typo>
-      <StyledUserSearchResultList>
-        {searchedUsers.length === 0 ? (
-          <NoSearchResult />
-        ) : (
-          searchedUsers.map(user => (
-            <StyledUserSearchResultListItem key={user.id} user={user} />
-          ))
-        )}
-      </StyledUserSearchResultList>
+      {searchedUsers ? (
+        <>
+          {searchedUsers.length === 0 && <NoSearchResult />}
+          <StyledUserSearchResultList>
+            {searchedUsers.map(user => (
+              <StyledUserSearchResultListItem key={user.id} user={user} />
+            ))}
+          </StyledUserSearchResultList>
+        </>
+      ) : (
+        <StyledUserSearchResultListItemSkeletonWrapper>
+          <StyledUserSearchResultListItemSkeleton />
+          <StyledUserSearchResultListItemSkeleton />
+        </StyledUserSearchResultListItemSkeletonWrapper>
+      )}
     </section>
   )
 }

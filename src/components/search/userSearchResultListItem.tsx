@@ -15,7 +15,7 @@ const linkStyle = css`
 const avatarStyle = css`
   width: 100px;
   height: 100px;
-  margin: 0 auto 6px;
+  margin: 0 auto 12px;
 `
 
 const fashionStyleTagStyle = css`
@@ -38,7 +38,7 @@ const UserSearchResultListItem = ({
   <li className={className}>
     <Link href={`${ROUTE_URL.SNS}/${user.id}`} css={linkStyle}>
       <Avatar src={user.avatarUrl} alt={user.username} css={avatarStyle} />
-      <div css={setMarginBottom(6)}>
+      <div css={setMarginBottom(10)}>
         <span css={setMarginRight(10)}>{user.username}</span>
         <span>{user.gender}</span>
       </div>

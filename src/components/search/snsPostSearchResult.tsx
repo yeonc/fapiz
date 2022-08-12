@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import SnsPostSearchResultListItem from 'components/search/snsPostSearchResultListItem'
+import SnsPostSearchResultListItemSkeleton from 'components/search/snsPostSearchResultListItemSkeleton'
 import NoSearchResult from 'components/search/noSearchResult'
 import Typo from 'components/common/typo'
 import useSnsPosts from 'hooks/useSnsPosts'
@@ -33,6 +34,27 @@ const StyledSnsPostSearchResultListItem = styled(
   }
 `
 
+type SnsPostSearchResultListItemSkeletonComponentProps = {
+  className?: string
+}
+
+const SnsPostSearchResultListItemSkeletonComponent = ({
+  className,
+}: SnsPostSearchResultListItemSkeletonComponentProps) => (
+  <SnsPostSearchResultListItemSkeleton className={className} />
+)
+
+const StyledSnsPostSearchResultListItemSkeleton = styled(
+  SnsPostSearchResultListItemSkeletonComponent
+)`
+  padding: 10px 14px;
+  margin-bottom: 20px;
+
+  &:hover {
+    background-color: ${GRAY_HOVER_BACKGROUND};
+  }
+`
+
 type SnsPostSearchResultProps = {
   className?: string
   searchKeyword: string
@@ -55,27 +77,31 @@ const SnsPostSearchResult = ({
   const { snsPosts: searchedSnsPostsFromStrapi, isLoading: isSnsPostsLoading } =
     useSnsPosts(query)
 
-  if (isSnsPostsLoading) {
-    return <p>로딩중...</p>
-  }
-
-  const searchedSnsPosts = sanitizeSnsPosts(searchedSnsPostsFromStrapi)
+  const searchedSnsPosts = isSnsPostsLoading
+    ? null
+    : sanitizeSnsPosts(searchedSnsPostsFromStrapi)
 
   return (
     <section className={className}>
       <Typo {...searchResultHeadingTypoProps}>SNS 게시물 검색 결과</Typo>
-      <ul>
-        {searchedSnsPosts.length === 0 ? (
-          <NoSearchResult />
-        ) : (
-          searchedSnsPosts.map(snsPost => (
-            <StyledSnsPostSearchResultListItem
-              key={snsPost.id}
-              snsPost={snsPost}
-            />
-          ))
-        )}
-      </ul>
+      {searchedSnsPosts ? (
+        <>
+          {searchedSnsPosts.length === 0 && <NoSearchResult />}
+          <ul>
+            {searchedSnsPosts.map(snsPost => (
+              <StyledSnsPostSearchResultListItem
+                key={snsPost.id}
+                snsPost={snsPost}
+              />
+            ))}
+          </ul>
+        </>
+      ) : (
+        <ul>
+          <StyledSnsPostSearchResultListItemSkeleton />
+          <StyledSnsPostSearchResultListItemSkeleton />
+        </ul>
+      )}
     </section>
   )
 }

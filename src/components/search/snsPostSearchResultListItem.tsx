@@ -18,6 +18,10 @@ const StyledPostImageWrapper = styled.div`
   margin-right: 14px;
 `
 
+const StyledPostTextWrapper = styled.div`
+  flex-grow: 1;
+`
+
 const StyledSnsPostInfoWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -51,7 +55,7 @@ const SnsPostSearchResultListItem = ({
             layout="fixed"
           />
         </StyledPostImageWrapper>
-        <div>
+        <StyledPostTextWrapper>
           <p css={setMarginBottom(16)}>{snsPost.content}</p>
           <StyledSnsPostInfoWrapper>
             <Avatar
@@ -64,7 +68,7 @@ const SnsPostSearchResultListItem = ({
             <span css={setMarginRight(8)}>댓글 {snsPost.commentCount}</span>
             <span>좋아요 {snsPost.likeNumbers}</span>
           </StyledSnsPostInfoWrapper>
-        </div>
+        </StyledPostTextWrapper>
       </StyledSnsPostSearchResultWrapper>
     </Link>
   </li>
