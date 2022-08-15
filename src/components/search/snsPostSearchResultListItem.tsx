@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import Avatar from '@mui/material/Avatar'
@@ -6,6 +5,7 @@ import Link from '@mui/material/Link'
 import ROUTE_URL from 'constants/routeUrl'
 import { SnsPostForSearching } from 'types/snsPost'
 import { setMarginBottom, setMarginRight } from 'styles/layout'
+import { DEFAULT_BLACK } from 'styles/constants/color'
 
 const StyledSnsPostSearchResultWrapper = styled.div`
   display: flex;
@@ -45,7 +45,7 @@ const SnsPostSearchResultListItem = ({
   snsPost,
 }: SnsPostSearchResultListItemProps) => (
   <li className={className}>
-    <Link href={`${ROUTE_URL.SNS}/post/${snsPost.id}`}>
+    <Link href={`${ROUTE_URL.SNS}/post/${snsPost.id}`} color={DEFAULT_BLACK}>
       <StyledSnsPostSearchResultWrapper>
         <img
           src={snsPost.firstImage.url}
