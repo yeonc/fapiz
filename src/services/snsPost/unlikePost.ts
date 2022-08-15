@@ -1,8 +1,20 @@
 import axios from 'axios'
 import { BACKEND_URL } from 'constants/constants'
 
+type UnlikePostArgs = {
+  snsPostId: number
+  likePostUserIds: number[]
+  unlikeUserId: number
+}
+
+type UnlikePost = (args: UnlikePostArgs) => Promise<void>
+
 // TODO: unlikePost 함수를 구현할 수 있는 더 좋은 방법 고민해 보기
-const unlikePost = async ({ snsPostId, likePostUserIds, unlikeUserId }) => {
+const unlikePost: UnlikePost = async ({
+  snsPostId,
+  likePostUserIds,
+  unlikeUserId,
+}) => {
   const url = `${BACKEND_URL}/api/sns-posts/${snsPostId}`
 
   // 1. SNS 게시물을 좋아요 한 유저들을 전부 삭제함
@@ -35,7 +47,7 @@ const unlikePost = async ({ snsPostId, likePostUserIds, unlikeUserId }) => {
         url,
         data: {
           data: {
-            likeUsers: likePostUserIds.filter((id: any) => id !== unlikeUserId),
+            likeUsers: likePostUserIds.filter(id => id !== unlikeUserId),
           },
         },
       })
