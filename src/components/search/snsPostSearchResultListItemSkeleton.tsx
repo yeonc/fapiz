@@ -1,7 +1,7 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import Skeleton from '@mui/material/Skeleton'
-import { setMarginBottom } from 'styles/layout'
+import { mgBottom } from 'styles/layout'
 
 const StyledSnsPostSearchResultWrapper = styled.div`
   display: flex;
@@ -35,7 +35,7 @@ const SnsPostSearchResultListItemSkeleton = ({
     <StyledSnsPostSearchResultWrapper>
       <Skeleton animation="wave" variant="rectangular" css={PostImageStyle} />
       <StyledPostTextWrapper>
-        <div css={setMarginBottom(16)}>
+        <div css={mgBottom(16)}>
           <Skeleton animation="wave" />
           <Skeleton animation="wave" />
         </div>

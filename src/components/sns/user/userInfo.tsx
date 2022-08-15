@@ -10,7 +10,7 @@ import useMe from 'hooks/useMe'
 import useUser from 'hooks/useUser'
 import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 import { UserForUserInfo } from 'types/user'
-import { horizontal, setMarginRight } from 'styles/layout'
+import { horizontal, mgRight } from 'styles/layout'
 import visuallyHidden from 'styles/visuallyHidden'
 
 const StyledUserInfoWrapper = styled.header`
@@ -61,7 +61,7 @@ const UserInfo = ({ userId }) => {
         </Typography>
         <dl css={horizontal}>
           {user.height && (
-            <div css={setMarginRight(8)}>
+            <div css={mgRight(8)}>
               <dt css={visuallyHidden}>키</dt>
               <dd>{user.height}cm</dd>
             </div>

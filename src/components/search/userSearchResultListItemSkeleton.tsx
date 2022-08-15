@@ -1,6 +1,6 @@
 import { css } from '@emotion/react'
 import Skeleton from '@mui/material/Skeleton'
-import { setMarginBottom } from 'styles/layout'
+import { mgBottom } from 'styles/layout'
 
 const listItemStyle = css`
   display: block;
@@ -25,7 +25,7 @@ const UserSearchResultListItemSkeleton = ({
 }: UserSearchResultListItemSkeletonProps) => (
   <li className={className} css={listItemStyle}>
     <Skeleton animation="wave" variant="circular" css={avatarStyle} />
-    <Skeleton animation="wave" height={10} css={setMarginBottom(10)} />
+    <Skeleton animation="wave" height={10} css={mgBottom(10)} />
     <Skeleton animation="wave" height={10} />
   </li>
 )

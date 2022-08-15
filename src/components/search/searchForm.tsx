@@ -3,7 +3,7 @@ import OutlinedInput from '@mui/material/OutlinedInput'
 import InputAdornment from '@mui/material/InputAdornment'
 import SearchIcon from '@mui/icons-material/Search'
 import Button from '@mui/material/Button'
-import { setMarginRight } from 'styles/layout'
+import { mgRight } from 'styles/layout'
 
 type SearchFormProps = {
   onSearchKeywordSubmit: (keyword: string) => void
@@ -34,7 +34,7 @@ const SearchForm = ({ onSearchKeywordSubmit }: SearchFormProps) => {
         placeholder="검색어를 입력하세요"
         value={keyword}
         onChange={e => handleKeywordChange(e.target.value)}
-        css={setMarginRight(8)}
+        css={mgRight(8)}
       />
       <Button type="submit" variant="contained" size="large">
         검색

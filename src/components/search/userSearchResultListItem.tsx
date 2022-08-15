@@ -3,7 +3,7 @@ import Avatar from '@mui/material/Avatar'
 import Link from '@mui/material/Link'
 import ROUTE_URL from 'constants/routeUrl'
 import { UserForSearching } from 'types/user'
-import { setMarginBottom, setMarginRight } from 'styles/layout'
+import { mgBottom, mgRight } from 'styles/layout'
 import {
   DEFAULT_BLACK,
   FASHION_STYLE_TAG_BACKGROUND_GRAY,
@@ -46,8 +46,8 @@ const UserSearchResultListItem = ({
       color={DEFAULT_BLACK}
     >
       <Avatar src={user.avatarUrl} alt={user.username} css={avatarStyle} />
-      <div css={setMarginBottom(10)}>
-        <span css={setMarginRight(10)}>{user.username}</span>
+      <div css={mgBottom(10)}>
+        <span css={mgRight(10)}>{user.username}</span>
         <span>{user.gender}</span>
       </div>
       <ul>

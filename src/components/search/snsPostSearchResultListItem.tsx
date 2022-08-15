@@ -4,7 +4,7 @@ import Avatar from '@mui/material/Avatar'
 import Link from '@mui/material/Link'
 import ROUTE_URL from 'constants/routeUrl'
 import { SnsPostForSearching } from 'types/snsPost'
-import { setMarginBottom, setMarginRight } from 'styles/layout'
+import { mgBottom, mgRight } from 'styles/layout'
 import { DEFAULT_BLACK } from 'styles/constants/color'
 
 const StyledSnsPostSearchResultWrapper = styled.div`
@@ -53,16 +53,16 @@ const SnsPostSearchResultListItem = ({
           css={postImageStyle}
         />
         <StyledPostTextWrapper>
-          <p css={setMarginBottom(16)}>{snsPost.content}</p>
+          <p css={mgBottom(16)}>{snsPost.content}</p>
           <StyledSnsPostInfoWrapper>
             <Avatar
               src={snsPost.author.avatarUrl}
               alt={snsPost.author.username}
               css={avatarStyle}
             />
-            <span css={setMarginRight(8)}>{snsPost.author.username}</span>
-            <span css={setMarginRight(8)}>{snsPost.createdAt}</span>
-            <span css={setMarginRight(8)}>댓글 {snsPost.commentCount}</span>
+            <span css={mgRight(8)}>{snsPost.author.username}</span>
+            <span css={mgRight(8)}>{snsPost.createdAt}</span>
+            <span css={mgRight(8)}>댓글 {snsPost.commentCount}</span>
             <span>좋아요 {snsPost.likeNumbers}</span>
           </StyledSnsPostInfoWrapper>
         </StyledPostTextWrapper>
