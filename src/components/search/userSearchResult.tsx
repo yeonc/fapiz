@@ -5,7 +5,7 @@ import NoSearchResult from 'components/search/noSearchResult'
 import Typo from 'components/common/typo'
 import useSearchedUsers from 'hooks/useSearchedUsers'
 import { UserForSearching } from 'types/user'
-import { GRAY_HOVER_BACKGROUND } from 'styles/constants/color'
+import { HOVER_BACKGROUND_GRAY } from 'styles/constants/color'
 import searchResultHeadingTypoProps from 'styles/props/searchResultHeadingTypoProps'
 
 const StyledUserSearchResultList = styled.ul`
@@ -30,7 +30,7 @@ const StyledUserSearchResultListItem = styled(
   margin-right: 20px;
 
   &:hover {
-    background-color: ${GRAY_HOVER_BACKGROUND};
+    background-color: ${HOVER_BACKGROUND_GRAY};
   }
 `
 
@@ -48,10 +48,6 @@ const StyledUserSearchResultListItemSkeleton = styled(
   UserSearchResultListItemSkeletonComponent
 )`
   margin-right: 20px;
-
-  &:hover {
-    background-color: ${GRAY_HOVER_BACKGROUND};
-  }
 `
 
 const StyledUserSearchResultListItemSkeletonWrapper = styled.ul`

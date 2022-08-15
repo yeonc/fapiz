@@ -4,12 +4,12 @@ import FavoriteBorder from '@mui/icons-material/FavoriteBorder'
 import Favorite from '@mui/icons-material/Favorite'
 import likePost from 'services/snsPost/likePost'
 import unlikePost from 'services/snsPost/unlikePost'
-import { PINK_LIKE_BUTTON } from 'styles/constants/color'
+import { LIKE_BUTTON_PINK } from 'styles/constants/color'
 
 const LIKE_BUTTON_ID = 'like-button'
 
 const favoriteColor = css`
-  color: ${PINK_LIKE_BUTTON};
+  color: ${LIKE_BUTTON_PINK};
 `
 
 const setFavoriteBorderColor = (color: string) => css`

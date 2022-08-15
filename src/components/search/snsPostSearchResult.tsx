@@ -8,7 +8,7 @@ import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 import createUrlQuery from 'utils/createUrlQuery'
 import getFormattedDate from 'utils/getFormattedDate'
 import { SnsPostForSearching } from 'types/snsPost'
-import { GRAY_HOVER_BACKGROUND } from 'styles/constants/color'
+import { HOVER_BACKGROUND_GRAY } from 'styles/constants/color'
 import searchResultHeadingTypoProps from 'styles/props/searchResultHeadingTypoProps'
 
 type SnsPostSearchResultListItemComponentProps = {
@@ -30,7 +30,7 @@ const StyledSnsPostSearchResultListItem = styled(
   margin-bottom: 20px;
 
   &:hover {
-    background-color: ${GRAY_HOVER_BACKGROUND};
+    background-color: ${HOVER_BACKGROUND_GRAY};
   }
 `
 
@@ -49,10 +49,6 @@ const StyledSnsPostSearchResultListItemSkeleton = styled(
 )`
   padding: 10px 14px;
   margin-bottom: 20px;
-
-  &:hover {
-    background-color: ${GRAY_HOVER_BACKGROUND};
-  }
 `
 
 type SnsPostSearchResultProps = {

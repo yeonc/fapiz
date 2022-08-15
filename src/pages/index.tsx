@@ -8,7 +8,7 @@ import ImageCardItem from 'components/home/imageCardItem'
 import useMe from 'hooks/useMe'
 import useSnsPostInfiniteScroll from 'hooks/useSnsPostInfiniteScroll'
 import createUrlQuery from 'utils/createUrlQuery'
-import { WHITE_DEFAULT } from 'styles/constants/color'
+import { DEFAULT_WHITE } from 'styles/constants/color'
 
 const INITIAL_PAGE_NUMBER = 1
 const PAGE_SIZE = 20
@@ -70,7 +70,7 @@ const MainPage = () => {
                   likeUsers={snsPost.likeUsers}
                   afterLike={afterLike}
                   isShowLikeUsersNumber={false}
-                  likeIconBorderColor={WHITE_DEFAULT}
+                  likeIconBorderColor={DEFAULT_WHITE}
                 />
               }
             />

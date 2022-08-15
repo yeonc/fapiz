@@ -4,6 +4,7 @@ import Link from '@mui/material/Link'
 import ROUTE_URL from 'constants/routeUrl'
 import { UserForSearching } from 'types/user'
 import { setMarginBottom, setMarginRight } from 'styles/layout'
+import { FASHION_STYLE_TAG_BACKGROUND_GRAY } from 'styles/constants/color'
 
 const linkStyle = css`
   display: block;
@@ -23,7 +24,7 @@ const fashionStyleTagStyle = css`
   padding: 4px 8px;
   border-radius: 18px;
   font-size: 14px;
-  background-color: #a8b1ff83;
+  background-color: ${FASHION_STYLE_TAG_BACKGROUND_GRAY};
 `
 
 type UserSearchResultListItemProps = {

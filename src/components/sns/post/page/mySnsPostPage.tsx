@@ -9,7 +9,7 @@ import useMe from 'hooks/useMe'
 import useSnsPost from 'hooks/useSnsPost'
 import createUrlQuery from 'utils/createUrlQuery'
 import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
-import { BLACK_DEFAULT } from 'styles/constants/color'
+import { DEFAULT_BLACK } from 'styles/constants/color'
 
 const queryForFetchingSnsPost = createUrlQuery({
   'populate[0]': 'author.profileImage',
@@ -95,7 +95,7 @@ const MySnsPostPage = () => {
             likeUsers={snsPost.likeUsers}
             afterLike={afterLike}
             isShowLikeUsersNumber={true}
-            likeIconBorderColor={BLACK_DEFAULT}
+            likeIconBorderColor={DEFAULT_BLACK}
           />
         }
         bookmarkButton={null}
