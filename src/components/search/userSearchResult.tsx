@@ -2,10 +2,9 @@ import styled from '@emotion/styled'
 import UserSearchResultListItem from 'components/search/userSearchResultListItem'
 import UserSearchResultListItemSkeleton from 'components/search/userSearchResultListItemSkeleton'
 import NoSearchResult from 'components/search/noSearchResult'
-import Typo from 'components/common/typo'
+import SearchResultHeadingTypo from 'components/search/searchResultHeadingTypo'
 import useSearchedUsers from 'hooks/useSearchedUsers'
 import { HOVER_BACKGROUND_GRAY } from 'styles/constants/color'
-import searchResultHeadingTypoProps from 'styles/props/searchResultHeadingTypoProps'
 
 const StyledUserSearchResultList = styled.ul`
   display: flex;
@@ -38,7 +37,7 @@ const UserSearchResult = ({ searchKeyword }: UserSearchResultProps) => {
 
   return (
     <section>
-      <Typo {...searchResultHeadingTypoProps}>유저 검색 결과</Typo>
+      <SearchResultHeadingTypo>유저 검색 결과</SearchResultHeadingTypo>
       {searchedUsers ? (
         <>
           {searchedUsers.length === 0 && <NoSearchResult />}

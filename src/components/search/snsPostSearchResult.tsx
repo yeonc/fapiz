@@ -2,14 +2,13 @@ import styled from '@emotion/styled'
 import SnsPostSearchResultListItem from 'components/search/snsPostSearchResultListItem'
 import SnsPostSearchResultListItemSkeleton from 'components/search/snsPostSearchResultListItemSkeleton'
 import NoSearchResult from 'components/search/noSearchResult'
-import Typo from 'components/common/typo'
+import SearchResultHeadingTypo from 'components/search/searchResultHeadingTypo'
 import useSnsPosts from 'hooks/useSnsPosts'
 import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 import createUrlQuery from 'utils/createUrlQuery'
 import getFormattedDate from 'utils/getFormattedDate'
 import { SnsPostForSearching } from 'types/snsPost'
 import { HOVER_BACKGROUND_GRAY } from 'styles/constants/color'
-import searchResultHeadingTypoProps from 'styles/props/searchResultHeadingTypoProps'
 
 const StyledSnsPostSearchResultListItem = styled(SnsPostSearchResultListItem)`
   padding: 10px 14px;
@@ -55,7 +54,7 @@ const SnsPostSearchResult = ({
 
   return (
     <section className={className}>
-      <Typo {...searchResultHeadingTypoProps}>SNS 게시물 검색 결과</Typo>
+      <SearchResultHeadingTypo>SNS 게시물 검색 결과</SearchResultHeadingTypo>
       {searchedSnsPosts ? (
         <>
           {searchedSnsPosts.length === 0 && <NoSearchResult />}
