@@ -24,7 +24,7 @@ type LikeButtonProps = {
   likeUsers: LikeUser[]
   afterLike: () => void
   isShowLikeUsersNumber: boolean
-  likeIconBorderColor: any
+  borderColor: any
 }
 
 // TODO: 좋아요 버튼 눌렀을 때 UI에 느리게 반영되는 것 개선하기
@@ -34,7 +34,7 @@ const LikeButton = ({
   likeUsers,
   afterLike,
   isShowLikeUsersNumber,
-  likeIconBorderColor,
+  borderColor,
 }: LikeButtonProps) => {
   const isLiked = likeUsers.some(likeUser => likeUser.id === myId)
   const likePostUserIds = likeUsers.map(likeUser => likeUser.id)
@@ -66,7 +66,7 @@ const LikeButton = ({
     <>
       <Checkbox
         id={LIKE_BUTTON_ID}
-        icon={<StyledFavoriteBorder color={likeIconBorderColor} />}
+        icon={<StyledFavoriteBorder color={borderColor} />}
         checkedIcon={<Favorite css={favoriteColor} />}
         checked={isLiked}
         onClick={handleLikeButtonClick}

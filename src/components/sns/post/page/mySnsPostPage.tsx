@@ -95,7 +95,7 @@ const MySnsPostPage = () => {
             likeUsers={snsPost.likeUsers}
             afterLike={afterLike}
             isShowLikeUsersNumber={true}
-            likeIconBorderColor={DEFAULT_BLACK}
+            borderColor={DEFAULT_BLACK}
           />
         }
         bookmarkButton={null}

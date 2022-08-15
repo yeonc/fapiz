@@ -70,7 +70,7 @@ const MainPage = () => {
                   likeUsers={snsPost.likeUsers}
                   afterLike={afterLike}
                   isShowLikeUsersNumber={false}
-                  likeIconBorderColor={DEFAULT_WHITE}
+                  borderColor={DEFAULT_WHITE}
                 />
               }
             />
