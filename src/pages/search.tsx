@@ -19,19 +19,7 @@ const MessageBeforeSearching = (
   <Typo>검색어를 입력하여 SNS 게시물과 유저들을 찾아보세요!</Typo>
 )
 
-type SnsPostSearchResultComponentProps = {
-  className?: string
-  searchKeyword: string
-}
-
-const SnsPostSearchResultComponent = ({
-  className,
-  searchKeyword,
-}: SnsPostSearchResultComponentProps) => (
-  <SnsPostSearchResult className={className} searchKeyword={searchKeyword} />
-)
-
-const StyledSnsPostSearchResult = styled(SnsPostSearchResultComponent)`
+const StyledSnsPostSearchResult = styled(SnsPostSearchResult)`
   margin-bottom: 60px;
 `
 

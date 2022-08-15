@@ -4,7 +4,6 @@ import UserSearchResultListItemSkeleton from 'components/search/userSearchResult
 import NoSearchResult from 'components/search/noSearchResult'
 import Typo from 'components/common/typo'
 import useSearchedUsers from 'hooks/useSearchedUsers'
-import { UserForSearching } from 'types/user'
 import { HOVER_BACKGROUND_GRAY } from 'styles/constants/color'
 import searchResultHeadingTypoProps from 'styles/props/searchResultHeadingTypoProps'
 
@@ -12,21 +11,11 @@ const StyledUserSearchResultList = styled.ul`
   display: flex;
 `
 
-type UserSearchResultListItemComponentProps = {
-  className?: string
-  user: UserForSearching
-}
+const StyledUserSearchResultListItemSkeletonWrapper = styled.ul`
+  display: flex;
+`
 
-const UserSearchResultListItemComponent = ({
-  className,
-  user,
-}: UserSearchResultListItemComponentProps) => (
-  <UserSearchResultListItem className={className} user={user} />
-)
-
-const StyledUserSearchResultListItem = styled(
-  UserSearchResultListItemComponent
-)`
+const StyledUserSearchResultListItem = styled(UserSearchResultListItem)`
   margin-right: 20px;
 
   &:hover {
@@ -34,24 +23,10 @@ const StyledUserSearchResultListItem = styled(
   }
 `
 
-type UserSearchResultListItemSkeletonComponentProps = {
-  className?: string
-}
-
-const UserSearchResultListItemSkeletonComponent = ({
-  className,
-}: UserSearchResultListItemSkeletonComponentProps) => (
-  <UserSearchResultListItemSkeleton className={className} />
-)
-
 const StyledUserSearchResultListItemSkeleton = styled(
-  UserSearchResultListItemSkeletonComponent
+  UserSearchResultListItemSkeleton
 )`
   margin-right: 20px;
-`
-
-const StyledUserSearchResultListItemSkeletonWrapper = styled.ul`
-  display: flex;
 `
 
 type UserSearchResultProps = {

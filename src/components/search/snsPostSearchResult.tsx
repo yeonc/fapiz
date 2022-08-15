@@ -11,21 +11,7 @@ import { SnsPostForSearching } from 'types/snsPost'
 import { HOVER_BACKGROUND_GRAY } from 'styles/constants/color'
 import searchResultHeadingTypoProps from 'styles/props/searchResultHeadingTypoProps'
 
-type SnsPostSearchResultListItemComponentProps = {
-  className?: string
-  snsPost: SnsPostForSearching
-}
-
-const SnsPostSearchResultListItemComponent = ({
-  className,
-  snsPost,
-}: SnsPostSearchResultListItemComponentProps) => (
-  <SnsPostSearchResultListItem className={className} snsPost={snsPost} />
-)
-
-const StyledSnsPostSearchResultListItem = styled(
-  SnsPostSearchResultListItemComponent
-)`
+const StyledSnsPostSearchResultListItem = styled(SnsPostSearchResultListItem)`
   padding: 10px 14px;
   margin-bottom: 20px;
 
@@ -34,18 +20,8 @@ const StyledSnsPostSearchResultListItem = styled(
   }
 `
 
-type SnsPostSearchResultListItemSkeletonComponentProps = {
-  className?: string
-}
-
-const SnsPostSearchResultListItemSkeletonComponent = ({
-  className,
-}: SnsPostSearchResultListItemSkeletonComponentProps) => (
-  <SnsPostSearchResultListItemSkeleton className={className} />
-)
-
 const StyledSnsPostSearchResultListItemSkeleton = styled(
-  SnsPostSearchResultListItemSkeletonComponent
+  SnsPostSearchResultListItemSkeleton
 )`
   padding: 10px 14px;
   margin-bottom: 20px;
