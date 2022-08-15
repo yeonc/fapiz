@@ -1,8 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import axios, { AxiosResponse } from 'axios'
+import fetchUsers from 'services/user/fetchUsers'
 import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 import createSearchKeywordsArray from 'utils/createSearchKeywordsArray'
-import { BACKEND_URL } from 'constants/constants'
 import { FashionStyle } from 'types/fashion'
 import { UserForSearching } from 'types/user'
 import { Nullable } from 'types/common'
@@ -42,13 +41,6 @@ const getSafeStringFromQuery = (
   }
 
   return queryValue
-}
-
-const fetchUsers = async (): Promise<AxiosResponse> => {
-  return axios({
-    method: 'get',
-    url: `${BACKEND_URL}/api/users`,
-  })
 }
 
 const sanitizeUsers = (usersFromStrapi): UserForSearching[] => {

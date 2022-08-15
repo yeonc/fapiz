@@ -5,7 +5,7 @@ import Button from '@mui/material/Button'
 import Avatar from '@mui/material/Avatar'
 import { horizontal } from 'styles/layout'
 import useMe from 'hooks/useMe'
-import createComment from 'services/comment/createComment'
+import createComment from 'services/snsComment/createComment'
 import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 
 const StyledPostCommentWritingAreaWrapper = styled.div`

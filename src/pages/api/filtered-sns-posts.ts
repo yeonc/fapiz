@@ -1,9 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import axios, { AxiosResponse } from 'axios'
+import fetchSnsPosts from 'services/snsPost/fetchSnsPosts'
 import getDaysBetweenTwoDate from 'utils/getDaysBetweenTwoDate'
 import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 import paginateData from 'utils/paginateData'
-import { BACKEND_URL } from 'constants/constants'
 import { USER_FASHION_STYLES } from 'constants/user'
 import { SnsPostForMainPage } from 'types/snsPost'
 import { FashionStyle } from 'types/fashion'
@@ -132,18 +131,6 @@ const getSafeFashionStylesFromQuery = (
   })
 
   return fashionStyleArray
-}
-
-const fetchSnsPosts = async (): Promise<AxiosResponse> => {
-  return axios({
-    method: 'get',
-    url: `${BACKEND_URL}/api/sns-posts`,
-    params: {
-      'populate[0]': 'postImages',
-      'populate[1]': 'likeUsers',
-      'populate[2]': 'author',
-    },
-  })
 }
 
 const sanitizedSnsPosts = (snsPostsFromStrapi: any): SnsPostForMainPage[] => {
