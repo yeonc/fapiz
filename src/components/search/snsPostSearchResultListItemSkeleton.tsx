@@ -1,3 +1,4 @@
+import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import Skeleton from '@mui/material/Skeleton'
 import { setMarginBottom } from 'styles/layout'
@@ -5,12 +6,6 @@ import { setMarginBottom } from 'styles/layout'
 const StyledSnsPostSearchResultWrapper = styled.div`
   display: flex;
   align-items: center;
-`
-
-const StyledPostImageWrapper = styled.div`
-  width: 120px;
-  height: 120px;
-  margin-right: 14px;
 `
 
 const StyledPostTextWrapper = styled.div`
@@ -22,6 +17,13 @@ const StyledSnsPostInfoWrapper = styled.div`
   align-items: center;
 `
 
+const PostImageStyle = css`
+  width: 120px;
+  height: 120px;
+  border-radius: 8px;
+  margin-right: 16px;
+`
+
 type SnsPostSearchResultListItemSkeletonProps = {
   className?: string
 }
@@ -31,16 +33,14 @@ const SnsPostSearchResultListItemSkeleton = ({
 }: SnsPostSearchResultListItemSkeletonProps) => (
   <li className={className}>
     <StyledSnsPostSearchResultWrapper>
-      <StyledPostImageWrapper>
-        <Skeleton variant="rectangular" width={120} height={120} />
-      </StyledPostImageWrapper>
+      <Skeleton animation="wave" variant="rectangular" css={PostImageStyle} />
       <StyledPostTextWrapper>
         <div css={setMarginBottom(16)}>
-          <Skeleton />
-          <Skeleton />
+          <Skeleton animation="wave" />
+          <Skeleton animation="wave" />
         </div>
         <StyledSnsPostInfoWrapper>
-          <Skeleton width="50%" />
+          <Skeleton animation="wave" width="50%" />
         </StyledSnsPostInfoWrapper>
       </StyledPostTextWrapper>
     </StyledSnsPostSearchResultWrapper>

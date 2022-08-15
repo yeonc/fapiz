@@ -12,12 +12,6 @@ const StyledSnsPostSearchResultWrapper = styled.div`
   align-items: center;
 `
 
-const StyledPostImageWrapper = styled.div`
-  width: 120px;
-  height: 120px;
-  margin-right: 14px;
-`
-
 const StyledPostTextWrapper = styled.div`
   flex-grow: 1;
 `
@@ -25,6 +19,13 @@ const StyledPostTextWrapper = styled.div`
 const StyledSnsPostInfoWrapper = styled.div`
   display: flex;
   align-items: center;
+`
+
+const postImageStyle = css`
+  width: 120px;
+  height: 120px;
+  border-radius: 8px;
+  margin-right: 16px;
 `
 
 const avatarStyle = css`
@@ -46,15 +47,11 @@ const SnsPostSearchResultListItem = ({
   <li className={className}>
     <Link href={`${ROUTE_URL.SNS}/post/${snsPost.id}`}>
       <StyledSnsPostSearchResultWrapper>
-        <StyledPostImageWrapper>
-          <Image
-            src={snsPost.firstImage.url}
-            alt={snsPost.firstImage.altText}
-            width="120px"
-            height="120px"
-            layout="fixed"
-          />
-        </StyledPostImageWrapper>
+        <img
+          src={snsPost.firstImage.url}
+          alt={snsPost.firstImage.altText}
+          css={postImageStyle}
+        />
         <StyledPostTextWrapper>
           <p css={setMarginBottom(16)}>{snsPost.content}</p>
           <StyledSnsPostInfoWrapper>
