@@ -1,7 +1,7 @@
 import { useSWRConfig } from 'swr'
 import styled from '@emotion/styled'
 import Avatar from '@mui/material/Avatar'
-import Typography from '@mui/material/Typography'
+import Typo from 'components/common/typo'
 import FollowToggleButton from 'components/common/buttons/followToggleButton'
 import MessageButton from 'components/common/buttons/messageButton'
 import Follower from 'components/sns/user/follower'
@@ -56,9 +56,9 @@ const UserInfo = ({ userId }) => {
         sx={{ width: 130, height: 130, marginRight: 4 }}
       />
       <div>
-        <Typography variant="h4" component="h1">
+        <Typo variant="h4" component="h1">
           {user.username}
-        </Typography>
+        </Typo>
         <dl css={horizontal}>
           {user.height && (
             <div css={mgRight(8)}>

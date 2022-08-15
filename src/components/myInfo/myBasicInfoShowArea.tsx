@@ -1,5 +1,5 @@
 import Avatar from '@mui/material/Avatar'
-import Typography from '@mui/material/Typography'
+import Typo from 'components/common/typo'
 
 const NOT_INFOMATION_TEXT =
   '정보가 없습니다. 상세 정보 수정 버튼을 눌러 정보를 입력해 보세요!'
@@ -11,9 +11,9 @@ const MyBasicInfoShowArea = ({ myBasicInfo }) => (
       src={myBasicInfo.imageUrl}
       sx={{ width: 100, height: 100 }}
     />
-    <Typography variant="h4" component="h1">
+    <Typo variant="h4" component="h1">
       {myBasicInfo.username}
-    </Typography>
+    </Typo>
     <dl>
       <div>
         <dt>포인트</dt>

@@ -1,11 +1,11 @@
 import styled from '@emotion/styled'
 import Link from '@mui/material/Link'
 import Avatar from '@mui/material/Avatar'
-import Typography from '@mui/material/Typography'
-import { horizontal, mgRight } from 'styles/layout'
-import visuallyHidden from 'styles/visuallyHidden'
+import Typo from 'components/common/typo'
 import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 import ROUTE_URL from 'constants/routeUrl'
+import { horizontal, mgRight } from 'styles/layout'
+import visuallyHidden from 'styles/visuallyHidden'
 
 const StyledPostAuthorHeaderWrapper = styled.header`
   display: flex;
@@ -24,9 +24,9 @@ const PostAuthorHeader = ({ author, popoverMenu }) => (
     />
     <StyledUserProfileTextWrapper>
       <Link href={`${ROUTE_URL.SNS}/${author.id}`}>
-        <Typography variant="h6" component="h1">
+        <Typo variant="h6" component="h1">
           {author.username}
-        </Typography>
+        </Typo>
       </Link>
       <dl css={horizontal}>
         {author.height && (
