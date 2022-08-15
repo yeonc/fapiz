@@ -20,16 +20,17 @@ const query = createUrlQuery({
   'pagination[limit]': 200,
 })
 
+const fetchTriggerStyle = css`
+  display: block;
+  height: 1px;
+`
+
 const loadingTextStyle = css`
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 30px;
-`
-
-const fetchTriggerStyle = css`
-  visibility: hidden;
 `
 
 const SnsPostLikeButtonWithLogin = withLogin(LikeButton)
@@ -77,9 +78,7 @@ const MainPage = () => {
           )
         })}
       </ImageList>
-      <span ref={fetchTriggerRef} css={fetchTriggerStyle}>
-        trigger
-      </span>
+      <span ref={fetchTriggerRef} css={fetchTriggerStyle}></span>
       {isSnsPostsLoading && <p css={loadingTextStyle}>loading...</p>}
     </>
   )
