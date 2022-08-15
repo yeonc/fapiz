@@ -9,9 +9,8 @@ import globalResetStyles from 'styles/globalResetStyles'
 import globalFullHeightStyles from 'styles/globalFullHeightStyles'
 import theme from 'theme'
 import createEmotionCache from 'createEmotionCache'
-import axios from 'axios'
 import { SWRConfig } from 'swr'
-import { BACKEND_URL } from 'constants/constants'
+import swrFetcher from 'services/fetcher/swrFetcher'
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache()
@@ -35,14 +34,7 @@ export default function MyApp(props: MyAppProps) {
           {globalFullHeightStyles}
           <SWRConfig
             value={{
-              fetcher: ({ baseURL = BACKEND_URL, url, config }) => {
-                const axiosConfig = {
-                  baseURL,
-                  ...config,
-                }
-
-                return axios.get(url, axiosConfig).then(res => res.data)
-              },
+              fetcher: swrFetcher,
             }}
           >
             <Component {...pageProps} />
