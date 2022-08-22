@@ -1,14 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import fetchSnsPosts from 'services/snsPost/fetchSnsPosts'
-import getDaysBetweenTwoDate from 'utils/getDaysBetweenTwoDate'
 import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 import paginateData from 'utils/paginateData'
 import { USER_FASHION_STYLES } from 'constants/user'
 import { SnsPostForMainPage } from 'types/snsPost'
 import { FashionStyle } from 'types/fashion'
 import { Nullable } from 'types/common'
-
-const TWO_DAYS = 2
 
 const ADD_ADDITIONAL_INFO_MESSAGE =
   '추가 정보 세 개 중 하나밖에 작성되지 않았네요! 두 가지 이상을 작성하시면 맞춤형 게시물을 보실 수 있습니다! 지금 정보를 수정하러 가 볼까요?'
@@ -44,6 +41,7 @@ const filterSnsPosts = async (
     const snsPosts = sanitizedSnsPosts(snsPostsFromStrapi)
 
     // 4. 정제한 SNS 게시물 데이터 필터링하기
+    // (로그인 한 유저의 정보와 비슷한 정보를 가진 유저들이 올린 SNS 게시물들만 필터링)
     const filteredSnsPostsByMyInfo = filterSnsPostsByMyInfo({
       snsPosts,
       isLoggedIn,
@@ -51,14 +49,11 @@ const filterSnsPosts = async (
       myBodyShape,
       myFashionStyles,
     })
-    const filteredSnsPosts = filterRecentlyCreatedSnsPosts(
-      filteredSnsPostsByMyInfo
-    )
 
     // 5-1. 요청 쿼리에 pageNumber, pageSize 둘 다 있는 경우, 필터링 된 SNS 게시물 데이터에서 특정 페이지를 추출해서 내려주기
     if (pageNumber && pageSize) {
       const paginatedSnsPosts = paginateData({
-        dataArray: filteredSnsPosts,
+        dataArray: filteredSnsPostsByMyInfo,
         pageNumber,
         pageSize,
       })
@@ -67,7 +62,7 @@ const filterSnsPosts = async (
 
     // 5-2. 요청 쿼리에 pageNumber, pageSize 중 하나라도 빠져있는 경우, 필터링 된 SNS 게시물 데이터 내려주기
     if (!pageNumber || !pageSize) {
-      res.status(200).json(filteredSnsPosts)
+      res.status(200).json(filteredSnsPostsByMyInfo)
     }
   } catch (error) {
     res.status(400).json(error)
@@ -153,19 +148,6 @@ const sanitizedSnsPosts = (snsPostsFromStrapi: any): SnsPostForMainPage[] => {
   }))
 }
 
-// 최근 이틀 간 올라온 SNS 게시물들만 필터링 해 주는 함수
-const filterRecentlyCreatedSnsPosts = (
-  snsPosts: SnsPostForMainPage[]
-): SnsPostForMainPage[] => {
-  const today = new Date()
-  return snsPosts.filter(snsPost => {
-    const snsPostCreatedAt = new Date(snsPost.createdAt)
-    const isCreatedInLast2Days =
-      getDaysBetweenTwoDate(snsPostCreatedAt, today) < TWO_DAYS
-    return isCreatedInLast2Days
-  })
-}
-
 type FilterSnsPostsByMyInfoArgs = {
   snsPosts: SnsPostForMainPage[]
   isLoggedIn: boolean
@@ -178,7 +160,6 @@ type FilterSnsPostsByMyInfo = (
   args: FilterSnsPostsByMyInfoArgs
 ) => SnsPostForMainPage[]
 
-// 로그인 한 유저의 정보와 비슷한 정보를 가진 유저들이 올린 SNS 게시물들만 필터링 해 주는 함수
 const filterSnsPostsByMyInfo: FilterSnsPostsByMyInfo = ({
   snsPosts,
   isLoggedIn,

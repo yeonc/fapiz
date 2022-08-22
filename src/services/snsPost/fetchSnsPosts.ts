@@ -9,6 +9,7 @@ const fetchSnsPosts = async (): Promise<AxiosResponse> => {
       'populate[0]': 'postImages',
       'populate[1]': 'likeUsers',
       'populate[2]': 'author',
+      sort: 'createdAt:desc',
     },
   })
 }
