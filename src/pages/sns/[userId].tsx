@@ -6,6 +6,7 @@ import CreateIcon from '@mui/icons-material/Create'
 import UserInfo from 'components/sns/user/userInfo'
 import SnsPosts from 'components/sns/post/snsPosts'
 import useMe from 'hooks/useMe'
+import getSafeNumberFromQuery from 'utils/getSafeNumberFromQuery'
 
 const positionOfSnsPostCreateButton = css`
   position: fixed;
@@ -15,7 +16,10 @@ const positionOfSnsPostCreateButton = css`
 
 const SnsPage = () => {
   const router = useRouter()
-  const { userId } = router.query
+  const { userId: userIdFromQuery } = router.query
+  const userId = userIdFromQuery
+    ? getSafeNumberFromQuery(userIdFromQuery)
+    : undefined
 
   const { me } = useMe()
 
@@ -27,8 +31,12 @@ const SnsPage = () => {
 
   return (
     <>
-      <UserInfo userId={userId} />
-      <SnsPosts userId={userId} />
+      {userId && (
+        <>
+          <UserInfo userId={userId} />
+          <SnsPosts userId={userId} />
+        </>
+      )}
       {isMySnsPage && (
         <Fab
           color="primary"

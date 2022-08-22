@@ -7,8 +7,19 @@ import ImageListItemBar from '@mui/material/ImageListItemBar'
 import LikeButton from 'components/common/buttons/likeButton'
 import { SnsPostForMainPage } from 'types/snsPost'
 
-const cursorPointer = css`
+const imageListItemStyle = css`
+  border-radius: 10px;
+  overflow: hidden;
   cursor: pointer;
+`
+
+const imageListItemBarStyle = css`
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 0.3),
+    rgba(0, 0, 0, 0)
+  );
 `
 
 type ImageCardItemProps = {
@@ -35,7 +46,7 @@ const ImageCardItem = ({
   }
 
   return (
-    <ImageListItem onClick={handleImageListItemClick} css={cursorPointer}>
+    <ImageListItem onClick={handleImageListItemClick} css={imageListItemStyle}>
       <img
         src={cardItemData.postImage.url}
         alt={cardItemData.postImage.altText}
@@ -45,6 +56,7 @@ const ImageCardItem = ({
         position="top"
         actionIcon={rightActionButton}
         actionPosition="right"
+        css={imageListItemBarStyle}
       />
     </ImageListItem>
   )

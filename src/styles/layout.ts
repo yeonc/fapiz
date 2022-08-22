@@ -8,3 +8,7 @@ export const horizontal = css`
 export const mgRight = (marginValue: number) => css`
   margin-right: ${marginValue}px;
 `
+
+export const mgBottom = (marginValue: number) => css`
+  margin-bottom: ${marginValue}px;
+`

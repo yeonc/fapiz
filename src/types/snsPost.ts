@@ -1,5 +1,5 @@
 import { Nullable } from 'types/common'
-import { LikeUserForMainPage } from 'types/user'
+import { LikeUser } from 'types/user'
 import { FashionStyle } from 'types/fashion'
 import { SnsPostImage } from 'types/image'
 
@@ -13,6 +13,7 @@ export type SnsPostForSearching = {
     username: string
     avatarUrl: string | undefined
   }
+  commentCount: number
 }
 
 export type SnsPostForMainPage = {
@@ -25,7 +26,7 @@ export type SnsPostForMainPage = {
     fashionStyles: Nullable<FashionStyle[]>
   }
   postImage: SnsPostImage
-  likeUsers: LikeUserForMainPage[]
+  likeUsers: LikeUser[]
 }
 
 export type SnsPostForSnsPostsPage = {

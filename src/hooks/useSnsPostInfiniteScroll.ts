@@ -1,47 +1,9 @@
 import { useState, useEffect, RefObject } from 'react'
-import axios, { AxiosResponse } from 'axios'
 import useInfiniteScroll from 'hooks/useInfiniteScroll'
+import fetchFilteredSnsPosts from 'services/snsPost/fetchFilteredSnsPosts'
 import { SnsPostForMainPage } from 'types/snsPost'
 import { Nullable } from 'types/common'
 import { FashionStyle } from 'types/fashion'
-
-type FetchFilteredSnsPostsArgs = {
-  pageNumber: number
-  pageSize: number
-  isLoggedIn: boolean
-  myGender: Nullable<string>
-  myBodyShape: Nullable<string>
-  myFashionStyles: Nullable<FashionStyle[]>
-}
-
-type FetchFilteredSnsPosts = (
-  args: FetchFilteredSnsPostsArgs
-) => Promise<AxiosResponse<SnsPostForMainPage[]>>
-
-const fetchFilteredSnsPosts: FetchFilteredSnsPosts = async ({
-  pageNumber,
-  pageSize,
-  isLoggedIn,
-  myGender,
-  myBodyShape,
-  myFashionStyles,
-}) => {
-  const myFashionStylesString = JSON.stringify(myFashionStyles)
-  const encodedMyFashonStyles = encodeURIComponent(myFashionStylesString)
-
-  return axios({
-    method: 'get',
-    url: '/api/filtered-sns-posts',
-    params: {
-      pageNumber,
-      pageSize,
-      isLoggedIn,
-      myGender,
-      myBodyShape,
-      myFashionStyles: myFashionStyles && encodedMyFashonStyles,
-    },
-  })
-}
 
 type UseSnsPostInfiniteScrollArgs = {
   initialPageNumber: number
@@ -73,12 +35,22 @@ const useSnsPostInfiniteScroll: UseSnsPostInfiniteScroll = ({
   const [snsPosts, setSnsPosts] = useState<SnsPostForMainPage[]>([])
   const [isSnsPostsLoading, setIsSnsPostsLoading] = useState(false)
   const [pageNumber, setPageNumber] = useState(initialPageNumber)
+  const [pageNumberAlreadyFetched, setPageNumberAlreadyFetched] = useState(0)
 
   const increasePageNumber = () => setPageNumber(prev => prev + 1)
   const fetchTriggerRef = useInfiniteScroll(increasePageNumber)
 
   useEffect(() => {
+    if (isSnsPostsLoading) {
+      return
+    }
+
+    if (pageNumber === pageNumberAlreadyFetched) {
+      return
+    }
+
     setIsSnsPostsLoading(true)
+    setPageNumberAlreadyFetched(pageNumber)
     fetchFilteredSnsPosts({
       pageNumber,
       pageSize,
@@ -90,7 +62,7 @@ const useSnsPostInfiniteScroll: UseSnsPostInfiniteScroll = ({
       .then(response => setSnsPosts(prev => [...prev, ...response.data]))
       .catch(console.error)
       .finally(() => setIsSnsPostsLoading(false))
-  }, [pageNumber])
+  }, [pageNumber, isSnsPostsLoading, pageNumberAlreadyFetched])
 
   return {
     snsPosts,

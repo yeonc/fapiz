@@ -8,7 +8,7 @@ import LikeButton from 'components/common/buttons/likeButton'
 import useMe from 'hooks/useMe'
 import useSnsPost from 'hooks/useSnsPost'
 import createUrlQuery from 'utils/createUrlQuery'
-import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
+import { DEFAULT_BLACK } from 'styles/constants/color'
 
 const queryForFetchingSnsPost = createUrlQuery({
   'populate[0]': 'author.profileImage',
@@ -50,7 +50,7 @@ const OtherSnsPostPage = () => {
     id: snsPostFromStrapi.id,
     createdAt: snsPostFromStrapi.attributes.createdAt,
     images: snsPostFromStrapi.attributes.postImages.data.map((image: any) => ({
-      url: addBackendUrlToImageUrl(image.attributes.url),
+      url: image.attributes.url,
       altText: image.attributes.alternativeText,
     })),
     author: {
@@ -98,6 +98,7 @@ const OtherSnsPostPage = () => {
             likeUsers={snsPost.likeUsers}
             afterLike={afterLike}
             isShowLikeUsersNumber={true}
+            borderColor={DEFAULT_BLACK}
           />
         }
         bookmarkButton={

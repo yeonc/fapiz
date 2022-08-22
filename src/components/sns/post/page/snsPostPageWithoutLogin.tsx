@@ -3,7 +3,6 @@ import PostDescriptionContentsLayout from 'components/sns/post/postDescriptionCo
 import PostCommentList from 'components/sns/comment/postCommentList'
 import useSnsPost from 'hooks/useSnsPost'
 import createUrlQuery from 'utils/createUrlQuery'
-import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 
 const queryForFetchingSnsPost = createUrlQuery({
   'populate[0]': 'author.profileImage',
@@ -34,7 +33,7 @@ const SnsPostPageWithoutLogin = () => {
     id: snsPostFromStrapi.id,
     createdAt: snsPostFromStrapi.attributes.createdAt,
     images: snsPostFromStrapi.attributes.postImages.data.map((image: any) => ({
-      url: addBackendUrlToImageUrl(image.attributes.url),
+      url: image.attributes.url,
       altText: image.attributes.alternativeText,
     })),
     author: {

@@ -5,7 +5,6 @@ import CommentByMode from 'components/sns/comment/commentByMode'
 import { horizontal } from 'styles/layout'
 import useSnsComments from 'hooks/useSnsComments'
 import createUrlQuery from 'utils/createUrlQuery'
-import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 import ROUTE_URL from 'constants/routeUrl'
 import { PostCommentForSnsPostPage } from 'types/postComment'
 
@@ -38,9 +37,8 @@ const PostCommentList = ({ snsPostId }: PostCommentListProps) => {
         content: snsComment.attributes.content,
         authorId: author.id,
         authorName: author.attributes.username,
-        authorProfileImageUrl: addBackendUrlToImageUrl(
-          author.attributes.profileImage.data?.attributes.url
-        ),
+        authorProfileImageUrl:
+          author.attributes.profileImage.data?.attributes.url,
       }
     }
   )

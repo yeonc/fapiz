@@ -11,7 +11,6 @@ import useMe from 'hooks/useMe'
 import useFashionItems from 'hooks/useFashionItems'
 import useModalState from 'hooks/useModalState'
 import createUrlQuery from 'utils/createUrlQuery'
-import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 
 const fabPositionFixed = css`
   position: fixed;
@@ -48,9 +47,7 @@ const ClosetPage = () => {
     category: fashionItem.attributes.category,
     color: fashionItem.attributes.color,
     image: {
-      url: addBackendUrlToImageUrl(
-        fashionItem.attributes.image.data.attributes.url
-      ),
+      url: fashionItem.attributes.image.data.attributes.url,
       altText: fashionItem.attributes.image.data.attributes.alternativeText,
     },
   }))

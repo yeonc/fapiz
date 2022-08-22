@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import ImageUploadButton from 'components/common/buttons/imageUploadButton'
 import uploadImage from 'services/upload/uploadImage'
-import editMyBasicInfo from 'services/myInfo/editMyBasicInfo'
+import editMyBasicInfo from 'services/user/editMyBasicInfo'
 import { ImageFiles } from 'types/image'
 
 type UploadedImageId = number | undefined

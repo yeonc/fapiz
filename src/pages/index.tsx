@@ -8,6 +8,7 @@ import ImageCardItem from 'components/home/imageCardItem'
 import useMe from 'hooks/useMe'
 import useSnsPostInfiniteScroll from 'hooks/useSnsPostInfiniteScroll'
 import createUrlQuery from 'utils/createUrlQuery'
+import { DEFAULT_WHITE } from 'styles/constants/color'
 
 const INITIAL_PAGE_NUMBER = 1
 const PAGE_SIZE = 20
@@ -18,6 +19,11 @@ const query = createUrlQuery({
   'populate[2]': 'author',
   'pagination[limit]': 200,
 })
+
+const fetchTriggerStyle = css`
+  display: block;
+  height: 1px;
+`
 
 const loadingTextStyle = css`
   position: fixed;
@@ -65,13 +71,14 @@ const MainPage = () => {
                   likeUsers={snsPost.likeUsers}
                   afterLike={afterLike}
                   isShowLikeUsersNumber={false}
+                  borderColor={DEFAULT_WHITE}
                 />
               }
             />
           )
         })}
       </ImageList>
-      <span ref={fetchTriggerRef}>trigger</span>
+      <span ref={fetchTriggerRef} css={fetchTriggerStyle}></span>
       {isSnsPostsLoading && <p css={loadingTextStyle}>loading...</p>}
     </>
   )

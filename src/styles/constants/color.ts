@@ -1,0 +1,5 @@
+export const DEFAULT_WHITE = '#FFF'
+export const DEFAULT_BLACK = '#000'
+export const HOVER_BACKGROUND_GRAY = '#ebebeb83'
+export const FASHION_STYLE_TAG_BACKGROUND_GRAY = '#e5e6e4'
+export const LIKE_BUTTON_PINK = '#FD4658'

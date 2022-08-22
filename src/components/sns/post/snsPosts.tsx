@@ -4,7 +4,6 @@ import ImageList from '@mui/material/ImageList'
 import ImageListItem from '@mui/material/ImageListItem'
 import useSnsPosts from 'hooks/useSnsPosts'
 import createUrlQuery from 'utils/createUrlQuery'
-import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 import { SnsPostForSnsPostsPage } from 'types/snsPost'
 
 export const cursorPointer = css`
@@ -29,9 +28,7 @@ const SnsPosts = ({ userId }) => {
     (post: any) => ({
       id: post.id,
       firstImage: {
-        url: addBackendUrlToImageUrl(
-          post.attributes.postImages.data[0].attributes.url
-        ),
+        url: post.attributes.postImages.data[0].attributes.url,
         altText: post.attributes.postImages.data[0].attributes.alternativeText,
       },
     })

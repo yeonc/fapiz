@@ -9,7 +9,7 @@ export type UserForSearching = {
   avatarUrl: string | undefined
 }
 
-export type LikeUserForMainPage = {
+export type LikeUser = {
   id: number
   attributes: {
     username: string

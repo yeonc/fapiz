@@ -1,6 +1,6 @@
 import MUIModal from '@mui/material/Modal'
 import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
+import Typo from 'components/common/typo'
 
 const modalBoxStyle = {
   position: 'absolute',
@@ -18,9 +18,9 @@ const Modal = ({ title, contents, open, onClose }) => {
   return (
     <MUIModal open={open} onClose={onClose}>
       <Box sx={modalBoxStyle}>
-        <Typography variant="h6" component="h2">
+        <Typo variant="h6" component="h2">
           {title}
-        </Typography>
+        </Typo>
         {contents}
       </Box>
     </MUIModal>

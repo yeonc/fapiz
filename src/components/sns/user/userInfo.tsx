@@ -1,17 +1,16 @@
 import { useSWRConfig } from 'swr'
 import styled from '@emotion/styled'
 import Avatar from '@mui/material/Avatar'
-import Typography from '@mui/material/Typography'
+import Typo from 'components/common/typo'
 import FollowToggleButton from 'components/common/buttons/followToggleButton'
 import MessageButton from 'components/common/buttons/messageButton'
 import Follower from 'components/sns/user/follower'
 import Following from 'components/sns/user/following'
-import { horizontal, mgRight } from 'styles/layout'
-import visuallyHidden from 'styles/visuallyHidden'
 import useMe from 'hooks/useMe'
 import useUser from 'hooks/useUser'
-import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 import { UserForUserInfo } from 'types/user'
+import { horizontal, mgRight } from 'styles/layout'
+import visuallyHidden from 'styles/visuallyHidden'
 
 const StyledUserInfoWrapper = styled.header`
   display: flex;
@@ -22,7 +21,7 @@ const UserInfo = ({ userId }) => {
   const { mutate } = useSWRConfig()
 
   const { me } = useMe()
-  const { user: userFromStrapi } = useUser(Number(userId))
+  const { user: userFromStrapi } = useUser(userId)
 
   if (!userFromStrapi) {
     return null
@@ -33,7 +32,7 @@ const UserInfo = ({ userId }) => {
     username: userFromStrapi.username,
     height: userFromStrapi.height,
     weight: userFromStrapi.weight,
-    profileImageUrl: addBackendUrlToImageUrl(userFromStrapi.profileImage?.url),
+    profileImageUrl: userFromStrapi.profileImage?.url,
     followers: userFromStrapi.followers,
     followings: userFromStrapi.followings,
   }
@@ -56,9 +55,9 @@ const UserInfo = ({ userId }) => {
         sx={{ width: 130, height: 130, marginRight: 4 }}
       />
       <div>
-        <Typography variant="h4" component="h1">
+        <Typo variant="h4" component="h1">
           {user.username}
-        </Typography>
+        </Typo>
         <dl css={horizontal}>
           {user.height && (
             <div css={mgRight(8)}>

@@ -1,10 +1,26 @@
+import { css } from '@emotion/react'
 import Checkbox from '@mui/material/Checkbox'
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder'
 import Favorite from '@mui/icons-material/Favorite'
 import likePost from 'services/snsPost/likePost'
 import unlikePost from 'services/snsPost/unlikePost'
+import { LikeUser } from 'types/user'
+import { LIKE_BUTTON_PINK } from 'styles/constants/color'
 
 const LIKE_BUTTON_ID = 'like-button'
+
+const favoriteColor = css`
+  color: ${LIKE_BUTTON_PINK};
+`
+
+type LikeButtonProps = {
+  myId: number
+  targetId: number
+  likeUsers: LikeUser[]
+  afterLike: () => void
+  isShowLikeUsersNumber: boolean
+  borderColor: string
+}
 
 // TODO: 좋아요 버튼 눌렀을 때 UI에 느리게 반영되는 것 개선하기
 const LikeButton = ({
@@ -13,15 +29,17 @@ const LikeButton = ({
   likeUsers,
   afterLike,
   isShowLikeUsersNumber,
-}) => {
-  const isLiked = likeUsers.some((likeUser: any) => likeUser.id === myId)
+  borderColor,
+}: LikeButtonProps) => {
+  const isLiked = likeUsers.some(likeUser => likeUser.id === myId)
+  const likePostUserIds = likeUsers.map(likeUser => likeUser.id)
+  const likeUsersAfterLiked = [...likePostUserIds, myId]
 
   const like = async () => {
-    await likePost({ snsPostId: targetId, likeUserId: myId })
+    await likePost({ snsPostId: targetId, likeUsersAfterLiked })
   }
 
   const unlike = async () => {
-    const likePostUserIds = likeUsers.map((likeUser: any) => likeUser.id)
     await unlikePost({
       snsPostId: targetId,
       likePostUserIds,
@@ -43,8 +61,8 @@ const LikeButton = ({
     <>
       <Checkbox
         id={LIKE_BUTTON_ID}
-        icon={<FavoriteBorder />}
-        checkedIcon={<Favorite />}
+        icon={<FavoriteBorder htmlColor={borderColor} />}
+        checkedIcon={<Favorite css={favoriteColor} />}
         checked={isLiked}
         onClick={handleLikeButtonClick}
       />
