@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import fetchUsers from 'services/user/fetchUsers'
 import createSearchKeywordsArray from 'utils/createSearchKeywordsArray'
+import getSafeStringFromQuery from 'utils/getSafeStringFromQuery'
 import { FashionStyle } from 'types/fashion'
 import { UserForSearching } from 'types/user'
 import { Nullable } from 'types/common'
@@ -31,16 +32,6 @@ const searchUsers = async (
 }
 
 export default searchUsers
-
-const getSafeStringFromQuery = (
-  queryValue: string | string[]
-): Nullable<string> => {
-  if (typeof queryValue !== 'string') {
-    return null
-  }
-
-  return queryValue
-}
 
 const sanitizeUsers = (usersFromStrapi): UserForSearching[] => {
   const sanitizedUsers = usersFromStrapi.map(userFromStrapi => ({

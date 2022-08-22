@@ -1,6 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import fetchSnsPosts from 'services/snsPost/fetchSnsPosts'
 import paginateData from 'utils/paginateData'
+import getSafeStringFromQuery from 'utils/getSafeStringFromQuery'
+import getSafeNumberFromQuery from 'utils/getSafeNumberFromQuery'
 import { USER_FASHION_STYLES } from 'constants/user'
 import { SnsPostForMainPage } from 'types/snsPost'
 import { FashionStyle } from 'types/fashion'
@@ -69,31 +71,6 @@ const filterSnsPosts = async (
 }
 
 export default filterSnsPosts
-
-const getSafeNumberFromQuery = (
-  queryValue: string | string[]
-): Nullable<number> => {
-  if (typeof queryValue !== 'string') {
-    return null
-  }
-
-  const numberFromQueryValue = Number(queryValue)
-  if (isNaN(numberFromQueryValue)) {
-    return null
-  }
-
-  return numberFromQueryValue
-}
-
-const getSafeStringFromQuery = (
-  queryValue: string | string[]
-): Nullable<string> => {
-  if (typeof queryValue !== 'string') {
-    return null
-  }
-
-  return queryValue
-}
 
 const getSafeFashionStylesFromQuery = (
   queryValue: string | string[]

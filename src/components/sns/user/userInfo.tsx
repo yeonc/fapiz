@@ -21,7 +21,7 @@ const UserInfo = ({ userId }) => {
   const { mutate } = useSWRConfig()
 
   const { me } = useMe()
-  const { user: userFromStrapi } = useUser(Number(userId))
+  const { user: userFromStrapi } = useUser(userId)
 
   if (!userFromStrapi) {
     return null
