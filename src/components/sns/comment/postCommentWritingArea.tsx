@@ -6,7 +6,6 @@ import Avatar from '@mui/material/Avatar'
 import { horizontal } from 'styles/layout'
 import useMe from 'hooks/useMe'
 import createComment from 'services/snsComment/createComment'
-import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 
 const StyledPostCommentWritingAreaWrapper = styled.div`
   display: flex;
@@ -50,7 +49,7 @@ const PostCommentWritingArea = ({
     <StyledPostCommentWritingAreaWrapper>
       <Avatar
         alt={me.username}
-        src={addBackendUrlToImageUrl(me.profileImage?.url)}
+        src={me.profileImage?.url}
         sx={{ width: 30, height: 30, marginRight: 1 }}
       />
       <form onSubmit={handleCommentSubmit} css={horizontal}>

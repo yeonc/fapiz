@@ -8,7 +8,6 @@ import Follower from 'components/sns/user/follower'
 import Following from 'components/sns/user/following'
 import useMe from 'hooks/useMe'
 import useUser from 'hooks/useUser'
-import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 import { UserForUserInfo } from 'types/user'
 import { horizontal, mgRight } from 'styles/layout'
 import visuallyHidden from 'styles/visuallyHidden'
@@ -33,7 +32,7 @@ const UserInfo = ({ userId }) => {
     username: userFromStrapi.username,
     height: userFromStrapi.height,
     weight: userFromStrapi.weight,
-    profileImageUrl: addBackendUrlToImageUrl(userFromStrapi.profileImage?.url),
+    profileImageUrl: userFromStrapi.profileImage?.url,
     followers: userFromStrapi.followers,
     followings: userFromStrapi.followings,
   }

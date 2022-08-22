@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import fetchUsers from 'services/user/fetchUsers'
-import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 import createSearchKeywordsArray from 'utils/createSearchKeywordsArray'
 import { FashionStyle } from 'types/fashion'
 import { UserForSearching } from 'types/user'
@@ -49,7 +48,7 @@ const sanitizeUsers = (usersFromStrapi): UserForSearching[] => {
     username: userFromStrapi.username,
     gender: userFromStrapi.gender,
     fashionStyles: userFromStrapi.fashionStyles ?? [],
-    avatarUrl: addBackendUrlToImageUrl(userFromStrapi.profileImage?.url),
+    avatarUrl: userFromStrapi.profileImage?.url,
   }))
 
   return sanitizedUsers

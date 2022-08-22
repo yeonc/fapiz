@@ -3,7 +3,6 @@ import editPost from 'services/snsPost/editPost'
 import uploadImage from 'services/upload/uploadImage'
 import generateIdIntoObject from 'utils/generateIdIntoObject'
 import { changeImageFilesToPreviewImages } from 'utils/previewImage'
-import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 import { EmotionJSX } from '@emotion/react/types/jsx-namespace'
 import { Obj, WithId } from 'types/common'
 import { FashionItemInfo } from 'types/fashion'
@@ -42,7 +41,7 @@ const PostEdit = ({ snsPost, afterEditPost, children }: PostEditProps) => {
   // TODO: map 함수 image 인자 타입 정의
   const initialPreviewImages: PreviewImage[] =
     snsPost.attributes.postImages.data.map((image: any) => ({
-      url: addBackendUrlToImageUrl(image.attributes.url),
+      url: image.attributes.url,
       altText: image.attributes.alternativeText,
     }))
   const initialFashionItemsInfo: FashionItemInfo[] = snsPost.attributes

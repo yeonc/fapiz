@@ -2,7 +2,6 @@ import styled from '@emotion/styled'
 import Link from '@mui/material/Link'
 import Avatar from '@mui/material/Avatar'
 import Typo from 'components/common/typo'
-import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 import ROUTE_URL from 'constants/routeUrl'
 import { horizontal, mgRight } from 'styles/layout'
 import visuallyHidden from 'styles/visuallyHidden'
@@ -19,7 +18,7 @@ const PostAuthorHeader = ({ author, popoverMenu }) => (
   <StyledPostAuthorHeaderWrapper>
     <Avatar
       alt={author.username}
-      src={addBackendUrlToImageUrl(author.avatarUrl)}
+      src={author.avatarUrl}
       sx={{ width: 50, height: 50, marginRight: 2 }}
     />
     <StyledUserProfileTextWrapper>

@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import fetchSnsPosts from 'services/snsPost/fetchSnsPosts'
-import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 import paginateData from 'utils/paginateData'
 import { USER_FASHION_STYLES } from 'constants/user'
 import { SnsPostForMainPage } from 'types/snsPost'
@@ -139,9 +138,7 @@ const sanitizedSnsPosts = (snsPostsFromStrapi: any): SnsPostForMainPage[] => {
       fashionStyles: snsPost.attributes.author.data.attributes.fashionStyles,
     },
     postImage: {
-      url: addBackendUrlToImageUrl(
-        snsPost.attributes.postImages.data[0].attributes.url
-      ),
+      url: snsPost.attributes.postImages.data[0].attributes.url,
       altText: snsPost.attributes.postImages.data[0].attributes.alternativeText,
     },
     likeUsers: snsPost.attributes.likeUsers.data,

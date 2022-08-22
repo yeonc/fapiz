@@ -4,7 +4,6 @@ import SnsPostSearchResultListItemSkeleton from 'components/search/snsPostSearch
 import NoSearchResult from 'components/search/noSearchResult'
 import SearchResultHeadingTypo from 'components/search/searchResultHeadingTypo'
 import useSnsPosts from 'hooks/useSnsPosts'
-import addBackendUrlToImageUrl from 'utils/addBackendUrlToImageUrl'
 import createUrlQuery from 'utils/createUrlQuery'
 import getFormattedDate from 'utils/getFormattedDate'
 import { SnsPostForSearching } from 'types/snsPost'
@@ -88,9 +87,8 @@ const sanitizeSnsPosts = (searchedSnsPostsFromStrapi): SnsPostForSearching[] =>
       id: searchedSnsPostFromStrapi.id,
       createdAt: getFormattedDate(createdDate),
       firstImage: {
-        url: addBackendUrlToImageUrl(
-          searchedSnsPostFromStrapi.attributes.postImages.data[0].attributes.url
-        ),
+        url: searchedSnsPostFromStrapi.attributes.postImages.data[0].attributes
+          .url,
         altText:
           searchedSnsPostFromStrapi.attributes.postImages.data[0].attributes
             .alternativeText,
@@ -99,9 +97,7 @@ const sanitizeSnsPosts = (searchedSnsPostsFromStrapi): SnsPostForSearching[] =>
       likeNumbers: searchedSnsPostFromStrapi.attributes.likeUsers.data.length,
       author: {
         username: author.username,
-        avatarUrl: addBackendUrlToImageUrl(
-          author.profileImage.data?.attributes.url
-        ),
+        avatarUrl: author.profileImage.data?.attributes.url,
       },
       commentCount: searchedSnsPostFromStrapi.attributes.comments.data.length,
     }
