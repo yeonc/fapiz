@@ -1,14 +1,19 @@
+import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
-import { mgRight } from 'styles/layout'
 import useModalState from 'hooks/useModalState'
-import FollowingListModal from 'components/common/modals/modal'
+import Modal from 'components/common/modals/modal'
 import UserList from 'components/sns/user/userList'
 import useMe from 'hooks/useMe'
+import { DEFAULT_BLACK } from 'styles/constants/color'
+import { horizontal, mgRight } from 'styles/layout'
 
-const StyledFollowingWrapper = styled.dl`
-  display: inline-flex;
-  align-items: center;
+const followingStyle = css`
+  color: ${DEFAULT_BLACK};
+`
+
+const StyledModal = styled(Modal)`
+  border-radius: 10px;
 `
 
 const Following = ({ followings, afterFollow }) => {
@@ -22,16 +27,18 @@ const Following = ({ followings, afterFollow }) => {
 
   return (
     <>
-      <StyledFollowingWrapper>
-        <dt css={mgRight(4)}>팔로잉</dt>
-        <dd>
-          <Button variant="text" onClick={handleFollowingModalOpen}>
-            {followings.length}
-          </Button>
-        </dd>
-      </StyledFollowingWrapper>
-      <FollowingListModal
-        title="Followings"
+      <Button
+        variant="text"
+        onClick={handleFollowingModalOpen}
+        css={followingStyle}
+      >
+        <dl css={horizontal}>
+          <dt css={mgRight(10)}>팔로잉</dt>
+          <dd>{followings.length}</dd>
+        </dl>
+      </Button>
+      <StyledModal
+        title="팔로잉"
         contents={
           <UserList users={followings} me={me} afterFollow={afterFollow} />
         }

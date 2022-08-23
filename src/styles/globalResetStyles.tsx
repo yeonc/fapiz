@@ -1,9 +1,14 @@
 import { css } from '@emotion/react'
 import GlobalStyles from '@mui/material/GlobalStyles'
+import { DEFAULT_BLACK } from './constants/color'
 
 const resetStyles = css`
   * {
     margin: 0;
+  }
+
+  body {
+    color: ${DEFAULT_BLACK};
   }
 
   ul {

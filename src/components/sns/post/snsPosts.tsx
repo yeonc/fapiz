@@ -43,7 +43,7 @@ const SnsPosts = ({ userId }) => {
   }
 
   return (
-    <ImageList sx={{ width: 650 }} cols={3}>
+    <ImageList cols={3} rowHeight={264}>
       {snsPosts.map(snsPost => (
         <ImageListItem
           key={snsPost.firstImage.url}

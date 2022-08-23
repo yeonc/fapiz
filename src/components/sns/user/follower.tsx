@@ -1,14 +1,19 @@
+import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
-import { mgRight } from 'styles/layout'
 import useModalState from 'hooks/useModalState'
-import FollowerListModal from 'components/common/modals/modal'
+import Modal from 'components/common/modals/modal'
 import UserList from 'components/sns/user/userList'
 import useMe from 'hooks/useMe'
+import { DEFAULT_BLACK } from 'styles/constants/color'
+import { horizontal, mgRight } from 'styles/layout'
 
-const StyledFollowerWrapper = styled.dl`
-  display: inline-flex;
-  align-items: center;
+const followerStyle = css`
+  color: ${DEFAULT_BLACK};
+`
+
+const StyledModal = styled(Modal)`
+  border-radius: 10px;
 `
 
 const Follower = ({ followers, afterFollow }) => {
@@ -22,16 +27,18 @@ const Follower = ({ followers, afterFollow }) => {
 
   return (
     <>
-      <StyledFollowerWrapper>
-        <dt css={mgRight(4)}>팔로워</dt>
-        <dd>
-          <Button variant="text" onClick={handleFollowerModalOpen}>
-            {followers.length}
-          </Button>
-        </dd>
-      </StyledFollowerWrapper>
-      <FollowerListModal
-        title="Followers"
+      <Button
+        variant="text"
+        onClick={handleFollowerModalOpen}
+        css={followerStyle}
+      >
+        <dl css={horizontal}>
+          <dt css={mgRight(10)}>팔로워</dt>
+          <dd>{followers.length}</dd>
+        </dl>
+      </Button>
+      <StyledModal
+        title="팔로워"
         contents={
           <UserList users={followers} me={me} afterFollow={afterFollow} />
         }

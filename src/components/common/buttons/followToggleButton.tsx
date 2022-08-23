@@ -35,6 +35,7 @@ const FollowToggleButton = ({
     (following: any) => following.id === targetUserId
   )
 
+  const buttonVariant = isFollowing ? 'outlined' : 'contained'
   const buttonText = isFollowing ? '팔로우 취소하기' : '팔로우하기'
   const handleFollow = isFollowing ? unfollowUser : followUser
 
@@ -43,7 +44,11 @@ const FollowToggleButton = ({
     afterFollow()
   }
 
-  return <Button onClick={handleClick}>{buttonText}</Button>
+  return (
+    <Button size="small" variant={buttonVariant} onClick={handleClick}>
+      {buttonText}
+    </Button>
+  )
 }
 
 export default FollowToggleButton
