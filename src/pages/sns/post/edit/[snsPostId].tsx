@@ -20,7 +20,7 @@ const SnsPostEditPage = () => {
 
   const goToEditedPostPage = () => router.push(`/sns/post/${snsPostId}`)
 
-  const afterEditPost = () => {
+  const afterPostEdited = () => {
     goToEditedPostPage()
   }
 
@@ -29,7 +29,7 @@ const SnsPostEditPage = () => {
   }
 
   return (
-    <PostEdit snsPost={snsPost} afterEditPost={afterEditPost}>
+    <PostEdit snsPost={snsPost} afterPostEdited={afterPostEdited}>
       {({
         previewImages,
         fashionItemsInfo,

@@ -33,11 +33,11 @@ type ChildrenProps = {
 
 type PostEditProps = {
   snsPost: any
-  afterEditPost: () => void
+  afterPostEdited: () => void
   children: (props: ChildrenProps) => EmotionJSX.Element
 }
 
-const PostEdit = ({ snsPost, afterEditPost, children }: PostEditProps) => {
+const PostEdit = ({ snsPost, afterPostEdited, children }: PostEditProps) => {
   // TODO: map 함수 image 인자 타입 정의
   const initialPreviewImages: PreviewImage[] =
     snsPost.attributes.postImages.data.map((image: any) => ({
@@ -119,7 +119,7 @@ const PostEdit = ({ snsPost, afterEditPost, children }: PostEditProps) => {
 
     try {
       await editSnsPost()
-      afterEditPost()
+      afterPostEdited()
     } catch (error) {
       console.error(error)
     }

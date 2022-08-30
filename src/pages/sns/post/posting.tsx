@@ -21,12 +21,12 @@ const SnsPostCreatePage = () => {
     router.push(`/sns/post/${postId}`)
   }
 
-  const afterCreatePost = (createdPostId: number) => {
+  const afterPostCreated = (createdPostId: number) => {
     goToSnsPost(createdPostId)
   }
 
   return (
-    <PostCreate authorId={me?.id} afterCreatePost={afterCreatePost}>
+    <PostCreate authorId={me?.id} afterPostCreated={afterPostCreated}>
       {({
         previewImages,
         fashionItemsInfo,
