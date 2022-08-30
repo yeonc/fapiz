@@ -7,6 +7,17 @@ import FormControl from '@mui/material/FormControl'
 import TextField from '@mui/material/TextField'
 import { FASHION_ITEM_CATEGORIES } from 'constants/fashionItem'
 import { FashionItemInfo } from 'types/fashion'
+import styled from '@emotion/styled'
+
+const StyledFashionItemInfo = styled.li`
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+`
 
 type FashionItemInfoToChange = Partial<FashionItemInfo>
 
@@ -42,12 +53,14 @@ type FashionItemsInfoProps = {
   onFashionItemInfoDeleteButtonClick: (
     fashionItemInfoIdToDelete: number
   ) => void
+  className?: string
 }
 
 const FashionItemsInfo = ({
   fashionItemsInfo,
   onFashionItemsInfoChange,
   onFashionItemInfoDeleteButtonClick,
+  className,
 }: FashionItemsInfoProps) => {
   const changeFashionItemsInfo: ChangeFashionItemsInfo = ({
     fashionItemInfoId,
@@ -99,9 +112,9 @@ const FashionItemsInfo = ({
   }
 
   return (
-    <ul>
+    <ul className={className}>
       {fashionItemsInfo.map(fashionItemInfo => (
-        <li key={fashionItemInfo.id}>
+        <StyledFashionItemInfo key={fashionItemInfo.id}>
           <FormControl sx={{ width: 150 }}>
             <InputLabel>아이템 종류</InputLabel>
             <Select
@@ -150,7 +163,7 @@ const FashionItemsInfo = ({
           >
             <RemoveCircleOutlineIcon />
           </IconButton>
-        </li>
+        </StyledFashionItemInfo>
       ))}
     </ul>
   )
