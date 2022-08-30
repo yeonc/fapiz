@@ -19,7 +19,7 @@ type LikeButtonProps = {
   likeUsers: LikeUser[]
   afterLike: () => void
   isShowLikeUsersNumber: boolean
-  borderColor: string
+  borderColor?: string
 }
 
 // TODO: 좋아요 버튼 눌렀을 때 UI에 느리게 반영되는 것 개선하기

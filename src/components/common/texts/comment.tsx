@@ -1,4 +1,10 @@
+import styled from '@emotion/styled'
 import { EmotionJSX } from '@emotion/react/types/jsx-namespace'
+
+const StyledCommentText = styled.p`
+  display: inline;
+  margin-right: 4px;
+`
 
 type CommentProps = {
   text: string
@@ -6,10 +12,10 @@ type CommentProps = {
 }
 
 const Comment = ({ text, buttons }: CommentProps) => (
-  <>
-    <p>{text}</p>
+  <div>
+    <StyledCommentText>{text}</StyledCommentText>
     {buttons}
-  </>
+  </div>
 )
 
 export default Comment

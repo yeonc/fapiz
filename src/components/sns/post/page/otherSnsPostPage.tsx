@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router'
 import { useSWRConfig } from 'swr'
+import styled from '@emotion/styled'
 import PostDescriptionContentsLayout from 'components/sns/post/postDescriptionContentsLayout'
 import PostCommentWritingArea from 'components/sns/comment/postCommentWritingArea'
 import PostCommentList from 'components/sns/comment/postCommentList'
@@ -9,6 +10,10 @@ import useMe from 'hooks/useMe'
 import useSnsPost from 'hooks/useSnsPost'
 import createUrlQuery from 'utils/createUrlQuery'
 import { DEFAULT_BLACK } from 'styles/constants/color'
+
+const StyledPostCommentWritingArea = styled(PostCommentWritingArea)`
+  margin-bottom: 12px;
+`
 
 const queryForFetchingSnsPost = createUrlQuery({
   'populate[0]': 'author.profileImage',
@@ -98,7 +103,6 @@ const OtherSnsPostPage = () => {
             likeUsers={snsPost.likeUsers}
             afterLike={afterLike}
             isShowLikeUsersNumber={true}
-            borderColor={DEFAULT_BLACK}
           />
         }
         bookmarkButton={
@@ -116,7 +120,7 @@ const OtherSnsPostPage = () => {
         postContent={snsPost.content}
         postFashionItemsInfo={snsPost.fashionItemsInfo}
       />
-      <PostCommentWritingArea
+      <StyledPostCommentWritingArea
         snsPostId={snsPost.id}
         afterPostCommentSubmit={afterPostCommentSubmit}
       />

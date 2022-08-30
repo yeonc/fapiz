@@ -75,14 +75,19 @@ const CommentByMode = ({
 
   const commentEditButtons = (
     <>
-      <IconButton aria-label="댓글 수정" onClick={handleCommentEditButtonClick}>
-        <EditIcon />
+      <IconButton
+        aria-label="댓글 수정"
+        onClick={handleCommentEditButtonClick}
+        size="small"
+      >
+        <EditIcon fontSize="small" />
       </IconButton>
       <IconButton
         aria-label="댓글 삭제"
         onClick={handleCommentDeleteButtonClick}
+        size="small"
       >
-        <DeleteIcon />
+        <DeleteIcon fontSize="small" />
       </IconButton>
     </>
   )
