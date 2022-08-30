@@ -58,13 +58,16 @@ const SnsPostEditPage = () => {
           <FashionItemsInfo
             fashionItemsInfo={fashionItemsInfo}
             onFashionItemsInfoChange={handleFashionItemsInfoChange}
-            onFashionItemInfoAddMoreButtonClick={
-              handleFashionItemInfoAddMoreButtonClick
-            }
             onFashionItemInfoDeleteButtonClick={
               handleFashionItemInfoDeleteButtonClick
             }
           />
+          <Button
+            variant="contained"
+            onClick={handleFashionItemInfoAddMoreButtonClick}
+          >
+            아이템 정보 더 추가
+          </Button>
           <TextField
             label="글 내용을 작성해 주세요"
             multiline
