@@ -31,17 +31,17 @@ type ChildrenProps = {
   handleSubmit: (e: FormEvent<HTMLFormElement>) => Promise<void>
 }
 
-type CreatePostProps = {
+type PostCreateProps = {
   authorId: number
   afterCreatePost: (createdPostId: number) => void
   children: (props: ChildrenProps) => EmotionJSX.Element
 }
 
-const CreatePost = ({
+const PostCreate = ({
   authorId,
   afterCreatePost,
   children,
-}: CreatePostProps) => {
+}: PostCreateProps) => {
   const [imageFiles, setImageFiles] = useState<ImageFiles>(null)
   const [previewImages, setPreviewImages] = useState<PreviewImage[] | null>(
     null
@@ -129,4 +129,4 @@ const CreatePost = ({
   })
 }
 
-export default CreatePost
+export default PostCreate

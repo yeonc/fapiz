@@ -12,7 +12,7 @@ const postPreviewImagesSize = css`
   width: 200px;
 `
 
-const SnsPostCreatingPage = () => {
+const SnsPostCreatePage = () => {
   const { me } = useMe()
 
   const router = useRouter()
@@ -81,4 +81,4 @@ const SnsPostCreatingPage = () => {
   )
 }
 
-export default withHeader(SnsPostCreatingPage)
+export default withHeader(SnsPostCreatePage)
