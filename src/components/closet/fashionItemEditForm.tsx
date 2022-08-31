@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { FormEvent, useState } from 'react'
 import { css } from '@emotion/react'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
@@ -67,7 +67,11 @@ const FashionItemEditForm = ({
     })
   }
 
-  const handleFashionItemEditButtonClick = async () => {
+  const handleFashionItemEditButtonClick = async (
+    e: FormEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault()
+
     try {
       await editFashionItemInCloset()
       afterEditFashionItem()
@@ -93,7 +97,7 @@ const FashionItemEditForm = ({
   }
 
   return (
-    <form>
+    <form onSubmit={handleFashionItemEditButtonClick}>
       <img
         src={previewImage.url}
         alt={previewImage.altText}
@@ -116,11 +120,7 @@ const FashionItemEditForm = ({
         onChange={e => handleColorChange(e.target.value)}
         required
       />
-      <Button
-        variant="contained"
-        type="button"
-        onClick={handleFashionItemEditButtonClick}
-      >
+      <Button variant="contained" type="submit">
         수정
       </Button>
       <Button
