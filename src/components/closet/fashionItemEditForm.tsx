@@ -1,20 +1,12 @@
 import { useState } from 'react'
 import { css } from '@emotion/react'
-import FormControl from '@mui/material/FormControl'
-import InputLabel from '@mui/material/InputLabel'
-import Select from '@mui/material/Select'
-import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
+import TextField from '@mui/material/TextField'
 import ImageUploadButton from 'components/common/buttons/imageUploadButton'
 import uploadImage from 'services/upload/uploadImage'
 import editFashionItem from 'services/fashionItem/editFashionItem'
 import deleteFashionItem from 'services/fashionItem/deleteFashionItem'
 import { changeImageFileToPreviewImage } from 'utils/previewImage'
-import {
-  FASHION_ITEM_SEASONS,
-  FASHION_ITEM_CATEGORIES,
-  FASHION_ITEM_COLORS,
-} from 'constants/fashionItem'
 import { ImageFiles, PreviewImage } from 'types/image'
 
 const previewImageStyle = css`
@@ -36,7 +28,6 @@ const FashionItemEditForm = ({
   const [previewImage, setPreviewImage] = useState<PreviewImage>(
     initialFashionItem.image
   )
-  const [season, setSeason] = useState<string>(initialFashionItem.season)
   const [category, setCategory] = useState<string>(initialFashionItem.category)
   const [color, setColor] = useState<string>(initialFashionItem.color)
 
@@ -44,10 +35,6 @@ const FashionItemEditForm = ({
     setImageFiles(imageFiles)
     const previewImage = changeImageFileToPreviewImage(imageFiles[0])
     setPreviewImage(previewImage)
-  }
-
-  const handleSeasonChange = (season: string) => {
-    setSeason(season)
   }
 
   const handleCategoryChange = (category: string) => {
@@ -74,7 +61,6 @@ const FashionItemEditForm = ({
 
     await editFashionItem({
       fashionItemId: initialFashionItem.id,
-      season,
       category,
       color,
       imageId,
@@ -118,48 +104,18 @@ const FashionItemEditForm = ({
         buttonAriaLabel="패션 아이템 이미지 선택"
         isImageRequired={false}
       />
-      <FormControl fullWidth>
-        <InputLabel>계절</InputLabel>
-        <Select
-          value={season}
-          label="계절"
-          onChange={e => handleSeasonChange(e.target.value)}
-        >
-          {FASHION_ITEM_SEASONS.map(season => (
-            <MenuItem key={season.id} value={season.name}>
-              {season.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl fullWidth>
-        <InputLabel>카테고리</InputLabel>
-        <Select
-          value={category}
-          label="카테고리"
-          onChange={e => handleCategoryChange(e.target.value)}
-        >
-          {FASHION_ITEM_CATEGORIES.map(category => (
-            <MenuItem key={category.id} value={category.name}>
-              {category.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl fullWidth>
-        <InputLabel>색상</InputLabel>
-        <Select
-          value={color}
-          label="색상"
-          onChange={e => handleColorChange(e.target.value)}
-        >
-          {FASHION_ITEM_COLORS.map(color => (
-            <MenuItem key={color.id} value={color.name}>
-              {color.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <TextField
+        label="카테고리"
+        value={category}
+        onChange={e => handleCategoryChange(e.target.value)}
+        required
+      />
+      <TextField
+        label="색상"
+        value={color}
+        onChange={e => handleColorChange(e.target.value)}
+        required
+      />
       <Button
         variant="contained"
         type="button"

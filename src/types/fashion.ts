@@ -1,3 +1,5 @@
+import { fashionItemImage } from 'types/image'
+
 export type FashionItemInfo = {
   id: number
   category: string
@@ -22,4 +24,11 @@ type FashionStyleName =
 export type FashionStyle = {
   id: number
   name: FashionStyleName
+}
+
+export type FashionItemForClosetPage = {
+  id: number
+  category: string
+  color: string
+  image: fashionItemImage
 }
