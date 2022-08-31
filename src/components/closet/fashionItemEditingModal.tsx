@@ -1,8 +1,13 @@
 import { useSWRConfig } from 'swr'
+import styled from '@emotion/styled'
 import Modal from 'components/common/modals/modal'
 import FashionItemEditForm from 'components/closet/fashionItemEditForm'
 import useMe from 'hooks/useMe'
 import createUrlQuery from 'utils/createUrlQuery'
+
+const StyledModal = styled(Modal)`
+  border-radius: 10px;
+`
 
 const FashionItemEditingModal = ({
   onFashionItemEditModalClose,
@@ -32,7 +37,7 @@ const FashionItemEditingModal = ({
   }
 
   return (
-    <Modal
+    <StyledModal
       title="패션 아이템 편집"
       contents={
         <FashionItemEditForm

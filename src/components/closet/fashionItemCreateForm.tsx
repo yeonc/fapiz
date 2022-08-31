@@ -1,20 +1,32 @@
 import { useState } from 'react'
 import { css } from '@emotion/react'
+import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import ImageUploadButton from 'components/common/buttons/imageUploadButton'
+import ImageUploadCaptionTypo from 'components/common/typo/imageUploadCaptionTypo'
 import uploadImage from 'services/upload/uploadImage'
 import createFashionItem from 'services/fashionItem/createFashionItem'
 import useMe from 'hooks/useMe'
 import { changeImageFileToPreviewImage } from 'utils/previewImage'
 import { ImageFiles, PreviewImage } from 'types/image'
+import { mgBottom } from 'styles/layout'
+
+const StyledFashionItemCreateForm = styled.form`
+  text-align: center;
+`
+
+const StyledTextFieldWrapper = styled.div`
+  padding: 12px 12px 18px;
+`
 
 const previewImageStyle = css`
-  width: 250px;
-  height: 250px;
+  display: block;
+  width: 200px;
   border-radius: 50%;
-  margin: 10px 0;
+  margin: 10px auto;
   object-fit: cover;
+  aspect-ratio: 1 / 1;
 `
 
 const DEFAULT_PREVIEW_IMAGE = {
@@ -75,7 +87,7 @@ const FashionItemCreateForm = ({ afterCreateFashionItem }) => {
   }
 
   return (
-    <form onSubmit={handleFashionItemSubmit}>
+    <StyledFashionItemCreateForm onSubmit={handleFashionItemSubmit}>
       <img
         src={previewImage.url}
         alt={previewImage.altText}
@@ -86,22 +98,30 @@ const FashionItemCreateForm = ({ afterCreateFashionItem }) => {
         buttonAriaLabel="패션 아이템 이미지 선택"
         isImageRequired={true}
       />
-      <TextField
-        label="카테고리를 입력하세요"
-        value={category}
-        onChange={e => handleCategoryChange(e.target.value)}
-        required
-      />
-      <TextField
-        label="색상을 입력하세요"
-        value={color}
-        onChange={e => handleColorChange(e.target.value)}
-        required
-      />
+      <ImageUploadCaptionTypo>
+        아이콘을 클릭해 패션 아이템 이미지를 업로드 해 보세요!
+      </ImageUploadCaptionTypo>
+      <StyledTextFieldWrapper>
+        <TextField
+          label="카테고리를 입력하세요"
+          value={category}
+          onChange={e => handleCategoryChange(e.target.value)}
+          required
+          fullWidth={true}
+          css={mgBottom(12)}
+        />
+        <TextField
+          label="색상을 입력하세요"
+          value={color}
+          onChange={e => handleColorChange(e.target.value)}
+          required
+          fullWidth={true}
+        />
+      </StyledTextFieldWrapper>
       <Button variant="contained" type="submit">
         등록
       </Button>
-    </form>
+    </StyledFashionItemCreateForm>
   )
 }
 

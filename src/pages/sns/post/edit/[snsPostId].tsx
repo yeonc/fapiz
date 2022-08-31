@@ -10,7 +10,7 @@ import ImageUploadButton from 'components/common/buttons/imageUploadButton'
 import FashionItemsInfo from 'components/sns/post/fashionItemsInfo'
 import PostWritingHeadingTypo from 'components/sns/post/postWritingHeadingTypo'
 import PostWritingSubheadingTypo from 'components/sns/post/postWritingSubheadingTypo'
-import PostImageUploadCaptionTypo from 'components/sns/post/postImageUploadCaptionTypo'
+import ImageUploadCaptionTypo from 'components/common/typo/imageUploadCaptionTypo'
 import useSnsPost from 'hooks/useSnsPost'
 
 const StyledSnsPostEditPage = styled.div`
@@ -95,9 +95,9 @@ const SnsPostEditPage = () => {
                   buttonAriaLabel="SNS 게시물 이미지 수정"
                   isImageRequired={false}
                 />
-                <PostImageUploadCaptionTypo>
+                <ImageUploadCaptionTypo>
                   아이콘을 클릭해 이미지를 업로드 해 보세요! (세 장까지만 가능)
-                </PostImageUploadCaptionTypo>
+                </ImageUploadCaptionTypo>
               </div>
             </StyledPostImageWrapper>
             <StyledPostFashionItemInfoWrapper>

@@ -1,20 +1,32 @@
 import { FormEvent, useState } from 'react'
 import { css } from '@emotion/react'
+import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import ImageUploadButton from 'components/common/buttons/imageUploadButton'
+import ImageUploadCaptionTypo from 'components/common/typo/imageUploadCaptionTypo'
 import uploadImage from 'services/upload/uploadImage'
 import editFashionItem from 'services/fashionItem/editFashionItem'
 import deleteFashionItem from 'services/fashionItem/deleteFashionItem'
 import { changeImageFileToPreviewImage } from 'utils/previewImage'
 import { ImageFiles, PreviewImage } from 'types/image'
+import { mgBottom, mgRight } from 'styles/layout'
+
+const StyledFashionItemCreateForm = styled.form`
+  text-align: center;
+`
+
+const StyledTextFieldWrapper = styled.div`
+  padding: 12px 12px 18px;
+`
 
 const previewImageStyle = css`
-  width: 250px;
-  height: 250px;
+  display: block;
+  width: 200px;
   border-radius: 50%;
-  margin: 10px 0;
+  margin: 10px auto;
   object-fit: cover;
+  aspect-ratio: 1 / 1;
 `
 
 type UploadedImageId = number | undefined
@@ -97,7 +109,7 @@ const FashionItemEditForm = ({
   }
 
   return (
-    <form onSubmit={handleFashionItemEditButtonClick}>
+    <StyledFashionItemCreateForm onSubmit={handleFashionItemEditButtonClick}>
       <img
         src={previewImage.url}
         alt={previewImage.altText}
@@ -108,19 +120,27 @@ const FashionItemEditForm = ({
         buttonAriaLabel="패션 아이템 이미지 선택"
         isImageRequired={false}
       />
-      <TextField
-        label="카테고리"
-        value={category}
-        onChange={e => handleCategoryChange(e.target.value)}
-        required
-      />
-      <TextField
-        label="색상"
-        value={color}
-        onChange={e => handleColorChange(e.target.value)}
-        required
-      />
-      <Button variant="contained" type="submit">
+      <ImageUploadCaptionTypo>
+        아이콘을 클릭해 패션 아이템 이미지를 수정해 보세요!
+      </ImageUploadCaptionTypo>
+      <StyledTextFieldWrapper>
+        <TextField
+          label="카테고리"
+          value={category}
+          onChange={e => handleCategoryChange(e.target.value)}
+          required
+          fullWidth={true}
+          css={mgBottom(12)}
+        />
+        <TextField
+          label="색상"
+          value={color}
+          onChange={e => handleColorChange(e.target.value)}
+          required
+          fullWidth={true}
+        />
+      </StyledTextFieldWrapper>
+      <Button variant="contained" type="submit" css={mgRight(6)}>
         수정
       </Button>
       <Button
@@ -130,7 +150,7 @@ const FashionItemEditForm = ({
       >
         삭제
       </Button>
-    </form>
+    </StyledFashionItemCreateForm>
   )
 }
 

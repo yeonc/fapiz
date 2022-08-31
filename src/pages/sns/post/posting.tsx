@@ -10,7 +10,7 @@ import PostWritingHeadingTypo from 'components/sns/post/postWritingHeadingTypo'
 import PostWritingSubheadingTypo from 'components/sns/post/postWritingSubheadingTypo'
 import FashionItemsInfo from 'components/sns/post/fashionItemsInfo'
 import PostCreate from 'components/sns/post/postCreate'
-import PostImageUploadCaptionTypo from 'components/sns/post/postImageUploadCaptionTypo'
+import ImageUploadCaptionTypo from 'components/common/typo/imageUploadCaptionTypo'
 import useMe from 'hooks/useMe'
 
 const StyledSnsPostCreatePage = styled.div`
@@ -93,9 +93,9 @@ const SnsPostCreatePage = () => {
                   buttonAriaLabel="SNS 게시물 이미지 업로드"
                   isImageRequired={true}
                 />
-                <PostImageUploadCaptionTypo>
+                <ImageUploadCaptionTypo>
                   아이콘을 클릭해 이미지를 업로드 해 보세요! (세 장까지만 가능)
-                </PostImageUploadCaptionTypo>
+                </ImageUploadCaptionTypo>
               </div>
             </StyledPostImageWrapper>
             <StyledPostFashionItemInfoWrapper>

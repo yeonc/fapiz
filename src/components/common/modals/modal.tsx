@@ -14,7 +14,7 @@ const StyledModalBox = styled.div`
 `
 
 const StyledModalContentsWrapper = styled.div`
-  max-height: 200px;
+  max-height: 550px;
   overflow: auto;
 `
 
