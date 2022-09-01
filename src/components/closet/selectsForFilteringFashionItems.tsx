@@ -10,6 +10,7 @@ type SelectsForFilteringFashionItemsProps = {
   color: string
   colors: string[]
   handleColorChange: (color: string) => void
+  className?: string
 }
 
 const SelectsForFilteringFashionItems = ({
@@ -19,10 +20,11 @@ const SelectsForFilteringFashionItems = ({
   color,
   colors,
   handleColorChange,
+  className,
 }: SelectsForFilteringFashionItemsProps) => {
   return (
-    <>
-      <FormControl sx={{ minWidth: 120 }}>
+    <div className={className}>
+      <FormControl sx={{ minWidth: 120, mr: 1 }}>
         <InputLabel>카테고리</InputLabel>
         <Select
           value={category}
@@ -52,7 +54,7 @@ const SelectsForFilteringFashionItems = ({
           ))}
         </Select>
       </FormControl>
-    </>
+    </div>
   )
 }
 

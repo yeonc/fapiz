@@ -1,23 +1,26 @@
 import { useState } from 'react'
 import withHeader from 'hocs/withHeader'
 import withLoginPageRedirect from 'hocs/withLoginPageRedirect'
-import { css } from '@emotion/react'
-import Fab from '@mui/material/Fab'
-import CheckroomIcon from '@mui/icons-material/Checkroom'
+import styled from '@emotion/styled'
 import FashionItemList from 'components/closet/fashionItemList'
 import SelectsForFilteringFashionItems from 'components/closet/selectsForFilteringFashionItems'
-import FashionItemCreatingModal from 'components/closet/fashionItemCreatingModal'
+import IntroducingBanner from 'components/closet/introducingBanner'
 import useMe from 'hooks/useMe'
 import useFashionItems from 'hooks/useFashionItems'
-import useModalState from 'hooks/useModalState'
 import createUrlQuery from 'utils/createUrlQuery'
 import removeDuplicatedValueFromArray from 'utils/removeDuplicatedValueFromArray'
 import { FashionItemForClosetPage } from 'types/fashion'
 
-const fabPositionFixed = css`
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
+const StyledClosetPageWrapper = styled.div`
+  padding-bottom: 30px;
+`
+
+const StyledSelectsForFilteringFashionItems = styled(
+  SelectsForFilteringFashionItems
+)`
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
 `
 
 const ClosetPage = () => {
@@ -55,12 +58,6 @@ const ClosetPage = () => {
     })
   )
 
-  const {
-    isOpen: isFashionItemCreateModalOpen,
-    handleOpen: handleFashionItemCreateModalOpen,
-    handleClose: handleFashionItemCreateModalClose,
-  } = useModalState()
-
   const categories = getCategoriesFromFashionItems(fashionItems)
   const colors = getColorsFromFashionItems(fashionItems)
 
@@ -71,8 +68,9 @@ const ClosetPage = () => {
   })
 
   return (
-    <>
-      <SelectsForFilteringFashionItems
+    <StyledClosetPageWrapper>
+      <IntroducingBanner />
+      <StyledSelectsForFilteringFashionItems
         category={category}
         categories={categories}
         handleCategoryChange={handleCategoryChange}
@@ -81,19 +79,7 @@ const ClosetPage = () => {
         handleColorChange={handleColorChange}
       />
       <FashionItemList fashionItems={filteredFashionItems} />
-      <Fab
-        color="primary"
-        aria-label="옷장에 패션 아이템 등록"
-        css={fabPositionFixed}
-        onClick={handleFashionItemCreateModalOpen}
-      >
-        <CheckroomIcon />
-      </Fab>
-      <FashionItemCreatingModal
-        isFashionItemCreateModalOpen={isFashionItemCreateModalOpen}
-        onFashionItemCreateModalClose={handleFashionItemCreateModalClose}
-      />
-    </>
+    </StyledClosetPageWrapper>
   )
 }
 

@@ -1,24 +1,36 @@
 import styled from '@emotion/styled'
+import ImageList from '@mui/material/ImageList'
+import AnnouncementIcon from '@mui/icons-material/Announcement'
 import FashionItemListItem from 'components/closet/fashionItemListItem'
+import Typo from 'components/common/typo'
+import { FashionItemForClosetPage } from 'types/fashion'
+import { mgBottom } from 'styles/layout'
 
-const StyledFashionItemListWrapper = styled.div`
-  max-width: 800px;
+const StyledNoExistFashionItem = styled.div`
+  text-align: center;
+  padding-top: 40px;
 `
 
-const StyledFashionItemList = styled.ul`
-  display: flex;
-  flex-wrap: wrap;
-`
+type FashonItemListProps = {
+  fashionItems: FashionItemForClosetPage[]
+}
 
-const FashionItemList = ({ fashionItems }) => {
+const FashionItemList = ({ fashionItems }: FashonItemListProps) => {
+  if (fashionItems.length === 0) {
+    return (
+      <StyledNoExistFashionItem>
+        <AnnouncementIcon fontSize="large" css={mgBottom(6)} />
+        <Typo>조건에 해당하는 아이템이 존재하지 않습니다.</Typo>
+      </StyledNoExistFashionItem>
+    )
+  }
+
   return (
-    <StyledFashionItemListWrapper>
-      <StyledFashionItemList>
-        {fashionItems.map((fashionItem: any) => (
-          <FashionItemListItem key={fashionItem.id} fashionItem={fashionItem} />
-        ))}
-      </StyledFashionItemList>
-    </StyledFashionItemListWrapper>
+    <ImageList cols={5} rowHeight={250} gap={10}>
+      {fashionItems.map(fashionItem => (
+        <FashionItemListItem key={fashionItem.id} fashionItem={fashionItem} />
+      ))}
+    </ImageList>
   )
 }
 
