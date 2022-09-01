@@ -17,12 +17,14 @@ type ImageUploadButtonProps = {
   onImageFilesChange: (imageFiles: FileList) => void
   buttonAriaLabel: string
   isImageRequired: boolean
+  className?: string
 }
 
 const ImageUploadButton = ({
   onImageFilesChange,
   buttonAriaLabel,
   isImageRequired,
+  className,
 }: ImageUploadButtonProps) => {
   const [isInvalid, setIsInvalid] = useState(false)
 
@@ -41,7 +43,12 @@ const ImageUploadButton = ({
         css={inputDisplayNone}
         onChange={e => onImageFilesChange(e.target.files as FileList)}
       />
-      <IconButton color="primary" aria-label={buttonAriaLabel} component="span">
+      <IconButton
+        color="primary"
+        aria-label={buttonAriaLabel}
+        component="span"
+        className={className}
+      >
         <PhotoCamera />
       </IconButton>
       {isInvalid && (
