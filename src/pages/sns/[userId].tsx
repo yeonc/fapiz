@@ -6,6 +6,7 @@ import Fab from '@mui/material/Fab'
 import CreateIcon from '@mui/icons-material/Create'
 import UserInfo from 'components/sns/user/userInfo'
 import SnsPosts from 'components/sns/post/snsPosts'
+import PageContainer from 'components/layouts/containers/pageContainer'
 import useMe from 'hooks/useMe'
 import getSafeNumberFromQuery from 'utils/getSafeNumberFromQuery'
 import { LIGHT_GRAY } from 'styles/constants/color'
@@ -43,24 +44,26 @@ const SnsPage = () => {
   const isMySnsPage = me?.id === userId
 
   return (
-    <StyledSnsPageWrapper>
-      {userId && (
-        <>
-          <StyledUserInfo userId={userId} />
-          <SnsPosts userId={userId} />
-        </>
-      )}
-      {isMySnsPage && (
-        <Fab
-          color="primary"
-          aria-label="SNS 게시물 등록"
-          css={positionOfSnsPostCreateButton}
-          onClick={handleSnsPostCreateButtonClick}
-        >
-          <CreateIcon />
-        </Fab>
-      )}
-    </StyledSnsPageWrapper>
+    <PageContainer>
+      <StyledSnsPageWrapper>
+        {userId && (
+          <>
+            <StyledUserInfo userId={userId} />
+            <SnsPosts userId={userId} />
+          </>
+        )}
+        {isMySnsPage && (
+          <Fab
+            color="primary"
+            aria-label="SNS 게시물 등록"
+            css={positionOfSnsPostCreateButton}
+            onClick={handleSnsPostCreateButtonClick}
+          >
+            <CreateIcon />
+          </Fab>
+        )}
+      </StyledSnsPageWrapper>
+    </PageContainer>
   )
 }
 

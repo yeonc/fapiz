@@ -5,6 +5,7 @@ import styled from '@emotion/styled'
 import FashionItemList from 'components/closet/fashionItemList'
 import SelectsForFilteringFashionItems from 'components/closet/selectsForFilteringFashionItems'
 import IntroducingBanner from 'components/closet/introducingBanner'
+import PageContainer from 'components/layouts/containers/pageContainer'
 import useMe from 'hooks/useMe'
 import useFashionItems from 'hooks/useFashionItems'
 import createUrlQuery from 'utils/createUrlQuery'
@@ -68,18 +69,20 @@ const ClosetPage = () => {
   })
 
   return (
-    <StyledClosetPageWrapper>
-      <IntroducingBanner />
-      <StyledSelectsForFilteringFashionItems
-        category={category}
-        categories={categories}
-        handleCategoryChange={handleCategoryChange}
-        color={color}
-        colors={colors}
-        handleColorChange={handleColorChange}
-      />
-      <FashionItemList fashionItems={filteredFashionItems} />
-    </StyledClosetPageWrapper>
+    <PageContainer>
+      <StyledClosetPageWrapper>
+        <IntroducingBanner />
+        <StyledSelectsForFilteringFashionItems
+          category={category}
+          categories={categories}
+          handleCategoryChange={handleCategoryChange}
+          color={color}
+          colors={colors}
+          handleColorChange={handleColorChange}
+        />
+        <FashionItemList fashionItems={filteredFashionItems} />
+      </StyledClosetPageWrapper>
+    </PageContainer>
   )
 }
 

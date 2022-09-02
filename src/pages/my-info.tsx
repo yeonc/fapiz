@@ -12,6 +12,7 @@ import getToken from 'utils/getToken'
 import { BACKEND_URL } from 'constants/constants'
 import { UserForMyInfoPage } from 'types/user'
 import { mgBottom } from 'styles/layout'
+import PageContainer from 'components/layouts/containers/pageContainer'
 
 const TOOLTIP_TEXT =
   '성별, 체형, 패션 스타일 정보 중 두 가지 이상을 입력하면 메인 페이지에서 나와 같은 정보를 가진 유저들이 올린 SNS 게시물만을 볼 수 있어요! 🙂'
@@ -60,21 +61,23 @@ const MyInfoPage = () => {
   }
 
   return (
-    <StyledMyInfoPageWrapper>
-      <Typo variant="h4" component="h1">
-        내 정보 수정
-      </Typo>
-      <Tooltip title={TOOLTIP_TEXT}>
-        <Button startIcon={<InfoIcon />} css={mgBottom(30)}>
-          Tip (마우스를 올려서 확인해 보세요)
-        </Button>
-      </Tooltip>
-      <MyInfoEditForm
-        myInfo={myInfo}
-        afterMyInfoEdited={afterMyInfoEdited}
-        afterMyInfoEditCanceled={afterMyInfoEditCanceled}
-      />
-    </StyledMyInfoPageWrapper>
+    <PageContainer>
+      <StyledMyInfoPageWrapper>
+        <Typo variant="h4" component="h1">
+          내 정보 수정
+        </Typo>
+        <Tooltip title={TOOLTIP_TEXT}>
+          <Button startIcon={<InfoIcon />} css={mgBottom(30)}>
+            Tip (마우스를 올려서 확인해 보세요)
+          </Button>
+        </Tooltip>
+        <MyInfoEditForm
+          myInfo={myInfo}
+          afterMyInfoEdited={afterMyInfoEdited}
+          afterMyInfoEditCanceled={afterMyInfoEditCanceled}
+        />
+      </StyledMyInfoPageWrapper>
+    </PageContainer>
   )
 }
 

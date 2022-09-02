@@ -5,6 +5,7 @@ import { css } from '@emotion/react'
 import ImageList from '@mui/material/ImageList'
 import LikeButton from 'components/common/buttons/likeButton'
 import ImageCardItem from 'components/home/imageCardItem'
+import PageContainer from 'components/layouts/containers/pageContainer'
 import useMe from 'hooks/useMe'
 import useSnsPostInfiniteScroll from 'hooks/useSnsPostInfiniteScroll'
 import createUrlQuery from 'utils/createUrlQuery'
@@ -57,7 +58,7 @@ const MainPage = () => {
   }
 
   return (
-    <>
+    <PageContainer>
       <ImageList variant="masonry" cols={3}>
         {snsPosts.map(snsPost => {
           return (
@@ -80,7 +81,7 @@ const MainPage = () => {
       </ImageList>
       <span ref={fetchTriggerRef} css={fetchTriggerStyle}></span>
       {isSnsPostsLoading && <p css={loadingTextStyle}>loading...</p>}
-    </>
+    </PageContainer>
   )
 }
 

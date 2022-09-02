@@ -5,6 +5,7 @@ import SearchForm from 'components/search/searchForm'
 import SnsPostSearchResult from 'components/search/snsPostSearchResult'
 import UserSearchResult from 'components/search/userSearchResult'
 import Typo from 'components/common/typo'
+import PageContainer from 'components/layouts/containers/pageContainer'
 import visuallyHidden from 'styles/visuallyHidden'
 
 const StyledSearchFormWrapper = styled.div`
@@ -31,7 +32,7 @@ const SearchPage = () => {
   }
 
   return (
-    <>
+    <PageContainer>
       <h1 css={visuallyHidden}>통합 검색 결과 페이지</h1>
       <StyledSearchFormWrapper>
         {!searchKeyword && MessageBeforeSearching}
@@ -43,7 +44,7 @@ const SearchPage = () => {
           <UserSearchResult searchKeyword={searchKeyword} />
         </StyledSearchResultWrapper>
       )}
-    </>
+    </PageContainer>
   )
 }
 
