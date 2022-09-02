@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import googleLogin from 'services/auth/googleLogin'
-import ROUTE_URL from 'constants/routeUrl'
 import getValueOfKeyFromQueryString from 'utils/getValueOfKeyFromQueryString'
+import ROUTE_URL from 'constants/routeUrl'
 import { LoginSuccessResponseData, AccessToken } from 'types/auth'
 
 const ACCESS_TOKEN_KEY = 'access_token'
@@ -44,7 +44,7 @@ const GoogleLoginRedirectPage = () => {
       .catch(console.error)
   }, [])
 
-  return <p>로그인 중입니다. 잠시만 기다려 주세요</p>
+  return null
 }
 
 export default GoogleLoginRedirectPage
