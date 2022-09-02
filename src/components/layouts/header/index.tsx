@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import Navbar from 'components/layouts/header/navbar'
-import HeaderLogo from 'components/layouts/header/headerLogo'
+import HeaderFapizLogo from 'components/layouts/header/headerFapizLogo'
 
 const StyledHeaderWrapper = styled.header`
   display: flex;
@@ -12,7 +12,7 @@ const StyledHeaderWrapper = styled.header`
 const Header = () => {
   return (
     <StyledHeaderWrapper>
-      <HeaderLogo />
+      <HeaderFapizLogo />
       <Navbar />
     </StyledHeaderWrapper>
   )

@@ -1,7 +1,5 @@
 import { useRouter } from 'next/router'
 import Link from '@mui/material/Link'
-import SearchIcon from '@mui/icons-material/Search'
-import ChatIcon from '@mui/icons-material/ChatBubbleOutline'
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import ROUTE_URL from 'constants/routeUrl'

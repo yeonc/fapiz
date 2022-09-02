@@ -5,8 +5,8 @@ const StyledContainer = styled.div`
   margin: 0 auto;
 `
 
-const GlobalContainer = ({ children }) => (
+const PageContainer = ({ children }) => (
   <StyledContainer>{children}</StyledContainer>
 )
 
-export default GlobalContainer
+export default PageContainer
