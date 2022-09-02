@@ -5,6 +5,11 @@ import styled from '@emotion/styled'
 import ROUTE_URL from 'constants/routeUrl'
 import useMe from 'hooks/useMe'
 
+const StyledNavbar = styled.nav`
+  display: flex;
+  align-items: center;
+`
+
 const StyledPageLinkList = styled.ul`
   display: inline-flex;
 `
@@ -55,7 +60,7 @@ const Navbar = () => {
   ]
 
   return (
-    <nav>
+    <StyledNavbar>
       <StyledPageLinkList>
         {PAGE_LINK_LIST.map(link => (
           <StyledPageLink key={link.href}>
@@ -64,7 +69,7 @@ const Navbar = () => {
         ))}
       </StyledPageLinkList>
       <AuthButton />
-    </nav>
+    </StyledNavbar>
   )
 }
 

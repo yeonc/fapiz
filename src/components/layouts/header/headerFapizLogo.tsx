@@ -4,7 +4,8 @@ import ROUTE_URL from 'constants/routeUrl'
 import FapizLogo from 'components/common/logos/fapizLogo'
 
 const StyledFapizLogoWrapper = styled.div`
-  margin-right: 28px;
+  display: flex;
+  width: 120px;
 `
 
 const HeaderFapizLogo = () => (
