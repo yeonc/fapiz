@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import Button from '@mui/material/Button'
+import LoadingButton from '@mui/lab/LoadingButton'
 import TextField from '@mui/material/TextField'
 import ImageUploadButton from 'components/common/buttons/imageUploadButton'
 import ImageUploadCaptionTypo from 'components/common/typo/imageUploadCaptionTypo'
@@ -43,6 +43,8 @@ const FashionItemCreateForm = ({ afterCreateFashionItem }) => {
   )
   const [category, setCategory] = useState('')
   const [color, setColor] = useState('')
+  const [isFashionItemCreateLoading, setIsFashionItemCreateLoading] =
+    useState(false)
 
   const handleImageFilesChange = (imageFiles: FileList) => {
     setImageFiles(imageFiles)
@@ -77,9 +79,11 @@ const FashionItemCreateForm = ({ afterCreateFashionItem }) => {
 
     // TODO: uploadedImageId 가져오는 과정 함수로 빼기
     try {
+      setIsFashionItemCreateLoading(true)
       const res = await uploadImage(imageFiles)
       const uploadedImageId = res.data[0].id
       await createFashionItemWithImage(uploadedImageId)
+      setIsFashionItemCreateLoading(false)
       afterCreateFashionItem()
     } catch (error) {
       console.error(error)
@@ -118,9 +122,14 @@ const FashionItemCreateForm = ({ afterCreateFashionItem }) => {
           fullWidth={true}
         />
       </StyledTextFieldWrapper>
-      <Button variant="contained" type="submit">
+      <LoadingButton
+        variant="contained"
+        type="submit"
+        loading={isFashionItemCreateLoading}
+        loadingPosition="center"
+      >
         등록
-      </Button>
+      </LoadingButton>
     </StyledFashionItemCreateForm>
   )
 }

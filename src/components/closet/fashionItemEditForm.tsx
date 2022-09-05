@@ -3,6 +3,7 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
+import LoadingButton from '@mui/lab/LoadingButton'
 import ImageUploadButton from 'components/common/buttons/imageUploadButton'
 import ImageUploadCaptionTypo from 'components/common/typo/imageUploadCaptionTypo'
 import uploadImage from 'services/upload/uploadImage'
@@ -42,6 +43,8 @@ const FashionItemEditForm = ({
   )
   const [category, setCategory] = useState<string>(initialFashionItem.category)
   const [color, setColor] = useState<string>(initialFashionItem.color)
+  const [isFashionItemEditLoading, setIsFashionItemEditLoading] =
+    useState(false)
 
   const handleImageFilesChange = (imageFiles: FileList) => {
     setImageFiles(imageFiles)
@@ -85,7 +88,9 @@ const FashionItemEditForm = ({
     e.preventDefault()
 
     try {
+      setIsFashionItemEditLoading(true)
       await editFashionItemInCloset()
+      setIsFashionItemEditLoading(false)
       afterEditFashionItem()
     } catch (error) {
       console.error(error)
@@ -140,13 +145,20 @@ const FashionItemEditForm = ({
           fullWidth={true}
         />
       </StyledTextFieldWrapper>
-      <Button variant="contained" type="submit" css={mgRight(6)}>
+      <LoadingButton
+        variant="contained"
+        type="submit"
+        css={mgRight(6)}
+        loading={isFashionItemEditLoading}
+        loadingPosition="center"
+      >
         수정
-      </Button>
+      </LoadingButton>
       <Button
         variant="outlined"
         type="button"
         onClick={handleFashionItemDeleteButtonClick}
+        disabled={isFashionItemEditLoading}
       >
         삭제
       </Button>
