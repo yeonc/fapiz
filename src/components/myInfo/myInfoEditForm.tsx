@@ -26,6 +26,7 @@ import { ImageFiles, PreviewImage } from 'types/image'
 import { Nullable } from 'types/common'
 import { DEFAULT_BLACK, DEFAULT_WHITE } from 'styles/constants/color'
 import { mgBottom, mgRight } from 'styles/layout'
+import { FashionStyle } from 'types/fashion'
 
 const StyledAvatarAndUsernameWrapper = styled.div`
   text-align: center;
@@ -69,6 +70,8 @@ const inputWidth = css`
   width: 35%;
 `
 
+type FashionStyleId = FashionStyle['id']
+
 type MyInfoEditFormProps = {
   myInfo: UserForMyInfoPage
 }
@@ -111,7 +114,7 @@ const MyInfoEditForm = ({ myInfo }: MyInfoEditFormProps) => {
     setBodyShape(bodyShape)
   }
 
-  const handleFashionStylesChange = (fashionStyles: any) => {
+  const handleFashionStylesChange = (fashionStyles: FashionStyle[]) => {
     setFashionStyles(fashionStyles)
   }
 
@@ -237,18 +240,34 @@ const MyInfoEditForm = ({ myInfo }: MyInfoEditFormProps) => {
           <Select
             label="패션 스타일"
             multiple
-            value={fashionStyles}
-            onChange={e => handleFashionStylesChange(e.target.value)}
-            renderValue={selectedFashionStyles => (
-              <div>
-                {selectedFashionStyles.map(fashionStyle => (
-                  <Chip key={fashionStyle.id} label={fashionStyle.name} />
-                ))}
-              </div>
-            )}
+            value={convertFashionStyleObjectsToFashionStyleIds(fashionStyles)}
+            onChange={e =>
+              handleFashionStylesChange(
+                convertFashionStyleIdsToFashionStyleObjects(
+                  e.target.value as FashionStyleId[]
+                )
+              )
+            }
+            renderValue={selectedFashionStyleIds => {
+              const fashionStyles = convertFashionStyleIdsToFashionStyleObjects(
+                selectedFashionStyleIds
+              )
+
+              return (
+                <div>
+                  {fashionStyles.map(fashionStyle => (
+                    <Chip
+                      key={fashionStyle.id}
+                      label={fashionStyle.name}
+                      size="small"
+                    />
+                  ))}
+                </div>
+              )
+            }}
           >
             {USER_FASHION_STYLES.map(fashionStyle => (
-              <MenuItem key={fashionStyle.id} value={fashionStyle.name}>
+              <MenuItem key={fashionStyle.id} value={fashionStyle.id}>
                 {fashionStyle.name}
               </MenuItem>
             ))}
@@ -271,3 +290,20 @@ const MyInfoEditForm = ({ myInfo }: MyInfoEditFormProps) => {
 }
 
 export default MyInfoEditForm
+
+const convertFashionStyleIdsToFashionStyleObjects = (
+  fashionStyles: FashionStyleId[]
+): FashionStyle[] => {
+  return fashionStyles.map(fashionStyleId => {
+    const foundedFashionStyleObject = USER_FASHION_STYLES.find(
+      fashionStyle => fashionStyle.id === fashionStyleId
+    )
+    return foundedFashionStyleObject
+  }) as FashionStyle[]
+}
+
+const convertFashionStyleObjectsToFashionStyleIds = (
+  fashionStyles: FashionStyle[]
+): FashionStyleId[] => {
+  return fashionStyles.map(fashionStyle => fashionStyle.id)
+}
