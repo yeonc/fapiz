@@ -1,7 +1,7 @@
 import { FormEvent, useState } from 'react'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import Button from '@mui/material/Button'
+import LoadingButton from '@mui/lab/LoadingButton'
 import Typo from 'components/common/typo'
 import TextField from '@mui/material/TextField'
 import Avatar from '@mui/material/Avatar'
@@ -11,6 +11,7 @@ import MenuItem from '@mui/material/MenuItem'
 import Select from '@mui/material/Select'
 import Chip from '@mui/material/Chip'
 import Badge from '@mui/material/Badge'
+import InputAdornment from '@mui/material/InputAdornment'
 import ImageUploadButton from 'components/common/buttons/imageUploadButton'
 import editMyInfo from 'services/user/editMyInfo'
 import uploadImage from 'services/upload/uploadImage'
@@ -70,15 +71,9 @@ const inputWidth = css`
 
 type MyInfoEditFormProps = {
   myInfo: UserForMyInfoPage
-  afterMyInfoEdited: () => void
-  afterMyInfoEditCanceled: () => void
 }
 
-const MyInfoEditForm = ({
-  myInfo,
-  afterMyInfoEdited,
-  afterMyInfoEditCanceled,
-}: MyInfoEditFormProps) => {
+const MyInfoEditForm = ({ myInfo }: MyInfoEditFormProps) => {
   const [avatarImageFiles, setAvatarImageFiles] = useState<ImageFiles>(null)
   const [previewAvatar, setPreviewAvatar] =
     useState<Nullable<PreviewImage>>(null)
@@ -88,6 +83,7 @@ const MyInfoEditForm = ({
   const [weight, setWeight] = useState(myInfo.weight)
   const [bodyShape, setBodyShape] = useState(myInfo.bodyShape)
   const [fashionStyles, setFashionStyles] = useState(myInfo.fashionStyles)
+  const [isMyInfoEditLoading, setIsMyInfoEditLoading] = useState(false)
 
   const handleAvatarImageFilesChange = (imageFiles: FileList) => {
     setAvatarImageFiles(imageFiles)
@@ -143,8 +139,9 @@ const MyInfoEditForm = ({
     e.preventDefault()
 
     try {
+      setIsMyInfoEditLoading(true)
       await editInfo()
-      afterMyInfoEdited()
+      setIsMyInfoEditLoading(false)
     } catch (error) {
       console.error(error)
     }
@@ -180,6 +177,7 @@ const MyInfoEditForm = ({
           label="유저 이름"
           value={username}
           onChange={e => handleUsernameChange(e.target.value)}
+          required
           css={[inputWidth, mgRight(20)]}
         />
         <FormControl css={inputWidth}>
@@ -203,6 +201,9 @@ const MyInfoEditForm = ({
           type="number"
           value={height}
           onChange={e => handleHeightChange(Number(e.target.value))}
+          InputProps={{
+            endAdornment: <InputAdornment position="end">cm</InputAdornment>,
+          }}
           css={[inputWidth, mgRight(20)]}
         />
         <TextField
@@ -210,6 +211,9 @@ const MyInfoEditForm = ({
           type="number"
           value={weight}
           onChange={e => handleWeightChange(Number(e.target.value))}
+          InputProps={{
+            endAdornment: <InputAdornment position="end">kg</InputAdornment>,
+          }}
           css={inputWidth}
         />
       </StyledHeightAndWeightInputWrapper>
@@ -252,12 +256,15 @@ const MyInfoEditForm = ({
         </FormControl>
       </StyledBodyShapeAndFashionStyleInputWrapper>
       <StyledUserInfoEditAndCancelButtonWrapper>
-        <Button variant="contained" type="submit" css={mgRight(10)}>
+        <LoadingButton
+          variant="contained"
+          type="submit"
+          css={mgRight(10)}
+          loading={isMyInfoEditLoading}
+          loadingPosition="center"
+        >
           수정
-        </Button>
-        <Button variant="outlined" onClick={afterMyInfoEditCanceled}>
-          취소
-        </Button>
+        </LoadingButton>
       </StyledUserInfoEditAndCancelButtonWrapper>
     </form>
   )
