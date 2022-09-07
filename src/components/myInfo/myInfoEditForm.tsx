@@ -16,6 +16,7 @@ import ImageUploadButton from 'components/common/buttons/imageUploadButton'
 import editMyInfo from 'services/user/editMyInfo'
 import uploadImage from 'services/upload/uploadImage'
 import { changeImageFileToPreviewImage } from 'utils/previewImage'
+import compareTwoArrays from 'utils/compareTwoArrays'
 import {
   USER_BODY_SHAPES,
   USER_FASHION_STYLES,
@@ -87,34 +88,76 @@ const MyInfoEditForm = ({ myInfo }: MyInfoEditFormProps) => {
   const [bodyShape, setBodyShape] = useState(myInfo.bodyShape)
   const [fashionStyles, setFashionStyles] = useState(myInfo.fashionStyles)
   const [isMyInfoEditLoading, setIsMyInfoEditLoading] = useState(false)
+  const [isEditButtonActivated, setIsEditButtonActivated] = useState(false)
+
+  const avatarImageSrc = previewAvatar ? previewAvatar.url : myInfo.imageUrl
+  const avatarImageAlt = previewAvatar ? previewAvatar.altText : myInfo.username
+
+  const changeEditButtonActivateMode = (activateMode: boolean) => {
+    setIsEditButtonActivated(activateMode)
+  }
 
   const handleAvatarImageFilesChange = (imageFiles: FileList) => {
+    setEditButtonStateByAvatarImageFilesChange({
+      avatarImageFiles,
+      changeEditButtonActivateMode,
+    })
     setAvatarImageFiles(imageFiles)
     const previewAvatarImage = changeImageFileToPreviewImage(imageFiles[0])
     setPreviewAvatar(previewAvatarImage)
   }
 
   const handleUsernameChange = (username: string) => {
+    setEditButtonStateByPrimitiveValueChange({
+      initialValue: myInfo.username,
+      inputValue: username,
+      changeEditButtonActivateMode,
+    })
     setUsername(username)
   }
 
   const handleGenderChange = (gender: string) => {
+    setEditButtonStateByPrimitiveValueChange({
+      initialValue: myInfo.gender,
+      inputValue: gender,
+      changeEditButtonActivateMode,
+    })
     setGender(gender)
   }
 
   const handleHeightChange = (height: number) => {
+    setEditButtonStateByPrimitiveValueChange({
+      initialValue: myInfo.height,
+      inputValue: height,
+      changeEditButtonActivateMode,
+    })
     setHeight(height)
   }
 
   const handleWeightChange = (weight: number) => {
+    setEditButtonStateByPrimitiveValueChange({
+      initialValue: myInfo.weight,
+      inputValue: weight,
+      changeEditButtonActivateMode,
+    })
     setWeight(weight)
   }
 
   const handleBodyShapeChange = (bodyShape: string) => {
+    setEditButtonStateByPrimitiveValueChange({
+      initialValue: myInfo.bodyShape,
+      inputValue: bodyShape,
+      changeEditButtonActivateMode,
+    })
     setBodyShape(bodyShape)
   }
 
   const handleFashionStylesChange = (fashionStyles: FashionStyle[]) => {
+    setEditButtonStateByFashionStylesChange({
+      initialFashionStyles: myInfo.fashionStyles,
+      fashionStylesOfInput: fashionStyles,
+      changeEditButtonActivateMode,
+    })
     setFashionStyles(fashionStyles)
   }
 
@@ -145,6 +188,7 @@ const MyInfoEditForm = ({ myInfo }: MyInfoEditFormProps) => {
       setIsMyInfoEditLoading(true)
       await editInfo()
       setIsMyInfoEditLoading(false)
+      changeEditButtonActivateMode(false)
     } catch (error) {
       console.error(error)
     }
@@ -165,11 +209,7 @@ const MyInfoEditForm = ({ myInfo }: MyInfoEditFormProps) => {
           }
           css={mgBottom(10)}
         >
-          <Avatar
-            src={previewAvatar ? previewAvatar.url : myInfo.imageUrl}
-            alt={previewAvatar ? previewAvatar.altText : myInfo.username}
-            css={avatarStyle}
-          />
+          <Avatar src={avatarImageSrc} alt={avatarImageAlt} css={avatarStyle} />
         </Badge>
         <Typo variant="h4" component="h1">
           {myInfo.username}
@@ -279,6 +319,7 @@ const MyInfoEditForm = ({ myInfo }: MyInfoEditFormProps) => {
           variant="contained"
           type="submit"
           css={mgRight(10)}
+          disabled={!isEditButtonActivated}
           loading={isMyInfoEditLoading}
           loadingPosition="center"
         >
@@ -290,6 +331,67 @@ const MyInfoEditForm = ({ myInfo }: MyInfoEditFormProps) => {
 }
 
 export default MyInfoEditForm
+
+type SetEditButtonStateByAvatarImageFilesChangeArgs = {
+  avatarImageFiles: ImageFiles
+  changeEditButtonActivateMode: (activateMode: boolean) => void
+}
+
+const setEditButtonStateByAvatarImageFilesChange = ({
+  avatarImageFiles,
+  changeEditButtonActivateMode,
+}: SetEditButtonStateByAvatarImageFilesChangeArgs) => {
+  if (avatarImageFiles === null) {
+    changeEditButtonActivateMode(false)
+  }
+
+  changeEditButtonActivateMode(true)
+}
+
+type SetEditButtonStateByPrimitiveValueChangeArgs = {
+  initialValue: string | number
+  inputValue: string | number
+  changeEditButtonActivateMode: (activateMode: boolean) => void
+}
+
+const setEditButtonStateByPrimitiveValueChange = ({
+  initialValue,
+  inputValue,
+  changeEditButtonActivateMode,
+}: SetEditButtonStateByPrimitiveValueChangeArgs) => {
+  if (initialValue === inputValue) {
+    changeEditButtonActivateMode(false)
+  }
+
+  if (initialValue !== inputValue) {
+    changeEditButtonActivateMode(true)
+  }
+}
+
+type SetEditButtonStateByFashionStylesChangeArgs = {
+  initialFashionStyles: FashionStyle[]
+  fashionStylesOfInput: FashionStyle[]
+  changeEditButtonActivateMode: (activateMode: boolean) => void
+}
+
+const setEditButtonStateByFashionStylesChange = ({
+  initialFashionStyles,
+  fashionStylesOfInput,
+  changeEditButtonActivateMode,
+}: SetEditButtonStateByFashionStylesChangeArgs) => {
+  const areTwoFashionStyesEqual = compareTwoArrays({
+    firstArray: initialFashionStyles,
+    secondArray: fashionStylesOfInput,
+  })
+
+  if (!areTwoFashionStyesEqual) {
+    changeEditButtonActivateMode(true)
+  }
+
+  if (areTwoFashionStyesEqual) {
+    changeEditButtonActivateMode(false)
+  }
+}
 
 const convertFashionStyleIdsToFashionStyleObjects = (
   fashionStyles: FashionStyleId[]
