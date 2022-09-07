@@ -1,3 +1,4 @@
+import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { EmotionJSX } from '@emotion/react/types/jsx-namespace'
 import Link from '@mui/material/Link'
@@ -23,6 +24,12 @@ const StyledAuthorBodyInfoWrapper = styled.dl`
   font-size: 16px;
 `
 
+const authorAvatarStyle = css`
+  width: 50px;
+  height: 50px;
+  margin-right: 16px;
+`
+
 type PostAuthorHeaderProps = {
   author: any // TODO: 타입 정의하기
   popoverMenu: EmotionJSX.Element
@@ -39,7 +46,7 @@ const PostAuthorHeader = ({
       <Avatar
         alt={author.username}
         src={author.avatarUrl}
-        sx={{ width: 50, height: 50, marginRight: 2 }}
+        css={authorAvatarStyle}
       />
       <div>
         <Link href={`${ROUTE_URL.SNS}/${author.id}`}>

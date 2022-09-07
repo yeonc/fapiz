@@ -1,3 +1,4 @@
+import { css } from '@emotion/react'
 import IconButton from '@mui/material/IconButton'
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
 import Select from '@mui/material/Select'
@@ -17,6 +18,10 @@ const StyledFashionItemInfo = styled.li`
   &:last-child {
     margin-bottom: 0;
   }
+`
+
+const formControlWidth = css`
+  width: 150px;
 `
 
 type FashionItemInfoToChange = Partial<FashionItemInfo>
@@ -115,7 +120,7 @@ const FashionItemsInfo = ({
     <ul className={className}>
       {fashionItemsInfo.map(fashionItemInfo => (
         <StyledFashionItemInfo key={fashionItemInfo.id}>
-          <FormControl sx={{ width: 150 }}>
+          <FormControl css={formControlWidth}>
             <InputLabel>아이템 종류</InputLabel>
             <Select
               label="아이템 종류"

@@ -1,7 +1,9 @@
+import { css } from '@emotion/react'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
+import { mgRight } from 'styles/layout'
 
 type SelectsForFilteringFashionItemsProps = {
   category: string
@@ -12,6 +14,10 @@ type SelectsForFilteringFashionItemsProps = {
   handleColorChange: (color: string) => void
   className?: string
 }
+
+const formControlMinWidth = css`
+  min-width: 120px;
+`
 
 const SelectsForFilteringFashionItems = ({
   category,
@@ -24,7 +30,7 @@ const SelectsForFilteringFashionItems = ({
 }: SelectsForFilteringFashionItemsProps) => {
   return (
     <div className={className}>
-      <FormControl sx={{ minWidth: 120, mr: 1 }}>
+      <FormControl css={[formControlMinWidth, mgRight(10)]}>
         <InputLabel>카테고리</InputLabel>
         <Select
           value={category}
@@ -39,7 +45,7 @@ const SelectsForFilteringFashionItems = ({
           ))}
         </Select>
       </FormControl>
-      <FormControl sx={{ minWidth: 120 }}>
+      <FormControl css={formControlMinWidth}>
         <InputLabel>색상</InputLabel>
         <Select
           value={color}
