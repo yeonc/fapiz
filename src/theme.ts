@@ -2,8 +2,12 @@ import { createTheme } from '@mui/material/styles'
 import { red } from '@mui/material/colors'
 import { DEFAULT_BLACK } from 'styles/constants/color'
 
-// Create a theme instance.
+const DEFAULT_FONT_FAMILY = '"Noto Sans KR", sans-serif'
+
 const theme = createTheme({
+  typography: {
+    fontFamily: DEFAULT_FONT_FAMILY,
+  },
   components: {
     MuiLink: {
       defaultProps: {
