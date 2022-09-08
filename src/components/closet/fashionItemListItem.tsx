@@ -2,9 +2,11 @@ import styled from '@emotion/styled'
 import ImageListItem from '@mui/material/ImageListItem'
 import ButtonBase from '@mui/material/ButtonBase'
 import FashionItemEditingModal from 'components/closet/fashionItemEditingModal'
+import Typo from 'components/common/typo'
 import useModalState from 'hooks/useModalState'
 import { FashionItemForClosetPage } from 'types/fashion'
 import { DEFAULT_WHITE, LIGHT_GRAY } from 'styles/constants/color'
+import { mgBottom } from 'styles/layout'
 
 const StyledImageListItem = styled(ImageListItem)`
   position: relative;
@@ -16,7 +18,8 @@ const StyledImageListItem = styled(ImageListItem)`
   cursor: pointer;
 
   &:hover button {
-    display: block;
+    display: flex;
+    flex-direction: column;
   }
 `
 
@@ -44,7 +47,12 @@ const FashionItemListItem = ({ fashionItem }: FashionItemListItemProps) => {
     <StyledImageListItem>
       <img src={fashionItem.image.url} alt={fashionItem.image.altText} />
       <StyledButton onClick={handleFashionItemEditModalOpen}>
-        패션 아이템 편집
+        <Typo variant="subtitle1" component="span">
+          {fashionItem.category}
+        </Typo>
+        <Typo variant="subtitle2" component="span">
+          색상: {fashionItem.color}
+        </Typo>
       </StyledButton>
       <FashionItemEditingModal
         onFashionItemEditModalClose={handleFashionItemEditModalClose}

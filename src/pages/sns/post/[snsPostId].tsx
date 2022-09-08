@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import SnsPostPageWithoutLogin from 'components/sns/post/page/snsPostPageWithoutLogin'
 import OtherSnsPostPage from 'components/sns/post/page/otherSnsPostPage'
 import MySnsPostPage from 'components/sns/post/page/mySnsPostPage'
-import PageContainer from 'components/layouts/containers/pageContainer'
+import MaxWidthContainer from 'components/layouts/containers/maxWidthContainer'
 import useMe from 'hooks/useMe'
 import useSnsPost from 'hooks/useSnsPost'
 
@@ -31,30 +31,30 @@ const SnsPostPage = () => {
 
   if (!isLoggedIn) {
     return (
-      <PageContainer>
+      <MaxWidthContainer>
         <StyledSnsPostPageWrapper>
           <SnsPostPageWithoutLogin />
         </StyledSnsPostPageWrapper>
-      </PageContainer>
+      </MaxWidthContainer>
     )
   }
 
   if (isMySnsPostPage) {
     return (
-      <PageContainer>
+      <MaxWidthContainer>
         <StyledSnsPostPageWrapper>
           <MySnsPostPage />
         </StyledSnsPostPageWrapper>
-      </PageContainer>
+      </MaxWidthContainer>
     )
   }
 
   return (
-    <PageContainer>
+    <MaxWidthContainer>
       <StyledSnsPostPageWrapper>
         <OtherSnsPostPage />
       </StyledSnsPostPageWrapper>
-    </PageContainer>
+    </MaxWidthContainer>
   )
 }
 

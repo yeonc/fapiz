@@ -1,19 +1,24 @@
 import { useState } from 'react'
 import withHeader from 'hocs/withHeader'
 import withLoginPageRedirect from 'hocs/withLoginPageRedirect'
+import { css } from '@emotion/react'
 import styled from '@emotion/styled'
+import Fab from '@mui/material/Fab'
+import CheckroomIcon from '@mui/icons-material/Checkroom'
 import FashionItemList from 'components/closet/fashionItemList'
 import SelectsForFilteringFashionItems from 'components/closet/selectsForFilteringFashionItems'
 import IntroducingBanner from 'components/closet/introducingBanner'
-import PageContainer from 'components/layouts/containers/pageContainer'
+import MaxWidthContainer from 'components/layouts/containers/maxWidthContainer'
+import FashionItemCreatingModal from 'components/closet/fashionItemCreatingModal'
 import useMe from 'hooks/useMe'
+import useModalState from 'hooks/useModalState'
 import useFashionItems from 'hooks/useFashionItems'
 import createUrlQuery from 'utils/createUrlQuery'
 import removeDuplicatedValueFromArray from 'utils/removeDuplicatedValueFromArray'
 import { FashionItemForClosetPage } from 'types/fashion'
 
-const StyledClosetPageWrapper = styled.div`
-  padding-bottom: 30px;
+const StyledClosetContentsWrapper = styled.div`
+  padding: 30px 0;
 `
 
 const StyledSelectsForFilteringFashionItems = styled(
@@ -21,7 +26,13 @@ const StyledSelectsForFilteringFashionItems = styled(
 )`
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+`
+
+const fabPositionFixed = css`
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
 `
 
 const ClosetPage = () => {
@@ -59,6 +70,12 @@ const ClosetPage = () => {
     })
   )
 
+  const {
+    isOpen: isFashionItemCreateModalOpen,
+    handleOpen: handleFashionItemCreateModalOpen,
+    handleClose: handleFashionItemCreateModalClose,
+  } = useModalState()
+
   const categories = getCategoriesFromFashionItems(fashionItems)
   const colors = getColorsFromFashionItems(fashionItems)
 
@@ -69,20 +86,34 @@ const ClosetPage = () => {
   })
 
   return (
-    <PageContainer>
-      <StyledClosetPageWrapper>
-        <IntroducingBanner />
-        <StyledSelectsForFilteringFashionItems
-          category={category}
-          categories={categories}
-          handleCategoryChange={handleCategoryChange}
-          color={color}
-          colors={colors}
-          handleColorChange={handleColorChange}
-        />
-        <FashionItemList fashionItems={filteredFashionItems} />
-      </StyledClosetPageWrapper>
-    </PageContainer>
+    <>
+      <IntroducingBanner />
+      <MaxWidthContainer>
+        <StyledClosetContentsWrapper>
+          <StyledSelectsForFilteringFashionItems
+            category={category}
+            categories={categories}
+            handleCategoryChange={handleCategoryChange}
+            color={color}
+            colors={colors}
+            handleColorChange={handleColorChange}
+          />
+          <FashionItemList fashionItems={filteredFashionItems} />
+          <Fab
+            color="primary"
+            aria-label="옷장에 패션 아이템 등록"
+            css={fabPositionFixed}
+            onClick={handleFashionItemCreateModalOpen}
+          >
+            <CheckroomIcon />
+          </Fab>
+          <FashionItemCreatingModal
+            isFashionItemCreateModalOpen={isFashionItemCreateModalOpen}
+            onFashionItemCreateModalClose={handleFashionItemCreateModalClose}
+          />
+        </StyledClosetContentsWrapper>
+      </MaxWidthContainer>
+    </>
   )
 }
 

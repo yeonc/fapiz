@@ -6,13 +6,13 @@ import Fab from '@mui/material/Fab'
 import CreateIcon from '@mui/icons-material/Create'
 import UserInfo from 'components/sns/user/userInfo'
 import SnsPosts from 'components/sns/post/snsPosts'
-import PageContainer from 'components/layouts/containers/pageContainer'
+import MaxWidthContainer from 'components/layouts/containers/maxWidthContainer'
 import useMe from 'hooks/useMe'
 import getSafeNumberFromQuery from 'utils/getSafeNumberFromQuery'
 import { LIGHT_GRAY } from 'styles/constants/color'
 
 const StyledSnsPageWrapper = styled.div`
-  padding: 20px 0;
+  padding: 30px 0;
 `
 
 const positionOfSnsPostCreateButton = css`
@@ -44,7 +44,7 @@ const SnsPage = () => {
   const isMySnsPage = me?.id === userId
 
   return (
-    <PageContainer>
+    <MaxWidthContainer>
       <StyledSnsPageWrapper>
         {userId && (
           <>
@@ -63,7 +63,7 @@ const SnsPage = () => {
           </Fab>
         )}
       </StyledSnsPageWrapper>
-    </PageContainer>
+    </MaxWidthContainer>
   )
 }
 

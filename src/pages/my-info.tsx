@@ -6,16 +6,16 @@ import Button from '@mui/material/Button'
 import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates'
 import MyInfoEditForm from 'components/myInfo/myInfoEditForm'
 import Typo from 'components/common/typo'
+import MaxWidthContainer from 'components/layouts/containers/maxWidthContainer'
 import useMe from 'hooks/useMe'
 import { UserForMyInfoPage } from 'types/user'
 import { mgBottom } from 'styles/layout'
-import PageContainer from 'components/layouts/containers/pageContainer'
 
 const TOOLTIP_TEXT =
   '성별, 체형, 패션 스타일 정보 중 두 가지 이상을 입력하면 메인 페이지에서 나와 같은 정보를 가진 유저들이 올린 SNS 게시물만을 볼 수 있어요! 🙂'
 
 const StyledMyInfoPageWrapper = styled.div`
-  padding: 20px 20px 30px;
+  padding: 30px 20px;
 `
 
 const StyledButton = styled(Button)`
@@ -38,7 +38,7 @@ const MyInfoPage = () => {
   }
 
   return (
-    <PageContainer>
+    <MaxWidthContainer>
       <StyledMyInfoPageWrapper>
         <Typo variant="h4" component="h1" css={mgBottom(10)}>
           내 정보 수정
@@ -50,7 +50,7 @@ const MyInfoPage = () => {
         </Tooltip>
         <MyInfoEditForm myInfo={myInfo} />
       </StyledMyInfoPageWrapper>
-    </PageContainer>
+    </MaxWidthContainer>
   )
 }
 

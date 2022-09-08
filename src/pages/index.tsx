@@ -2,10 +2,11 @@ import { useSWRConfig } from 'swr'
 import withHeader from 'hocs/withHeader'
 import withLogin from 'hocs/withLogin'
 import { css } from '@emotion/react'
+import styled from '@emotion/styled'
 import ImageList from '@mui/material/ImageList'
 import LikeButton from 'components/common/buttons/likeButton'
 import ImageCardItem from 'components/home/imageCardItem'
-import PageContainer from 'components/layouts/containers/pageContainer'
+import MaxWidthContainer from 'components/layouts/containers/maxWidthContainer'
 import useMe from 'hooks/useMe'
 import useSnsPostInfiniteScroll from 'hooks/useSnsPostInfiniteScroll'
 import createUrlQuery from 'utils/createUrlQuery'
@@ -20,6 +21,10 @@ const query = createUrlQuery({
   'populate[2]': 'author',
   'pagination[limit]': 200,
 })
+
+const StyledMainPageWrapper = styled.div`
+  padding: 30px 0;
+`
 
 const fetchTriggerStyle = css`
   display: block;
@@ -58,30 +63,32 @@ const MainPage = () => {
   }
 
   return (
-    <PageContainer>
-      <ImageList variant="masonry" cols={3}>
-        {snsPosts.map(snsPost => {
-          return (
-            <ImageCardItem
-              key={snsPost.id}
-              cardItemData={snsPost}
-              rightActionButton={
-                <SnsPostLikeButtonWithLogin
-                  myId={me?.id}
-                  targetId={snsPost.id}
-                  likeUsers={snsPost.likeUsers}
-                  afterLike={afterLike}
-                  isShowLikeUsersNumber={false}
-                  borderColor={DEFAULT_WHITE}
-                />
-              }
-            />
-          )
-        })}
-      </ImageList>
-      <span ref={fetchTriggerRef} css={fetchTriggerStyle}></span>
-      {isSnsPostsLoading && <p css={loadingTextStyle}>loading...</p>}
-    </PageContainer>
+    <MaxWidthContainer>
+      <StyledMainPageWrapper>
+        <ImageList variant="masonry" cols={3}>
+          {snsPosts.map(snsPost => {
+            return (
+              <ImageCardItem
+                key={snsPost.id}
+                cardItemData={snsPost}
+                rightActionButton={
+                  <SnsPostLikeButtonWithLogin
+                    myId={me?.id}
+                    targetId={snsPost.id}
+                    likeUsers={snsPost.likeUsers}
+                    afterLike={afterLike}
+                    isShowLikeUsersNumber={false}
+                    borderColor={DEFAULT_WHITE}
+                  />
+                }
+              />
+            )
+          })}
+        </ImageList>
+        <span ref={fetchTriggerRef} css={fetchTriggerStyle}></span>
+        {isSnsPostsLoading && <p css={loadingTextStyle}>loading...</p>}
+      </StyledMainPageWrapper>
+    </MaxWidthContainer>
   )
 }
 

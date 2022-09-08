@@ -5,8 +5,12 @@ import SearchForm from 'components/search/searchForm'
 import SnsPostSearchResult from 'components/search/snsPostSearchResult'
 import UserSearchResult from 'components/search/userSearchResult'
 import Typo from 'components/common/typo'
-import PageContainer from 'components/layouts/containers/pageContainer'
+import MaxWidthContainer from 'components/layouts/containers/maxWidthContainer'
 import visuallyHidden from 'styles/visuallyHidden'
+
+const StyledSearchPageWrapper = styled.div`
+  padding: 30px 0;
+`
 
 const StyledSearchFormWrapper = styled.div`
   text-align: center;
@@ -32,19 +36,21 @@ const SearchPage = () => {
   }
 
   return (
-    <PageContainer>
-      <h1 css={visuallyHidden}>통합 검색 결과 페이지</h1>
-      <StyledSearchFormWrapper>
-        {!searchKeyword && MessageBeforeSearching}
-        <SearchForm onSearchKeywordSubmit={onSearchKeywordSubmit} />
-      </StyledSearchFormWrapper>
-      {searchKeyword && (
-        <StyledSearchResultWrapper>
-          <StyledSnsPostSearchResult searchKeyword={searchKeyword} />
-          <UserSearchResult searchKeyword={searchKeyword} />
-        </StyledSearchResultWrapper>
-      )}
-    </PageContainer>
+    <MaxWidthContainer>
+      <StyledSearchPageWrapper>
+        <h1 css={visuallyHidden}>통합 검색 결과 페이지</h1>
+        <StyledSearchFormWrapper>
+          {!searchKeyword && MessageBeforeSearching}
+          <SearchForm onSearchKeywordSubmit={onSearchKeywordSubmit} />
+        </StyledSearchFormWrapper>
+        {searchKeyword && (
+          <StyledSearchResultWrapper>
+            <StyledSnsPostSearchResult searchKeyword={searchKeyword} />
+            <UserSearchResult searchKeyword={searchKeyword} />
+          </StyledSearchResultWrapper>
+        )}
+      </StyledSearchPageWrapper>
+    </MaxWidthContainer>
   )
 }
 
