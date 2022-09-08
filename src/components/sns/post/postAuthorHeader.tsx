@@ -32,7 +32,7 @@ const authorAvatarStyle = css`
 
 type PostAuthorHeaderProps = {
   author: any // TODO: 타입 정의하기
-  popoverMenu: EmotionJSX.Element
+  popoverMenu: EmotionJSX.Element | null
   className?: string
 }
 

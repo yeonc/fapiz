@@ -12,7 +12,7 @@ const StyledNotExistComment = styled.div`
 `
 
 const StyledPostCommentItem = styled(PostCommentItem)`
-  margin-bottom: 4px;
+  margin-bottom: 14px;
 `
 
 type PostCommentListProps = {
@@ -24,7 +24,7 @@ const PostCommentList = ({ snsPostId }: PostCommentListProps) => {
     'populate[0]': 'author',
     'populate[1]': 'author.profileImage',
     'filters[post][id][$eq]': `${snsPostId}`,
-    sort: 'createdAt:asc',
+    sort: 'createdAt:desc',
   })
 
   const { snsComments: snsCommentsFromStrapi } = useSnsComments(query)
@@ -35,6 +35,7 @@ const PostCommentList = ({ snsPostId }: PostCommentListProps) => {
 
       return {
         id: snsComment.id,
+        createdAt: snsComment.attributes.createdAt,
         content: snsComment.attributes.content,
         authorId: author.id,
         authorName: author.attributes.username,

@@ -1,7 +1,12 @@
 import { ChangeEvent } from 'react'
+import styled from '@emotion/styled'
 import Input from '@mui/material/Input'
 import { EmotionJSX } from '@emotion/react/types/jsx-namespace'
 import { mgRight } from 'styles/layout'
+
+const StyledCommentInputWrapper = styled.div`
+  display: flex;
+`
 
 type CommentInputProps = {
   placeholder?: string
@@ -16,7 +21,7 @@ const CommentInput = ({
   onChange,
   buttons,
 }: CommentInputProps) => (
-  <>
+  <StyledCommentInputWrapper>
     <Input
       placeholder={placeholder}
       value={value}
@@ -26,7 +31,7 @@ const CommentInput = ({
       css={mgRight(6)}
     />
     {buttons}
-  </>
+  </StyledCommentInputWrapper>
 )
 
 export default CommentInput

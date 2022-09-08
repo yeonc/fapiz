@@ -1,6 +1,5 @@
 import { createTheme } from '@mui/material/styles'
-import { red } from '@mui/material/colors'
-import { DEFAULT_BLACK } from 'styles/constants/color'
+import { red, grey } from '@mui/material/colors'
 
 const DEFAULT_FONT_FAMILY = '"Noto Sans KR", sans-serif'
 
@@ -11,14 +10,14 @@ const theme = createTheme({
   components: {
     MuiLink: {
       defaultProps: {
-        color: DEFAULT_BLACK,
+        color: grey[900],
         underline: 'none',
       },
     },
   },
   palette: {
     primary: {
-      main: '#0A0903',
+      main: grey[900],
     },
     secondary: {
       main: '#19857b',

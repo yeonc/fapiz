@@ -4,6 +4,7 @@ import { EmotionJSX } from '@emotion/react/types/jsx-namespace'
 const StyledCommentText = styled.p`
   display: inline;
   margin-right: 4px;
+  white-space: pre-line;
 `
 
 type CommentProps = {

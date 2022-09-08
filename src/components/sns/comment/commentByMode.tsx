@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useSWRConfig } from 'swr'
+import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -28,7 +29,7 @@ const CommentByMode = ({
     'populate[0]': 'author',
     'populate[1]': 'author.profileImage',
     'filters[post][id][$eq]': `${snsPostId}`,
-    sort: 'createdAt:asc',
+    sort: 'createdAt:desc',
   })
 
   const refetch = () => {

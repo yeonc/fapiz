@@ -9,7 +9,6 @@ import LikeButton from 'components/common/buttons/likeButton'
 import useMe from 'hooks/useMe'
 import useSnsPost from 'hooks/useSnsPost'
 import createUrlQuery from 'utils/createUrlQuery'
-import { DEFAULT_BLACK } from 'styles/constants/color'
 
 const StyledPostCommentWritingArea = styled(PostCommentWritingArea)`
   margin-bottom: 12px;
@@ -40,7 +39,7 @@ const MySnsPostPage = () => {
     'populate[0]': 'author',
     'populate[1]': 'author.profileImage',
     'filters[post][id][$eq]': `${snsPostId}`,
-    sort: 'createdAt:asc',
+    sort: 'createdAt:desc',
   })
 
   if (isLoading) {
@@ -69,7 +68,7 @@ const MySnsPostPage = () => {
     },
     likeUsers: snsPostFromStrapi.attributes.likeUsers.data,
     bookmarkUsers: snsPostFromStrapi.attributes.bookmarkUsers.data,
-    content: snsPostFromStrapi.attributes.content,
+    content: snsPostFromStrapi.attributes.content ?? '',
     fashionItemsInfo: snsPostFromStrapi.attributes.fashionItemsInfo,
   }
 
@@ -106,7 +105,7 @@ const MySnsPostPage = () => {
         postAuthor={snsPost.author}
         postImages={snsPost.images}
         postContent={snsPost.content}
-        postFashionItemsInfo={snsPost.fashionItemsInfo}
+        postFashionItemInfos={snsPost.fashionItemsInfo}
       />
       <StyledPostCommentWritingArea
         snsPostId={snsPost.id}

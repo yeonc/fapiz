@@ -1,18 +1,25 @@
 import { useState } from 'react'
 import { css } from '@emotion/react'
+import { EmotionJSX } from '@emotion/react/types/jsx-namespace'
 import styled from '@emotion/styled'
 import MobileStepper from '@mui/material/MobileStepper'
 import IconButton from '@mui/material/IconButton'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import PostAuthorHeader from 'components/sns/post/postAuthorHeader'
+import AdditionalContentShowingToggleButton from 'components/sns/post/additionalContentShowingToggleButton'
 import Typo from 'components/common/typo'
 import getFormattedDate from 'utils/getFormattedDate'
+import { SnsPostImage } from 'types/image'
 import { DEFAULT_GRAY, LIGHT_GRAY } from 'styles/constants/color'
 import visuallyHidden from 'styles/visuallyHidden'
+import { FashionItemInfo } from 'types/fashion'
+
+const INITIAL_SHOWED_POST_CONTENT_LENGTH = 200
+const POST_CONTENT_STRING_START_INDEX = 0
 
 const StyledPostAuthorHeader = styled(PostAuthorHeader)`
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 `
 
 const StyledPostImageWrapper = styled.div`
@@ -41,26 +48,16 @@ const StyledMobileStepper = styled(MobileStepper)`
   margin-bottom: 10px;
 `
 
-const StyledLikeAndBookmarkButtonsWrapper = styled.div`
-  text-align: center;
-  margin-bottom: 6px;
-`
-
-const createdAtStyle = css`
-  display: block;
-  margin-bottom: 20px;
-  font-size: 15px;
-  color: ${DEFAULT_GRAY};
+const paddingStyle = css`
+  padding-left: 6px;
 `
 
 const StyledPostContentWrapper = styled.div`
-  margin-bottom: 8px;
-  max-height: 200px;
-  overflow: auto;
+  white-space: pre-line;
 `
 
 const StyledFashionItemInfosWrapper = styled.section`
-  margin-bottom: 28px;
+  margin-bottom: 10px;
 `
 
 const StyledFashionItemInfos = styled.ul`
@@ -83,6 +80,24 @@ const categoryStyle = css`
   font-weight: 700;
 `
 
+const createdAtStyle = css`
+  display: block;
+  margin: 10px 0;
+  font-size: 15px;
+  color: ${DEFAULT_GRAY};
+`
+
+type PostDescriptionContentsLayoutProps = {
+  snsPostEditMenu: EmotionJSX.Element | null
+  likeButton: EmotionJSX.Element | null
+  bookmarkButton: EmotionJSX.Element | null
+  postCreatedDate: string
+  postAuthor: any // TODO: 추후에 타입 정의 후 수정할 것
+  postImages: SnsPostImage[]
+  postContent: string
+  postFashionItemInfos: FashionItemInfo[]
+}
+
 const PostDescriptionContentsLayout = ({
   snsPostEditMenu,
   likeButton,
@@ -91,8 +106,19 @@ const PostDescriptionContentsLayout = ({
   postAuthor,
   postImages,
   postContent,
-  postFashionItemsInfo,
-}) => {
+  postFashionItemInfos,
+}: PostDescriptionContentsLayoutProps) => {
+  const createdDate = new Date(postCreatedDate)
+  const formattedCreatedAt = getFormattedDate(createdDate)
+  const initialPostContentToBeShowed = postContent.slice(
+    POST_CONTENT_STRING_START_INDEX,
+    INITIAL_SHOWED_POST_CONTENT_LENGTH
+  )
+
+  const [postContentToBeShowed, setPostContentToBeShowed] = useState(
+    initialPostContentToBeShowed
+  )
+  const [isHiddenContentShowed, setIsHiddenContentShowed] = useState(false)
   const [activeStep, setActiveStep] = useState(0)
   const maxSteps = postImages.length
 
@@ -104,8 +130,15 @@ const PostDescriptionContentsLayout = ({
     setActiveStep(prevActiveStep => prevActiveStep - 1)
   }
 
-  const createdDate = new Date(postCreatedDate)
-  const formattedCreatedAt = getFormattedDate(createdDate)
+  const handleContentShowMoreButtonClick = () => {
+    setPostContentToBeShowed(postContent)
+    setIsHiddenContentShowed(true)
+  }
+
+  const handleContentHideButtonClick = () => {
+    setPostContentToBeShowed(initialPostContentToBeShowed)
+    setIsHiddenContentShowed(false)
+  }
 
   return (
     <>
@@ -142,19 +175,13 @@ const PostDescriptionContentsLayout = ({
         nextButton={null}
         backButton={null}
       />
-      <StyledLikeAndBookmarkButtonsWrapper>
-        {likeButton}
-        {bookmarkButton}
-      </StyledLikeAndBookmarkButtonsWrapper>
-      <StyledPostContentWrapper>
-        <p>{postContent}</p>
-      </StyledPostContentWrapper>
-      <span css={createdAtStyle}>{formattedCreatedAt}</span>
-      {postFashionItemsInfo && (
+      {likeButton}
+      {bookmarkButton}
+      {postFashionItemInfos && (
         <StyledFashionItemInfosWrapper>
           <span css={visuallyHidden}>착용한 제품 정보</span>
           <StyledFashionItemInfos>
-            {postFashionItemsInfo.map((fashionItemInfo: any, index: number) => (
+            {postFashionItemInfos.map((fashionItemInfo: any, index: number) => (
               <StyledFashionItemInfo key={index.toString()}>
                 <Typo component="span" css={categoryStyle}>
                   {fashionItemInfo.category}
@@ -166,6 +193,19 @@ const PostDescriptionContentsLayout = ({
           </StyledFashionItemInfos>
         </StyledFashionItemInfosWrapper>
       )}
+      <div css={paddingStyle}>
+        <StyledPostContentWrapper>
+          <p>{postContentToBeShowed}</p>
+        </StyledPostContentWrapper>
+        {postContent.length > INITIAL_SHOWED_POST_CONTENT_LENGTH ? (
+          <AdditionalContentShowingToggleButton
+            isHiddenContentShowed={isHiddenContentShowed}
+            onContentShowMoreButtonClick={handleContentShowMoreButtonClick}
+            onContentHideButtonClick={handleContentHideButtonClick}
+          />
+        ) : null}
+        <span css={createdAtStyle}>{formattedCreatedAt}</span>
+      </div>
     </>
   )
 }

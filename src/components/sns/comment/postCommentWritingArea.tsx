@@ -9,22 +9,24 @@ import createComment from 'services/snsComment/createComment'
 
 const StyledPostCommentWritingAreaWrapper = styled.div`
   display: flex;
-  align-items: flex-end;
 `
 
 const avatarStyle = css`
+  display: inline-flex;
   width: 30px;
   height: 30px;
-  margin-right: 12px;
+  margin-right: 10px;
+  transform: translateY(18px);
 `
 
 const StyledPostCommentForm = styled.form`
-  display: flex;
+  display: inline-flex;
   align-items: flex-end;
-  flex-grow: 1;
+  width: 100%;
 `
 
 const StyledTextField = styled(TextField)`
+  flex-grow: 1;
   margin-right: 6px;
 `
 
@@ -73,7 +75,7 @@ const PostCommentWritingArea = ({
           value={comment}
           onChange={e => handleCommentChange(e.target.value)}
           required
-          fullWidth={true}
+          multiline
         />
         <Button variant="contained" size="small" type="submit">
           등록
