@@ -8,6 +8,8 @@ import Follower from 'components/sns/user/follower'
 import Following from 'components/sns/user/following'
 import useMe from 'hooks/useMe'
 import useUser from 'hooks/useUser'
+import getToken from 'utils/getToken'
+import { BACKEND_URL } from 'constants/constants'
 import { UserForUserInfo } from 'types/user'
 import { mgRight, mgBottom } from 'styles/layout'
 import visuallyHidden from 'styles/visuallyHidden'
@@ -51,8 +53,20 @@ const UserInfo = ({ userId, className }: UserInfoProps) => {
   const isMySnsPage = user.id === me?.id
   const isLoggedIn = !!me
 
-  const refetch = () =>
+  const refetch = () => {
+    const token = getToken()
+    if (!token) return null
+
+    mutate({
+      url: `${BACKEND_URL}/api/users/me`,
+      config: {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    })
     mutate(user.id ? { url: `/api/users/${user.id}` } : null)
+  }
 
   const afterFollow = () => {
     refetch()
