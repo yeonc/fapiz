@@ -6,6 +6,8 @@ import SearchResultHeadingTypo from 'components/search/searchResultHeadingTypo'
 import useSearchedUsers from 'hooks/useSearchedUsers'
 import { HOVER_BACKGROUND_GRAY } from 'styles/constants/color'
 
+const USER_SEARCH_RESULT_COUNT_TO_BE_SHOWED = 5
+
 const StyledUserSearchResultList = styled.ul`
   display: flex;
 `
@@ -16,6 +18,7 @@ const StyledUserSearchResultListItemSkeletonWrapper = styled.ul`
 
 const StyledUserSearchResultListItem = styled(UserSearchResultListItem)`
   margin-right: 20px;
+  width: 150px;
 
   &:hover {
     background-color: ${HOVER_BACKGROUND_GRAY};
@@ -30,25 +33,37 @@ const StyledUserSearchResultListItemSkeleton = styled(
 
 type UserSearchResultProps = {
   searchKeyword: string
+  className?: string
 }
 
-const UserSearchResult = ({ searchKeyword }: UserSearchResultProps) => {
+const UserSearchResult = ({
+  searchKeyword,
+  className,
+}: UserSearchResultProps) => {
   const { searchedUsers } = useSearchedUsers(searchKeyword)
 
+  const searchedUsersToBeShowed = searchedUsers?.slice(
+    0,
+    USER_SEARCH_RESULT_COUNT_TO_BE_SHOWED
+  )
+
   return (
-    <section>
+    <section className={className}>
       <SearchResultHeadingTypo>유저 검색 결과</SearchResultHeadingTypo>
-      {searchedUsers ? (
+      {searchedUsersToBeShowed ? (
         <>
-          {searchedUsers.length === 0 && <NoSearchResult />}
+          {searchedUsersToBeShowed.length === 0 && <NoSearchResult />}
           <StyledUserSearchResultList>
-            {searchedUsers.map(user => (
+            {searchedUsersToBeShowed.map(user => (
               <StyledUserSearchResultListItem key={user.id} user={user} />
             ))}
           </StyledUserSearchResultList>
         </>
       ) : (
         <StyledUserSearchResultListItemSkeletonWrapper>
+          <StyledUserSearchResultListItemSkeleton />
+          <StyledUserSearchResultListItemSkeleton />
+          <StyledUserSearchResultListItemSkeleton />
           <StyledUserSearchResultListItemSkeleton />
           <StyledUserSearchResultListItemSkeleton />
         </StyledUserSearchResultListItemSkeletonWrapper>

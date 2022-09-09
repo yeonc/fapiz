@@ -12,7 +12,6 @@ import {
 const linkStyle = css`
   display: block;
   padding: 16px;
-  height: 200px;
   text-align: center;
 `
 
@@ -26,6 +25,7 @@ const fashionStyleTagStyle = css`
   display: inline-block;
   padding: 4px 8px;
   border-radius: 18px;
+  margin-bottom: 2px;
   font-size: 14px;
   background-color: ${FASHION_STYLE_TAG_BACKGROUND_GRAY};
 `

@@ -7,6 +7,7 @@ import UserSearchResult from 'components/search/userSearchResult'
 import Typo from 'components/common/typo'
 import MaxWidthContainer from 'components/layouts/containers/maxWidthContainer'
 import visuallyHidden from 'styles/visuallyHidden'
+import { mgBottom } from 'styles/layout'
 
 const StyledSearchPageWrapper = styled.div`
   padding: 30px 0;
@@ -20,13 +21,16 @@ const StyledSearchResultWrapper = styled.section`
   padding: 60px 0;
 `
 
-const MessageBeforeSearching = (
-  <Typo>검색어를 입력하여 SNS 게시물과 유저들을 찾아보세요!</Typo>
-)
-
-const StyledSnsPostSearchResult = styled(SnsPostSearchResult)`
-  margin-bottom: 60px;
+const StyledUserSearchResult = styled(UserSearchResult)`
+  margin-bottom: 50px;
 `
+
+const MessageBeforeSearching = (
+  <Typo css={mgBottom(24)}>
+    검색어를 입력하여 <strong>SNS 게시물</strong>과 <strong>유저</strong>를
+    찾아보세요!
+  </Typo>
+)
 
 const SearchPage = () => {
   const [searchKeyword, setSearchKeyword] = useState('')
@@ -45,8 +49,8 @@ const SearchPage = () => {
         </StyledSearchFormWrapper>
         {searchKeyword && (
           <StyledSearchResultWrapper>
-            <StyledSnsPostSearchResult searchKeyword={searchKeyword} />
-            <UserSearchResult searchKeyword={searchKeyword} />
+            <StyledUserSearchResult searchKeyword={searchKeyword} />
+            <SnsPostSearchResult searchKeyword={searchKeyword} />
           </StyledSearchResultWrapper>
         )}
       </StyledSearchPageWrapper>

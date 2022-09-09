@@ -9,6 +9,8 @@ import getFormattedDate from 'utils/getFormattedDate'
 import { SnsPostForSearching } from 'types/snsPost'
 import { HOVER_BACKGROUND_GRAY } from 'styles/constants/color'
 
+const SNS_POST_SEARCH_RESULT_COUNT_TO_BE_SHOWED = 5
+
 const StyledSnsPostSearchResultListItem = styled(SnsPostSearchResultListItem)`
   padding: 10px 14px;
   margin-bottom: 20px;
@@ -26,14 +28,10 @@ const StyledSnsPostSearchResultListItemSkeleton = styled(
 `
 
 type SnsPostSearchResultProps = {
-  className?: string
   searchKeyword: string
 }
 
-const SnsPostSearchResult = ({
-  className,
-  searchKeyword,
-}: SnsPostSearchResultProps) => {
+const SnsPostSearchResult = ({ searchKeyword }: SnsPostSearchResultProps) => {
   const query = createUrlQuery({
     'populate[0]': 'postImages',
     'populate[1]': 'author',
@@ -51,14 +49,19 @@ const SnsPostSearchResult = ({
     ? null
     : sanitizeSnsPosts(searchedSnsPostsFromStrapi)
 
+  const searchedSnsPostsToBeShowed = searchedSnsPosts?.slice(
+    0,
+    SNS_POST_SEARCH_RESULT_COUNT_TO_BE_SHOWED
+  )
+
   return (
-    <section className={className}>
+    <section>
       <SearchResultHeadingTypo>SNS 게시물 검색 결과</SearchResultHeadingTypo>
-      {searchedSnsPosts ? (
+      {searchedSnsPostsToBeShowed ? (
         <>
-          {searchedSnsPosts.length === 0 && <NoSearchResult />}
+          {searchedSnsPostsToBeShowed.length === 0 && <NoSearchResult />}
           <ul>
-            {searchedSnsPosts.map(snsPost => (
+            {searchedSnsPostsToBeShowed.map(snsPost => (
               <StyledSnsPostSearchResultListItem
                 key={snsPost.id}
                 snsPost={snsPost}
