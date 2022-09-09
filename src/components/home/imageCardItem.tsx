@@ -4,7 +4,7 @@ import { css } from '@emotion/react'
 import { EmotionJSX } from '@emotion/react/types/jsx-namespace'
 import ImageListItem from '@mui/material/ImageListItem'
 import ImageListItemBar from '@mui/material/ImageListItemBar'
-import LikeButton from 'components/common/buttons/likeButton'
+import LikeButtonForMainPage from 'components/home/likeButtonForMainPage'
 import { SnsPostForMainPage } from 'types/snsPost'
 
 const imageListItemStyle = css`
@@ -37,7 +37,8 @@ const ImageCardItem = ({
     router.push(`/sns/post/${snsPostId}`)
 
   const handleImageListItemClick = (e: MouseEvent<HTMLElement>) => {
-    const isLikeButtonClicked = (e.target as HTMLElement).id === LikeButton.id
+    const isLikeButtonClicked =
+      (e.target as HTMLElement).id === LikeButtonForMainPage.id
     if (isLikeButtonClicked) {
       return
     }
