@@ -6,8 +6,14 @@ import useSnsPosts from 'hooks/useSnsPosts'
 import createUrlQuery from 'utils/createUrlQuery'
 import { SnsPostForSnsPostsPage } from 'types/snsPost'
 
-export const cursorPointer = css`
+const cursorPointer = css`
   cursor: pointer;
+`
+
+const postImageStyle = css`
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
 `
 
 const SnsPosts = ({ userId }) => {
@@ -16,6 +22,7 @@ const SnsPosts = ({ userId }) => {
   const query = createUrlQuery({
     populate: '*',
     'filters[author][id][$eq]': userId,
+    sort: 'createdAt:desc',
   })
 
   const { snsPosts: snsPostsFromStrapi, isLoading } = useSnsPosts(query)
@@ -43,14 +50,18 @@ const SnsPosts = ({ userId }) => {
   }
 
   return (
-    <ImageList cols={3} rowHeight={264}>
+    <ImageList cols={3}>
       {snsPosts.map(snsPost => (
         <ImageListItem
           key={snsPost.firstImage.url}
           onClick={() => goToSnsPost(snsPost.id)}
           css={cursorPointer}
         >
-          <img src={snsPost.firstImage.url} alt={snsPost.firstImage.altText} />
+          <img
+            src={snsPost.firstImage.url}
+            alt={snsPost.firstImage.altText}
+            css={postImageStyle}
+          />
         </ImageListItem>
       ))}
     </ImageList>
