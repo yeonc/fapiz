@@ -4,7 +4,6 @@ import BookmarkIcon from '@mui/icons-material/Bookmark'
 import createBookmark from 'services/snsPost/createBookmark'
 import deleteBookmark from 'services/snsPost/deleteBookmark'
 
-// TODO: 북마크 버튼 눌렀을 때 UI에 느리게 반영되는 것 개선하기
 const BookmarkButton = ({
   myId,
   targetId,
@@ -15,22 +14,23 @@ const BookmarkButton = ({
   const isBookmarked = bookmarkUsers.some(
     (bookmarkUser: any) => bookmarkUser.id === myId
   )
+  const bookmarkUserIds = bookmarkUsers.map(
+    (bookmarkUser: any) => bookmarkUser.id
+  )
 
   const bookmark = async () => {
     await createBookmark({
-      snsPostId: targetId,
-      bookmarkUserId: myId,
+      targetPostId: targetId,
+      myId,
+      bookmarkUserIds,
     })
   }
 
   const unBookmark = async () => {
-    const bookmarkUserIds = bookmarkUsers.map(
-      (bookmarkUser: any) => bookmarkUser.id
-    )
     await deleteBookmark({
-      snsPostId: targetId,
+      targetPostId: targetId,
+      myId,
       bookmarkUserIds,
-      deleteBookmarkUserId: myId,
     })
   }
 

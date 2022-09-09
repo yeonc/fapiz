@@ -1,13 +1,25 @@
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import { BACKEND_URL } from 'constants/constants'
 
-const createBookmark = async ({ snsPostId, bookmarkUserId }) => {
+type CreateBookmarkArgs = {
+  targetPostId: number
+  myId: number
+  bookmarkUserIds: number[]
+}
+
+type CreateBookmark = (args: CreateBookmarkArgs) => Promise<AxiosResponse>
+
+const createBookmark: CreateBookmark = async ({
+  targetPostId,
+  myId,
+  bookmarkUserIds,
+}) => {
   return axios({
     method: 'put',
-    url: `${BACKEND_URL}/api/sns-posts/${snsPostId}`,
+    url: `${BACKEND_URL}/api/sns-posts/${targetPostId}`,
     data: {
       data: {
-        bookmarkUsers: bookmarkUserId,
+        bookmarkUsers: [...bookmarkUserIds, myId],
       },
     },
   })

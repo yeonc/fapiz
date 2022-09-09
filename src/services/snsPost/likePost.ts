@@ -2,19 +2,20 @@ import axios, { AxiosResponse } from 'axios'
 import { BACKEND_URL } from 'constants/constants'
 
 type LikePostArgs = {
-  snsPostId: number
-  likeUsersAfterLiked: number[]
+  targetPostId: number
+  myId: number
+  likeUserIds: number[]
 }
 
 type LikePost = (args: LikePostArgs) => Promise<AxiosResponse>
 
-const likePost: LikePost = async ({ snsPostId, likeUsersAfterLiked }) => {
+const likePost: LikePost = async ({ targetPostId, myId, likeUserIds }) => {
   return axios({
     method: 'put',
-    url: `${BACKEND_URL}/api/sns-posts/${snsPostId}`,
+    url: `${BACKEND_URL}/api/sns-posts/${targetPostId}`,
     data: {
       data: {
-        likeUsers: likeUsersAfterLiked,
+        likeUsers: [...likeUserIds, myId],
       },
     },
   })
