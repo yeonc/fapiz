@@ -4,7 +4,6 @@ import styled from '@emotion/styled'
 import Avatar from '@mui/material/Avatar'
 import Typo from 'components/common/typo'
 import FollowToggleButton from 'components/common/buttons/followToggleButton'
-import MessageButton from 'components/common/buttons/messageButton'
 import Follower from 'components/sns/user/follower'
 import Following from 'components/sns/user/following'
 import useMe from 'hooks/useMe'
@@ -93,7 +92,6 @@ const UserInfo = ({ userId, className }: UserInfoProps) => {
             targetUserId={user.id}
             afterFollow={afterFollow}
           />
-          <MessageButton userId={user.id} />
         </div>
       )}
     </header>
