@@ -4,6 +4,7 @@ import { AppProps } from 'next/app'
 import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import { CacheProvider, EmotionCache } from '@emotion/react'
+import GlobalContainer from 'components/layouts/containers/globalContainer'
 import globalResetStyles from 'styles/globalResetStyles'
 import globalFullHeightStyles from 'styles/globalFullHeightStyles'
 import theme from 'theme'
@@ -35,7 +36,9 @@ export default function MyApp(props: MyAppProps) {
             fetcher: swrFetcher,
           }}
         >
-          <Component {...pageProps} />
+          <GlobalContainer>
+            <Component {...pageProps} />
+          </GlobalContainer>
         </SWRConfig>
       </ThemeProvider>
     </CacheProvider>
