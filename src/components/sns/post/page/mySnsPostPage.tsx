@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router'
 import { useSWRConfig } from 'swr'
+import styled from '@emotion/styled'
 import PostDescriptionContentsLayout from 'components/sns/post/postDescriptionContentsLayout'
 import PostCommentWritingArea from 'components/sns/comment/postCommentWritingArea'
 import PostCommentList from 'components/sns/comment/postCommentList'
@@ -8,7 +9,10 @@ import LikeButton from 'components/common/buttons/likeButton'
 import useMe from 'hooks/useMe'
 import useSnsPost from 'hooks/useSnsPost'
 import createUrlQuery from 'utils/createUrlQuery'
-import { DEFAULT_BLACK } from 'styles/constants/color'
+
+const StyledPostCommentWritingArea = styled(PostCommentWritingArea)`
+  margin-bottom: 12px;
+`
 
 const queryForFetchingSnsPost = createUrlQuery({
   'populate[0]': 'author.profileImage',
@@ -35,7 +39,7 @@ const MySnsPostPage = () => {
     'populate[0]': 'author',
     'populate[1]': 'author.profileImage',
     'filters[post][id][$eq]': `${snsPostId}`,
-    sort: 'createdAt:asc',
+    sort: 'createdAt:desc',
   })
 
   if (isLoading) {
@@ -64,7 +68,7 @@ const MySnsPostPage = () => {
     },
     likeUsers: snsPostFromStrapi.attributes.likeUsers.data,
     bookmarkUsers: snsPostFromStrapi.attributes.bookmarkUsers.data,
-    content: snsPostFromStrapi.attributes.content,
+    content: snsPostFromStrapi.attributes.content ?? '',
     fashionItemsInfo: snsPostFromStrapi.attributes.fashionItemsInfo,
   }
 
@@ -94,7 +98,6 @@ const MySnsPostPage = () => {
             likeUsers={snsPost.likeUsers}
             afterLike={afterLike}
             isShowLikeUsersNumber={true}
-            borderColor={DEFAULT_BLACK}
           />
         }
         bookmarkButton={null}
@@ -102,9 +105,9 @@ const MySnsPostPage = () => {
         postAuthor={snsPost.author}
         postImages={snsPost.images}
         postContent={snsPost.content}
-        postFashionItemsInfo={snsPost.fashionItemsInfo}
+        postFashionItemInfos={snsPost.fashionItemsInfo}
       />
-      <PostCommentWritingArea
+      <StyledPostCommentWritingArea
         snsPostId={snsPost.id}
         afterPostCommentSubmit={afterPostCommentSubmit}
       />

@@ -4,7 +4,7 @@ import { AppProps } from 'next/app'
 import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import { CacheProvider, EmotionCache } from '@emotion/react'
-import GlobalContainer from 'components/common/containers/globalContainer'
+import GlobalContainer from 'components/layouts/containers/globalContainer'
 import globalResetStyles from 'styles/globalResetStyles'
 import globalFullHeightStyles from 'styles/globalFullHeightStyles'
 import theme from 'theme'
@@ -27,20 +27,20 @@ export default function MyApp(props: MyAppProps) {
       <Head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
-      <GlobalContainer>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          {globalResetStyles}
-          {globalFullHeightStyles}
-          <SWRConfig
-            value={{
-              fetcher: swrFetcher,
-            }}
-          >
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        {globalResetStyles}
+        {globalFullHeightStyles}
+        <SWRConfig
+          value={{
+            fetcher: swrFetcher,
+          }}
+        >
+          <GlobalContainer>
             <Component {...pageProps} />
-          </SWRConfig>
-        </ThemeProvider>
-      </GlobalContainer>
+          </GlobalContainer>
+        </SWRConfig>
+      </ThemeProvider>
     </CacheProvider>
   )
 }

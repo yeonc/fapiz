@@ -1,10 +1,102 @@
+import { useState } from 'react'
 import { css } from '@emotion/react'
+import { EmotionJSX } from '@emotion/react/types/jsx-namespace'
+import styled from '@emotion/styled'
+import MobileStepper from '@mui/material/MobileStepper'
+import IconButton from '@mui/material/IconButton'
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import PostAuthorHeader from 'components/sns/post/postAuthorHeader'
+import AdditionalContentShowingToggleButton from 'components/sns/post/additionalContentShowingToggleButton'
+import Typo from 'components/common/typo'
 import getFormattedDate from 'utils/getFormattedDate'
+import { SnsPostImage } from 'types/image'
+import { DEFAULT_GRAY, LIGHT_GRAY } from 'styles/constants/color'
+import visuallyHidden from 'styles/visuallyHidden'
+import { FashionItemInfo } from 'types/fashion'
+
+const INITIAL_SHOWED_POST_CONTENT_LENGTH = 200
+const POST_CONTENT_STRING_START_INDEX = 0
+
+const StyledPostAuthorHeader = styled(PostAuthorHeader)`
+  margin-bottom: 20px;
+`
+
+const StyledPostImageWrapper = styled.div`
+  position: relative;
+  text-align: center;
+`
 
 const snsPostImagesStyle = css`
-  width: 200px;
+  width: 70%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
 `
+
+const StyledArrowButtonsWrapper = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+`
+
+const StyledMobileStepper = styled(MobileStepper)`
+  justify-content: center;
+  margin-bottom: 10px;
+`
+
+const paddingStyle = css`
+  padding-left: 6px;
+`
+
+const StyledPostContentWrapper = styled.div`
+  white-space: pre-line;
+`
+
+const StyledFashionItemInfosWrapper = styled.section`
+  margin-bottom: 10px;
+`
+
+const StyledFashionItemInfos = styled.ul`
+  display: flex;
+  flex-wrap: wrap;
+`
+
+const StyledFashionItemInfo = styled.li`
+  display: flex;
+  flex-direction: column;
+  flex-basis: calc(50% - 4px);
+  padding: 8px;
+  width: 50%;
+  border: 1px solid ${LIGHT_GRAY};
+  border-radius: 8px;
+  margin: 2px;
+`
+
+const categoryStyle = css`
+  font-weight: 700;
+`
+
+const createdAtStyle = css`
+  display: block;
+  margin: 10px 0;
+  font-size: 15px;
+  color: ${DEFAULT_GRAY};
+`
+
+type PostDescriptionContentsLayoutProps = {
+  snsPostEditMenu: EmotionJSX.Element | null
+  likeButton: EmotionJSX.Element | null
+  bookmarkButton: EmotionJSX.Element | null
+  postCreatedDate: string
+  postAuthor: any // TODO: 추후에 타입 정의 후 수정할 것
+  postImages: SnsPostImage[]
+  postContent: string
+  postFashionItemInfos: FashionItemInfo[]
+}
 
 const PostDescriptionContentsLayout = ({
   snsPostEditMenu,
@@ -14,40 +106,106 @@ const PostDescriptionContentsLayout = ({
   postAuthor,
   postImages,
   postContent,
-  postFashionItemsInfo,
-}) => {
+  postFashionItemInfos,
+}: PostDescriptionContentsLayoutProps) => {
   const createdDate = new Date(postCreatedDate)
-  const dateFormat = getFormattedDate(createdDate)
+  const formattedCreatedAt = getFormattedDate(createdDate)
+  const initialPostContentToBeShowed = postContent.slice(
+    POST_CONTENT_STRING_START_INDEX,
+    INITIAL_SHOWED_POST_CONTENT_LENGTH
+  )
+
+  const [postContentToBeShowed, setPostContentToBeShowed] = useState(
+    initialPostContentToBeShowed
+  )
+  const [isHiddenContentShowed, setIsHiddenContentShowed] = useState(false)
+  const [activeStep, setActiveStep] = useState(0)
+  const maxSteps = postImages.length
+
+  const handleNextButtonClick = () => {
+    setActiveStep(prevActiveStep => prevActiveStep + 1)
+  }
+
+  const handleBackButtonClick = () => {
+    setActiveStep(prevActiveStep => prevActiveStep - 1)
+  }
+
+  const handleContentShowMoreButtonClick = () => {
+    setPostContentToBeShowed(postContent)
+    setIsHiddenContentShowed(true)
+  }
+
+  const handleContentHideButtonClick = () => {
+    setPostContentToBeShowed(initialPostContentToBeShowed)
+    setIsHiddenContentShowed(false)
+  }
 
   return (
     <>
-      <PostAuthorHeader author={postAuthor} popoverMenu={snsPostEditMenu} />
-      {postImages.map(postImage => (
+      <StyledPostAuthorHeader
+        author={postAuthor}
+        popoverMenu={snsPostEditMenu}
+      />
+      <StyledPostImageWrapper>
         <img
           css={snsPostImagesStyle}
-          key={postImage.url}
-          src={postImage.url}
-          alt={postImage.altText}
+          key={postImages[activeStep].url}
+          src={postImages[activeStep].url}
+          alt={postImages[activeStep].altText}
         />
-      ))}
-      <div>
-        {likeButton}
-        {bookmarkButton}
-      </div>
-      <p>{postContent}</p>
-      <span>{dateFormat}</span>
-      {postFashionItemsInfo && (
-        <>
-          <h3>착용한 제품 정보</h3>
-          <ul>
-            {postFashionItemsInfo.map((fashionItemInfo: any, index: number) => (
-              <li key={index.toString()}>
-                {`${fashionItemInfo.category}: ${fashionItemInfo.price}원 / ${fashionItemInfo.buyingPlace}`}
-              </li>
+        <StyledArrowButtonsWrapper>
+          <IconButton
+            onClick={handleBackButtonClick}
+            disabled={activeStep === 0}
+          >
+            <ArrowBackIosNewIcon />
+          </IconButton>
+          <IconButton
+            onClick={handleNextButtonClick}
+            disabled={activeStep === maxSteps - 1}
+          >
+            <ArrowForwardIosIcon />
+          </IconButton>
+        </StyledArrowButtonsWrapper>
+      </StyledPostImageWrapper>
+      <StyledMobileStepper
+        steps={maxSteps}
+        position="static"
+        activeStep={activeStep}
+        nextButton={null}
+        backButton={null}
+      />
+      {likeButton}
+      {bookmarkButton}
+      {postFashionItemInfos && (
+        <StyledFashionItemInfosWrapper>
+          <span css={visuallyHidden}>착용한 제품 정보</span>
+          <StyledFashionItemInfos>
+            {postFashionItemInfos.map((fashionItemInfo: any, index: number) => (
+              <StyledFashionItemInfo key={index.toString()}>
+                <Typo component="span" css={categoryStyle}>
+                  {fashionItemInfo.category}
+                </Typo>
+                <Typo component="span">{fashionItemInfo.buyingPlace}</Typo>
+                <Typo component="span">{fashionItemInfo.price}원</Typo>
+              </StyledFashionItemInfo>
             ))}
-          </ul>
-        </>
+          </StyledFashionItemInfos>
+        </StyledFashionItemInfosWrapper>
       )}
+      <div css={paddingStyle}>
+        <StyledPostContentWrapper>
+          <p>{postContentToBeShowed}</p>
+        </StyledPostContentWrapper>
+        {postContent.length > INITIAL_SHOWED_POST_CONTENT_LENGTH ? (
+          <AdditionalContentShowingToggleButton
+            isHiddenContentShowed={isHiddenContentShowed}
+            onContentShowMoreButtonClick={handleContentShowMoreButtonClick}
+            onContentHideButtonClick={handleContentHideButtonClick}
+          />
+        ) : null}
+        <span css={createdAtStyle}>{formattedCreatedAt}</span>
+      </div>
     </>
   )
 }

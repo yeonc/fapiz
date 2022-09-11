@@ -10,6 +10,7 @@ import { DEFAULT_BLACK } from 'styles/constants/color'
 const StyledSnsPostSearchResultWrapper = styled.div`
   display: flex;
   align-items: center;
+  gap: 20px;
 `
 
 const StyledPostTextWrapper = styled.div`
@@ -22,10 +23,18 @@ const StyledSnsPostInfoWrapper = styled.div`
 `
 
 const postImageStyle = css`
-  width: 120px;
-  height: 120px;
-  border-radius: 8px;
-  margin-right: 16px;
+  width: 140px;
+  border-radius: 10px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+`
+
+const postContentStyle = css`
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 3;
 `
 
 const avatarStyle = css`
@@ -53,7 +62,7 @@ const SnsPostSearchResultListItem = ({
           css={postImageStyle}
         />
         <StyledPostTextWrapper>
-          <p css={mgBottom(16)}>{snsPost.content}</p>
+          <p css={[mgBottom(16), postContentStyle]}>{snsPost.content}</p>
           <StyledSnsPostInfoWrapper>
             <Avatar
               src={snsPost.author.avatarUrl}

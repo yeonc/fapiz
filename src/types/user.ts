@@ -59,3 +59,14 @@ export type UserForUserInfo = {
   followings: FollowUserForUserInfo[]
   followers: FollowUserForUserInfo[]
 }
+
+export type UserForMyInfoPage = {
+  id: number
+  imageUrl: string
+  username: string
+  gender: string
+  height: number
+  weight: number
+  bodyShape: string
+  fashionStyles: FashionStyle[]
+}

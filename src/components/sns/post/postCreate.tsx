@@ -31,17 +31,17 @@ type ChildrenProps = {
   handleSubmit: (e: FormEvent<HTMLFormElement>) => Promise<void>
 }
 
-type CreatePostProps = {
+type PostCreateProps = {
   authorId: number
-  afterCreatePost: (createdPostId: number) => void
+  afterPostCreated: (createdPostId: number) => void
   children: (props: ChildrenProps) => EmotionJSX.Element
 }
 
-const CreatePost = ({
+const PostCreate = ({
   authorId,
-  afterCreatePost,
+  afterPostCreated,
   children,
-}: CreatePostProps) => {
+}: PostCreateProps) => {
   const [imageFiles, setImageFiles] = useState<ImageFiles>(null)
   const [previewImages, setPreviewImages] = useState<PreviewImage[] | null>(
     null
@@ -110,7 +110,7 @@ const CreatePost = ({
     // TODO: map 함수 image 인자 타입 정의
     try {
       const createdPostId = await createSnsPost()
-      afterCreatePost(createdPostId)
+      afterPostCreated(createdPostId)
     } catch (error) {
       console.error(error)
     }
@@ -129,4 +129,4 @@ const CreatePost = ({
   })
 }
 
-export default CreatePost
+export default PostCreate

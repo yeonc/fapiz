@@ -32,6 +32,9 @@ const PopoverMenu = ({ postId, myId }) => {
   }
 
   const handleDeleteClick = async () => {
+    const willDeleteSnsPost = window.confirm('게시물을 삭제하시겠습니까?')
+    if (!willDeleteSnsPost) return
+
     try {
       await deletePost(postId)
       afterDeletePost()

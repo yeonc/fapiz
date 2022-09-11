@@ -1,10 +1,18 @@
 import { useRouter } from 'next/router'
 import withHeader from 'hocs/withHeader'
+import styled from '@emotion/styled'
 import SnsPostPageWithoutLogin from 'components/sns/post/page/snsPostPageWithoutLogin'
 import OtherSnsPostPage from 'components/sns/post/page/otherSnsPostPage'
 import MySnsPostPage from 'components/sns/post/page/mySnsPostPage'
+import MaxWidthContainer from 'components/layouts/containers/maxWidthContainer'
 import useMe from 'hooks/useMe'
 import useSnsPost from 'hooks/useSnsPost'
+
+const StyledSnsPostPageWrapper = styled.div`
+  padding: 20px 0;
+  width: 90%;
+  margin: 0 auto;
+`
 
 const SnsPostPage = () => {
   const router = useRouter()
@@ -22,14 +30,32 @@ const SnsPostPage = () => {
   }
 
   if (!isLoggedIn) {
-    return <SnsPostPageWithoutLogin />
+    return (
+      <MaxWidthContainer>
+        <StyledSnsPostPageWrapper>
+          <SnsPostPageWithoutLogin />
+        </StyledSnsPostPageWrapper>
+      </MaxWidthContainer>
+    )
   }
 
   if (isMySnsPostPage) {
-    return <MySnsPostPage />
+    return (
+      <MaxWidthContainer>
+        <StyledSnsPostPageWrapper>
+          <MySnsPostPage />
+        </StyledSnsPostPageWrapper>
+      </MaxWidthContainer>
+    )
   }
 
-  return <OtherSnsPostPage />
+  return (
+    <MaxWidthContainer>
+      <StyledSnsPostPageWrapper>
+        <OtherSnsPostPage />
+      </StyledSnsPostPageWrapper>
+    </MaxWidthContainer>
+  )
 }
 
 export default withHeader(SnsPostPage)

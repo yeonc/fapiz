@@ -1,28 +1,33 @@
-import { useState } from 'react'
+import { FormEvent, useState } from 'react'
 import { css } from '@emotion/react'
-import FormControl from '@mui/material/FormControl'
-import InputLabel from '@mui/material/InputLabel'
-import Select from '@mui/material/Select'
-import MenuItem from '@mui/material/MenuItem'
+import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
+import TextField from '@mui/material/TextField'
+import LoadingButton from '@mui/lab/LoadingButton'
 import ImageUploadButton from 'components/common/buttons/imageUploadButton'
+import ImageUploadCaptionTypo from 'components/common/typo/imageUploadCaptionTypo'
 import uploadImage from 'services/upload/uploadImage'
 import editFashionItem from 'services/fashionItem/editFashionItem'
 import deleteFashionItem from 'services/fashionItem/deleteFashionItem'
 import { changeImageFileToPreviewImage } from 'utils/previewImage'
-import {
-  FASHION_ITEM_SEASONS,
-  FASHION_ITEM_CATEGORIES,
-  FASHION_ITEM_COLORS,
-} from 'constants/fashionItem'
 import { ImageFiles, PreviewImage } from 'types/image'
+import { mgBottom, mgRight } from 'styles/layout'
+
+const StyledFashionItemCreateForm = styled.form`
+  text-align: center;
+`
+
+const StyledTextFieldWrapper = styled.div`
+  padding: 12px 12px 18px;
+`
 
 const previewImageStyle = css`
-  width: 250px;
-  height: 250px;
+  display: block;
+  width: 200px;
   border-radius: 50%;
-  margin: 10px 0;
+  margin: 10px auto;
   object-fit: cover;
+  aspect-ratio: 1 / 1;
 `
 
 type UploadedImageId = number | undefined
@@ -36,18 +41,15 @@ const FashionItemEditForm = ({
   const [previewImage, setPreviewImage] = useState<PreviewImage>(
     initialFashionItem.image
   )
-  const [season, setSeason] = useState<string>(initialFashionItem.season)
   const [category, setCategory] = useState<string>(initialFashionItem.category)
   const [color, setColor] = useState<string>(initialFashionItem.color)
+  const [isFashionItemEditLoading, setIsFashionItemEditLoading] =
+    useState(false)
 
   const handleImageFilesChange = (imageFiles: FileList) => {
     setImageFiles(imageFiles)
     const previewImage = changeImageFileToPreviewImage(imageFiles[0])
     setPreviewImage(previewImage)
-  }
-
-  const handleSeasonChange = (season: string) => {
-    setSeason(season)
   }
 
   const handleCategoryChange = (category: string) => {
@@ -74,16 +76,21 @@ const FashionItemEditForm = ({
 
     await editFashionItem({
       fashionItemId: initialFashionItem.id,
-      season,
       category,
       color,
       imageId,
     })
   }
 
-  const handleFashionItemEditButtonClick = async () => {
+  const handleFashionItemEditButtonClick = async (
+    e: FormEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault()
+
     try {
+      setIsFashionItemEditLoading(true)
       await editFashionItemInCloset()
+      setIsFashionItemEditLoading(false)
       afterEditFashionItem()
     } catch (error) {
       console.error(error)
@@ -107,7 +114,7 @@ const FashionItemEditForm = ({
   }
 
   return (
-    <form>
+    <StyledFashionItemCreateForm onSubmit={handleFashionItemEditButtonClick}>
       <img
         src={previewImage.url}
         alt={previewImage.altText}
@@ -118,63 +125,44 @@ const FashionItemEditForm = ({
         buttonAriaLabel="패션 아이템 이미지 선택"
         isImageRequired={false}
       />
-      <FormControl fullWidth>
-        <InputLabel>계절</InputLabel>
-        <Select
-          value={season}
-          label="계절"
-          onChange={e => handleSeasonChange(e.target.value)}
-        >
-          {FASHION_ITEM_SEASONS.map(season => (
-            <MenuItem key={season.id} value={season.name}>
-              {season.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl fullWidth>
-        <InputLabel>카테고리</InputLabel>
-        <Select
-          value={category}
+      <ImageUploadCaptionTypo>
+        아이콘을 클릭해 패션 아이템 이미지를 수정해 보세요!
+      </ImageUploadCaptionTypo>
+      <StyledTextFieldWrapper>
+        <TextField
           label="카테고리"
+          value={category}
           onChange={e => handleCategoryChange(e.target.value)}
-        >
-          {FASHION_ITEM_CATEGORIES.map(category => (
-            <MenuItem key={category.id} value={category.name}>
-              {category.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl fullWidth>
-        <InputLabel>색상</InputLabel>
-        <Select
-          value={color}
+          required
+          fullWidth={true}
+          css={mgBottom(12)}
+        />
+        <TextField
           label="색상"
+          value={color}
           onChange={e => handleColorChange(e.target.value)}
-        >
-          {FASHION_ITEM_COLORS.map(color => (
-            <MenuItem key={color.id} value={color.name}>
-              {color.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <Button
+          required
+          fullWidth={true}
+        />
+      </StyledTextFieldWrapper>
+      <LoadingButton
         variant="contained"
-        type="button"
-        onClick={handleFashionItemEditButtonClick}
+        type="submit"
+        css={mgRight(6)}
+        loading={isFashionItemEditLoading}
+        loadingPosition="center"
       >
         수정
-      </Button>
+      </LoadingButton>
       <Button
         variant="outlined"
         type="button"
         onClick={handleFashionItemDeleteButtonClick}
+        disabled={isFashionItemEditLoading}
       >
         삭제
       </Button>
-    </form>
+    </StyledFashionItemCreateForm>
   )
 }
 

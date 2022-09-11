@@ -1,17 +1,18 @@
 import styled from '@emotion/styled'
-import Avatar from '@mui/material/Avatar'
-import Link from '@mui/material/Link'
-import CommentByMode from 'components/sns/comment/commentByMode'
-import { horizontal } from 'styles/layout'
+import CommentIcon from '@mui/icons-material/Comment'
+import PostCommentItem from 'components/sns/comment/postCommentItem'
 import useSnsComments from 'hooks/useSnsComments'
 import createUrlQuery from 'utils/createUrlQuery'
-import ROUTE_URL from 'constants/routeUrl'
 import { PostCommentForSnsPostPage } from 'types/postComment'
+import { mgBottom } from 'styles/layout'
 
-const StyledCommentAuthorWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  margin-right: 8px;
+const StyledNotExistComment = styled.div`
+  padding: 30px;
+  text-align: center;
+`
+
+const StyledPostCommentItem = styled(PostCommentItem)`
+  margin-bottom: 14px;
 `
 
 type PostCommentListProps = {
@@ -23,7 +24,7 @@ const PostCommentList = ({ snsPostId }: PostCommentListProps) => {
     'populate[0]': 'author',
     'populate[1]': 'author.profileImage',
     'filters[post][id][$eq]': `${snsPostId}`,
-    sort: 'createdAt:asc',
+    sort: 'createdAt:desc',
   })
 
   const { snsComments: snsCommentsFromStrapi } = useSnsComments(query)
@@ -34,6 +35,7 @@ const PostCommentList = ({ snsPostId }: PostCommentListProps) => {
 
       return {
         id: snsComment.id,
+        createdAt: snsComment.attributes.createdAt,
         content: snsComment.attributes.content,
         authorId: author.id,
         authorName: author.attributes.username,
@@ -44,30 +46,22 @@ const PostCommentList = ({ snsPostId }: PostCommentListProps) => {
   )
 
   if (comments.length === 0) {
-    return <p>댓글이 없습니다. 첫 댓글을 입력해 보세요!</p>
+    return (
+      <StyledNotExistComment>
+        <CommentIcon fontSize="large" css={mgBottom(4)} />
+        <p>댓글이 없습니다. 첫 댓글을 입력해 보세요!</p>
+      </StyledNotExistComment>
+    )
   }
 
   return (
     <ul>
       {comments.map(comment => (
-        <li key={comment.id} css={horizontal}>
-          <Link href={`${ROUTE_URL.SNS}/${comment.authorId}`}>
-            <StyledCommentAuthorWrapper>
-              <Avatar
-                alt={comment.authorName}
-                src={comment.authorProfileImageUrl}
-                sx={{ width: 30, height: 30, marginRight: 1 }}
-              />
-              <span>{comment.authorName}</span>
-            </StyledCommentAuthorWrapper>
-          </Link>
-          <CommentByMode
-            commentId={comment.id}
-            commentText={comment.content}
-            snsPostId={snsPostId}
-            commentAuthorId={comment.authorId}
-          />
-        </li>
+        <StyledPostCommentItem
+          key={comment.id}
+          comment={comment}
+          postId={snsPostId}
+        />
       ))}
     </ul>
   )

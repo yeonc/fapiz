@@ -11,3 +11,8 @@ export type SnsPostImage = {
   url: string
   altText: string
 }
+
+export type fashionItemImage = {
+  url: string
+  altText: string
+}

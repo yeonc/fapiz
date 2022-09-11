@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useSWRConfig } from 'swr'
+import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -28,7 +29,7 @@ const CommentByMode = ({
     'populate[0]': 'author',
     'populate[1]': 'author.profileImage',
     'filters[post][id][$eq]': `${snsPostId}`,
-    sort: 'createdAt:asc',
+    sort: 'createdAt:desc',
   })
 
   const refetch = () => {
@@ -75,14 +76,19 @@ const CommentByMode = ({
 
   const commentEditButtons = (
     <>
-      <IconButton aria-label="댓글 수정" onClick={handleCommentEditButtonClick}>
-        <EditIcon />
+      <IconButton
+        aria-label="댓글 수정"
+        onClick={handleCommentEditButtonClick}
+        size="small"
+      >
+        <EditIcon fontSize="small" />
       </IconButton>
       <IconButton
         aria-label="댓글 삭제"
         onClick={handleCommentDeleteButtonClick}
+        size="small"
       >
-        <DeleteIcon />
+        <DeleteIcon fontSize="small" />
       </IconButton>
     </>
   )

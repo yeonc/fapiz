@@ -1,11 +1,14 @@
 import { useRouter } from 'next/router'
 import Link from '@mui/material/Link'
-import SearchIcon from '@mui/icons-material/Search'
-import ChatIcon from '@mui/icons-material/ChatBubbleOutline'
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import ROUTE_URL from 'constants/routeUrl'
 import useMe from 'hooks/useMe'
+
+const StyledNavbar = styled.nav`
+  display: flex;
+  align-items: center;
+`
 
 const StyledPageLinkList = styled.ul`
   display: inline-flex;
@@ -57,7 +60,7 @@ const Navbar = () => {
   ]
 
   return (
-    <nav>
+    <StyledNavbar>
       <StyledPageLinkList>
         {PAGE_LINK_LIST.map(link => (
           <StyledPageLink key={link.href}>
@@ -66,7 +69,7 @@ const Navbar = () => {
         ))}
       </StyledPageLinkList>
       <AuthButton />
-    </nav>
+    </StyledNavbar>
   )
 }
 

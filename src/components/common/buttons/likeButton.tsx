@@ -19,10 +19,9 @@ type LikeButtonProps = {
   likeUsers: LikeUser[]
   afterLike: () => void
   isShowLikeUsersNumber: boolean
-  borderColor: string
+  borderColor?: string
 }
 
-// TODO: 좋아요 버튼 눌렀을 때 UI에 느리게 반영되는 것 개선하기
 const LikeButton = ({
   myId,
   targetId,
@@ -32,18 +31,17 @@ const LikeButton = ({
   borderColor,
 }: LikeButtonProps) => {
   const isLiked = likeUsers.some(likeUser => likeUser.id === myId)
-  const likePostUserIds = likeUsers.map(likeUser => likeUser.id)
-  const likeUsersAfterLiked = [...likePostUserIds, myId]
+  const likeUserIds = likeUsers.map(likeUser => likeUser.id)
 
   const like = async () => {
-    await likePost({ snsPostId: targetId, likeUsersAfterLiked })
+    await likePost({ targetPostId: targetId, myId, likeUserIds })
   }
 
   const unlike = async () => {
     await unlikePost({
-      snsPostId: targetId,
-      likePostUserIds,
-      unlikeUserId: myId,
+      targetPostId: targetId,
+      myId,
+      likeUserIds,
     })
   }
 
