@@ -9,6 +9,7 @@ const LOGIN_PAGE_TEXT_SHADOW = `${DEFAULT_BLACK} 3px 5px 2px`
 
 const StyledLoginPageWrapper = styled.div`
   padding: 30px;
+  height: 100vh;
   background-image: url('/login-background.jpg');
   background-repeat: no-repeat;
   background-size: cover;
