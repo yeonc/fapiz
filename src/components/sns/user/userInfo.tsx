@@ -9,6 +9,7 @@ import Following from 'components/sns/user/following'
 import useMe from 'hooks/useMe'
 import useUser from 'hooks/useUser'
 import getToken from 'utils/getToken'
+import createUrlQuery from 'utils/createUrlQuery'
 import { BACKEND_URL } from 'constants/constants'
 import { UserForUserInfo } from 'types/user'
 import { mgRight, mgBottom } from 'styles/layout'
@@ -30,11 +31,21 @@ type UserInfoProps = {
   className?: string
 }
 
+const queryForUseMe = createUrlQuery({
+  'populate[0]': 'followings',
+})
+
+const queryForUseUser = createUrlQuery({
+  'populate[0]': 'profileImage',
+  'populate[1]': 'followers.profileImage',
+  'populate[2]': 'followings.profileImage',
+})
+
 const UserInfo = ({ userId, className }: UserInfoProps) => {
   const { mutate } = useSWRConfig()
 
-  const { me } = useMe()
-  const { user: userFromStrapi } = useUser(userId)
+  const { me } = useMe(queryForUseMe)
+  const { user: userFromStrapi } = useUser(userId, queryForUseUser)
 
   if (!userFromStrapi) {
     return null
@@ -58,14 +69,14 @@ const UserInfo = ({ userId, className }: UserInfoProps) => {
     if (!token) return null
 
     mutate({
-      url: `${BACKEND_URL}/api/users/me`,
+      url: `${BACKEND_URL}/api/users/me?${queryForUseMe}`,
       config: {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       },
     })
-    mutate(user.id ? { url: `/api/users/${user.id}` } : null)
+    mutate(user.id ? { url: `/api/users/${user.id}?${queryForUseUser}` } : null)
   }
 
   const afterFollow = () => {

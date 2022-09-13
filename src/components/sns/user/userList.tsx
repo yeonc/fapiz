@@ -64,7 +64,7 @@ const UserList = ({ users, me, afterFollow }) => {
           <ListItemAvatar>
             <Avatar
               alt={user.username}
-              src=""
+              src={user.profileImage?.url}
               component="a"
               href={`/sns/${user.id}`}
             />

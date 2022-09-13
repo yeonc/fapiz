@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useSWRConfig } from 'swr'
-import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'

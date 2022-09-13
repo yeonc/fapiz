@@ -8,6 +8,7 @@ import MyInfoEditForm from 'components/myInfo/myInfoEditForm'
 import Typo from 'components/common/typo'
 import MaxWidthContainer from 'components/layouts/containers/maxWidthContainer'
 import useMe from 'hooks/useMe'
+import createUrlQuery from 'utils/createUrlQuery'
 import { UserForMyInfoPage } from 'types/user'
 import { mgBottom } from 'styles/layout'
 
@@ -23,13 +24,21 @@ const StyledButton = styled(Button)`
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 `
 
+const queryForUseMe = createUrlQuery({
+  'populate[0]': 'profileImage',
+})
+
 const MyInfoPage = () => {
-  const { me } = useMe()
+  const { me } = useMe(queryForUseMe)
+
+  if (!me) {
+    return null
+  }
 
   const myInfo: UserForMyInfoPage = {
     id: me.id,
     imageUrl: me.profileImage?.url,
-    username: me?.username,
+    username: me.username,
     gender: me.gender || null,
     height: me.height ?? null,
     weight: me.weight ?? null,
