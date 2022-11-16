@@ -28,7 +28,7 @@ const SnsPosts = ({ userId }) => {
   const { snsPosts: snsPostsFromStrapi, isLoading } = useSnsPosts(query)
 
   if (isLoading) {
-    return <p>게시물을 불러오는 중입니다...</p>
+    return null
   }
 
   const snsPosts: SnsPostForSnsPostsPage[] = snsPostsFromStrapi.map(

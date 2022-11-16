@@ -6,6 +6,7 @@ import Button from '@mui/material/Button'
 import Avatar from '@mui/material/Avatar'
 import useMe from 'hooks/useMe'
 import createComment from 'services/snsComment/createComment'
+import createUrlQuery from 'utils/createUrlQuery'
 
 const StyledPostCommentWritingAreaWrapper = styled.div`
   display: flex;
@@ -30,6 +31,8 @@ const StyledTextField = styled(TextField)`
   margin-right: 6px;
 `
 
+const queryForUseMe = createUrlQuery({ 'populate[0]': 'profileImage' })
+
 type PostCommentWritingAreaProps = {
   snsPostId: number
   afterPostCommentSubmit: () => void
@@ -43,7 +46,7 @@ const PostCommentWritingArea = ({
 }: PostCommentWritingAreaProps) => {
   const [comment, setComment] = useState('')
 
-  const { me, isLoading } = useMe()
+  const { me, isLoading } = useMe(queryForUseMe)
 
   if (isLoading) {
     return <p>로딩중</p>

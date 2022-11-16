@@ -2,13 +2,17 @@ import useSWR from 'swr'
 import { BACKEND_URL } from 'constants/constants'
 import getToken from 'utils/getToken'
 
-const useMe = () => {
+const useMe = (query?: string) => {
   const token = getToken()
+
+  const urlNotIncludedQuery = `${BACKEND_URL}/api/users/me`
+  const urlIncludedQuery = `${BACKEND_URL}/api/users/me?${query}`
+  const url = query ? urlIncludedQuery : urlNotIncludedQuery
 
   const { data, error } = useSWR(
     token
       ? {
-          url: `${BACKEND_URL}/api/users/me`,
+          url,
           config: {
             headers: {
               Authorization: `Bearer ${token}`,
