@@ -43,7 +43,7 @@ const OtherSnsPostPage = () => {
   })
 
   if (isLoading) {
-    return <p>로딩중..</p>
+    return null
   }
 
   if (error) {

@@ -7,7 +7,7 @@ const withLoginPageRedirect = (Page: FunctionComponent) => {
     const { me, isLoading } = useMe()
 
     if (isLoading) {
-      return <p>로딩중...</p>
+      return null
     }
 
     if (!me) {
