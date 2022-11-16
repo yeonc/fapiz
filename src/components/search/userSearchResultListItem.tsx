@@ -3,11 +3,14 @@ import Avatar from '@mui/material/Avatar'
 import Link from '@mui/material/Link'
 import ROUTE_URL from 'constants/routeUrl'
 import { UserForSearching } from 'types/user'
-import { mgBottom, mgRight } from 'styles/layout'
+import { mgBottom } from 'styles/layout'
 import {
   DEFAULT_BLACK,
   FASHION_STYLE_TAG_BACKGROUND_GRAY,
 } from 'styles/constants/color'
+
+const DIVIDER = ' / '
+const NO_DIVIDER = ''
 
 const linkStyle = css`
   display: block;
@@ -38,28 +41,33 @@ type UserSearchResultListItemProps = {
 const UserSearchResultListItem = ({
   className,
   user,
-}: UserSearchResultListItemProps) => (
-  <li className={className}>
-    <Link
-      href={`${ROUTE_URL.SNS}/${user.id}`}
-      css={linkStyle}
-      color={DEFAULT_BLACK}
-    >
-      <Avatar src={user.avatarUrl} alt={user.username} css={avatarStyle} />
-      <div css={mgBottom(10)}>
-        <span css={mgRight(10)}>{user.username}</span>
-        <span>{user.gender}</span>
-      </div>
-      <ul>
-        {user.fashionStyles &&
-          user.fashionStyles.map(fashionStyle => (
-            <li key={fashionStyle.id} css={fashionStyleTagStyle}>
-              #{fashionStyle.name}
-            </li>
-          ))}
-      </ul>
-    </Link>
-  </li>
-)
+}: UserSearchResultListItemProps) => {
+  return (
+    <li className={className}>
+      <Link
+        href={`${ROUTE_URL.SNS}/${user.id}`}
+        css={linkStyle}
+        color={DEFAULT_BLACK}
+      >
+        <Avatar src={user.avatarUrl} alt={user.username} css={avatarStyle} />
+        <div css={mgBottom(10)}>
+          <span>
+            {user.username}
+            {user.gender ? DIVIDER : NO_DIVIDER}
+            {user.gender}
+          </span>
+        </div>
+        <ul>
+          {user.fashionStyles &&
+            user.fashionStyles.map(fashionStyle => (
+              <li key={fashionStyle.id} css={fashionStyleTagStyle}>
+                #{fashionStyle.name}
+              </li>
+            ))}
+        </ul>
+      </Link>
+    </li>
+  )
+}
 
 export default UserSearchResultListItem
