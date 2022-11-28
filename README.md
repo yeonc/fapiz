@@ -47,7 +47,7 @@
 |Name|Description|
 |:---:|:---:|
 |**Strapi**|Headless CMS|
-|**Heroku**|Deployment|
+|**Railway**|Deployment|
 
 ## ❓ 더 많은 것을 알고 싶다면
 - [작업 진행 방식](https://github.com/yeonc/fapiz-frontend/wiki/%EC%9E%91%EC%97%85-%EC%A7%84%ED%96%89-%EB%B0%A9%EC%8B%9D)
