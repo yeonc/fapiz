@@ -22,7 +22,7 @@ import {
   USER_FASHION_STYLES,
   USER_GENDERS,
 } from 'constants/user'
-import { UserForMyInfoPage } from 'types/user'
+import { UserForMyInfo } from 'types/user'
 import { ImageFiles, Image } from 'types/image'
 import { Nullable } from 'types/common'
 import { DEFAULT_BLACK, DEFAULT_WHITE } from 'styles/constants/color'
@@ -74,7 +74,7 @@ const inputWidth = css`
 type FashionStyleId = FashionStyle['id']
 
 type MyInfoEditFormProps = {
-  myInfo: UserForMyInfoPage
+  myInfo: UserForMyInfo
 }
 
 const MyInfoEditForm = ({ myInfo }: MyInfoEditFormProps) => {

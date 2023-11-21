@@ -9,7 +9,7 @@ import Typo from 'components/common/typo'
 import MaxWidthContainer from 'components/layouts/containers/maxWidthContainer'
 import useMe from 'hooks/useMe'
 import createUrlQuery from 'utils/createUrlQuery'
-import { UserForMyInfoPage } from 'types/user'
+import { UserForMyInfo } from 'types/user'
 import { mgBottom } from 'styles/layout'
 
 const TOOLTIP_TEXT =
@@ -35,9 +35,9 @@ const MyInfoPage = () => {
     return null
   }
 
-  const myInfo: UserForMyInfoPage = {
+  const myInfo: UserForMyInfo = {
     id: me.id,
-    imageUrl: me.profileImage?.url,
+    imageUrl: me.profileImage?.url || null,
     username: me.username,
     gender: me.gender || null,
     height: me.height ?? null,

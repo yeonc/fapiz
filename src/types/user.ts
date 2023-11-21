@@ -1,72 +1,30 @@
 import { Nullable } from 'types/common'
 import { FashionStyle } from 'types/fashion'
 
-export type UserForSearching = {
+export type User = {
   id: number
   username: string
   gender: Nullable<string>
+  height: Nullable<number>
+  weight: Nullable<number>
+  bodyShape: Nullable<string>
   fashionStyles: Nullable<FashionStyle[]>
-  avatarUrl: string | undefined
+  profileImage: Nullable<{ url: string }>
+  followers: User[] | []
+  followings: User[] | []
 }
+
+export type UserForSearching = Pick<
+  User,
+  'id' | 'username' | 'gender' | 'fashionStyles'
+> & { avatarUrl: Nullable<string> }
 
 export type LikeUser = {
   id: number
-  attributes: {
-    username: string
-    email: string
-    provider: string
-    confirmed: boolean
-    blocked: boolean
-    createdAt: string
-    updatedAt: string
-    height: Nullable<number>
-    weight: Nullable<number>
-    points: Nullable<number>
-    level: Nullable<number>
-    gender: Nullable<string>
-    bodyShape: Nullable<string>
-    fashionStyles: Nullable<FashionStyle[]>
-  }
+  attributes: Omit<User, 'id'>
 }
 
-type FollowUserForUserInfo = {
-  id: number
-  username: string
-  email: string
-  provider: string
-  password: null
-  resetPasswordToken: null
-  confirmationToken: null
-  confirmed: boolean
-  blocked: boolean
-  createdAt: string
-  updatedAt: string
-  height: Nullable<number>
-  weight: Nullable<number>
-  points: Nullable<number>
-  level: Nullable<number>
-  gender: Nullable<string>
-  bodyShape: Nullable<string>
-  fashionStyles: Nullable<FashionStyle[]>
-}
-
-export type UserForUserInfo = {
-  id: number
-  username: string
-  height: Nullable<number>
-  weight: Nullable<number>
-  profileImageUrl: string | undefined
-  followings: FollowUserForUserInfo[]
-  followers: FollowUserForUserInfo[]
-}
-
-export type UserForMyInfoPage = {
-  id: number
-  imageUrl: string
-  username: string
-  gender: string
-  height: number
-  weight: number
-  bodyShape: string
-  fashionStyles: FashionStyle[]
-}
+export type UserForMyInfo = Omit<
+  User,
+  'profileImage' | 'followers' | 'followings'
+> & { imageUrl: Nullable<string> }

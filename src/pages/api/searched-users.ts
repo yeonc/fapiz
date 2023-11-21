@@ -3,8 +3,9 @@ import fetchUsers from 'services/user/fetchUsers'
 import createSearchKeywordsArray from 'utils/createSearchKeywordsArray'
 import getSafeStringFromQuery from 'utils/getSafeStringFromQuery'
 import { FashionStyle } from 'types/fashion'
-import { UserForSearching } from 'types/user'
+import { User, UserForSearching } from 'types/user'
 import { Nullable } from 'types/common'
+import createUrlQuery from 'utils/createUrlQuery'
 
 const searchUsers = async (
   req: NextApiRequest,
@@ -15,7 +16,10 @@ const searchUsers = async (
 
   try {
     // 2. strapi 데이터 받아오기
-    const response = await fetchUsers()
+    const query = createUrlQuery({
+      'populate[0]': 'profileImage',
+    })
+    const response = await fetchUsers(query)
     const usersFromStrapi = response.data
 
     // 3. strapi에서 받아온 데이터 정제하기
@@ -33,16 +37,14 @@ const searchUsers = async (
 
 export default searchUsers
 
-const sanitizeUsers = (usersFromStrapi): UserForSearching[] => {
-  const sanitizedUsers = usersFromStrapi.map(userFromStrapi => ({
-    id: userFromStrapi.id,
-    username: userFromStrapi.username,
-    gender: userFromStrapi.gender,
-    fashionStyles: userFromStrapi.fashionStyles ?? [],
-    avatarUrl: userFromStrapi.profileImage?.url,
+const sanitizeUsers = (usersFromStrapi: User[]): UserForSearching[] => {
+  return usersFromStrapi.map(user => ({
+    id: user.id,
+    username: user.username,
+    gender: user.gender,
+    fashionStyles: user.fashionStyles ?? [],
+    avatarUrl: user.profileImage?.url || null,
   }))
-
-  return sanitizedUsers
 }
 
 type SearchUserArgs = {

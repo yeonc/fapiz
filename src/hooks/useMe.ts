@@ -1,15 +1,14 @@
 import useSWR from 'swr'
 import { BACKEND_URL } from 'constants/constants'
 import getToken from 'utils/getToken'
+import { User } from 'types/user'
 
 const useMe = (query?: string) => {
   const token = getToken()
-
   const urlNotIncludedQuery = `${BACKEND_URL}/api/users/me`
   const urlIncludedQuery = `${BACKEND_URL}/api/users/me?${query}`
   const url = query ? urlIncludedQuery : urlNotIncludedQuery
-
-  const { data, error } = useSWR(
+  const { data, error } = useSWR<User, Error>(
     token
       ? {
           url,

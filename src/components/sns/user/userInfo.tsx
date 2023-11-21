@@ -11,7 +11,6 @@ import useUser from 'hooks/useUser'
 import getToken from 'utils/getToken'
 import createUrlQuery from 'utils/createUrlQuery'
 import { BACKEND_URL } from 'constants/constants'
-import { UserForUserInfo } from 'types/user'
 import { mgRight, mgBottom } from 'styles/layout'
 import visuallyHidden from 'styles/visuallyHidden'
 
@@ -51,7 +50,7 @@ const UserInfo = ({ userId, className }: UserInfoProps) => {
     return null
   }
 
-  const user: UserForUserInfo = {
+  const user = {
     id: userFromStrapi.id,
     username: userFromStrapi.username,
     height: userFromStrapi.height,
