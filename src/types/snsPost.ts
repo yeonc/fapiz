@@ -1,12 +1,12 @@
 import { Nullable } from 'types/common'
 import { LikeUser } from 'types/user'
 import { FashionStyle } from 'types/fashion'
-import { SnsPostImage } from 'types/image'
+import { Image } from 'types/image'
 
 export type SnsPostForSearching = {
   id: number
   createdAt: string
-  firstImage: SnsPostImage
+  firstImage: Image
   content: string
   likeNumbers: number
   author: {
@@ -25,11 +25,11 @@ export type SnsPostForMainPage = {
     bodyShape: Nullable<string>
     fashionStyles: Nullable<FashionStyle[]>
   }
-  postImage: SnsPostImage
+  postImage: Image
   likeUsers: LikeUser[]
 }
 
 export type SnsPostForSnsPostsPage = {
   id: number
-  firstImage: SnsPostImage
+  firstImage: Image
 }

@@ -6,7 +6,7 @@ import generateIdIntoObject from 'utils/generateIdIntoObject'
 import { EmotionJSX } from '@emotion/react/types/jsx-namespace'
 import { Obj, WithId } from 'types/common'
 import { FashionItemInfo } from 'types/fashion'
-import { ImageFiles, PreviewImage } from 'types/image'
+import { ImageFiles, Image } from 'types/image'
 
 const EMPTY_FASHION_ITEM_INFO = { category: '', price: 0, buyingPlace: '' }
 
@@ -18,7 +18,7 @@ const emptyFashionItemInfo = createNewEmptyFashionItemInfo() as FashionItemInfo
 type CreatedPostId = number
 
 type ChildrenProps = {
-  previewImages: PreviewImage[] | null
+  previewImages: Image[] | null
   fashionItemsInfo: FashionItemInfo[]
   postText: string
   handleImageFilesChange: (imageFiles: FileList) => void
@@ -43,9 +43,7 @@ const PostCreate = ({
   children,
 }: PostCreateProps) => {
   const [imageFiles, setImageFiles] = useState<ImageFiles>(null)
-  const [previewImages, setPreviewImages] = useState<PreviewImage[] | null>(
-    null
-  )
+  const [previewImages, setPreviewImages] = useState<Image[] | null>(null)
   const [fashionItemsInfo, setFashionItemsInfo] = useState<FashionItemInfo[]>([
     emptyFashionItemInfo,
   ])

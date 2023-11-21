@@ -10,7 +10,7 @@ import uploadImage from 'services/upload/uploadImage'
 import editFashionItem from 'services/fashionItem/editFashionItem'
 import deleteFashionItem from 'services/fashionItem/deleteFashionItem'
 import { changeImageFileToPreviewImage } from 'utils/previewImage'
-import { ImageFiles, PreviewImage } from 'types/image'
+import { ImageFiles, Image } from 'types/image'
 import { mgBottom, mgRight } from 'styles/layout'
 
 const StyledFashionItemCreateForm = styled.form`
@@ -38,7 +38,7 @@ const FashionItemEditForm = ({
   afterDeleteFashionItem,
 }) => {
   const [imageFiles, setImageFiles] = useState<ImageFiles>(null)
-  const [previewImage, setPreviewImage] = useState<PreviewImage>(
+  const [previewImage, setPreviewImage] = useState<Image>(
     initialFashionItem.image
   )
   const [category, setCategory] = useState<string>(initialFashionItem.category)

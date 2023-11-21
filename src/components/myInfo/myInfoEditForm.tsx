@@ -23,7 +23,7 @@ import {
   USER_GENDERS,
 } from 'constants/user'
 import { UserForMyInfoPage } from 'types/user'
-import { ImageFiles, PreviewImage } from 'types/image'
+import { ImageFiles, Image } from 'types/image'
 import { Nullable } from 'types/common'
 import { DEFAULT_BLACK, DEFAULT_WHITE } from 'styles/constants/color'
 import { mgBottom, mgRight } from 'styles/layout'
@@ -79,8 +79,7 @@ type MyInfoEditFormProps = {
 
 const MyInfoEditForm = ({ myInfo }: MyInfoEditFormProps) => {
   const [avatarImageFiles, setAvatarImageFiles] = useState<ImageFiles>(null)
-  const [previewAvatar, setPreviewAvatar] =
-    useState<Nullable<PreviewImage>>(null)
+  const [previewAvatar, setPreviewAvatar] = useState<Nullable<Image>>(null)
   const [username, setUsername] = useState(myInfo.username)
   const [gender, setGender] = useState(myInfo.gender)
   const [height, setHeight] = useState(myInfo.height)

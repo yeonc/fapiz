@@ -10,7 +10,7 @@ import PostAuthorHeader from 'components/sns/post/postAuthorHeader'
 import AdditionalContentShowingToggleButton from 'components/sns/post/additionalContentShowingToggleButton'
 import Typo from 'components/common/typo'
 import getFormattedDate from 'utils/getFormattedDate'
-import { SnsPostImage } from 'types/image'
+import { Image } from 'types/image'
 import { DEFAULT_GRAY, LIGHT_GRAY } from 'styles/constants/color'
 import visuallyHidden from 'styles/visuallyHidden'
 import { FashionItemInfo } from 'types/fashion'
@@ -93,7 +93,7 @@ type PostDescriptionContentsLayoutProps = {
   bookmarkButton: EmotionJSX.Element | null
   postCreatedDate: string
   postAuthor: any // TODO: 추후에 타입 정의 후 수정할 것
-  postImages: SnsPostImage[]
+  postImages: Image[]
   postContent: string
   postFashionItemInfos: FashionItemInfo[]
 }

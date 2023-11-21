@@ -4,7 +4,7 @@ import ButtonBase from '@mui/material/ButtonBase'
 import FashionItemEditingModal from 'components/closet/fashionItemEditingModal'
 import Typo from 'components/common/typo'
 import useModalState from 'hooks/useModalState'
-import { FashionItemForClosetPage } from 'types/fashion'
+import { FashionItemForCloset } from 'types/fashion'
 import { DEFAULT_WHITE, LIGHT_GRAY } from 'styles/constants/color'
 import { mgBottom } from 'styles/layout'
 
@@ -33,7 +33,7 @@ const StyledButton = styled(ButtonBase)`
 `
 
 type FashionItemListItemProps = {
-  fashionItem: FashionItemForClosetPage
+  fashionItem: FashionItemForCloset
 }
 
 const FashionItemListItem = ({ fashionItem }: FashionItemListItemProps) => {

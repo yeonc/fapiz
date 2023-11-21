@@ -9,7 +9,7 @@ import uploadImage from 'services/upload/uploadImage'
 import createFashionItem from 'services/fashionItem/createFashionItem'
 import useMe from 'hooks/useMe'
 import { changeImageFileToPreviewImage } from 'utils/previewImage'
-import { ImageFiles, PreviewImage } from 'types/image'
+import { ImageFiles, Image } from 'types/image'
 import { mgBottom } from 'styles/layout'
 
 const StyledFashionItemCreateForm = styled.form`
@@ -36,11 +36,8 @@ const DEFAULT_PREVIEW_IMAGE = {
 
 const FashionItemCreateForm = ({ afterCreateFashionItem }) => {
   const { me } = useMe()
-
   const [imageFiles, setImageFiles] = useState<ImageFiles>(null)
-  const [previewImage, setPreviewImage] = useState<PreviewImage>(
-    DEFAULT_PREVIEW_IMAGE
-  )
+  const [previewImage, setPreviewImage] = useState<Image>(DEFAULT_PREVIEW_IMAGE)
   const [category, setCategory] = useState('')
   const [color, setColor] = useState('')
   const [isFashionItemCreateLoading, setIsFashionItemCreateLoading] =
@@ -65,7 +62,7 @@ const FashionItemCreateForm = ({ afterCreateFashionItem }) => {
       category,
       color,
       imageId: uploadedImageId,
-      ownerId: me.id,
+      ownerId: me && me.id,
     })
   }
 

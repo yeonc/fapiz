@@ -6,7 +6,7 @@ import { changeImageFilesToPreviewImages } from 'utils/previewImage'
 import { EmotionJSX } from '@emotion/react/types/jsx-namespace'
 import { Obj, WithId } from 'types/common'
 import { FashionItemInfo } from 'types/fashion'
-import { PreviewImage, ImageFiles } from 'types/image'
+import { Image, ImageFiles } from 'types/image'
 
 const EMPTY_FASHION_ITEM_INFO = { category: '', price: 0, buyingPlace: '' }
 
@@ -18,7 +18,7 @@ const emptyFashionItemInfo = createNewEmptyFashionItemInfo() as FashionItemInfo
 type UploadedImageIds = number[]
 
 type ChildrenProps = {
-  previewImages: PreviewImage[]
+  previewImages: Image[]
   fashionItemsInfo: FashionItemInfo[]
   postText: string
   handleImageFilesChange: (imageFiles: FileList) => void
@@ -39,11 +39,12 @@ type PostEditProps = {
 
 const PostEdit = ({ snsPost, afterPostEdited, children }: PostEditProps) => {
   // TODO: map 함수 image 인자 타입 정의
-  const initialPreviewImages: PreviewImage[] =
-    snsPost.attributes.postImages.data.map((image: any) => ({
+  const initialPreviewImages: Image[] = snsPost.attributes.postImages.data.map(
+    (image: any) => ({
       url: image.attributes.url,
       altText: image.attributes.alternativeText,
-    }))
+    })
+  )
   const initialFashionItemsInfo: FashionItemInfo[] = snsPost.attributes
     .fashionItemsInfo ?? [emptyFashionItemInfo]
   const initialPostText: string = snsPost.attributes.content

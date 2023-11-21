@@ -3,7 +3,7 @@ import ImageList from '@mui/material/ImageList'
 import AnnouncementIcon from '@mui/icons-material/Announcement'
 import FashionItemListItem from 'components/closet/fashionItemListItem'
 import Typo from 'components/common/typo'
-import { FashionItemForClosetPage } from 'types/fashion'
+import { FashionItemForCloset } from 'types/fashion'
 import { mgBottom } from 'styles/layout'
 
 const StyledNoExistFashionItem = styled.div`
@@ -12,7 +12,7 @@ const StyledNoExistFashionItem = styled.div`
 `
 
 type FashonItemListProps = {
-  fashionItems: FashionItemForClosetPage[]
+  fashionItems: FashionItemForCloset[]
 }
 
 const FashionItemList = ({ fashionItems }: FashonItemListProps) => {

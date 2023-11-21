@@ -1,4 +1,4 @@
-import { fashionItemImage } from 'types/image'
+import { Image } from 'types/image'
 
 export type FashionItemInfo = {
   id: number
@@ -26,9 +26,30 @@ export type FashionStyle = {
   name: FashionStyleName
 }
 
-export type FashionItemForClosetPage = {
+export type FashionItemForCloset = {
   id: number
   category: string
   color: string
-  image: fashionItemImage
+  image: Image
+}
+
+type FashionItem = {
+  id: number
+  attributes: {
+    category: string
+    color: string
+    image: {
+      data: {
+        id: number
+        attributes: {
+          url: string
+          alternativeText: string
+        }
+      }
+    }
+  }
+}
+
+export type FashionItems = {
+  data: FashionItem[]
 }

@@ -15,7 +15,7 @@ import useModalState from 'hooks/useModalState'
 import useFashionItems from 'hooks/useFashionItems'
 import createUrlQuery from 'utils/createUrlQuery'
 import removeDuplicatedValueFromArray from 'utils/removeDuplicatedValueFromArray'
-import { FashionItemForClosetPage } from 'types/fashion'
+import { FashionItemForCloset } from 'types/fashion'
 
 const StyledClosetContentsWrapper = styled.div`
   padding: 30px 0;
@@ -58,8 +58,10 @@ const ClosetPage = () => {
 
   const { fashionItems: fashionItemsFromStrapi } = useFashionItems(query)
 
-  const fashionItems: FashionItemForClosetPage[] = fashionItemsFromStrapi.map(
-    (fashionItem: any) => ({
+  console.log(fashionItemsFromStrapi)
+
+  const fashionItems: FashionItemForCloset[] = fashionItemsFromStrapi.map(
+    fashionItem => ({
       id: fashionItem.id,
       category: fashionItem.attributes.category,
       color: fashionItem.attributes.color,
@@ -123,14 +125,14 @@ type Category = string
 type Color = string
 
 const getCategoriesFromFashionItems = (
-  fashionItems: FashionItemForClosetPage[]
+  fashionItems: FashionItemForCloset[]
 ): Category[] => {
   const categories = fashionItems.map(fashionItem => fashionItem.category)
   return removeDuplicatedValueFromArray(categories)
 }
 
 const getColorsFromFashionItems = (
-  fashionItems: FashionItemForClosetPage[]
+  fashionItems: FashionItemForCloset[]
 ): Color[] => {
   const colors = fashionItems.map(fashionItem => fashionItem.color)
   return removeDuplicatedValueFromArray(colors)
@@ -139,12 +141,12 @@ const getColorsFromFashionItems = (
 type FilterFashionItemsArgs = {
   category: string
   color: string
-  fashionItems: FashionItemForClosetPage[]
+  fashionItems: FashionItemForCloset[]
 }
 
 type FilterFashionItems = (
   args: FilterFashionItemsArgs
-) => FashionItemForClosetPage[]
+) => FashionItemForCloset[]
 
 const filterFashionItems: FilterFashionItems = ({
   category,
@@ -160,7 +162,7 @@ const filterFashionItems: FilterFashionItems = ({
 
 const byCategory =
   (category: string) =>
-  (fashionItem: FashionItemForClosetPage): boolean => {
+  (fashionItem: FashionItemForCloset): boolean => {
     if (category === 'all') {
       return true
     }
@@ -170,7 +172,7 @@ const byCategory =
 
 const byColor =
   (color: string) =>
-  (fashionItem: FashionItemForClosetPage): boolean => {
+  (fashionItem: FashionItemForCloset): boolean => {
     if (color === 'all') {
       return true
     }
