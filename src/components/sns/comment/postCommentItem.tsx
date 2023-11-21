@@ -6,6 +6,7 @@ import Typo from 'components/common/typo'
 import CommentByMode from 'components/sns/comment/commentByMode'
 import ROUTE_URL from 'constants/routeUrl'
 import { DEFAULT_GRAY } from 'styles/constants/color'
+import { PostCommentForSnsPost } from 'types/postComment'
 import getFormattedDate from 'utils/getFormattedDate'
 
 const StyledPostCommentWrapper = styled.li`
@@ -35,7 +36,7 @@ const commentCreatedAtTextStyle = css`
 `
 
 type PostCommentItemProps = {
-  comment: any // TODO: 타입 정의
+  comment: PostCommentForSnsPost
   postId: number
   className?: string
 }

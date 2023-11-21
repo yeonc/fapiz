@@ -22,7 +22,7 @@ const SnsPostPage = () => {
   const { me } = useMe()
 
   const isLoggedIn = !!me
-  const snsPostAuthorId: number = snsPost?.attributes.author.data.id
+  const snsPostAuthorId = snsPost?.attributes.author.data.id
   const isMySnsPostPage = me?.id === snsPostAuthorId
 
   if (!snsPost) {

@@ -6,7 +6,7 @@ import SearchResultHeadingTypo from 'components/search/searchResultHeadingTypo'
 import useSnsPosts from 'hooks/useSnsPosts'
 import createUrlQuery from 'utils/createUrlQuery'
 import getFormattedDate from 'utils/getFormattedDate'
-import { SnsPostForSearching } from 'types/snsPost'
+import { SnsPost, SnsPostForSearching } from 'types/snsPost'
 import { HOVER_BACKGROUND_GRAY } from 'styles/constants/color'
 
 const SNS_POST_SEARCH_RESULT_COUNT_TO_BE_SHOWED = 5
@@ -81,27 +81,24 @@ const SnsPostSearchResult = ({ searchKeyword }: SnsPostSearchResultProps) => {
 
 export default SnsPostSearchResult
 
-const sanitizeSnsPosts = (searchedSnsPostsFromStrapi): SnsPostForSearching[] =>
-  searchedSnsPostsFromStrapi.map(searchedSnsPostFromStrapi => {
-    const author = searchedSnsPostFromStrapi.attributes.author.data.attributes
-    const createdDate = new Date(searchedSnsPostFromStrapi.attributes.createdAt)
+const sanitizeSnsPosts = (posts: SnsPost[]): SnsPostForSearching[] =>
+  posts.map(post => {
+    const author = post.attributes.author.data.attributes
+    const createdDate = new Date(post.attributes.createdAt)
 
     return {
-      id: searchedSnsPostFromStrapi.id,
+      id: post.id,
       createdAt: getFormattedDate(createdDate),
       firstImage: {
-        url: searchedSnsPostFromStrapi.attributes.postImages.data[0].attributes
-          .url,
-        altText:
-          searchedSnsPostFromStrapi.attributes.postImages.data[0].attributes
-            .alternativeText,
+        url: post.attributes.postImages.data[0].attributes.url,
+        altText: post.attributes.postImages.data[0].attributes.alternativeText,
       },
-      content: searchedSnsPostFromStrapi.attributes.content,
-      likeNumbers: searchedSnsPostFromStrapi.attributes.likeUsers.data.length,
+      content: post.attributes.content,
+      likeNumbers: post.attributes.likeUsers.data.length,
       author: {
         username: author.username,
         avatarUrl: author.profileImage.data?.attributes.url,
       },
-      commentCount: searchedSnsPostFromStrapi.attributes.comments.data.length,
+      commentCount: post.attributes.comments.data.length,
     }
   })

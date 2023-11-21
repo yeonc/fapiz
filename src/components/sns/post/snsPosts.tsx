@@ -4,7 +4,7 @@ import ImageList from '@mui/material/ImageList'
 import ImageListItem from '@mui/material/ImageListItem'
 import useSnsPosts from 'hooks/useSnsPosts'
 import createUrlQuery from 'utils/createUrlQuery'
-import { SnsPostForSnsPostsPage } from 'types/snsPost'
+import { SnsPost, SnsPostForSnsPostsPage } from 'types/snsPost'
 
 const cursorPointer = css`
   cursor: pointer;
@@ -32,7 +32,7 @@ const SnsPosts = ({ userId }) => {
   }
 
   const snsPosts: SnsPostForSnsPostsPage[] = snsPostsFromStrapi.map(
-    (post: any) => ({
+    (post: SnsPost) => ({
       id: post.id,
       firstImage: {
         url: post.attributes.postImages.data[0].attributes.url,

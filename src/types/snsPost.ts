@@ -1,13 +1,49 @@
 import { Nullable } from 'types/common'
-import { LikeUser } from 'types/user'
-import { FashionStyle } from 'types/fashion'
+import { User, UserWithAttributes } from 'types/user'
+import { FashionItemInfo, FashionStyle } from 'types/fashion'
 import { Image } from 'types/image'
+
+export type SnsPost = {
+  id: number
+  attributes: {
+    author: {
+      data: UserWithAttributes
+    }
+    comments: {
+      data: {
+        id: number
+      }[]
+    }
+    bookmarkUsers: {
+      data: {
+        id: number
+        attributes: Omit<User, 'id'>
+      }[]
+    }
+    content: Nullable<string>
+    createdAt: string
+    fashionItemsInfo: Nullable<FashionItemInfo[]>
+    likeUsers: {
+      data: UserWithAttributes[]
+    }
+    postImages: {
+      data: {
+        id: number
+        attributes: {
+          url: string
+          alternativeText: string
+        }
+      }[]
+    }
+    publishedAt: Date
+  }
+}
 
 export type SnsPostForSearching = {
   id: number
   createdAt: string
   firstImage: Image
-  content: string
+  content: Nullable<string>
   likeNumbers: number
   author: {
     username: string
@@ -26,7 +62,7 @@ export type SnsPostForMainPage = {
     fashionStyles: Nullable<FashionStyle[]>
   }
   postImage: Image
-  likeUsers: LikeUser[]
+  likeUsers: UserWithAttributes[]
 }
 
 export type SnsPostForSnsPostsPage = {

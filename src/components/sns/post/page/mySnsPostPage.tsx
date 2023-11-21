@@ -53,7 +53,7 @@ const MySnsPostPage = () => {
   const snsPost = {
     id: snsPostFromStrapi.id,
     createdAt: snsPostFromStrapi.attributes.createdAt,
-    images: snsPostFromStrapi.attributes.postImages.data.map((image: any) => ({
+    images: snsPostFromStrapi.attributes.postImages.data.map(image => ({
       url: image.attributes.url,
       altText: image.attributes.alternativeText,
     })),

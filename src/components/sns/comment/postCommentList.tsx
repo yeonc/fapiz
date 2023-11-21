@@ -3,7 +3,7 @@ import CommentIcon from '@mui/icons-material/Comment'
 import PostCommentItem from 'components/sns/comment/postCommentItem'
 import useSnsComments from 'hooks/useSnsComments'
 import createUrlQuery from 'utils/createUrlQuery'
-import { PostCommentForSnsPostPage } from 'types/postComment'
+import { PostCommentForSnsPost } from 'types/postComment'
 import { mgBottom } from 'styles/layout'
 
 const StyledNotExistComment = styled.div`
@@ -29,10 +29,9 @@ const PostCommentList = ({ snsPostId }: PostCommentListProps) => {
 
   const { snsComments: snsCommentsFromStrapi } = useSnsComments(query)
 
-  const comments: PostCommentForSnsPostPage[] = snsCommentsFromStrapi.map(
-    (snsComment: any) => {
+  const comments: PostCommentForSnsPost[] = snsCommentsFromStrapi.map(
+    snsComment => {
       const author = snsComment.attributes.author.data
-
       return {
         id: snsComment.id,
         createdAt: snsComment.attributes.createdAt,
@@ -40,7 +39,7 @@ const PostCommentList = ({ snsPostId }: PostCommentListProps) => {
         authorId: author.id,
         authorName: author.attributes.username,
         authorProfileImageUrl:
-          author.attributes.profileImage.data?.attributes.url,
+          author.attributes.profileImage.data.attributes.url || null,
       }
     }
   )

@@ -14,15 +14,15 @@ export type User = {
   followings: User[] | []
 }
 
+export type UserWithAttributes = {
+  id: number
+  attributes: Omit<User, 'id'>
+}
+
 export type UserForSearching = Pick<
   User,
   'id' | 'username' | 'gender' | 'fashionStyles'
 > & { avatarUrl: Nullable<string> }
-
-export type LikeUser = {
-  id: number
-  attributes: Omit<User, 'id'>
-}
 
 export type UserForMyInfo = Omit<
   User,
