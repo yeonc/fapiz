@@ -15,7 +15,15 @@ import useModalState from 'hooks/useModalState'
 import useFashionItems from 'hooks/useFashionItems'
 import createUrlQuery from 'utils/createUrlQuery'
 import removeDuplicatedValueFromArray from 'utils/removeDuplicatedValueFromArray'
-import { FashionItemForCloset } from 'types/fashion'
+import { Image } from 'types/image'
+import { User } from 'types/user'
+
+export type FashionItemForCloset = {
+  id: number
+  category: string
+  color: string
+  image: Image
+}
 
 const StyledClosetContentsWrapper = styled.div`
   padding: 30px 0;
@@ -47,7 +55,7 @@ const ClosetPage = () => {
     setColor(color)
   }
 
-  const { me } = useMe()
+  const { me } = useMe<User>()
 
   const query = createUrlQuery({
     'populate[0]': 'image',
@@ -57,8 +65,6 @@ const ClosetPage = () => {
   })
 
   const { fashionItems: fashionItemsFromStrapi } = useFashionItems(query)
-
-  console.log(fashionItemsFromStrapi)
 
   const fashionItems: FashionItemForCloset[] = fashionItemsFromStrapi.map(
     fashionItem => ({

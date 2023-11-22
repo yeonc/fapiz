@@ -13,6 +13,7 @@ import PostCreate from 'components/sns/post/postCreate'
 import ImageUploadCaptionTypo from 'components/common/typo/imageUploadCaptionTypo'
 import MaxWidthContainer from 'components/layouts/containers/maxWidthContainer'
 import useMe from 'hooks/useMe'
+import { User } from 'types/user'
 
 const StyledSnsPostCreatePageWrapper = styled.div`
   padding: 20px 0;
@@ -47,7 +48,7 @@ const postSubmitButtonStyle = css`
 `
 
 const SnsPostCreatePage = () => {
-  const { me } = useMe()
+  const { me } = useMe<User>()
 
   const router = useRouter()
 

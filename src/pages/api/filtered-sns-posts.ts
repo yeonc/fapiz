@@ -4,9 +4,24 @@ import paginateData from 'utils/paginateData'
 import getSafeStringFromQuery from 'utils/getSafeStringFromQuery'
 import getSafeNumberFromQuery from 'utils/getSafeNumberFromQuery'
 import { USER_FASHION_STYLES } from 'constants/user'
-import { SnsPostForMainPage } from 'types/snsPost'
+import { SnsPostResponseAboutFiltering } from 'types/snsPost'
 import { FashionStyle } from 'types/fashion'
 import { Nullable } from 'types/common'
+import { Image } from 'types/image'
+import { UserWithAttributes } from 'types/user'
+
+export type SnsPostForMainPage = {
+  id: number
+  createdAt: string
+  author: {
+    username: string
+    gender: Nullable<string>
+    bodyShape: Nullable<string>
+    fashionStyles: Nullable<FashionStyle[]>
+  }
+  postImage: Image
+  likeUsers: UserWithAttributes[]
+}
 
 const ADD_ADDITIONAL_INFO_MESSAGE =
   '추가 정보 세 개 중 하나밖에 작성되지 않았네요! 두 가지 이상을 작성하시면 맞춤형 게시물을 보실 수 있습니다! 지금 정보를 수정하러 가 볼까요?'
@@ -104,21 +119,23 @@ const getSafeFashionStylesFromQuery = (
   return fashionStyleArray
 }
 
-const sanitizedSnsPosts = (snsPostsFromStrapi: any): SnsPostForMainPage[] => {
-  return snsPostsFromStrapi.map((snsPost: any) => ({
-    id: snsPost.id,
-    createdAt: snsPost.attributes.createdAt,
+const sanitizedSnsPosts = (
+  snsPostsFromStrapi: SnsPostResponseAboutFiltering[]
+): SnsPostForMainPage[] => {
+  return snsPostsFromStrapi.map(post => ({
+    id: post.id,
+    createdAt: post.attributes.createdAt,
     author: {
-      username: snsPost.attributes.author.data.attributes.username,
-      gender: snsPost.attributes.author.data.attributes.gender,
-      bodyShape: snsPost.attributes.author.data.attributes.bodyShape,
-      fashionStyles: snsPost.attributes.author.data.attributes.fashionStyles,
+      username: post.attributes.author.data.attributes.username,
+      gender: post.attributes.author.data.attributes.gender,
+      bodyShape: post.attributes.author.data.attributes.bodyShape,
+      fashionStyles: post.attributes.author.data.attributes.fashionStyles,
     },
     postImage: {
-      url: snsPost.attributes.postImages.data[0].attributes.url,
-      altText: snsPost.attributes.postImages.data[0].attributes.alternativeText,
+      url: post.attributes.postImages.data[0].attributes.url,
+      altText: post.attributes.postImages.data[0].attributes.alternativeText,
     },
-    likeUsers: snsPost.attributes.likeUsers.data,
+    likeUsers: post.attributes.likeUsers.data,
   }))
 }
 

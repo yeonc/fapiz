@@ -3,7 +3,7 @@ import { User } from './user'
 
 export type AccessToken = Nullable<string>
 
-export type LoginSuccessResponseData = {
+export type LoginSuccessResponse = {
   jwt: string
   user: User
 }

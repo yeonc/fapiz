@@ -5,7 +5,7 @@ import { EmotionJSX } from '@emotion/react/types/jsx-namespace'
 import ImageListItem from '@mui/material/ImageListItem'
 import ImageListItemBar from '@mui/material/ImageListItemBar'
 import LikeButtonForMainPage from 'components/home/likeButtonForMainPage'
-import { SnsPostForMainPage } from 'types/snsPost'
+import { SnsPostForMainPage } from 'pages/api/filtered-sns-posts'
 
 const imageListItemStyle = css`
   border-radius: 10px;

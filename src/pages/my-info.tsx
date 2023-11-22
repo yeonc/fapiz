@@ -9,8 +9,14 @@ import Typo from 'components/common/typo'
 import MaxWidthContainer from 'components/layouts/containers/maxWidthContainer'
 import useMe from 'hooks/useMe'
 import createUrlQuery from 'utils/createUrlQuery'
-import { UserForMyInfo } from 'types/user'
+import { User, UserResponseWithProfileImage } from 'types/user'
 import { mgBottom } from 'styles/layout'
+import { Nullable } from 'types/common'
+
+export type UserForMyInfo = Omit<
+  User,
+  'profileImage' | 'followers' | 'followings'
+> & { imageUrl: Nullable<string> }
 
 const TOOLTIP_TEXT =
   '성별, 체형, 패션 스타일 정보 중 두 가지 이상을 입력하면 메인 페이지에서 나와 같은 정보를 가진 유저들이 올린 SNS 게시물만을 볼 수 있어요! 🙂'
@@ -29,7 +35,7 @@ const queryForUseMe = createUrlQuery({
 })
 
 const MyInfoPage = () => {
-  const { me } = useMe(queryForUseMe)
+  const { me } = useMe<UserResponseWithProfileImage>(queryForUseMe)
 
   if (!me) {
     return null

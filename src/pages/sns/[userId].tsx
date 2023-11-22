@@ -10,6 +10,7 @@ import MaxWidthContainer from 'components/layouts/containers/maxWidthContainer'
 import useMe from 'hooks/useMe'
 import getSafeNumberFromQuery from 'utils/getSafeNumberFromQuery'
 import { LIGHT_GRAY } from 'styles/constants/color'
+import { User } from 'types/user'
 
 const StyledSnsPageWrapper = styled.div`
   padding: 30px 0;
@@ -35,7 +36,7 @@ const SnsPage = () => {
     ? getSafeNumberFromQuery(userIdFromQuery)
     : undefined
 
-  const { me } = useMe()
+  const { me } = useMe<User>()
 
   const handleSnsPostCreateButtonClick = () => {
     router.push(`/sns/post/posting`)

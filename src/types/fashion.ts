@@ -1,5 +1,3 @@
-import { Image } from 'types/image'
-
 export type FashionItemInfo = {
   id: number
   category: string
@@ -26,14 +24,7 @@ export type FashionStyle = {
   name: FashionStyleName
 }
 
-export type FashionItemForCloset = {
-  id: number
-  category: string
-  color: string
-  image: Image
-}
-
-type FashionItem = {
+export type FashionItemResponse = {
   id: number
   attributes: {
     category: string
@@ -48,8 +39,4 @@ type FashionItem = {
       }
     }
   }
-}
-
-export type FashionItems = {
-  data: FashionItem[]
 }

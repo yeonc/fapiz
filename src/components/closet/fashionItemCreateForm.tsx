@@ -11,6 +11,7 @@ import useMe from 'hooks/useMe'
 import { changeImageFileToPreviewImage } from 'utils/previewImage'
 import { ImageFiles, Image } from 'types/image'
 import { mgBottom } from 'styles/layout'
+import { User } from 'types/user'
 
 const StyledFashionItemCreateForm = styled.form`
   text-align: center;
@@ -35,7 +36,7 @@ const DEFAULT_PREVIEW_IMAGE = {
 }
 
 const FashionItemCreateForm = ({ afterCreateFashionItem }) => {
-  const { me } = useMe()
+  const { me } = useMe<User>()
   const [imageFiles, setImageFiles] = useState<ImageFiles>(null)
   const [previewImage, setPreviewImage] = useState<Image>(DEFAULT_PREVIEW_IMAGE)
   const [category, setCategory] = useState('')

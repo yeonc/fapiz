@@ -7,6 +7,8 @@ import MySnsPostPage from 'components/sns/post/page/mySnsPostPage'
 import MaxWidthContainer from 'components/layouts/containers/maxWidthContainer'
 import useMe from 'hooks/useMe'
 import useSnsPost from 'hooks/useSnsPost'
+import { User } from 'types/user'
+import { SnsPostResponseAboutDefaultQuery } from 'types/snsPost'
 
 const StyledSnsPostPageWrapper = styled.div`
   padding: 20px 0;
@@ -18,8 +20,10 @@ const SnsPostPage = () => {
   const router = useRouter()
   const { snsPostId } = router.query
 
-  const { snsPost } = useSnsPost(Number(snsPostId))
-  const { me } = useMe()
+  const { snsPost } = useSnsPost<SnsPostResponseAboutDefaultQuery>(
+    Number(snsPostId)
+  )
+  const { me } = useMe<User>()
 
   const isLoggedIn = !!me
   const snsPostAuthorId = snsPost?.attributes.author.data.id

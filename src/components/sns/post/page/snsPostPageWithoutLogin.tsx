@@ -3,6 +3,10 @@ import PostDescriptionContentsLayout from 'components/sns/post/postDescriptionCo
 import PostCommentList from 'components/sns/comment/postCommentList'
 import useSnsPost from 'hooks/useSnsPost'
 import createUrlQuery from 'utils/createUrlQuery'
+import {
+  SnsPostForPostDetail,
+  SnsPostResponseAboutPostDetail,
+} from 'types/snsPost'
 
 const queryForFetchingSnsPost = createUrlQuery({
   'populate[0]': 'author.profileImage',
@@ -19,7 +23,10 @@ const SnsPostPageWithoutLogin = () => {
     snsPost: snsPostFromStrapi,
     isLoading,
     error,
-  } = useSnsPost(Number(snsPostId), queryForFetchingSnsPost)
+  } = useSnsPost<SnsPostResponseAboutPostDetail>(
+    Number(snsPostId),
+    queryForFetchingSnsPost
+  )
 
   if (isLoading) {
     return null
@@ -29,10 +36,10 @@ const SnsPostPageWithoutLogin = () => {
     return <p>페이지를 표시할 수 없습니다.</p>
   }
 
-  const snsPost = {
+  const snsPost: SnsPostForPostDetail = {
     id: snsPostFromStrapi.id,
     createdAt: snsPostFromStrapi.attributes.createdAt,
-    images: snsPostFromStrapi.attributes.postImages.data.map((image: any) => ({
+    images: snsPostFromStrapi.attributes.postImages.data.map(image => ({
       url: image.attributes.url,
       altText: image.attributes.alternativeText,
     })),

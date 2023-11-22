@@ -9,6 +9,7 @@ import MaxWidthContainer from 'components/layouts/containers/maxWidthContainer'
 import useMe from 'hooks/useMe'
 import useSnsPostInfiniteScroll from 'hooks/useSnsPostInfiniteScroll'
 import { DEFAULT_WHITE } from 'styles/constants/color'
+import { User } from 'types/user'
 
 const INITIAL_PAGE_NUMBER = 1
 const PAGE_SIZE = 20
@@ -25,7 +26,7 @@ const fetchTriggerStyle = css`
 const SnsPostLikeButtonWithLogin = withLogin(LikeButtonForMainPage)
 
 const MainPage = () => {
-  const { me } = useMe()
+  const { me } = useMe<User>()
 
   const { snsPosts, fetchTriggerRef } = useSnsPostInfiniteScroll({
     initialPageNumber: INITIAL_PAGE_NUMBER,

@@ -6,8 +6,8 @@ import Typo from 'components/common/typo'
 import CommentByMode from 'components/sns/comment/commentByMode'
 import ROUTE_URL from 'constants/routeUrl'
 import { DEFAULT_GRAY } from 'styles/constants/color'
-import { PostCommentForSnsPost } from 'types/postComment'
 import getFormattedDate from 'utils/getFormattedDate'
+import { PostCommentForSnsPost } from './postCommentList'
 
 const StyledPostCommentWrapper = styled.li`
   display: flex;

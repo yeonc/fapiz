@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import googleLogin from 'services/auth/googleLogin'
 import getValueOfKeyFromQueryString from 'utils/getValueOfKeyFromQueryString'
 import ROUTE_URL from 'constants/routeUrl'
-import { LoginSuccessResponseData, AccessToken } from 'types/auth'
+import { LoginSuccessResponse, AccessToken } from 'types/auth'
 
 const ACCESS_TOKEN_KEY = 'access_token'
 
@@ -15,7 +15,7 @@ const getAccessTokenFromQueryString = (queryString: string): AccessToken => {
   return accessToken
 }
 
-const setUserDataToLocalStorage = (data: LoginSuccessResponseData) => {
+const setUserDataToLocalStorage = (data: LoginSuccessResponse) => {
   localStorage.setItem('jwt', data.jwt)
   localStorage.setItem('username', data.user.username)
 }

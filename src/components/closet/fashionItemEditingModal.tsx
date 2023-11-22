@@ -4,6 +4,7 @@ import Modal from 'components/common/modals/modal'
 import FashionItemEditForm from 'components/closet/fashionItemEditForm'
 import useMe from 'hooks/useMe'
 import createUrlQuery from 'utils/createUrlQuery'
+import { User } from 'types/user'
 
 const StyledModal = styled(Modal)`
   border-radius: 10px;
@@ -14,7 +15,7 @@ const FashionItemEditingModal = ({
   isFashionItemEditModalOpen,
   initialFashionItem,
 }) => {
-  const { me } = useMe()
+  const { me } = useMe<User>()
 
   const query = createUrlQuery({
     'populate[0]': 'image',

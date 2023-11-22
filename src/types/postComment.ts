@@ -1,6 +1,4 @@
-import { Nullable } from './common'
-
-export type PostComment = {
+export type PostCommentResponse = {
   id: number
   attributes: {
     content: string
@@ -22,13 +20,4 @@ export type PostComment = {
       }
     }
   }
-}
-
-export type PostCommentForSnsPost = {
-  id: number
-  createdAt: string
-  content: string
-  authorId: number
-  authorName: string
-  authorProfileImageUrl: Nullable<string>
 }

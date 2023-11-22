@@ -8,6 +8,7 @@ import useMe from 'hooks/useMe'
 import createUrlQuery from 'utils/createUrlQuery'
 import { DEFAULT_BLACK } from 'styles/constants/color'
 import { horizontal, mgRight } from 'styles/layout'
+import { UserResponseWithFollowings } from 'types/user'
 
 const followingStyle = css`
   color: ${DEFAULT_BLACK};
@@ -22,7 +23,7 @@ const queryForUseMe = createUrlQuery({
 })
 
 const Following = ({ followings, afterFollow }) => {
-  const { me } = useMe(queryForUseMe)
+  const { me } = useMe<UserResponseWithFollowings>(queryForUseMe)
 
   const {
     isOpen: isFollowingModalOpen,

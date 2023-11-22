@@ -6,8 +6,6 @@ const getDaysBetweenTwoDate = (
   startDate: Date,
   endDate: Date
 ): DaysBetweenTwoDate => {
-  console.log(startDate)
-
   const startMilliseconds = startDate.getTime()
   const endMilliseconds = endDate.getTime()
 

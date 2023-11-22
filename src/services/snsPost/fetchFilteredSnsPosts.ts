@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios'
+import { SnsPostForMainPage } from 'pages/api/filtered-sns-posts'
 import { Nullable } from 'types/common'
-import { SnsPostForMainPage } from 'types/snsPost'
 import { FashionStyle } from 'types/fashion'
 
 type FetchFilteredSnsPostsArgs = {

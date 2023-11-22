@@ -4,6 +4,7 @@ import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import ROUTE_URL from 'constants/routeUrl'
 import useMe from 'hooks/useMe'
+import { User } from 'types/user'
 
 const StyledNavbar = styled.nav`
   display: flex;
@@ -21,7 +22,7 @@ const StyledPageLink = styled.li`
 const AuthButton = () => {
   const router = useRouter()
 
-  const { me } = useMe()
+  const { me } = useMe<User>()
 
   const goToLoginPage = () => router.push(ROUTE_URL.LOGIN)
   const goToHomePage = () => router.push(ROUTE_URL.HOME)
@@ -47,7 +48,7 @@ const AuthButton = () => {
 }
 
 const Navbar = () => {
-  const { me } = useMe()
+  const { me } = useMe<User>()
 
   const PAGE_LINK_LIST = [
     {

@@ -7,6 +7,7 @@ import Avatar from '@mui/material/Avatar'
 import useMe from 'hooks/useMe'
 import createComment from 'services/snsComment/createComment'
 import createUrlQuery from 'utils/createUrlQuery'
+import { UserResponseWithProfileImage } from 'types/user'
 
 const StyledPostCommentWritingAreaWrapper = styled.div`
   display: flex;
@@ -46,7 +47,7 @@ const PostCommentWritingArea = ({
 }: PostCommentWritingAreaProps) => {
   const [comment, setComment] = useState('')
 
-  const { me, isLoading } = useMe(queryForUseMe)
+  const { me, isLoading } = useMe<UserResponseWithProfileImage>(queryForUseMe)
 
   if (isLoading) {
     return <p>로딩중</p>

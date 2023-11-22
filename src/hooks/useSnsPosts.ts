@@ -1,8 +1,7 @@
 import useSWR from 'swr'
-import { SnsPost } from 'types/snsPost'
 
-const useSnsPosts = (query: string) => {
-  const { data, error } = useSWR<{ data: SnsPost[] }, Error>({
+const useSnsPosts = <T>(query: string) => {
+  const { data, error } = useSWR<{ data: T }, Error>({
     url: `/api/sns-posts?${query}`,
   })
 

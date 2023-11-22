@@ -8,6 +8,7 @@ import Comment from 'components/common/texts/comment'
 import useMe from 'hooks/useMe'
 import deleteComment from 'services/snsComment/deleteComment'
 import createUrlQuery from 'utils/createUrlQuery'
+import { User } from 'types/user'
 
 type CommentByModeProps = {
   commentId: number
@@ -35,7 +36,7 @@ const CommentByMode = ({
     mutate({ url: `/api/sns-comments?${query}` })
   }
 
-  const { me, isLoading } = useMe()
+  const { me, isLoading } = useMe<User>()
   const [isCommentEditMode, setIsCommentEditMode] = useState(false)
 
   if (isLoading) {

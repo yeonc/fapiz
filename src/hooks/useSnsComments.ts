@@ -1,8 +1,8 @@
 import useSWR from 'swr'
-import { PostComment } from 'types/postComment'
+import { PostCommentResponse } from 'types/postComment'
 
 const useSnsComments = (query: string) => {
-  const { data, error } = useSWR<{ data: PostComment[] }, Error>({
+  const { data, error } = useSWR<{ data: PostCommentResponse[] }, Error>({
     url: `/api/sns-comments?${query}`,
   })
   const snsComments = data ? data.data : []

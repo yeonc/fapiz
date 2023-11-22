@@ -3,9 +3,14 @@ import fetchUsers from 'services/user/fetchUsers'
 import createSearchKeywordsArray from 'utils/createSearchKeywordsArray'
 import getSafeStringFromQuery from 'utils/getSafeStringFromQuery'
 import { FashionStyle } from 'types/fashion'
-import { User, UserForSearching } from 'types/user'
 import { Nullable } from 'types/common'
 import createUrlQuery from 'utils/createUrlQuery'
+import { User, UserResponseWithProfileImage } from 'types/user'
+
+export type UserForSearching = Pick<
+  User,
+  'id' | 'username' | 'gender' | 'fashionStyles'
+> & { avatarUrl: Nullable<string> }
 
 const searchUsers = async (
   req: NextApiRequest,
@@ -37,7 +42,9 @@ const searchUsers = async (
 
 export default searchUsers
 
-const sanitizeUsers = (usersFromStrapi: User[]): UserForSearching[] => {
+const sanitizeUsers = (
+  usersFromStrapi: UserResponseWithProfileImage[]
+): UserForSearching[] => {
   return usersFromStrapi.map(user => ({
     id: user.id,
     username: user.username,

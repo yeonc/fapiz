@@ -1,9 +1,9 @@
 import { useState, useEffect, RefObject } from 'react'
 import useInfiniteScroll from 'hooks/useInfiniteScroll'
 import fetchFilteredSnsPosts from 'services/snsPost/fetchFilteredSnsPosts'
-import { SnsPostForMainPage } from 'types/snsPost'
 import { Nullable } from 'types/common'
 import { FashionStyle } from 'types/fashion'
+import { SnsPostForMainPage } from 'pages/api/filtered-sns-posts'
 
 type UseSnsPostInfiniteScrollArgs = {
   initialPageNumber: number

@@ -22,12 +22,12 @@ import {
   USER_FASHION_STYLES,
   USER_GENDERS,
 } from 'constants/user'
-import { UserForMyInfo } from 'types/user'
 import { ImageFiles, Image } from 'types/image'
 import { Nullable } from 'types/common'
 import { DEFAULT_BLACK, DEFAULT_WHITE } from 'styles/constants/color'
 import { mgBottom, mgRight } from 'styles/layout'
 import { FashionStyle } from 'types/fashion'
+import { UserForMyInfo } from 'pages/my-info'
 
 const StyledAvatarAndUsernameWrapper = styled.div`
   text-align: center;

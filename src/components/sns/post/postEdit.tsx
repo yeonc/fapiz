@@ -7,6 +7,7 @@ import { EmotionJSX } from '@emotion/react/types/jsx-namespace'
 import { Obj, WithId } from 'types/common'
 import { FashionItemInfo } from 'types/fashion'
 import { Image, ImageFiles } from 'types/image'
+import { SnsPostResponseAboutDefaultQuery } from 'types/snsPost'
 
 const EMPTY_FASHION_ITEM_INFO = { category: '', price: 0, buyingPlace: '' }
 
@@ -32,22 +33,21 @@ type ChildrenProps = {
 }
 
 type PostEditProps = {
-  snsPost: any
+  snsPost: SnsPostResponseAboutDefaultQuery
   afterPostEdited: () => void
   children: (props: ChildrenProps) => EmotionJSX.Element
 }
 
 const PostEdit = ({ snsPost, afterPostEdited, children }: PostEditProps) => {
-  // TODO: map 함수 image 인자 타입 정의
   const initialPreviewImages: Image[] = snsPost.attributes.postImages.data.map(
-    (image: any) => ({
+    image => ({
       url: image.attributes.url,
       altText: image.attributes.alternativeText,
     })
   )
   const initialFashionItemsInfo: FashionItemInfo[] = snsPost.attributes
     .fashionItemsInfo ?? [emptyFashionItemInfo]
-  const initialPostText: string = snsPost.attributes.content
+  const initialPostText = snsPost.attributes.content
 
   const [imageFiles, setImageFiles] = useState<ImageFiles>(null)
   const [previewImages, setPreviewImages] = useState(initialPreviewImages)

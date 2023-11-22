@@ -9,6 +9,11 @@ import LikeButton from 'components/common/buttons/likeButton'
 import useMe from 'hooks/useMe'
 import useSnsPost from 'hooks/useSnsPost'
 import createUrlQuery from 'utils/createUrlQuery'
+import {
+  SnsPostForPostDetail,
+  SnsPostResponseAboutPostDetail,
+} from 'types/snsPost'
+import { User } from 'types/user'
 
 const StyledPostCommentWritingArea = styled(PostCommentWritingArea)`
   margin-bottom: 12px;
@@ -25,13 +30,16 @@ const MySnsPostPage = () => {
   const router = useRouter()
   const { snsPostId } = router.query
 
-  const { me } = useMe()
+  const { me } = useMe<User>()
 
   const {
     snsPost: snsPostFromStrapi,
     isLoading,
     error,
-  } = useSnsPost(Number(snsPostId), queryForFetchingSnsPost)
+  } = useSnsPost<SnsPostResponseAboutPostDetail>(
+    Number(snsPostId),
+    queryForFetchingSnsPost
+  )
 
   const { mutate } = useSWRConfig()
 
@@ -50,7 +58,7 @@ const MySnsPostPage = () => {
     return <p>페이지를 표시할 수 없습니다.</p>
   }
 
-  const snsPost = {
+  const snsPost: SnsPostForPostDetail = {
     id: snsPostFromStrapi.id,
     createdAt: snsPostFromStrapi.attributes.createdAt,
     images: snsPostFromStrapi.attributes.postImages.data.map(image => ({

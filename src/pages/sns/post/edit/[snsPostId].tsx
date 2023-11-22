@@ -13,6 +13,7 @@ import PostWritingSubheadingTypo from 'components/sns/post/postWritingSubheading
 import ImageUploadCaptionTypo from 'components/common/typo/imageUploadCaptionTypo'
 import MaxWidthContainer from 'components/layouts/containers/maxWidthContainer'
 import useSnsPost from 'hooks/useSnsPost'
+import { SnsPostResponseAboutDefaultQuery } from 'types/snsPost'
 
 const StyledSnsPostEditPageWrapper = styled.div`
   padding: 20px 0;
@@ -50,7 +51,9 @@ const SnsPostEditPage = () => {
   const router = useRouter()
   const { snsPostId } = router.query
 
-  const { snsPost } = useSnsPost(Number(snsPostId))
+  const { snsPost } = useSnsPost<SnsPostResponseAboutDefaultQuery>(
+    Number(snsPostId)
+  )
 
   const goToEditedPostPage = () => router.push(`/sns/post/${snsPostId}`)
 

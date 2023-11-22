@@ -4,7 +4,13 @@ import ImageList from '@mui/material/ImageList'
 import ImageListItem from '@mui/material/ImageListItem'
 import useSnsPosts from 'hooks/useSnsPosts'
 import createUrlQuery from 'utils/createUrlQuery'
-import { SnsPost, SnsPostForSnsPostsPage } from 'types/snsPost'
+import { SnsPostResponseAboutShowingAll } from 'types/snsPost'
+import { Image } from 'types/image'
+
+export type SnsPostForSnsPostsPage = {
+  id: number
+  firstImage: Image
+}
 
 const cursorPointer = css`
   cursor: pointer;
@@ -16,7 +22,7 @@ const postImageStyle = css`
   object-fit: cover;
 `
 
-const SnsPosts = ({ userId }) => {
+const SnsPosts = ({ userId }: { userId: number }) => {
   const router = useRouter()
 
   const query = createUrlQuery({
@@ -25,21 +31,23 @@ const SnsPosts = ({ userId }) => {
     sort: 'createdAt:desc',
   })
 
-  const { snsPosts: snsPostsFromStrapi, isLoading } = useSnsPosts(query)
+  const { snsPosts: snsPostsFromStrapi, isLoading } =
+    useSnsPosts<SnsPostResponseAboutShowingAll[]>(query)
 
   if (isLoading) {
     return null
   }
 
-  const snsPosts: SnsPostForSnsPostsPage[] = snsPostsFromStrapi.map(
-    (post: SnsPost) => ({
-      id: post.id,
-      firstImage: {
-        url: post.attributes.postImages.data[0].attributes.url,
-        altText: post.attributes.postImages.data[0].attributes.alternativeText,
-      },
-    })
-  )
+  const snsPosts: SnsPostForSnsPostsPage[] = snsPostsFromStrapi
+    ? snsPostsFromStrapi.map(post => ({
+        id: post.id,
+        firstImage: {
+          url: post.attributes.postImages.data[0].attributes.url,
+          altText:
+            post.attributes.postImages.data[0].attributes.alternativeText,
+        },
+      }))
+    : []
 
   const goToSnsPost = (postId: number) => {
     router.push(`/sns/post/${postId}`)

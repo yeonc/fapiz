@@ -9,6 +9,9 @@ export type User = {
   weight: Nullable<number>
   bodyShape: Nullable<string>
   fashionStyles: Nullable<FashionStyle[]>
+}
+
+export type UserAdditional = {
   profileImage: Nullable<{ url: string }>
   followers: User[] | []
   followings: User[] | []
@@ -19,12 +22,10 @@ export type UserWithAttributes = {
   attributes: Omit<User, 'id'>
 }
 
-export type UserForSearching = Pick<
-  User,
-  'id' | 'username' | 'gender' | 'fashionStyles'
-> & { avatarUrl: Nullable<string> }
+export type UserResponseWithAdditionalFields = User & UserAdditional
 
-export type UserForMyInfo = Omit<
-  User,
-  'profileImage' | 'followers' | 'followings'
-> & { imageUrl: Nullable<string> }
+export type UserResponseWithProfileImage = User &
+  Pick<UserAdditional, 'profileImage'>
+
+export type UserResponseWithFollowings = User &
+  Pick<UserAdditional, 'followings'>

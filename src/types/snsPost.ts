@@ -1,11 +1,14 @@
 import { Nullable } from 'types/common'
 import { User, UserWithAttributes } from 'types/user'
-import { FashionItemInfo, FashionStyle } from 'types/fashion'
+import { FashionItemInfo } from 'types/fashion'
 import { Image } from 'types/image'
 
-export type SnsPost = {
+export type SnsPostResponseAboutDefaultQuery = {
   id: number
   attributes: {
+    content: Nullable<string>
+    createdAt: string
+    fashionItemsInfo: Nullable<FashionItemInfo[]>
     author: {
       data: UserWithAttributes
     }
@@ -15,14 +18,8 @@ export type SnsPost = {
       }[]
     }
     bookmarkUsers: {
-      data: {
-        id: number
-        attributes: Omit<User, 'id'>
-      }[]
+      data: UserWithAttributes[]
     }
-    content: Nullable<string>
-    createdAt: string
-    fashionItemsInfo: Nullable<FashionItemInfo[]>
     likeUsers: {
       data: UserWithAttributes[]
     }
@@ -35,37 +32,143 @@ export type SnsPost = {
         }
       }[]
     }
-    publishedAt: Date
   }
 }
 
-export type SnsPostForSearching = {
+export type SnsPostResponseAboutPostDetail = {
   id: number
-  createdAt: string
-  firstImage: Image
-  content: Nullable<string>
-  likeNumbers: number
-  author: {
-    username: string
-    avatarUrl: string | undefined
+  attributes: {
+    content: Nullable<string>
+    createdAt: string
+    fashionItemsInfo: Nullable<FashionItemInfo[]>
+    author: {
+      data: {
+        id: number
+        attributes: Omit<User, 'id'> & {
+          ProfileImage: {
+            data: {
+              id: number
+              attributes: {
+                url: string
+                alternativeText: string
+              }
+            }
+          }
+        }
+      }
+    }
+    bookmarkUsers: {
+      data: UserWithAttributes[]
+    }
+    likeUsers: {
+      data: UserWithAttributes[]
+    }
+    postImages: {
+      data: {
+        id: number
+        attributes: {
+          url: string
+          alternativeText: string
+        }
+      }[]
+    }
   }
-  commentCount: number
 }
 
-export type SnsPostForMainPage = {
+export type SnsPostResponseAboutSearchResult = {
+  id: number
+  attributes: {
+    content: Nullable<string>
+    createdAt: string
+    fashionItemsInfo: Nullable<FashionItemInfo[]>
+    author: {
+      data: UserWithAttributes
+    }
+    comments: {
+      data: {
+        id: number
+      }[]
+    }
+    likeUsers: {
+      data: UserWithAttributes[]
+    }
+    postImages: {
+      data: {
+        id: number
+        attributes: {
+          url: string
+          alternativeText: string
+        }
+      }[]
+    }
+  }
+}
+
+export type SnsPostResponseAboutShowingAll = {
+  id: number
+  attributes: {
+    content: Nullable<string>
+    createdAt: string
+    fashionItemsInfo: Nullable<FashionItemInfo[]>
+    author: {
+      data: UserWithAttributes
+    }
+    comments: {
+      data: {
+        id: number
+      }[]
+    }
+    bookmarkUsers: {
+      data: UserWithAttributes[]
+    }
+    likeUsers: {
+      data: UserWithAttributes[]
+    }
+    postImages: {
+      data: {
+        id: number
+        attributes: {
+          url: string
+          alternativeText: string
+        }
+      }[]
+    }
+  }
+}
+
+export type SnsPostResponseAboutFiltering = {
+  id: number
+  attributes: {
+    content: Nullable<string>
+    createdAt: string
+    fashionItemsInfo: Nullable<FashionItemInfo[]>
+    postImages: {
+      data: {
+        id: number
+        attributes: {
+          url: string
+          alternativeText: string
+        }
+      }[]
+    }
+    likeUsers: {
+      data: UserWithAttributes[]
+    }
+    author: {
+      data: UserWithAttributes
+    }
+  }
+}
+
+export type SnsPostForPostDetail = {
   id: number
   createdAt: string
-  author: {
-    username: string
-    gender: Nullable<string>
-    bodyShape: Nullable<string>
-    fashionStyles: Nullable<FashionStyle[]>
+  images: Image[]
+  author: Pick<User, 'id' | 'username' | 'height' | 'weight'> & {
+    avatarUrl: Nullable<string>
   }
-  postImage: Image
   likeUsers: UserWithAttributes[]
-}
-
-export type SnsPostForSnsPostsPage = {
-  id: number
-  firstImage: Image
+  bookmarkUsers: UserWithAttributes[]
+  content: Nullable<string>
+  fashionItemsInfo: Nullable<FashionItemInfo[]>
 }

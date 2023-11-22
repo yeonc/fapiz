@@ -3,8 +3,8 @@ import CommentIcon from '@mui/icons-material/Comment'
 import PostCommentItem from 'components/sns/comment/postCommentItem'
 import useSnsComments from 'hooks/useSnsComments'
 import createUrlQuery from 'utils/createUrlQuery'
-import { PostCommentForSnsPost } from 'types/postComment'
 import { mgBottom } from 'styles/layout'
+import { Nullable } from 'types/common'
 
 const StyledNotExistComment = styled.div`
   padding: 30px;
@@ -14,6 +14,15 @@ const StyledNotExistComment = styled.div`
 const StyledPostCommentItem = styled(PostCommentItem)`
   margin-bottom: 14px;
 `
+
+export type PostCommentForSnsPost = {
+  id: number
+  createdAt: string
+  content: string
+  authorId: number
+  authorName: string
+  authorProfileImageUrl: Nullable<string>
+}
 
 type PostCommentListProps = {
   snsPostId: number
@@ -30,12 +39,12 @@ const PostCommentList = ({ snsPostId }: PostCommentListProps) => {
   const { snsComments: snsCommentsFromStrapi } = useSnsComments(query)
 
   const comments: PostCommentForSnsPost[] = snsCommentsFromStrapi.map(
-    snsComment => {
-      const author = snsComment.attributes.author.data
+    comment => {
+      const author = comment.attributes.author.data
       return {
-        id: snsComment.id,
-        createdAt: snsComment.attributes.createdAt,
-        content: snsComment.attributes.content,
+        id: comment.id,
+        createdAt: comment.attributes.createdAt,
+        content: comment.attributes.content,
         authorId: author.id,
         authorName: author.attributes.username,
         authorProfileImageUrl:

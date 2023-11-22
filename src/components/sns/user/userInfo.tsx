@@ -13,6 +13,7 @@ import createUrlQuery from 'utils/createUrlQuery'
 import { BACKEND_URL } from 'constants/constants'
 import { mgRight, mgBottom } from 'styles/layout'
 import visuallyHidden from 'styles/visuallyHidden'
+import { UserResponseWithFollowings } from 'types/user'
 
 const StyledBodyInfoWrapper = styled.dl`
   display: flex;
@@ -43,12 +44,14 @@ const queryForUseUser = createUrlQuery({
 const UserInfo = ({ userId, className }: UserInfoProps) => {
   const { mutate } = useSWRConfig()
 
-  const { me } = useMe(queryForUseMe)
+  const { me } = useMe<UserResponseWithFollowings>(queryForUseMe)
   const { user: userFromStrapi } = useUser(userId, queryForUseUser)
 
   if (!userFromStrapi) {
     return null
   }
+
+  console.log(userFromStrapi)
 
   const user = {
     id: userFromStrapi.id,

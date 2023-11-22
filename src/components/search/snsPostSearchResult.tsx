@@ -6,8 +6,23 @@ import SearchResultHeadingTypo from 'components/search/searchResultHeadingTypo'
 import useSnsPosts from 'hooks/useSnsPosts'
 import createUrlQuery from 'utils/createUrlQuery'
 import getFormattedDate from 'utils/getFormattedDate'
-import { SnsPost, SnsPostForSearching } from 'types/snsPost'
+import { SnsPostResponseAboutSearchResult } from 'types/snsPost'
 import { HOVER_BACKGROUND_GRAY } from 'styles/constants/color'
+import { Image } from 'types/image'
+import { Nullable } from 'types/common'
+
+export type SnsPostForSearching = {
+  id: number
+  createdAt: string
+  firstImage: Image
+  content: Nullable<string>
+  likeNumbers: number
+  author: {
+    username: string
+    avatarUrl: string | undefined
+  }
+  commentCount: number
+}
 
 const SNS_POST_SEARCH_RESULT_COUNT_TO_BE_SHOWED = 5
 
@@ -43,7 +58,7 @@ const SnsPostSearchResult = ({ searchKeyword }: SnsPostSearchResultProps) => {
   })
 
   const { snsPosts: searchedSnsPostsFromStrapi, isLoading: isSnsPostsLoading } =
-    useSnsPosts(query)
+    useSnsPosts<SnsPostResponseAboutSearchResult[]>(query)
 
   const searchedSnsPosts = isSnsPostsLoading
     ? null
@@ -81,7 +96,9 @@ const SnsPostSearchResult = ({ searchKeyword }: SnsPostSearchResultProps) => {
 
 export default SnsPostSearchResult
 
-const sanitizeSnsPosts = (posts: SnsPost[]): SnsPostForSearching[] =>
+const sanitizeSnsPosts = (
+  posts: SnsPostResponseAboutSearchResult[]
+): SnsPostForSearching[] =>
   posts.map(post => {
     const author = post.attributes.author.data.attributes
     const createdDate = new Date(post.attributes.createdAt)
