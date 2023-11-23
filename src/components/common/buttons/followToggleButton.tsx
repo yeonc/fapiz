@@ -1,15 +1,21 @@
 import Button from '@mui/material/Button'
 import follow from 'services/user/follow'
 import unfollow from 'services/user/unfollow'
+import { UserAdditional } from 'types/user'
 
+type FollowToggleButtonProps = {
+  myId: number
+  myFollowings: UserAdditional['followings']
+  targetUserId: number
+  afterFollow: () => void
+}
 const FollowToggleButton = ({
   myId,
   myFollowings,
   targetUserId,
   afterFollow,
-}) => {
-  const myFollowingUserIds = myFollowings.map((user: any) => user.id)
-
+}: FollowToggleButtonProps) => {
+  const myFollowingUserIds = myFollowings.map(user => user.id)
   const followUser = async () => {
     try {
       await follow({ myId, targetUserId, myFollowingUserIds })
@@ -17,7 +23,6 @@ const FollowToggleButton = ({
       console.error(error)
     }
   }
-
   const unfollowUser = async () => {
     try {
       await unfollow({
@@ -31,9 +36,8 @@ const FollowToggleButton = ({
   }
 
   const isFollowing = myFollowings.some(
-    (following: any) => following.id === targetUserId
+    following => following.id === targetUserId
   )
-
   const buttonVariant = isFollowing ? 'outlined' : 'contained'
   const buttonText = isFollowing ? '팔로우 취소하기' : '팔로우하기'
   const handleFollow = isFollowing ? unfollowUser : followUser

@@ -6,35 +6,28 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import deletePost from 'services/snsPost/deletePost'
 
-const PopoverMenu = ({ postId, myId }) => {
+type PopoverMenuProps = {
+  postId: number
+  myId: number
+}
+
+const PopoverMenu = ({ postId, myId }: PopoverMenuProps) => {
   const router = useRouter()
   const menuButtonRef = useRef<HTMLButtonElement>(null)
-
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  const handleMenuOpen = () => {
-    setIsMenuOpen(true)
-  }
-
-  const handleMenuClose = () => {
-    setIsMenuOpen(false)
-  }
+  const handleMenuOpen = () => setIsMenuOpen(true)
+  const handleMenuClose = () => setIsMenuOpen(false)
 
   const goToSnsPostEditPage = () => router.push(`/sns/post/edit/${postId}`)
   const goToMySnsPage = () => router.push(`/sns/${myId}`)
 
-  const afterDeletePost = () => {
-    goToMySnsPage()
-  }
+  const afterDeletePost = () => goToMySnsPage()
 
-  const handleEditClick = () => {
-    goToSnsPostEditPage()
-  }
-
+  const handleEditClick = () => goToSnsPostEditPage()
   const handleDeleteClick = async () => {
     const willDeleteSnsPost = window.confirm('게시물을 삭제하시겠습니까?')
     if (!willDeleteSnsPost) return
-
     try {
       await deletePost(postId)
       afterDeletePost()

@@ -11,11 +11,11 @@ const StyledNoExistFashionItem = styled.div`
   padding-top: 40px;
 `
 
-type FashonItemListProps = {
+const FashionItemList = ({
+  fashionItems,
+}: {
   fashionItems: FashionItemForCloset[]
-}
-
-const FashionItemList = ({ fashionItems }: FashonItemListProps) => {
+}) => {
   if (fashionItems.length === 0) {
     return (
       <StyledNoExistFashionItem>

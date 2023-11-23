@@ -5,33 +5,36 @@ import FashionItemEditForm from 'components/closet/fashionItemEditForm'
 import useMe from 'hooks/useMe'
 import createUrlQuery from 'utils/createUrlQuery'
 import { User } from 'types/user'
+import { FashionItemForCloset } from 'pages/closet'
 
 const StyledModal = styled(Modal)`
   border-radius: 10px;
 `
 
+type FashionItemEditingModalProps = {
+  onFashionItemEditModalClose: () => void
+  isFashionItemEditModalOpen: boolean
+  initialFashionItem: FashionItemForCloset
+}
+
 const FashionItemEditingModal = ({
   onFashionItemEditModalClose,
   isFashionItemEditModalOpen,
   initialFashionItem,
-}) => {
+}: FashionItemEditingModalProps) => {
   const { me } = useMe<User>()
-
   const query = createUrlQuery({
     'populate[0]': 'image',
     'populate[1]': 'owner',
     'filters[owner][id][$eq]': me && me.id,
     sort: 'createdAt:desc',
   })
-
   const { mutate } = useSWRConfig()
   const refetch = () => mutate({ url: `/api/fashion-items?${query}` })
-
   const afterEditFashionItem = () => {
     onFashionItemEditModalClose()
     refetch()
   }
-
   const afterDeleteFashionItem = () => {
     onFashionItemEditModalClose()
     refetch()

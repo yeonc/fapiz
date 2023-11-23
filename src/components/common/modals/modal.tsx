@@ -1,3 +1,4 @@
+import { ReactNode } from 'react'
 import styled from '@emotion/styled'
 import MUIModal from '@mui/material/Modal'
 import Typo from 'components/common/typo'
@@ -20,7 +21,7 @@ const StyledModalContentsWrapper = styled.div`
 
 type ModalProps = {
   title: string
-  contents: any
+  contents: ReactNode
   open: boolean
   onClose: () => void
   className?: string

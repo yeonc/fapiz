@@ -1,7 +1,6 @@
-import { ChangeEvent } from 'react'
+import { ChangeEvent, ReactNode } from 'react'
 import styled from '@emotion/styled'
 import Input from '@mui/material/Input'
-import { EmotionJSX } from '@emotion/react/types/jsx-namespace'
 import { mgRight } from 'styles/layout'
 
 const StyledCommentInputWrapper = styled.div`
@@ -12,7 +11,7 @@ type CommentInputProps = {
   placeholder?: string
   value: string
   onChange: (e: ChangeEvent<HTMLInputElement>) => void
-  buttons?: EmotionJSX.Element | null
+  buttons?: ReactNode | null
 }
 
 const CommentInput = ({

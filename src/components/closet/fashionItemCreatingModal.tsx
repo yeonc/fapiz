@@ -10,22 +10,24 @@ const StyledModal = styled(Modal)`
   border-radius: 10px;
 `
 
+type FashionItemCreatingModalProps = {
+  isFashionItemCreateModalOpen: boolean
+  onFashionItemCreateModalClose: () => void
+}
+
 const FashionItemCreatingModal = ({
   isFashionItemCreateModalOpen,
   onFashionItemCreateModalClose,
-}) => {
+}: FashionItemCreatingModalProps) => {
   const { me } = useMe<User>()
-
+  const { mutate } = useSWRConfig()
   const query = createUrlQuery({
     'populate[0]': 'image',
     'populate[1]': 'owner',
     'filters[owner][id][$eq]': me && me.id,
     sort: 'createdAt:desc',
   })
-
-  const { mutate } = useSWRConfig()
   const refetch = () => mutate({ url: `/api/fashion-items?${query}` })
-
   const afterCreateFashionItem = () => {
     onFashionItemCreateModalClose()
     refetch()

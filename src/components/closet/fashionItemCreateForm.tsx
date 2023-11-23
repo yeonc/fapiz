@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { FormEvent, useState } from 'react'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import LoadingButton from '@mui/lab/LoadingButton'
@@ -35,7 +35,11 @@ const DEFAULT_PREVIEW_IMAGE = {
   altText: '기본 프리뷰 이미지',
 }
 
-const FashionItemCreateForm = ({ afterCreateFashionItem }) => {
+const FashionItemCreateForm = ({
+  afterCreateFashionItem,
+}: {
+  afterCreateFashionItem: () => void
+}) => {
   const { me } = useMe<User>()
   const [imageFiles, setImageFiles] = useState<ImageFiles>(null)
   const [previewImage, setPreviewImage] = useState<Image>(DEFAULT_PREVIEW_IMAGE)
@@ -49,32 +53,11 @@ const FashionItemCreateForm = ({ afterCreateFashionItem }) => {
     const previewImage = changeImageFileToPreviewImage(imageFiles[0])
     setPreviewImage(previewImage)
   }
-
-  const handleCategoryChange = (category: any) => {
-    setCategory(category)
-  }
-
-  const handleColorChange = (color: any) => {
-    setColor(color)
-  }
-
-  const createFashionItemWithImage = async (uploadedImageId: any) => {
-    await createFashionItem({
-      category,
-      color,
-      imageId: uploadedImageId,
-      ownerId: me && me.id,
-    })
-  }
-
-  const handleFashionItemSubmit = async (e: any) => {
+  const handleCategoryChange = (category: string) => setCategory(category)
+  const handleColorChange = (color: string) => setColor(color)
+  const handleFashionItemSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
-    if (imageFiles === null) {
-      alert('이미지를 첨부해 주세요!')
-      return
-    }
-
+    if (imageFiles === null) return
     // TODO: uploadedImageId 가져오는 과정 함수로 빼기
     try {
       setIsFashionItemCreateLoading(true)
@@ -86,6 +69,15 @@ const FashionItemCreateForm = ({ afterCreateFashionItem }) => {
     } catch (error) {
       console.error(error)
     }
+  }
+  const createFashionItemWithImage = async (uploadedImageId: number) => {
+    if (!me) return
+    await createFashionItem({
+      category,
+      color,
+      imageId: uploadedImageId,
+      ownerId: me.id,
+    })
   }
 
   return (

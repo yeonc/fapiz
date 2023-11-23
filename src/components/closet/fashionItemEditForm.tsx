@@ -12,6 +12,7 @@ import deleteFashionItem from 'services/fashionItem/deleteFashionItem'
 import { changeImageFileToPreviewImage } from 'utils/previewImage'
 import { ImageFiles, Image } from 'types/image'
 import { mgBottom, mgRight } from 'styles/layout'
+import { FashionItemForCloset } from 'pages/closet'
 
 const StyledFashionItemCreateForm = styled.form`
   text-align: center;
@@ -31,12 +32,17 @@ const previewImageStyle = css`
 `
 
 type UploadedImageId = number | undefined
+type FashionItemEditFormProps = {
+  initialFashionItem: FashionItemForCloset
+  afterEditFashionItem: () => void
+  afterDeleteFashionItem: () => void
+}
 
 const FashionItemEditForm = ({
   initialFashionItem,
   afterEditFashionItem,
   afterDeleteFashionItem,
-}) => {
+}: FashionItemEditFormProps) => {
   const [imageFiles, setImageFiles] = useState<ImageFiles>(null)
   const [previewImage, setPreviewImage] = useState<Image>(
     initialFashionItem.image
@@ -51,29 +57,18 @@ const FashionItemEditForm = ({
     const previewImage = changeImageFileToPreviewImage(imageFiles[0])
     setPreviewImage(previewImage)
   }
-
-  const handleCategoryChange = (category: string) => {
-    setCategory(category)
-  }
-
-  const handleColorChange = (color: string) => {
-    setColor(color)
-  }
-
+  const handleCategoryChange = (category: string) => setCategory(category)
+  const handleColorChange = (color: string) => setColor(color)
   const getUploadedImageId = async (): Promise<UploadedImageId> => {
     if (!imageFiles) {
       return
     }
-
     const res = await uploadImage(imageFiles)
-    const uploadedImageId: number = res.data[0].id
-
+    const uploadedImageId = res.data[0].id
     return uploadedImageId
   }
-
   const editFashionItemInCloset = async () => {
     const imageId = await getUploadedImageId()
-
     await editFashionItem({
       fashionItemId: initialFashionItem.id,
       category,
@@ -81,12 +76,10 @@ const FashionItemEditForm = ({
       imageId,
     })
   }
-
   const handleFashionItemEditButtonClick = async (
     e: FormEvent<HTMLFormElement>
   ) => {
     e.preventDefault()
-
     try {
       setIsFashionItemEditLoading(true)
       await editFashionItemInCloset()
@@ -96,15 +89,12 @@ const FashionItemEditForm = ({
       console.error(error)
     }
   }
-
   const handleFashionItemDeleteButtonClick = async () => {
     const isFashionItemDelete =
       window.confirm('패션 아이템을 삭제하시겠습니까?')
-
     if (!isFashionItemDelete) {
       return
     }
-
     try {
       await deleteFashionItem(initialFashionItem.id)
       afterDeleteFashionItem()

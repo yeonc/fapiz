@@ -4,9 +4,8 @@ import ButtonBase from '@mui/material/ButtonBase'
 import FashionItemEditingModal from 'components/closet/fashionItemEditingModal'
 import Typo from 'components/common/typo'
 import useModalState from 'hooks/useModalState'
-import { FashionItemForCloset } from 'types/fashion'
 import { DEFAULT_WHITE, LIGHT_GRAY } from 'styles/constants/color'
-import { mgBottom } from 'styles/layout'
+import { FashionItemForCloset } from 'pages/closet'
 
 const StyledImageListItem = styled(ImageListItem)`
   position: relative;
@@ -22,7 +21,6 @@ const StyledImageListItem = styled(ImageListItem)`
     flex-direction: column;
   }
 `
-
 const StyledButton = styled(ButtonBase)`
   position: absolute;
   display: none;
@@ -32,11 +30,11 @@ const StyledButton = styled(ButtonBase)`
   background-color: rgba(0, 0, 0, 0.3);
 `
 
-type FashionItemListItemProps = {
+const FashionItemListItem = ({
+  fashionItem,
+}: {
   fashionItem: FashionItemForCloset
-}
-
-const FashionItemListItem = ({ fashionItem }: FashionItemListItemProps) => {
+}) => {
   const {
     isOpen: isFashionItemEditModalOpen,
     handleOpen: handleFashionItemEditModalOpen,

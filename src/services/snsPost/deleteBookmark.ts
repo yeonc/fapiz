@@ -19,7 +19,7 @@ const deleteBookmark: DeleteBookmark = async ({
     url: `${BACKEND_URL}/api/sns-posts/${targetPostId}`,
     data: {
       data: {
-        bookmarkUsers: bookmarkUserIds.filter((userId: any) => userId !== myId),
+        bookmarkUsers: bookmarkUserIds.filter(userId => userId !== myId),
       },
     },
   })
