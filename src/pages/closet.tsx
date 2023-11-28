@@ -57,26 +57,28 @@ const ClosetPage = () => {
 
   const { me } = useMe<User>()
 
-  const query = createUrlQuery({
-    'populate[0]': 'image',
-    'populate[1]': 'owner',
-    'filters[owner][id][$eq]': me && me.id,
-    sort: 'createdAt:desc',
-  })
+  const query = me
+    ? createUrlQuery({
+        'populate[0]': 'image',
+        'populate[1]': 'owner',
+        'filters[owner][id][$eq]': me.id,
+        sort: 'createdAt:desc',
+      })
+    : ''
 
   const { fashionItems: fashionItemsFromStrapi } = useFashionItems(query)
 
-  const fashionItems: FashionItemForCloset[] = fashionItemsFromStrapi.map(
-    fashionItem => ({
-      id: fashionItem.id,
-      category: fashionItem.attributes.category,
-      color: fashionItem.attributes.color,
-      image: {
-        url: fashionItem.attributes.image.data.attributes.url,
-        altText: fashionItem.attributes.image.data.attributes.alternativeText,
-      },
-    })
-  )
+  const fashionItems: FashionItemForCloset[] = fashionItemsFromStrapi
+    ? fashionItemsFromStrapi.map(fashionItem => ({
+        id: fashionItem.id,
+        category: fashionItem.attributes.category,
+        color: fashionItem.attributes.color,
+        image: {
+          url: fashionItem.attributes.image.data.attributes.url,
+          altText: fashionItem.attributes.image.data.attributes.alternativeText,
+        },
+      }))
+    : []
 
   const {
     isOpen: isFashionItemCreateModalOpen,
@@ -162,7 +164,6 @@ const filterFashionItems: FilterFashionItems = ({
   const filteredFashionItems = fashionItems
     .filter(byCategory(category))
     .filter(byColor(color))
-
   return filteredFashionItems
 }
 
@@ -172,7 +173,6 @@ const byCategory =
     if (category === 'all') {
       return true
     }
-
     return fashionItem.category === category
   }
 
@@ -182,6 +182,5 @@ const byColor =
     if (color === 'all') {
       return true
     }
-
     return fashionItem.color === color
   }

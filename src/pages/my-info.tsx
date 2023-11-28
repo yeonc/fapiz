@@ -21,7 +21,7 @@ export type UserForMyInfo = Omit<
   gender: string
   bodyShape: string
   fashionStyles: FashionStyle[]
-  imageUrl: Nullable<string>
+  imageUrl?: string
 }
 
 const TOOLTIP_TEXT =
@@ -49,7 +49,7 @@ const MyInfoPage = () => {
 
   const myInfo: UserForMyInfo = {
     id: me.id,
-    imageUrl: me.profileImage?.url || null,
+    imageUrl: me.profileImage?.url,
     username: me.username,
     gender: me.gender || '',
     height: me.height,

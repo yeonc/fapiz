@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import fetchUsers from 'services/user/fetchUsers'
 import createSearchKeywordsArray from 'utils/createSearchKeywordsArray'
 import getSafeStringFromQuery from 'utils/getSafeStringFromQuery'
-import { FashionStyle } from 'types/fashion'
 import { Nullable } from 'types/common'
 import createUrlQuery from 'utils/createUrlQuery'
 import { User, UserResponseWithProfileImage } from 'types/user'
@@ -12,10 +11,7 @@ export type UserForSearching = Pick<
   'id' | 'username' | 'gender' | 'fashionStyles'
 > & { avatarUrl?: string }
 
-const searchUsers = async (
-  req: NextApiRequest,
-  res: NextApiResponse<Nullable<UserForSearching[]>>
-) => {
+const searchUsers = async (req: NextApiRequest, res: NextApiResponse) => {
   // 1. keyword 받아오기
   const searchKeyword = getSafeStringFromQuery(req.query.keyword)
 
@@ -31,7 +27,7 @@ const searchUsers = async (
     const users = sanitizeUsers(usersFromStrapi)
 
     // 4. 검색 로직 실행하기
-    const searchedUsers = searchUser({ searchKeyword, initialUsers: users })
+    const searchedUsers = searchUser({ searchKeyword, users })
 
     // 5. 검색 결과 내려주기
     res.status(200).json(searchedUsers)
@@ -49,50 +45,47 @@ const sanitizeUsers = (
     id: user.id,
     username: user.username,
     gender: user.gender,
-    fashionStyles: user.fashionStyles ?? [],
+    fashionStyles: user.fashionStyles,
     avatarUrl: user.profileImage?.url,
   }))
 }
 
 type SearchUserArgs = {
   searchKeyword: Nullable<string>
-  initialUsers: UserForSearching[]
+  users: UserForSearching[]
 }
 
 type SearchUser = (args: SearchUserArgs) => Nullable<UserForSearching[]>
 
-const searchUser: SearchUser = ({ searchKeyword, initialUsers }) => {
+const searchUser: SearchUser = ({ searchKeyword, users }) => {
   if (!searchKeyword) {
     return null
   }
-
   const searchKeywords = createSearchKeywordsArray(searchKeyword)
   const searchKeywordRegex = new RegExp(searchKeywords.join('|'), 'gi')
-  const filteredUsers = filterUser({ initialUsers, searchKeywordRegex })
+  const filteredUsers = filterUser({ users, searchKeywordRegex })
   return filteredUsers
 }
 
 type FilterUserArgs = {
-  initialUsers: UserForSearching[]
+  users: UserForSearching[]
   searchKeywordRegex: RegExp
 }
 
 type FilterUser = (args: FilterUserArgs) => UserForSearching[]
 
-const filterUser: FilterUser = ({ initialUsers, searchKeywordRegex }) => {
-  const filteredUsers = initialUsers.filter(user => {
+const filterUser: FilterUser = ({ users, searchKeywordRegex }) => {
+  const filteredUsers = users.filter(user => {
     const username = user.username.toLowerCase().trim()
     const matchedUsername = username.match(searchKeywordRegex)
 
     const fashionStylesArray = user.fashionStyles
-      ? user.fashionStyles.map(
-          (fashionStyle: FashionStyle) => fashionStyle.name
-        )
+      ? user.fashionStyles.map(fashionStyle => fashionStyle.name)
       : []
     const fashionStyleString = fashionStylesArray.join(' ')
-    const matchedFashionItems = fashionStyleString.match(searchKeywordRegex)
+    const matchedFashionStyles = fashionStyleString.match(searchKeywordRegex)
 
-    return matchedUsername || matchedFashionItems
+    return matchedUsername || matchedFashionStyles
   })
 
   return filteredUsers

@@ -205,11 +205,7 @@ const MyInfoEditForm = ({ myInfo }: { myInfo: UserForMyInfo }) => {
           }
           css={mgBottom(10)}
         >
-          <Avatar
-            src={avatarImageSrc ?? undefined}
-            alt={avatarImageAlt}
-            css={avatarStyle}
-          />
+          <Avatar src={avatarImageSrc} alt={avatarImageAlt} css={avatarStyle} />
         </Badge>
         <Typo variant="h4" component="h1">
           {myInfo.username}

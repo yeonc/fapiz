@@ -7,12 +7,15 @@ type SwrFetcherArgs = {
   config: Omit<AxiosRequestConfig, 'baseURL'>
 }
 
-const swrFetcher = ({ baseURL = BACKEND_URL, url, config }: SwrFetcherArgs) => {
+const swrFetcher = async ({
+  baseURL = BACKEND_URL,
+  url,
+  config,
+}: SwrFetcherArgs) => {
   const axiosConfig = {
     baseURL,
     ...config,
   }
-
   return axios.get(url, axiosConfig).then(res => res.data)
 }
 

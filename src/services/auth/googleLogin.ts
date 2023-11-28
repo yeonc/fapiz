@@ -1,10 +1,10 @@
 import axios, { AxiosResponse } from 'axios'
 import { BACKEND_URL } from 'constants/constants'
-import { AccessToken } from 'types/auth'
+import { AccessToken, LoginSuccessResponse } from 'types/auth'
 
 const googleLogin = async (
   accessToken: AccessToken
-): Promise<AxiosResponse> => {
+): Promise<AxiosResponse<LoginSuccessResponse>> => {
   return axios({
     method: 'get',
     url: `${BACKEND_URL}/api/auth/google/callback`,

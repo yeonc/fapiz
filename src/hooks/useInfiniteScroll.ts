@@ -1,10 +1,8 @@
 import { useEffect, useRef, RefObject } from 'react'
 
-type UseInfiniteScroll = (
+const useInfiniteScroll = (
   increasePageNumber: () => void
-) => RefObject<HTMLElement>
-
-const useInfiniteScroll: UseInfiniteScroll = increasePageNumber => {
+): RefObject<HTMLElement> => {
   const fetchTriggerRef = useRef<HTMLElement>(null)
   const fetchTriggerElement = fetchTriggerRef.current
 

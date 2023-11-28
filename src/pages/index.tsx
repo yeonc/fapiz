@@ -27,37 +27,36 @@ const SnsPostLikeButtonWithLogin = withLogin(LikeButtonForMainPage)
 
 const MainPage = () => {
   const { me } = useMe<User>()
-
   const { snsPosts, fetchTriggerRef } = useSnsPostInfiniteScroll({
     initialPageNumber: INITIAL_PAGE_NUMBER,
     pageSize: PAGE_SIZE,
-    isLoggedIn: me && !!me,
-    myGender: me?.gender,
-    myBodyShape: me?.bodyShape,
-    myFashionStyles: me?.fashionStyles,
+    isLoggedIn: !!me,
+    myGender: me?.gender || null,
+    myBodyShape: me?.bodyShape || null,
+    myFashionStyles: me?.fashionStyles || null,
   })
 
   return (
     <MaxWidthContainer>
       <StyledMainPageWrapper>
         <ImageList variant="masonry" cols={3}>
-          {snsPosts.map(snsPost => {
-            return (
-              <ImageCardItem
-                key={snsPost.id}
-                cardItemData={snsPost}
-                rightActionButton={
+          {snsPosts.map(snsPost => (
+            <ImageCardItem
+              key={snsPost.id}
+              cardItemData={snsPost}
+              rightActionButton={
+                me && (
                   <SnsPostLikeButtonWithLogin
-                    myId={me?.id}
+                    myId={me.id}
                     targetId={snsPost.id}
                     likeUsers={snsPost.likeUsers}
                     isShowLikeUsersNumber={false}
                     borderColor={DEFAULT_WHITE}
                   />
-                }
-              />
-            )
-          })}
+                )
+              }
+            />
+          ))}
         </ImageList>
         <span ref={fetchTriggerRef} css={fetchTriggerStyle}></span>
       </StyledMainPageWrapper>

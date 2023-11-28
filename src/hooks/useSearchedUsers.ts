@@ -15,7 +15,7 @@ const useSearchedUsers = (searchKeyword: string) => {
 
   return {
     searchedUsers: data,
-    isSearchedUsersLoading: !data && !error,
+    isLoading: !data && !error,
     error,
   }
 }

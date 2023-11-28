@@ -1,13 +1,13 @@
 import useSWR from 'swr'
 import { UserResponseWithAdditionalFields } from 'types/user'
 
-const useUser = (userId: number, query?: string) => {
-  const urlNotIncludedQuery = `/api/users/${userId}`
-  const urlIncludedQuery = `/api/users/${userId}?${query}`
-  const url = query ? urlIncludedQuery : urlNotIncludedQuery
-
+const useUser = (userId?: number, query?: string) => {
   const { data, error } = useSWR<UserResponseWithAdditionalFields, Error>(
-    userId ? { url } : null
+    userId
+      ? {
+          url: `/api/users/${userId}${query ? `?${query}` : ''}`,
+        }
+      : null
   )
 
   if (!userId) {

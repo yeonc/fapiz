@@ -1,16 +1,14 @@
-import { Obj } from 'types/common'
-
-type PaginatedData = Obj[]
-
-type PaginateDataArgs = {
-  dataArray: Obj[]
+type PaginateDataArgs<T> = {
+  dataArray: T[]
   pageNumber: number
   pageSize: number
 }
 
-type PaginateData = (args: PaginateDataArgs) => PaginatedData
-
-const paginateData: PaginateData = ({ dataArray, pageNumber, pageSize }) => {
+const paginateData = <T>({
+  dataArray,
+  pageNumber,
+  pageSize,
+}: PaginateDataArgs<T>): T[] => {
   const startIndex = (pageNumber - 1) * pageSize
   const endIndex = startIndex + pageSize
   const paginatedData = dataArray.slice(startIndex, endIndex)

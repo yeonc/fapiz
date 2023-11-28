@@ -26,18 +26,11 @@ export type SnsPostForMainPage = {
 const ADD_ADDITIONAL_INFO_MESSAGE =
   '추가 정보 세 개 중 하나밖에 작성되지 않았네요! 두 가지 이상을 작성하시면 맞춤형 게시물을 보실 수 있습니다! 지금 정보를 수정하러 가 볼까요?'
 
-const FASHION_STYLE_NAMES = USER_FASHION_STYLES.map(
-  fashionStyle => fashionStyle.name
-)
-
 // TODO: console.log가 아닌 다른 형태로 메시지 보여주기
 const showMessageAboutAddingAdditionalInfo = () =>
   console.log(ADD_ADDITIONAL_INFO_MESSAGE)
 
-const filterSnsPosts = async (
-  req: NextApiRequest,
-  res: NextApiResponse<SnsPostForMainPage[]>
-) => {
+const filterSnsPosts = async (req: NextApiRequest, res: NextApiResponse) => {
   const { query } = req
 
   // 1. query 받아오기
@@ -73,7 +66,7 @@ const filterSnsPosts = async (
         pageNumber,
         pageSize,
       })
-      res.status(200).json(paginatedSnsPosts as SnsPostForMainPage[])
+      res.status(200).json(paginatedSnsPosts)
     }
 
     // 5-2. 요청 쿼리에 pageNumber, pageSize 중 하나라도 빠져있는 경우, 필터링 된 SNS 게시물 데이터 내려주기
@@ -95,17 +88,20 @@ const getSafeFashionStylesFromQuery = (
   }
 
   const decodedQueryValue = decodeURIComponent(queryValue)
-  const parsedArray = JSON.parse(decodedQueryValue)
+  const parsedArray: FashionStyle[] = JSON.parse(decodedQueryValue)
 
   if (!(parsedArray instanceof Array)) {
     return null
   }
 
-  const fashionStyleArray: FashionStyle[] = parsedArray.filter(item => {
+  const fashionStyleArray = parsedArray.filter(item => {
     if (!item.hasOwnProperty('id') || typeof item.id !== 'number') {
       return false
     }
 
+    const FASHION_STYLE_NAMES = USER_FASHION_STYLES.map(
+      fashionStyle => fashionStyle.name
+    )
     if (
       !item.hasOwnProperty('name') ||
       !FASHION_STYLE_NAMES.includes(item.name)

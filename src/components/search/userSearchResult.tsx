@@ -40,17 +40,16 @@ const UserSearchResult = ({
   searchKeyword,
   className,
 }: UserSearchResultProps) => {
-  const { searchedUsers } = useSearchedUsers(searchKeyword)
+  const { searchedUsers, isLoading } = useSearchedUsers(searchKeyword)
 
-  const searchedUsersToBeShowed = searchedUsers?.slice(
-    0,
-    USER_SEARCH_RESULT_COUNT_TO_BE_SHOWED
-  )
+  const searchedUsersToBeShowed = searchedUsers
+    ? searchedUsers.slice(0, USER_SEARCH_RESULT_COUNT_TO_BE_SHOWED)
+    : []
 
   return (
     <section className={className}>
       <SearchResultHeadingTypo>유저 검색 결과</SearchResultHeadingTypo>
-      {searchedUsersToBeShowed ? (
+      {!isLoading ? (
         <>
           {searchedUsersToBeShowed.length === 0 && <NoSearchResult />}
           <StyledUserSearchResultList>

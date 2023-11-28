@@ -34,20 +34,20 @@ const PostCommentList = ({ snsPostId }: { snsPostId: number }) => {
 
   const { snsComments: snsCommentsFromStrapi } = useSnsComments(query)
 
-  const comments: PostCommentForSnsPost[] = snsCommentsFromStrapi.map(
-    comment => {
-      const author = comment.attributes.author.data
-      return {
-        id: comment.id,
-        createdAt: comment.attributes.createdAt,
-        content: comment.attributes.content,
-        authorId: author?.id || null,
-        authorName: author?.attributes.username || null,
-        authorProfileImageUrl:
-          author?.attributes.profileImage.data?.attributes.url,
-      }
-    }
-  )
+  const comments: PostCommentForSnsPost[] = snsCommentsFromStrapi
+    ? snsCommentsFromStrapi.map(comment => {
+        const author = comment.attributes.author.data
+        return {
+          id: comment.id,
+          createdAt: comment.attributes.createdAt,
+          content: comment.attributes.content,
+          authorId: author?.id || null,
+          authorName: author?.attributes.username || null,
+          authorProfileImageUrl:
+            author?.attributes.profileImage.data?.attributes.url,
+        }
+      })
+    : []
 
   if (comments.length === 0) {
     return (
