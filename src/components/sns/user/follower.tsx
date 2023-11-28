@@ -8,7 +8,7 @@ import useMe from 'hooks/useMe'
 import createUrlQuery from 'utils/createUrlQuery'
 import { DEFAULT_BLACK } from 'styles/constants/color'
 import { horizontal, mgRight } from 'styles/layout'
-import { UserResponseWithFollowings } from 'types/user'
+import { UserResponseWithFollowings, UserWithProfileImage } from 'types/user'
 
 const followerStyle = css`
   color: ${DEFAULT_BLACK};
@@ -22,9 +22,13 @@ const queryForUseMe = createUrlQuery({
   'populate[0]': 'followings',
 })
 
-const Follower = ({ followers, afterFollow }) => {
-  const { me } = useMe<UserResponseWithFollowings>(queryForUseMe)
+type FollowerProps = {
+  followers: UserWithProfileImage[]
+  afterFollow: () => void
+}
 
+const Follower = ({ followers, afterFollow }: FollowerProps) => {
+  const { me } = useMe<UserResponseWithFollowings>(queryForUseMe)
   const {
     isOpen: isFollowerModalOpen,
     handleOpen: handleFollowerModalOpen,
@@ -46,7 +50,7 @@ const Follower = ({ followers, afterFollow }) => {
       <StyledModal
         title="팔로워"
         contents={
-          <UserList users={followers} me={me} afterFollow={afterFollow} />
+          me && <UserList users={followers} me={me} afterFollow={afterFollow} />
         }
         open={isFollowerModalOpen}
         onClose={handleFollowerModalClose}

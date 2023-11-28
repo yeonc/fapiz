@@ -11,7 +11,7 @@ type CommentInputProps = {
   placeholder?: string
   value: string
   onChange: (e: ChangeEvent<HTMLInputElement>) => void
-  buttons?: ReactNode | null
+  buttons?: ReactNode
 }
 
 const CommentInput = ({

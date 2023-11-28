@@ -46,20 +46,19 @@ const PostCommentWritingArea = ({
   className,
 }: PostCommentWritingAreaProps) => {
   const [comment, setComment] = useState('')
-
   const { me, isLoading } = useMe<UserResponseWithProfileImage>(queryForUseMe)
 
   if (isLoading) {
     return <p>로딩중</p>
   }
 
-  const handleCommentChange = (comment: string) => {
-    setComment(comment)
+  if (!me) {
+    return null
   }
 
+  const handleCommentChange = (comment: string) => setComment(comment)
   const handleCommentSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
     try {
       await createComment({ comment, postId: snsPostId, authorId: me.id })
       setComment('')

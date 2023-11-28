@@ -19,7 +19,7 @@ export type SnsPostForSearching = {
   likeNumbers: number
   author: {
     username: string
-    avatarUrl: string | undefined
+    avatarUrl?: string
   }
   commentCount: number
 }
@@ -42,11 +42,7 @@ const StyledSnsPostSearchResultListItemSkeleton = styled(
   margin-bottom: 20px;
 `
 
-type SnsPostSearchResultProps = {
-  searchKeyword: string
-}
-
-const SnsPostSearchResult = ({ searchKeyword }: SnsPostSearchResultProps) => {
+const SnsPostSearchResult = ({ searchKeyword }: { searchKeyword: string }) => {
   const query = createUrlQuery({
     'populate[0]': 'postImages',
     'populate[1]': 'author',
@@ -62,7 +58,7 @@ const SnsPostSearchResult = ({ searchKeyword }: SnsPostSearchResultProps) => {
 
   const searchedSnsPosts = isSnsPostsLoading
     ? null
-    : sanitizeSnsPosts(searchedSnsPostsFromStrapi)
+    : sanitizeSnsPosts(searchedSnsPostsFromStrapi || [])
 
   const searchedSnsPostsToBeShowed = searchedSnsPosts?.slice(
     0,
@@ -114,7 +110,7 @@ const sanitizeSnsPosts = (
       likeNumbers: post.attributes.likeUsers.data.length,
       author: {
         username: author.username,
-        avatarUrl: author.profileImage.data?.attributes.url,
+        avatarUrl: author.profileImage.data?.attributes.url ?? null,
       },
       commentCount: post.attributes.comments.data.length,
     }

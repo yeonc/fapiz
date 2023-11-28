@@ -9,7 +9,7 @@ import uploadImage from 'services/upload/uploadImage'
 import createFashionItem from 'services/fashionItem/createFashionItem'
 import useMe from 'hooks/useMe'
 import { changeImageFileToPreviewImage } from 'utils/previewImage'
-import { ImageFiles, Image } from 'types/image'
+import { ImageFiles, Image, UploadedImageId } from 'types/image'
 import { mgBottom } from 'styles/layout'
 import { User } from 'types/user'
 
@@ -70,7 +70,9 @@ const FashionItemCreateForm = ({
       console.error(error)
     }
   }
-  const createFashionItemWithImage = async (uploadedImageId: number) => {
+  const createFashionItemWithImage = async (
+    uploadedImageId: UploadedImageId
+  ) => {
     if (!me) return
     await createFashionItem({
       category,

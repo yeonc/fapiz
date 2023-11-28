@@ -13,7 +13,10 @@ import createUrlQuery from 'utils/createUrlQuery'
 import { BACKEND_URL } from 'constants/constants'
 import { mgRight, mgBottom } from 'styles/layout'
 import visuallyHidden from 'styles/visuallyHidden'
-import { UserResponseWithFollowings } from 'types/user'
+import {
+  UserResponseWithAdditionalFields,
+  UserResponseWithFollowings,
+} from 'types/user'
 
 const StyledBodyInfoWrapper = styled.dl`
   display: flex;
@@ -26,11 +29,6 @@ const avatarStyle = css`
   margin: 0 auto 10px;
 `
 
-type UserInfoProps = {
-  userId: number
-  className?: string
-}
-
 const queryForUseMe = createUrlQuery({
   'populate[0]': 'followings',
 })
@@ -41,9 +39,18 @@ const queryForUseUser = createUrlQuery({
   'populate[2]': 'followings.profileImage',
 })
 
+export type UserForSnsUserInfo = Omit<
+  UserResponseWithAdditionalFields,
+  'gender' | 'bodyShape' | 'fashionStyles' | 'profileImage'
+> & { profileImageUrl?: string }
+
+type UserInfoProps = {
+  userId: number
+  className?: string
+}
+
 const UserInfo = ({ userId, className }: UserInfoProps) => {
   const { mutate } = useSWRConfig()
-
   const { me } = useMe<UserResponseWithFollowings>(queryForUseMe)
   const { user: userFromStrapi } = useUser(userId, queryForUseUser)
 
@@ -51,9 +58,7 @@ const UserInfo = ({ userId, className }: UserInfoProps) => {
     return null
   }
 
-  console.log(userFromStrapi)
-
-  const user = {
+  const user: UserForSnsUserInfo = {
     id: userFromStrapi.id,
     username: userFromStrapi.username,
     height: userFromStrapi.height,
@@ -69,7 +74,6 @@ const UserInfo = ({ userId, className }: UserInfoProps) => {
   const refetch = () => {
     const token = getToken()
     if (!token) return null
-
     mutate({
       url: `${BACKEND_URL}/api/users/me?${queryForUseMe}`,
       config: {
@@ -81,9 +85,7 @@ const UserInfo = ({ userId, className }: UserInfoProps) => {
     mutate(user.id ? { url: `/api/users/${user.id}?${queryForUseUser}` } : null)
   }
 
-  const afterFollow = () => {
-    refetch()
-  }
+  const afterFollow = () => refetch()
 
   return (
     <header className={className}>

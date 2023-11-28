@@ -4,7 +4,7 @@ import useMe from 'hooks/useMe'
 import { User } from 'types/user'
 
 const withLoginPageRedirect = (Page: FunctionComponent) => {
-  return () => {
+  const ComponentWithLoginPageRedirect = () => {
     const { me, isLoading } = useMe<User>()
 
     if (isLoading) {
@@ -17,6 +17,7 @@ const withLoginPageRedirect = (Page: FunctionComponent) => {
 
     return <Page />
   }
+  return ComponentWithLoginPageRedirect
 }
 
 export default withLoginPageRedirect

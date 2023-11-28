@@ -9,6 +9,8 @@ import { DEFAULT_GRAY } from 'styles/constants/color'
 import getFormattedDate from 'utils/getFormattedDate'
 import { PostCommentForSnsPost } from './postCommentList'
 
+const WITHDRAWN_USER_TEXT = '탈퇴한 유저'
+
 const StyledPostCommentWrapper = styled.li`
   display: flex;
 `
@@ -53,11 +55,11 @@ const PostCommentItem = ({
       <Link href={`${ROUTE_URL.SNS}/${comment.authorId}`}>
         <StyledCommentAuthorWrapper>
           <Avatar
-            alt={comment.authorName}
+            alt={comment.authorName || WITHDRAWN_USER_TEXT}
             src={comment.authorProfileImageUrl}
             css={authorAvatarStyle}
           />
-          <span>{comment.authorName}</span>
+          <span>{comment.authorName || WITHDRAWN_USER_TEXT}</span>
         </StyledCommentAuthorWrapper>
       </Link>
       <StyledCommentContentWrapper>

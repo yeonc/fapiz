@@ -14,6 +14,7 @@ import { Image } from 'types/image'
 import { DEFAULT_GRAY, LIGHT_GRAY } from 'styles/constants/color'
 import visuallyHidden from 'styles/visuallyHidden'
 import { FashionItemInfo } from 'types/fashion'
+import { SnsPostAuthorForPostDetail } from 'types/snsPost'
 
 const INITIAL_SHOWED_POST_CONTENT_LENGTH = 200
 const POST_CONTENT_STRING_START_INDEX = 0
@@ -92,7 +93,7 @@ type PostDescriptionContentsLayoutProps = {
   likeButton: EmotionJSX.Element | null
   bookmarkButton: EmotionJSX.Element | null
   postCreatedDate: string
-  postAuthor: any // TODO: 추후에 타입 정의 후 수정할 것
+  postAuthor: SnsPostAuthorForPostDetail
   postImages: Image[]
   postContent: string
   postFashionItemInfos: FashionItemInfo[]
@@ -177,22 +178,20 @@ const PostDescriptionContentsLayout = ({
       />
       {likeButton}
       {bookmarkButton}
-      {postFashionItemInfos && (
-        <StyledFashionItemInfosWrapper>
-          <span css={visuallyHidden}>착용한 제품 정보</span>
-          <StyledFashionItemInfos>
-            {postFashionItemInfos.map((fashionItemInfo: any, index: number) => (
-              <StyledFashionItemInfo key={index.toString()}>
-                <Typo component="span" css={categoryStyle}>
-                  {fashionItemInfo.category}
-                </Typo>
-                <Typo component="span">{fashionItemInfo.buyingPlace}</Typo>
-                <Typo component="span">{fashionItemInfo.price}원</Typo>
-              </StyledFashionItemInfo>
-            ))}
-          </StyledFashionItemInfos>
-        </StyledFashionItemInfosWrapper>
-      )}
+      <StyledFashionItemInfosWrapper>
+        <span css={visuallyHidden}>착용한 제품 정보</span>
+        <StyledFashionItemInfos>
+          {postFashionItemInfos.map(fashionItemInfo => (
+            <StyledFashionItemInfo key={fashionItemInfo.id}>
+              <Typo component="span" css={categoryStyle}>
+                {fashionItemInfo.category}
+              </Typo>
+              <Typo component="span">{fashionItemInfo.buyingPlace}</Typo>
+              <Typo component="span">{fashionItemInfo.price}원</Typo>
+            </StyledFashionItemInfo>
+          ))}
+        </StyledFashionItemInfos>
+      </StyledFashionItemInfosWrapper>
       <div css={paddingStyle}>
         <StyledPostContentWrapper>
           <p>{postContentToBeShowed}</p>

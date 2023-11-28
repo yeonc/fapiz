@@ -19,16 +19,12 @@ export type PostCommentForSnsPost = {
   id: number
   createdAt: string
   content: string
-  authorId: number
-  authorName: string
-  authorProfileImageUrl: Nullable<string>
+  authorId: Nullable<number>
+  authorName: Nullable<string>
+  authorProfileImageUrl?: string
 }
 
-type PostCommentListProps = {
-  snsPostId: number
-}
-
-const PostCommentList = ({ snsPostId }: PostCommentListProps) => {
+const PostCommentList = ({ snsPostId }: { snsPostId: number }) => {
   const query = createUrlQuery({
     'populate[0]': 'author',
     'populate[1]': 'author.profileImage',
@@ -45,10 +41,10 @@ const PostCommentList = ({ snsPostId }: PostCommentListProps) => {
         id: comment.id,
         createdAt: comment.attributes.createdAt,
         content: comment.attributes.content,
-        authorId: author.id,
-        authorName: author.attributes.username,
+        authorId: author?.id || null,
+        authorName: author?.attributes.username || null,
         authorProfileImageUrl:
-          author.attributes.profileImage.data.attributes.url || null,
+          author?.attributes.profileImage.data?.attributes.url,
       }
     }
   )

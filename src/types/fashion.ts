@@ -1,7 +1,9 @@
+import { Nullable } from './common'
+
 export type FashionItemInfo = {
   id: number
   category: string
-  price: number
+  price: Nullable<number>
   buyingPlace: string
 }
 

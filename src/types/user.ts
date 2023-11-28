@@ -13,8 +13,8 @@ export type User = {
 
 export type UserAdditional = {
   profileImage: Nullable<{ url: string }>
-  followers: User[] | []
-  followings: User[] | []
+  followers: User[]
+  followings: User[]
 }
 
 export type UserWithAttributes = {
@@ -22,7 +22,13 @@ export type UserWithAttributes = {
   attributes: Omit<User, 'id'>
 }
 
-export type UserResponseWithAdditionalFields = User & UserAdditional
+export type UserWithProfileImage = User & Pick<UserAdditional, 'profileImage'>
+
+export type UserResponseWithAdditionalFields = User &
+  Pick<UserAdditional, 'profileImage'> & {
+    followers: UserWithProfileImage[]
+    followings: UserWithProfileImage[]
+  }
 
 export type UserResponseWithProfileImage = User &
   Pick<UserAdditional, 'profileImage'>

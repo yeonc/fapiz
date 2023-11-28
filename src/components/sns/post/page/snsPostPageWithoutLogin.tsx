@@ -18,17 +18,13 @@ const queryForFetchingSnsPost = createUrlQuery({
 const SnsPostPageWithoutLogin = () => {
   const router = useRouter()
   const { snsPostId } = router.query
+  const { snsPost: snsPostFromStrapi, error } =
+    useSnsPost<SnsPostResponseAboutPostDetail>(
+      parseInt(snsPostId as string),
+      queryForFetchingSnsPost
+    )
 
-  const {
-    snsPost: snsPostFromStrapi,
-    isLoading,
-    error,
-  } = useSnsPost<SnsPostResponseAboutPostDetail>(
-    Number(snsPostId),
-    queryForFetchingSnsPost
-  )
-
-  if (isLoading) {
+  if (!snsPostFromStrapi) {
     return null
   }
 
@@ -55,7 +51,7 @@ const SnsPostPageWithoutLogin = () => {
     likeUsers: snsPostFromStrapi.attributes.likeUsers.data,
     bookmarkUsers: snsPostFromStrapi.attributes.bookmarkUsers.data,
     content: snsPostFromStrapi.attributes.content ?? '',
-    fashionItemsInfo: snsPostFromStrapi.attributes.fashionItemsInfo,
+    fashionItemsInfo: snsPostFromStrapi.attributes.fashionItemsInfo ?? [],
   }
 
   return (

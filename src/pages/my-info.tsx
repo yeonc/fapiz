@@ -12,11 +12,17 @@ import createUrlQuery from 'utils/createUrlQuery'
 import { User, UserResponseWithProfileImage } from 'types/user'
 import { mgBottom } from 'styles/layout'
 import { Nullable } from 'types/common'
+import { FashionStyle } from 'types/fashion'
 
 export type UserForMyInfo = Omit<
   User,
-  'profileImage' | 'followers' | 'followings'
-> & { imageUrl: Nullable<string> }
+  'gender' | 'bodyShape' | 'fashionStyles'
+> & {
+  gender: string
+  bodyShape: string
+  fashionStyles: FashionStyle[]
+  imageUrl: Nullable<string>
+}
 
 const TOOLTIP_TEXT =
   '성별, 체형, 패션 스타일 정보 중 두 가지 이상을 입력하면 메인 페이지에서 나와 같은 정보를 가진 유저들이 올린 SNS 게시물만을 볼 수 있어요! 🙂'
@@ -45,10 +51,10 @@ const MyInfoPage = () => {
     id: me.id,
     imageUrl: me.profileImage?.url || null,
     username: me.username,
-    gender: me.gender || null,
-    height: me.height ?? null,
-    weight: me.weight ?? null,
-    bodyShape: me.bodyShape || null,
+    gender: me.gender || '',
+    height: me.height,
+    weight: me.weight,
+    bodyShape: me.bodyShape || '',
     fashionStyles: me.fashionStyles || [],
   }
 

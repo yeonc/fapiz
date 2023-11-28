@@ -7,6 +7,7 @@ import Typo from 'components/common/typo'
 import ROUTE_URL from 'constants/routeUrl'
 import { mgRight } from 'styles/layout'
 import visuallyHidden from 'styles/visuallyHidden'
+import { SnsPostAuthorForPostDetail } from 'types/snsPost'
 
 const StyledPostAuthorHeaderWrapper = styled.header`
   display: flex;
@@ -31,7 +32,7 @@ const authorAvatarStyle = css`
 `
 
 type PostAuthorHeaderProps = {
-  author: any // TODO: 타입 정의하기
+  author: SnsPostAuthorForPostDetail
   popoverMenu: EmotionJSX.Element | null
   className?: string
 }

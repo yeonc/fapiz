@@ -9,7 +9,9 @@ type CreatePostArgs = {
   postImageIds: number[]
 }
 
-type CreatePost = (args: CreatePostArgs) => Promise<AxiosResponse>
+type CreatePost = (
+  args: CreatePostArgs
+) => Promise<AxiosResponse<{ data: { id: number } }>>
 
 const createPost: CreatePost = async ({
   postText,

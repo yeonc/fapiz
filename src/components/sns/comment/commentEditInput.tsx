@@ -62,9 +62,7 @@ const CommentEditInput = ({
     <CommentInput
       placeholder="수정할 댓글 내용을 입력하세요"
       value={commentText}
-      onChange={(e: ChangeEvent<HTMLInputElement>) =>
-        handleCommentTextChange(e.target.value)
-      }
+      onChange={e => handleCommentTextChange(e.target.value)}
       buttons={commentEditButtons}
     />
   )

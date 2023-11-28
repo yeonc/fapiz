@@ -3,7 +3,7 @@ import useMe from 'hooks/useMe'
 import { User } from 'types/user'
 
 const withLogin = <T,>(Component: FunctionComponent<T>) => {
-  return ({ ...props }: T) => {
+  const ComponentWithLogin = ({ ...props }: T) => {
     const { me } = useMe<User>()
     const isLoggedIn = !!me
 
@@ -13,6 +13,7 @@ const withLogin = <T,>(Component: FunctionComponent<T>) => {
 
     return <Component {...props} />
   }
+  return ComponentWithLogin
 }
 
 export default withLogin

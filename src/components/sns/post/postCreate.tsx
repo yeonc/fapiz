@@ -6,9 +6,9 @@ import generateIdIntoObject from 'utils/generateIdIntoObject'
 import { EmotionJSX } from '@emotion/react/types/jsx-namespace'
 import { Obj, WithId } from 'types/common'
 import { FashionItemInfo } from 'types/fashion'
-import { ImageFiles, Image } from 'types/image'
+import { ImageFiles, Image, UploadedImageId } from 'types/image'
 
-const EMPTY_FASHION_ITEM_INFO = { category: '', price: 0, buyingPlace: '' }
+const EMPTY_FASHION_ITEM_INFO = { category: '', price: null, buyingPlace: '' }
 
 const createNewEmptyFashionItemInfo = (): WithId<Obj> => {
   return generateIdIntoObject(EMPTY_FASHION_ITEM_INFO)
@@ -81,31 +81,26 @@ const PostCreate = ({
     setPostText(postText)
   }
 
-  const getUploadedImageIds = async (): Promise<number[]> => {
-    // TODO: map 함수 image 인자 타입 정의
+  const getUploadedImageIds = async (): Promise<UploadedImageId[]> => {
     const res = await uploadImage(imageFiles as FileList)
-    const uploadedImageIds: number[] = res.data.map((image: any) => image.id)
+    const uploadedImageIds = res.data.map(image => image.id)
     return uploadedImageIds
   }
 
   const createSnsPost = async (): Promise<CreatedPostId> => {
     const uploadedImageIds = await getUploadedImageIds()
-
     const res = await createPost({
       postText,
       fashionItemsInfo,
       authorId,
       postImageIds: uploadedImageIds,
     })
-
-    const createdPostId: number = res.data.data.id
+    const createdPostId = res.data.data.id
     return createdPostId
   }
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
-    // TODO: map 함수 image 인자 타입 정의
     try {
       const createdPostId = await createSnsPost()
       afterPostCreated(createdPostId)

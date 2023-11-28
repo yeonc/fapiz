@@ -29,18 +29,12 @@ const queryForFetchingSnsPost = createUrlQuery({
 const MySnsPostPage = () => {
   const router = useRouter()
   const { snsPostId } = router.query
-
   const { me } = useMe<User>()
-
-  const {
-    snsPost: snsPostFromStrapi,
-    isLoading,
-    error,
-  } = useSnsPost<SnsPostResponseAboutPostDetail>(
-    Number(snsPostId),
-    queryForFetchingSnsPost
-  )
-
+  const { snsPost: snsPostFromStrapi, error } =
+    useSnsPost<SnsPostResponseAboutPostDetail>(
+      parseInt(snsPostId as string),
+      queryForFetchingSnsPost
+    )
   const { mutate } = useSWRConfig()
 
   const queryForFetchingSnsComments = createUrlQuery({
@@ -50,7 +44,7 @@ const MySnsPostPage = () => {
     sort: 'createdAt:desc',
   })
 
-  if (isLoading) {
+  if (!snsPostFromStrapi) {
     return null
   }
 
@@ -77,7 +71,7 @@ const MySnsPostPage = () => {
     likeUsers: snsPostFromStrapi.attributes.likeUsers.data,
     bookmarkUsers: snsPostFromStrapi.attributes.bookmarkUsers.data,
     content: snsPostFromStrapi.attributes.content ?? '',
-    fashionItemsInfo: snsPostFromStrapi.attributes.fashionItemsInfo,
+    fashionItemsInfo: snsPostFromStrapi.attributes.fashionItemsInfo ?? [],
   }
 
   const refetchSnsPost = () =>
@@ -97,24 +91,26 @@ const MySnsPostPage = () => {
 
   return (
     <>
-      <PostDescriptionContentsLayout
-        snsPostEditMenu={<PopoverMenu postId={snsPost.id} myId={me?.id} />}
-        likeButton={
-          <LikeButton
-            myId={me?.id}
-            targetId={snsPost.id}
-            likeUsers={snsPost.likeUsers}
-            afterLike={afterLike}
-            isShowLikeUsersNumber={true}
-          />
-        }
-        bookmarkButton={null}
-        postCreatedDate={snsPost.createdAt}
-        postAuthor={snsPost.author}
-        postImages={snsPost.images}
-        postContent={snsPost.content}
-        postFashionItemInfos={snsPost.fashionItemsInfo}
-      />
+      {me && (
+        <PostDescriptionContentsLayout
+          snsPostEditMenu={<PopoverMenu postId={snsPost.id} myId={me.id} />}
+          likeButton={
+            <LikeButton
+              myId={me.id}
+              targetId={snsPost.id}
+              likeUsers={snsPost.likeUsers}
+              afterLike={afterLike}
+              isShowLikeUsersNumber={true}
+            />
+          }
+          bookmarkButton={null}
+          postCreatedDate={snsPost.createdAt}
+          postAuthor={snsPost.author}
+          postImages={snsPost.images}
+          postContent={snsPost.content}
+          postFashionItemInfos={snsPost.fashionItemsInfo}
+        />
+      )}
       <StyledPostCommentWritingArea
         snsPostId={snsPost.id}
         afterPostCommentSubmit={afterPostCommentSubmit}

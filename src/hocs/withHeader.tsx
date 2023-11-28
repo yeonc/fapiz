@@ -1,8 +1,9 @@
+import { FunctionComponent } from 'react'
 import PaddingTopContainer from 'components/layouts/containers/paddingTopContainer'
 import Header from 'components/layouts/header'
 
-const withHeader = (Page: any) => {
-  return () => {
+const withHeader = (Page: FunctionComponent) => {
+  const ComponentWithHeader = () => {
     return (
       <PaddingTopContainer>
         <Header />
@@ -10,6 +11,7 @@ const withHeader = (Page: any) => {
       </PaddingTopContainer>
     )
   }
+  return ComponentWithHeader
 }
 
 export default withHeader

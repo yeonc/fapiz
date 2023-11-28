@@ -10,7 +10,7 @@ import { User, UserResponseWithProfileImage } from 'types/user'
 export type UserForSearching = Pick<
   User,
   'id' | 'username' | 'gender' | 'fashionStyles'
-> & { avatarUrl: Nullable<string> }
+> & { avatarUrl?: string }
 
 const searchUsers = async (
   req: NextApiRequest,
@@ -50,7 +50,7 @@ const sanitizeUsers = (
     username: user.username,
     gender: user.gender,
     fashionStyles: user.fashionStyles ?? [],
-    avatarUrl: user.profileImage?.url || null,
+    avatarUrl: user.profileImage?.url,
   }))
 }
 

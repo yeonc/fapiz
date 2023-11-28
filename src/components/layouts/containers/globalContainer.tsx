@@ -1,3 +1,4 @@
+import { ReactNode } from 'react'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import WarningIcon from '@mui/icons-material/Warning'
@@ -32,7 +33,7 @@ const StyledContainer = styled.div`
     }
   }
 `
-const GlobalContainer = ({ children }) => {
+const GlobalContainer = ({ children }: { children: ReactNode }) => {
   return (
     <StyledContainer>
       <div className="Children">{children}</div>

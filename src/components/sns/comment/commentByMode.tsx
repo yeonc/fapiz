@@ -9,12 +9,13 @@ import useMe from 'hooks/useMe'
 import deleteComment from 'services/snsComment/deleteComment'
 import createUrlQuery from 'utils/createUrlQuery'
 import { User } from 'types/user'
+import { Nullable } from 'types/common'
 
 type CommentByModeProps = {
   commentId: number
   commentText: string
   snsPostId: number
-  commentAuthorId: number
+  commentAuthorId: Nullable<number>
 }
 
 const CommentByMode = ({

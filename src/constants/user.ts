@@ -1,3 +1,5 @@
+import { FashionStyle } from 'types/fashion'
+
 export const USER_GENDERS = [
   { id: 1, name: '남' },
   { id: 2, name: '여' },
@@ -12,7 +14,7 @@ export const USER_BODY_SHAPES = [
   { id: 6, name: '사다리꼴형' },
 ]
 
-export const USER_FASHION_STYLES = [
+export const USER_FASHION_STYLES: FashionStyle[] = [
   { id: 1, name: '캐주얼' },
   { id: 2, name: '스트릿' },
   { id: 3, name: '빈티지' },

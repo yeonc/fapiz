@@ -4,24 +4,22 @@ import uploadImage from 'services/upload/uploadImage'
 import generateIdIntoObject from 'utils/generateIdIntoObject'
 import { changeImageFilesToPreviewImages } from 'utils/previewImage'
 import { EmotionJSX } from '@emotion/react/types/jsx-namespace'
-import { Obj, WithId } from 'types/common'
+import { Nullable, Obj, WithId } from 'types/common'
 import { FashionItemInfo } from 'types/fashion'
-import { Image, ImageFiles } from 'types/image'
+import { Image, ImageFiles, UploadedImageId } from 'types/image'
 import { SnsPostResponseAboutDefaultQuery } from 'types/snsPost'
 
-const EMPTY_FASHION_ITEM_INFO = { category: '', price: 0, buyingPlace: '' }
+const EMPTY_FASHION_ITEM_INFO = { category: '', price: null, buyingPlace: '' }
 
 const createNewEmptyFashionItemInfo = (): WithId<Obj> => {
   return generateIdIntoObject(EMPTY_FASHION_ITEM_INFO)
 }
 const emptyFashionItemInfo = createNewEmptyFashionItemInfo() as FashionItemInfo
 
-type UploadedImageIds = number[]
-
 type ChildrenProps = {
   previewImages: Image[]
   fashionItemsInfo: FashionItemInfo[]
-  postText: string
+  postText: Nullable<string>
   handleImageFilesChange: (imageFiles: FileList) => void
   handleFashionItemsInfoChange: (fashionItemsInfo: FashionItemInfo[]) => void
   handleFashionItemInfoAddMoreButtonClick: () => void
@@ -89,24 +87,18 @@ const PostEdit = ({ snsPost, afterPostEdited, children }: PostEditProps) => {
   }
 
   const getUploadedImageIds = async (): Promise<
-    UploadedImageIds | undefined
+    UploadedImageId[] | undefined
   > => {
     if (!imageFiles) {
       return
     }
-
-    // TODO: map 함수 image 인자 타입 정의
     const res = await uploadImage(imageFiles)
-    const uploadedImageIds: UploadedImageIds = res.data.map(
-      (image: any) => image.id
-    )
-
+    const uploadedImageIds = res.data.map(image => image.id)
     return uploadedImageIds
   }
 
   const editSnsPost = async () => {
     const imageIds = await getUploadedImageIds()
-
     await editPost({
       postId: snsPost.id,
       content: postText,
@@ -117,7 +109,6 @@ const PostEdit = ({ snsPost, afterPostEdited, children }: PostEditProps) => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
     try {
       await editSnsPost()
       afterPostEdited()

@@ -24,19 +24,13 @@ const postImageStyle = css`
 
 const SnsPosts = ({ userId }: { userId: number }) => {
   const router = useRouter()
-
   const query = createUrlQuery({
     populate: '*',
     'filters[author][id][$eq]': userId,
     sort: 'createdAt:desc',
   })
-
   const { snsPosts: snsPostsFromStrapi, isLoading } =
     useSnsPosts<SnsPostResponseAboutShowingAll[]>(query)
-
-  if (isLoading) {
-    return null
-  }
 
   const snsPosts: SnsPostForSnsPostsPage[] = snsPostsFromStrapi
     ? snsPostsFromStrapi.map(post => ({
@@ -49,8 +43,10 @@ const SnsPosts = ({ userId }: { userId: number }) => {
       }))
     : []
 
-  const goToSnsPost = (postId: number) => {
-    router.push(`/sns/post/${postId}`)
+  const goToSnsPost = (postId: number) => router.push(`/sns/post/${postId}`)
+
+  if (isLoading) {
+    return <p>포스트 데이터를 불러오는 중입니다.</p>
   }
 
   if (snsPosts.length === 0) {

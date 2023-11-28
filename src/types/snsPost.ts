@@ -45,7 +45,7 @@ export type SnsPostResponseAboutPostDetail = {
       data: {
         id: number
         attributes: Omit<User, 'id'> & {
-          ProfileImage: {
+          profileImage: {
             data: {
               id: number
               attributes: {
@@ -82,7 +82,19 @@ export type SnsPostResponseAboutSearchResult = {
     createdAt: string
     fashionItemsInfo: Nullable<FashionItemInfo[]>
     author: {
-      data: UserWithAttributes
+      data: {
+        id: number
+        attributes: Omit<User, 'id'> & {
+          profileImage: {
+            data: {
+              id: number
+              attributes: {
+                url: string
+              }
+            }
+          }
+        }
+      }
     }
     comments: {
       data: {
@@ -160,15 +172,20 @@ export type SnsPostResponseAboutFiltering = {
   }
 }
 
+export type SnsPostAuthorForPostDetail = Pick<
+  User,
+  'id' | 'username' | 'height' | 'weight'
+> & {
+  avatarUrl?: string
+}
+
 export type SnsPostForPostDetail = {
   id: number
   createdAt: string
   images: Image[]
-  author: Pick<User, 'id' | 'username' | 'height' | 'weight'> & {
-    avatarUrl: Nullable<string>
-  }
+  author: SnsPostAuthorForPostDetail
   likeUsers: UserWithAttributes[]
   bookmarkUsers: UserWithAttributes[]
-  content: Nullable<string>
-  fashionItemsInfo: Nullable<FashionItemInfo[]>
+  content: string
+  fashionItemsInfo: FashionItemInfo[]
 }

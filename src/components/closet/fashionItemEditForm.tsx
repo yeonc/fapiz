@@ -10,7 +10,7 @@ import uploadImage from 'services/upload/uploadImage'
 import editFashionItem from 'services/fashionItem/editFashionItem'
 import deleteFashionItem from 'services/fashionItem/deleteFashionItem'
 import { changeImageFileToPreviewImage } from 'utils/previewImage'
-import { ImageFiles, Image } from 'types/image'
+import { ImageFiles, Image, UploadedImageId } from 'types/image'
 import { mgBottom, mgRight } from 'styles/layout'
 import { FashionItemForCloset } from 'pages/closet'
 
@@ -31,7 +31,6 @@ const previewImageStyle = css`
   aspect-ratio: 1 / 1;
 `
 
-type UploadedImageId = number | undefined
 type FashionItemEditFormProps = {
   initialFashionItem: FashionItemForCloset
   afterEditFashionItem: () => void
@@ -59,7 +58,7 @@ const FashionItemEditForm = ({
   }
   const handleCategoryChange = (category: string) => setCategory(category)
   const handleColorChange = (color: string) => setColor(color)
-  const getUploadedImageId = async (): Promise<UploadedImageId> => {
+  const getUploadedImageId = async (): Promise<UploadedImageId | undefined> => {
     if (!imageFiles) {
       return
     }

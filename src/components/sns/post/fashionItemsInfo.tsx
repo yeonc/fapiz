@@ -98,9 +98,10 @@ const FashionItemsInfo = ({
     fashionItemInfoId,
     price,
   }: handlePriceChangeArgs) => {
+    const priceValue = !Number.isNaN(price) ? price : null
     const changedFashionItemsInfo = changeFashionItemsInfo({
       fashionItemInfoId,
-      fashionItemInfoToChange: { price },
+      fashionItemInfoToChange: { price: priceValue },
     })
     onFashionItemsInfoChange(changedFashionItemsInfo)
   }
@@ -142,11 +143,11 @@ const FashionItemsInfo = ({
           <TextField
             label="가격"
             type="number"
-            value={fashionItemInfo.price}
+            value={fashionItemInfo.price ?? ''}
             onChange={e =>
               handlePriceChange({
                 fashionItemInfoId: fashionItemInfo.id,
-                price: Number(e.target.value),
+                price: (e.target as HTMLInputElement).valueAsNumber,
               })
             }
           />

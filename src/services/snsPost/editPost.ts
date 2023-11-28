@@ -1,10 +1,11 @@
 import axios, { AxiosResponse } from 'axios'
 import { BACKEND_URL } from 'constants/constants'
+import { Nullable } from 'types/common'
 import { FashionItemInfo } from 'types/fashion'
 
 type EditPostArgs = {
   postId: number
-  content: string
+  content: Nullable<string>
   imageIds?: number[]
   fashionItemsInfo: FashionItemInfo[]
 }
@@ -22,7 +23,7 @@ const editPost: EditPost = async ({
     url: `${BACKEND_URL}/api/sns-posts/${postId}`,
     data: {
       data: {
-        content,
+        content: content === '' ? null : content,
         postImages: imageIds,
         fashionItemsInfo,
       },
