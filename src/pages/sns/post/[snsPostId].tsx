@@ -9,6 +9,7 @@ import useMe from 'hooks/useMe'
 import useSnsPost from 'hooks/useSnsPost'
 import { User } from 'types/user'
 import { SnsPostResponseAboutDefaultQuery } from 'types/snsPost'
+import getSafeNumberFromQuery from 'utils/getSafeNumberFromQuery'
 
 const StyledSnsPostPageWrapper = styled.div`
   padding: 20px 0;
@@ -18,10 +19,12 @@ const StyledSnsPostPageWrapper = styled.div`
 
 const SnsPostPage = () => {
   const router = useRouter()
-  const { snsPostId } = router.query
-
+  const { snsPostId: snsPostIdFromQuery } = router.query
+  const snsPostId = snsPostIdFromQuery
+    ? getSafeNumberFromQuery(snsPostIdFromQuery)
+    : undefined
   const { snsPost } = useSnsPost<SnsPostResponseAboutDefaultQuery>(
-    Number(snsPostId)
+    snsPostId || undefined
   )
   const { me } = useMe<User>()
 

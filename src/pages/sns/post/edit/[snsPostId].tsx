@@ -14,6 +14,7 @@ import ImageUploadCaptionTypo from 'components/common/typo/imageUploadCaptionTyp
 import MaxWidthContainer from 'components/layouts/containers/maxWidthContainer'
 import useSnsPost from 'hooks/useSnsPost'
 import { SnsPostResponseAboutDefaultQuery } from 'types/snsPost'
+import getSafeNumberFromQuery from 'utils/getSafeNumberFromQuery'
 
 const StyledSnsPostEditPageWrapper = styled.div`
   padding: 20px 0;
@@ -49,10 +50,12 @@ const postSubmitButtonStyle = css`
 
 const SnsPostEditPage = () => {
   const router = useRouter()
-  const { snsPostId } = router.query
-
+  const { snsPostId: snsPostIdFromQuery } = router.query
+  const snsPostId = snsPostIdFromQuery
+    ? getSafeNumberFromQuery(snsPostIdFromQuery)
+    : undefined
   const { snsPost } = useSnsPost<SnsPostResponseAboutDefaultQuery>(
-    Number(snsPostId)
+    snsPostId || undefined
   )
 
   const goToEditedPostPage = () => router.push(`/sns/post/${snsPostId}`)

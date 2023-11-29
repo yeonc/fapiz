@@ -25,7 +25,8 @@ const editPost: EditPost = async ({
       data: {
         content: content === '' ? null : content,
         postImages: imageIds,
-        fashionItemsInfo,
+        fashionItemsInfo:
+          fashionItemsInfo.length === 0 ? null : fashionItemsInfo,
       },
     },
   })

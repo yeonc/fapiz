@@ -1,4 +1,5 @@
 import { Nullable } from './common'
+import { ImageResponseWithAltText } from './image'
 
 export type FashionItemInfo = {
   id: number
@@ -32,13 +33,7 @@ export type FashionItemResponse = {
     category: string
     color: string
     image: {
-      data: {
-        id: number
-        attributes: {
-          url: string
-          alternativeText: string
-        }
-      }
+      data: ImageResponseWithAltText
     }
   }
 }

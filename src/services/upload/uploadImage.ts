@@ -1,7 +1,6 @@
 import axios, { AxiosResponse } from 'axios'
 import { BACKEND_URL } from 'constants/constants'
-
-type UploadImageResponse = { id: number }[]
+import { UploadImageResponse } from 'types/image'
 
 const uploadImage = async (
   imageFiles: FileList

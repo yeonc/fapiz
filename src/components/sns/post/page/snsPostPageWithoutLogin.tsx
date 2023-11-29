@@ -7,6 +7,7 @@ import {
   SnsPostForPostDetail,
   SnsPostResponseAboutPostDetail,
 } from 'types/snsPost'
+import getSafeNumberFromQuery from 'utils/getSafeNumberFromQuery'
 
 const queryForFetchingSnsPost = createUrlQuery({
   'populate[0]': 'author.profileImage',
@@ -17,10 +18,13 @@ const queryForFetchingSnsPost = createUrlQuery({
 
 const SnsPostPageWithoutLogin = () => {
   const router = useRouter()
-  const { snsPostId } = router.query
+  const { snsPostId: snsPostIdFromQuery } = router.query
+  const snsPostId = snsPostIdFromQuery
+    ? getSafeNumberFromQuery(snsPostIdFromQuery)
+    : undefined
   const { snsPost: snsPostFromStrapi, error } =
     useSnsPost<SnsPostResponseAboutPostDetail>(
-      parseInt(snsPostId as string),
+      snsPostId || undefined,
       queryForFetchingSnsPost
     )
 

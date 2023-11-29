@@ -14,6 +14,7 @@ import {
   SnsPostResponseAboutPostDetail,
 } from 'types/snsPost'
 import { User } from 'types/user'
+import getSafeNumberFromQuery from 'utils/getSafeNumberFromQuery'
 
 const StyledPostCommentWritingArea = styled(PostCommentWritingArea)`
   margin-bottom: 12px;
@@ -28,14 +29,17 @@ const queryForFetchingSnsPost = createUrlQuery({
 
 const OtherSnsPostPage = () => {
   const router = useRouter()
-  const { snsPostId } = router.query
+  const { snsPostId: snsPostIdFromQuery } = router.query
   const { me } = useMe<User>()
+  const { mutate } = useSWRConfig()
+  const snsPostId = snsPostIdFromQuery
+    ? getSafeNumberFromQuery(snsPostIdFromQuery)
+    : undefined
   const { snsPost: snsPostFromStrapi, error } =
     useSnsPost<SnsPostResponseAboutPostDetail>(
-      parseInt(snsPostId as string),
+      snsPostId || undefined,
       queryForFetchingSnsPost
     )
-  const { mutate } = useSWRConfig()
 
   const queryForFetchingSnsComments = createUrlQuery({
     'populate[0]': 'author',

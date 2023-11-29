@@ -1,9 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import fetchUsers from 'services/user/fetchUsers'
-import createSearchKeywordsArray from 'utils/createSearchKeywordsArray'
 import getSafeStringFromQuery from 'utils/getSafeStringFromQuery'
 import { Nullable } from 'types/common'
-import createUrlQuery from 'utils/createUrlQuery'
 import { User, UserResponseWithProfileImage } from 'types/user'
 
 export type UserForSearching = Pick<
@@ -17,10 +15,7 @@ const searchUsers = async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     // 2. strapi 데이터 받아오기
-    const query = createUrlQuery({
-      'populate[0]': 'profileImage',
-    })
-    const response = await fetchUsers(query)
+    const response = await fetchUsers()
     const usersFromStrapi = response.data
 
     // 3. strapi에서 받아온 데이터 정제하기
@@ -65,6 +60,11 @@ const searchUser: SearchUser = ({ searchKeyword, users }) => {
   const searchKeywordRegex = new RegExp(searchKeywords.join('|'), 'gi')
   const filteredUsers = filterUser({ users, searchKeywordRegex })
   return filteredUsers
+}
+
+const createSearchKeywordsArray = (searchKeyword: string): string[] => {
+  const searchKeywords = searchKeyword.toLowerCase().split(' ').filter(Boolean)
+  return searchKeywords
 }
 
 type FilterUserArgs = {

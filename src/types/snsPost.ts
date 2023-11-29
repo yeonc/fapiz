@@ -1,175 +1,73 @@
 import { Nullable } from 'types/common'
-import { User, UserWithAttributes } from 'types/user'
+import { PostAuthorResponse, User, UserWithAttributes } from 'types/user'
 import { FashionItemInfo } from 'types/fashion'
-import { Image } from 'types/image'
+import {
+  Image,
+  ImageResponseWithAltText,
+  ImageResponseWithoutAltText,
+} from 'types/image'
+import { PostCommentIdResponse } from './postComment'
+
+type SnsPostResponseCommonAttributes = {
+  content: Nullable<string>
+  createdAt: string
+  fashionItemsInfo: Nullable<FashionItemInfo[]>
+  likeUsers: {
+    data: UserWithAttributes[]
+  }
+  postImages: {
+    data: ImageResponseWithAltText[]
+  }
+}
+
+type SnsPostResponseAdditionalAttributes = {
+  author: {
+    data: UserWithAttributes
+  }
+  comments: {
+    data: PostCommentIdResponse[]
+  }
+  bookmarkUsers: {
+    data: UserWithAttributes[]
+  }
+}
 
 export type SnsPostResponseAboutDefaultQuery = {
   id: number
-  attributes: {
-    content: Nullable<string>
-    createdAt: string
-    fashionItemsInfo: Nullable<FashionItemInfo[]>
-    author: {
-      data: UserWithAttributes
-    }
-    comments: {
-      data: {
-        id: number
-      }[]
-    }
-    bookmarkUsers: {
-      data: UserWithAttributes[]
-    }
-    likeUsers: {
-      data: UserWithAttributes[]
-    }
-    postImages: {
-      data: {
-        id: number
-        attributes: {
-          url: string
-          alternativeText: string
-        }
-      }[]
-    }
-  }
+  attributes: SnsPostResponseCommonAttributes &
+    SnsPostResponseAdditionalAttributes
 }
 
 export type SnsPostResponseAboutPostDetail = {
   id: number
-  attributes: {
-    content: Nullable<string>
-    createdAt: string
-    fashionItemsInfo: Nullable<FashionItemInfo[]>
-    author: {
-      data: {
-        id: number
-        attributes: Omit<User, 'id'> & {
-          profileImage: {
-            data: {
-              id: number
-              attributes: {
-                url: string
-                alternativeText: string
-              }
-            }
-          }
-        }
+  attributes: SnsPostResponseCommonAttributes &
+    Pick<SnsPostResponseAdditionalAttributes, 'bookmarkUsers'> & {
+      author: {
+        data: PostAuthorResponse<ImageResponseWithAltText>
       }
     }
-    bookmarkUsers: {
-      data: UserWithAttributes[]
-    }
-    likeUsers: {
-      data: UserWithAttributes[]
-    }
-    postImages: {
-      data: {
-        id: number
-        attributes: {
-          url: string
-          alternativeText: string
-        }
-      }[]
-    }
-  }
 }
 
 export type SnsPostResponseAboutSearchResult = {
   id: number
-  attributes: {
-    content: Nullable<string>
-    createdAt: string
-    fashionItemsInfo: Nullable<FashionItemInfo[]>
-    author: {
-      data: {
-        id: number
-        attributes: Omit<User, 'id'> & {
-          profileImage: {
-            data: {
-              id: number
-              attributes: {
-                url: string
-              }
-            }
-          }
-        }
+  attributes: SnsPostResponseCommonAttributes &
+    Pick<SnsPostResponseAdditionalAttributes, 'comments'> & {
+      author: {
+        data: PostAuthorResponse<ImageResponseWithoutAltText>
       }
     }
-    comments: {
-      data: {
-        id: number
-      }[]
-    }
-    likeUsers: {
-      data: UserWithAttributes[]
-    }
-    postImages: {
-      data: {
-        id: number
-        attributes: {
-          url: string
-          alternativeText: string
-        }
-      }[]
-    }
-  }
 }
 
 export type SnsPostResponseAboutShowingAll = {
   id: number
-  attributes: {
-    content: Nullable<string>
-    createdAt: string
-    fashionItemsInfo: Nullable<FashionItemInfo[]>
-    author: {
-      data: UserWithAttributes
-    }
-    comments: {
-      data: {
-        id: number
-      }[]
-    }
-    bookmarkUsers: {
-      data: UserWithAttributes[]
-    }
-    likeUsers: {
-      data: UserWithAttributes[]
-    }
-    postImages: {
-      data: {
-        id: number
-        attributes: {
-          url: string
-          alternativeText: string
-        }
-      }[]
-    }
-  }
+  attributes: SnsPostResponseCommonAttributes &
+    SnsPostResponseAdditionalAttributes
 }
 
 export type SnsPostResponseAboutFiltering = {
   id: number
-  attributes: {
-    content: Nullable<string>
-    createdAt: string
-    fashionItemsInfo: Nullable<FashionItemInfo[]>
-    postImages: {
-      data: {
-        id: number
-        attributes: {
-          url: string
-          alternativeText: string
-        }
-      }[]
-    }
-    likeUsers: {
-      data: UserWithAttributes[]
-    }
-    author: {
-      data: UserWithAttributes
-    }
-  }
+  attributes: SnsPostResponseCommonAttributes &
+    Pick<SnsPostResponseAdditionalAttributes, 'author'>
 }
 
 export type SnsPostAuthorForPostDetail = Pick<

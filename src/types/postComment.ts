@@ -1,3 +1,5 @@
+import { ImageResponseWithoutAltText } from './image'
+
 export type PostCommentResponse = {
   id: number
   attributes: {
@@ -9,15 +11,14 @@ export type PostCommentResponse = {
         attributes: {
           username: string
           profileImage: {
-            data: {
-              id: number
-              attributes: {
-                url: string
-              }
-            }
+            data: ImageResponseWithoutAltText
           }
         }
       }
     }
   }
+}
+
+export type PostCommentIdResponse = {
+  id: number
 }

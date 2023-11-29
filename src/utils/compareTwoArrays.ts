@@ -1,4 +1,3 @@
-import getIdsFromArrayOfObjects from 'utils/getIdsFromArrayOfObjects'
 import { Obj, WithId } from 'types/common'
 
 type CompareTwoArraysArgs = {
@@ -13,8 +12,8 @@ const compareTwoArrays: CompareTwoArrays = ({ firstArray, secondArray }) => {
     return false
   }
 
-  const firstArrayIds = getIdsFromArrayOfObjects(firstArray).sort()
-  const secondArrayIds = getIdsFromArrayOfObjects(secondArray).sort()
+  const firstArrayIds = firstArray.map(item => item.id).sort()
+  const secondArrayIds = secondArray.map(item => item.id).sort()
 
   for (let i = 0; i < firstArrayIds.length; i++) {
     if (firstArrayIds[i] !== secondArrayIds[i]) {

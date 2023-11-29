@@ -11,7 +11,6 @@ import useMe from 'hooks/useMe'
 import createUrlQuery from 'utils/createUrlQuery'
 import { User, UserResponseWithProfileImage } from 'types/user'
 import { mgBottom } from 'styles/layout'
-import { Nullable } from 'types/common'
 import { FashionStyle } from 'types/fashion'
 
 export type UserForMyInfo = Omit<

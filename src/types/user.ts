@@ -30,8 +30,16 @@ export type UserResponseWithAdditionalFields = User &
     followings: UserWithProfileImage[]
   }
 
-export type UserResponseWithProfileImage = User &
-  Pick<UserAdditional, 'profileImage'>
+export type UserResponseWithProfileImage = UserWithProfileImage
 
 export type UserResponseWithFollowings = User &
   Pick<UserAdditional, 'followings'>
+
+export type PostAuthorResponse<T> = {
+  id: number
+  attributes: Omit<User, 'id'> & {
+    profileImage: {
+      data: T
+    }
+  }
+}

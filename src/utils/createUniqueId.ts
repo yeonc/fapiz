@@ -1,4 +1,4 @@
-type Id = number
+import { Id } from 'types/common'
 
 const createUniqueId = (): Id => {
   return Math.random() + new Date().getTime()
