@@ -1,4 +1,4 @@
-import { useState, useEffect, RefObject } from 'react'
+import { useState, useEffect, RefObject, useCallback } from 'react'
 import useInfiniteScroll from 'hooks/useInfiniteScroll'
 import fetchFilteredSnsPosts from 'services/snsPost/fetchFilteredSnsPosts'
 import { Nullable } from 'types/common'
@@ -37,7 +37,10 @@ const useSnsPostInfiniteScroll: UseSnsPostInfiniteScroll = ({
   const [pageNumber, setPageNumber] = useState(initialPageNumber)
   const [pageNumberAlreadyFetched, setPageNumberAlreadyFetched] = useState(0)
 
-  const increasePageNumber = () => setPageNumber(prev => prev + 1)
+  const increasePageNumber = useCallback(
+    () => setPageNumber(prev => prev + 1),
+    []
+  )
   const fetchTriggerRef = useInfiniteScroll(increasePageNumber)
 
   useEffect(() => {
@@ -62,7 +65,16 @@ const useSnsPostInfiniteScroll: UseSnsPostInfiniteScroll = ({
       .then(response => setSnsPosts(prev => [...prev, ...response.data]))
       .catch(console.error)
       .finally(() => setIsSnsPostsLoading(false))
-  }, [pageNumber, isSnsPostsLoading, pageNumberAlreadyFetched])
+  }, [
+    pageNumber,
+    isSnsPostsLoading,
+    pageNumberAlreadyFetched,
+    pageSize,
+    isLoggedIn,
+    myGender,
+    myBodyShape,
+    myFashionStyles,
+  ])
 
   return {
     snsPosts,

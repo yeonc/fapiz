@@ -6,15 +6,15 @@ import { LoginSuccessResponse, AccessToken } from 'types/auth'
 
 const GoogleLoginRedirectPage = () => {
   const router = useRouter()
-  const goToHomePage = () => router.push(ROUTE_URL.HOME)
 
   useEffect(() => {
     const queryString = location.search
     const accessToken = getAccessTokenFromQueryString(queryString)
+    const goToHomePage = () => router.push(ROUTE_URL.HOME)
     login(accessToken) //
       .then(goToHomePage)
       .catch(console.error)
-  }, [])
+  }, [router])
 
   return null
 }
