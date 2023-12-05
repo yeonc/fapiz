@@ -7,7 +7,9 @@ import Avatar from '@mui/material/Avatar'
 import Link from '@mui/material/Link'
 import FollowToggleButton from 'components/common/buttons/followToggleButton'
 import { Nullable } from 'types/common'
-import { UserResponseWithFollowings, UserWithProfileImage } from 'types/user'
+import { UserWithProfileImageAndFollowers } from 'types/user'
+import { useAuth } from 'context/AuthContext'
+import getIdsFromArrayOfObject from 'utils/getIdsFromArrayOfObject'
 
 const StyledNoExistUser = styled.p`
   text-align: center;
@@ -15,12 +17,13 @@ const StyledNoExistUser = styled.p`
 `
 
 type UserListProps = {
-  users: UserWithProfileImage[]
-  me: UserResponseWithFollowings
+  users: UserWithProfileImageAndFollowers[]
   afterFollow: () => void
 }
 
-const UserList = ({ users, me, afterFollow }: UserListProps) => {
+const UserList = ({ users, afterFollow }: UserListProps) => {
+  const { me } = useAuth()
+
   if (users.length === 0) {
     return (
       <StyledNoExistUser>해당하는 유저가 존재하지 않습니다.</StyledNoExistUser>
@@ -33,12 +36,14 @@ const UserList = ({ users, me, afterFollow }: UserListProps) => {
         <ListItem
           key={user.id}
           secondaryAction={
-            <FollowToggleButton
-              myId={me.id}
-              myFollowings={me.followings}
-              targetUserId={user.id}
-              afterFollow={afterFollow}
-            />
+            me && (
+              <FollowToggleButton
+                myId={me.id}
+                targetUserId={user.id}
+                targetUserFollowerIds={getIdsFromArrayOfObject(user.followers)}
+                afterFollow={afterFollow}
+              />
+            )
           }
         >
           <ListItemAvatar>

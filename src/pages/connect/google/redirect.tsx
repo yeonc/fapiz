@@ -1,11 +1,12 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import googleLogin from 'services/auth/googleLogin'
 import ROUTE_URL from 'constants/routeUrl'
-import { LoginSuccessResponse, AccessToken } from 'types/auth'
+import { AccessToken } from 'types/auth'
+import { useAuth } from 'context/AuthContext'
 
 const GoogleLoginRedirectPage = () => {
   const router = useRouter()
+  const { login } = useAuth()
 
   useEffect(() => {
     const queryString = location.search
@@ -14,7 +15,7 @@ const GoogleLoginRedirectPage = () => {
     login(accessToken) //
       .then(goToHomePage)
       .catch(console.error)
-  }, [router])
+  }, [router, login])
 
   return null
 }
@@ -26,14 +27,4 @@ const getAccessTokenFromQueryString = (queryString: string): AccessToken => {
   const urlQueryParams = new URLSearchParams(queryString)
   const accessToken = urlQueryParams.get(ACCESS_TOKEN_KEY)
   return accessToken
-}
-
-const login = async (accessToken: AccessToken) => {
-  const res = await googleLogin(accessToken)
-  setUserDataToLocalStorage(res.data)
-}
-
-const setUserDataToLocalStorage = (data: LoginSuccessResponse) => {
-  localStorage.setItem('jwt', data.jwt)
-  localStorage.setItem('username', data.user.username)
 }

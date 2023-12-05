@@ -5,11 +5,10 @@ import SnsPostPageWithoutLogin from 'components/sns/post/page/snsPostPageWithout
 import OtherSnsPostPage from 'components/sns/post/page/otherSnsPostPage'
 import MySnsPostPage from 'components/sns/post/page/mySnsPostPage'
 import MaxWidthContainer from 'components/layouts/containers/maxWidthContainer'
-import useMe from 'hooks/useMe'
 import useSnsPost from 'hooks/useSnsPost'
-import { User } from 'types/user'
 import { SnsPostResponseAboutDefaultQuery } from 'types/snsPost'
 import getSafeNumberFromQuery from 'utils/getSafeNumberFromQuery'
+import { useAuth } from 'context/AuthContext'
 
 const StyledSnsPostPageWrapper = styled.div`
   padding: 20px 0;
@@ -26,7 +25,7 @@ const SnsPostPage = () => {
   const { snsPost } = useSnsPost<SnsPostResponseAboutDefaultQuery>(
     snsPostId || undefined
   )
-  const { me } = useMe<User>()
+  const { me } = useAuth()
 
   const isLoggedIn = !!me
   const snsPostAuthorId = snsPost?.attributes.author.data.id

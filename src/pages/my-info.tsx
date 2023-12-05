@@ -7,11 +7,13 @@ import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates'
 import MyInfoEditForm from 'components/myInfo/myInfoEditForm'
 import Typo from 'components/common/typo'
 import MaxWidthContainer from 'components/layouts/containers/maxWidthContainer'
-import useMe from 'hooks/useMe'
 import createUrlQuery from 'utils/createUrlQuery'
 import { User, UserResponseWithProfileImage } from 'types/user'
 import { mgBottom } from 'styles/layout'
 import { FashionStyle } from 'types/fashion'
+import { useAuth } from 'context/AuthContext'
+import useUser from 'hooks/useUser'
+import { useSWRConfig } from 'swr'
 
 export type UserForMyInfo = Omit<
   User,
@@ -35,27 +37,26 @@ const StyledButton = styled(Button)`
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 `
 
-const queryForUseMe = createUrlQuery({
+const query = createUrlQuery({
   'populate[0]': 'profileImage',
 })
 
 const MyInfoPage = () => {
-  const { me } = useMe<UserResponseWithProfileImage>(queryForUseMe)
+  const { me } = useAuth()
+  const { user: userFromStrapi } = useUser<UserResponseWithProfileImage>(
+    me?.id,
+    query
+  )
+  const { mutate } = useSWRConfig()
 
-  if (!me) {
+  if (!userFromStrapi) {
     return null
   }
 
-  const myInfo: UserForMyInfo = {
-    id: me.id,
-    imageUrl: me.profileImage?.url,
-    username: me.username,
-    gender: me.gender || '',
-    height: me.height,
-    weight: me.weight,
-    bodyShape: me.bodyShape || '',
-    fashionStyles: me.fashionStyles || [],
-  }
+  const refetch = () => mutate({ url: `/api/users/${me?.id}?${query}` })
+  const afterMyInfoEdited = () => refetch()
+
+  const myInfo = sanitizeUser(userFromStrapi)
 
   return (
     <MaxWidthContainer>
@@ -68,10 +69,21 @@ const MyInfoPage = () => {
             Tip (마우스를 올려서 확인해 보세요)
           </StyledButton>
         </Tooltip>
-        <MyInfoEditForm myInfo={myInfo} />
+        <MyInfoEditForm myInfo={myInfo} afterMyInfoEdited={afterMyInfoEdited} />
       </StyledMyInfoPageWrapper>
     </MaxWidthContainer>
   )
 }
 
 export default withHeader(withLoginPageRedirect(MyInfoPage))
+
+const sanitizeUser = (user: UserResponseWithProfileImage): UserForMyInfo => ({
+  id: user.id,
+  imageUrl: user.profileImage?.url,
+  username: user.username,
+  gender: user.gender || '',
+  height: user.height,
+  weight: user.weight,
+  bodyShape: user.bodyShape || '',
+  fashionStyles: user.fashionStyles || [],
+})

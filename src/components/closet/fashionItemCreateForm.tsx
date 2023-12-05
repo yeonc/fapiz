@@ -7,11 +7,10 @@ import ImageUploadButton from 'components/common/buttons/imageUploadButton'
 import ImageUploadCaptionTypo from 'components/common/typo/imageUploadCaptionTypo'
 import uploadImage from 'services/upload/uploadImage'
 import createFashionItem from 'services/fashionItem/createFashionItem'
-import useMe from 'hooks/useMe'
 import { changeImageFileToPreviewImage } from 'utils/previewImage'
 import { ImageFiles, Image, UploadedImageId } from 'types/image'
 import { mgBottom } from 'styles/layout'
-import { User } from 'types/user'
+import { useAuth } from 'context/AuthContext'
 
 const StyledFashionItemCreateForm = styled.form`
   text-align: center;
@@ -40,7 +39,7 @@ const FashionItemCreateForm = ({
 }: {
   afterCreateFashionItem: () => void
 }) => {
-  const { me } = useMe<User>()
+  const { me } = useAuth()
   const [imageFiles, setImageFiles] = useState<ImageFiles>(null)
   const [previewImage, setPreviewImage] = useState<Image>(DEFAULT_PREVIEW_IMAGE)
   const [category, setCategory] = useState('')

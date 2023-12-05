@@ -1,10 +1,10 @@
 import { FunctionComponent } from 'react'
-import useMe from 'hooks/useMe'
-import { User } from 'types/user'
+import { useAuth } from 'context/AuthContext'
 
 const withLogin = <P extends {}>(Component: FunctionComponent<P>) => {
   const ComponentWithLogin = (props: P) => {
-    const { me } = useMe<User>()
+    const { me } = useAuth()
+
     const isLoggedIn = !!me
 
     if (!isLoggedIn) {

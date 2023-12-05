@@ -2,10 +2,9 @@ import { useSWRConfig } from 'swr'
 import styled from '@emotion/styled'
 import Modal from 'components/common/modals/modal'
 import FashionItemEditForm from 'components/closet/fashionItemEditForm'
-import useMe from 'hooks/useMe'
 import createUrlQuery from 'utils/createUrlQuery'
-import { User } from 'types/user'
 import { FashionItemForCloset } from 'pages/closet'
+import { useAuth } from 'context/AuthContext'
 
 const StyledModal = styled(Modal)`
   border-radius: 10px;
@@ -22,7 +21,7 @@ const FashionItemEditingModal = ({
   isFashionItemEditModalOpen,
   initialFashionItem,
 }: FashionItemEditingModalProps) => {
-  const { me } = useMe<User>()
+  const { me } = useAuth()
   const query = createUrlQuery({
     'populate[0]': 'image',
     'populate[1]': 'owner',

@@ -4,16 +4,20 @@ import { BACKEND_URL } from 'constants/constants'
 type FollowArgs = {
   myId: number
   targetUserId: number
-  myFollowingUserIds: number[]
+  targetUserFollowerIds: number[]
 }
 type Follow = (args: FollowArgs) => Promise<AxiosResponse>
 
-const follow: Follow = async ({ myId, targetUserId, myFollowingUserIds }) => {
+const follow: Follow = async ({
+  myId,
+  targetUserId,
+  targetUserFollowerIds,
+}) => {
   return axios({
     method: 'put',
-    url: `${BACKEND_URL}/api/users/${myId}`,
+    url: `${BACKEND_URL}/api/users/${targetUserId}`,
     data: {
-      followings: [...myFollowingUserIds, targetUserId],
+      followers: [...targetUserFollowerIds, myId],
     },
   })
 }

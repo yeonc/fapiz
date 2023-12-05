@@ -22,12 +22,18 @@ export type UserWithAttributes = {
   attributes: Omit<User, 'id'>
 }
 
+export type UserResponse = User &
+  Pick<UserAdditional, 'profileImage' | 'followings'>
+
 export type UserWithProfileImage = User & Pick<UserAdditional, 'profileImage'>
+
+export type UserWithProfileImageAndFollowers = User &
+  Pick<UserAdditional, 'profileImage' | 'followers'>
 
 export type UserResponseWithAdditionalFields = User &
   Pick<UserAdditional, 'profileImage'> & {
-    followers: UserWithProfileImage[]
-    followings: UserWithProfileImage[]
+    followers: UserWithProfileImageAndFollowers[]
+    followings: UserWithProfileImageAndFollowers[]
   }
 
 export type UserResponseWithProfileImage = UserWithProfileImage

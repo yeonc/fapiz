@@ -6,17 +6,13 @@ import Typo from 'components/common/typo'
 import FollowToggleButton from 'components/common/buttons/followToggleButton'
 import Follower from 'components/sns/user/follower'
 import Following from 'components/sns/user/following'
-import useMe from 'hooks/useMe'
 import useUser from 'hooks/useUser'
-import getToken from 'utils/getToken'
 import createUrlQuery from 'utils/createUrlQuery'
-import { BACKEND_URL } from 'constants/constants'
 import { mgRight, mgBottom } from 'styles/layout'
 import visuallyHidden from 'styles/visuallyHidden'
-import {
-  UserResponseWithAdditionalFields,
-  UserResponseWithFollowings,
-} from 'types/user'
+import { UserResponseWithAdditionalFields } from 'types/user'
+import { useAuth } from 'context/AuthContext'
+import getIdsFromArrayOfObject from 'utils/getIdsFromArrayOfObject'
 
 const StyledBodyInfoWrapper = styled.dl`
   display: flex;
@@ -29,14 +25,12 @@ const avatarStyle = css`
   margin: 0 auto 10px;
 `
 
-const queryForUseMe = createUrlQuery({
-  'populate[0]': 'followings',
-})
-
 const queryForUseUser = createUrlQuery({
   'populate[0]': 'profileImage',
   'populate[1]': 'followers.profileImage',
   'populate[2]': 'followings.profileImage',
+  'populate[3]': 'followers.followers',
+  'populate[4]': 'followings.followers',
 })
 
 export type UserForSnsUserInfo = Omit<
@@ -51,37 +45,22 @@ type UserInfoProps = {
 
 const UserInfo = ({ userId, className }: UserInfoProps) => {
   const { mutate } = useSWRConfig()
-  const { me } = useMe<UserResponseWithFollowings>(queryForUseMe)
-  const { user: userFromStrapi } = useUser(userId, queryForUseUser)
+  const { me } = useAuth()
+  const { user: userFromStrapi } = useUser<UserResponseWithAdditionalFields>(
+    userId,
+    queryForUseUser
+  )
 
   if (!userFromStrapi) {
     return null
   }
 
-  const user: UserForSnsUserInfo = {
-    id: userFromStrapi.id,
-    username: userFromStrapi.username,
-    height: userFromStrapi.height,
-    weight: userFromStrapi.weight,
-    profileImageUrl: userFromStrapi.profileImage?.url,
-    followers: userFromStrapi.followers,
-    followings: userFromStrapi.followings,
-  }
+  const user = sanitizeUser(userFromStrapi)
 
   const isMySnsPage = user.id === me?.id
   const isLoggedIn = !!me
 
   const refetch = () => {
-    const token = getToken()
-    if (!token) return null
-    mutate({
-      url: `${BACKEND_URL}/api/users/me?${queryForUseMe}`,
-      config: {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    })
     mutate(user.id ? { url: `/api/users/${user.id}?${queryForUseUser}` } : null)
   }
 
@@ -117,8 +96,8 @@ const UserInfo = ({ userId, className }: UserInfoProps) => {
         <div>
           <FollowToggleButton
             myId={me.id}
-            myFollowings={me.followings}
             targetUserId={user.id}
+            targetUserFollowerIds={getIdsFromArrayOfObject(user.followers)}
             afterFollow={afterFollow}
           />
         </div>
@@ -128,3 +107,15 @@ const UserInfo = ({ userId, className }: UserInfoProps) => {
 }
 
 export default UserInfo
+
+const sanitizeUser = (
+  user: UserResponseWithAdditionalFields
+): UserForSnsUserInfo => ({
+  id: user.id,
+  username: user.username,
+  height: user.height,
+  weight: user.weight,
+  profileImageUrl: user.profileImage?.url,
+  followers: user.followers,
+  followings: user.followings,
+})

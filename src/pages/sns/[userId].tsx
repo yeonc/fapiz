@@ -7,10 +7,9 @@ import CreateIcon from '@mui/icons-material/Create'
 import UserInfo from 'components/sns/user/userInfo'
 import SnsPosts from 'components/sns/post/snsPosts'
 import MaxWidthContainer from 'components/layouts/containers/maxWidthContainer'
-import useMe from 'hooks/useMe'
 import getSafeNumberFromQuery from 'utils/getSafeNumberFromQuery'
 import { LIGHT_GRAY } from 'styles/constants/color'
-import { User } from 'types/user'
+import { useAuth } from 'context/AuthContext'
 
 const StyledSnsPageWrapper = styled.div`
   padding: 30px 0;
@@ -36,7 +35,7 @@ const SnsPage = () => {
     ? getSafeNumberFromQuery(userIdFromQuery)
     : undefined
 
-  const { me } = useMe<User>()
+  const { me } = useAuth()
 
   const handleSnsPostCreateButtonClick = () => {
     router.push(`/sns/post/posting`)

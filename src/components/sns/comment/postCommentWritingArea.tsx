@@ -4,8 +4,9 @@ import styled from '@emotion/styled'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import Avatar from '@mui/material/Avatar'
-import useMe from 'hooks/useMe'
 import createComment from 'services/snsComment/createComment'
+import { useAuth } from 'context/AuthContext'
+import useUser from 'hooks/useUser'
 import createUrlQuery from 'utils/createUrlQuery'
 import { UserResponseWithProfileImage } from 'types/user'
 
@@ -32,13 +33,15 @@ const StyledTextField = styled(TextField)`
   margin-right: 6px;
 `
 
-const queryForUseMe = createUrlQuery({ 'populate[0]': 'profileImage' })
-
 type PostCommentWritingAreaProps = {
   snsPostId: number
   afterPostCommentSubmit: () => void
   className?: string
 }
+
+const query = createUrlQuery({
+  'populate[0]': 'profileImage',
+})
 
 const PostCommentWritingArea = ({
   snsPostId,
@@ -46,13 +49,10 @@ const PostCommentWritingArea = ({
   className,
 }: PostCommentWritingAreaProps) => {
   const [comment, setComment] = useState('')
-  const { me, isLoading } = useMe<UserResponseWithProfileImage>(queryForUseMe)
+  const { me } = useAuth()
+  const { user } = useUser<UserResponseWithProfileImage>(me?.id, query)
 
-  if (isLoading) {
-    return <p>로딩중</p>
-  }
-
-  if (!me) {
+  if (!user) {
     return null
   }
 
@@ -60,7 +60,7 @@ const PostCommentWritingArea = ({
   const handleCommentSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
-      await createComment({ comment, postId: snsPostId, authorId: me.id })
+      await createComment({ comment, postId: snsPostId, authorId: user.id })
       setComment('')
       afterPostCommentSubmit()
     } catch (error) {
@@ -70,7 +70,11 @@ const PostCommentWritingArea = ({
 
   return (
     <StyledPostCommentWritingAreaWrapper className={className}>
-      <Avatar alt={me.username} src={me.profileImage?.url} css={avatarStyle} />
+      <Avatar
+        alt={user.username}
+        src={user.profileImage?.url}
+        css={avatarStyle}
+      />
       <StyledPostCommentForm onSubmit={handleCommentSubmit}>
         <StyledTextField
           label="댓글을 입력하세요"

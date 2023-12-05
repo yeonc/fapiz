@@ -10,13 +10,12 @@ import SelectsForFilteringFashionItems from 'components/closet/selectsForFilteri
 import IntroducingBanner from 'components/closet/introducingBanner'
 import MaxWidthContainer from 'components/layouts/containers/maxWidthContainer'
 import FashionItemCreatingModal from 'components/closet/fashionItemCreatingModal'
-import useMe from 'hooks/useMe'
 import useModalState from 'hooks/useModalState'
 import useFashionItems from 'hooks/useFashionItems'
 import createUrlQuery from 'utils/createUrlQuery'
 import removeDuplicatedValueFromArray from 'utils/removeDuplicatedValueFromArray'
 import { Image } from 'types/image'
-import { User } from 'types/user'
+import { useAuth } from 'context/AuthContext'
 
 export type FashionItemForCloset = {
   id: number
@@ -55,7 +54,7 @@ const ClosetPage = () => {
     setColor(color)
   }
 
-  const { me } = useMe<User>()
+  const { me } = useAuth()
 
   const query = me
     ? createUrlQuery({

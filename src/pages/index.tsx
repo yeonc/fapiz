@@ -6,10 +6,9 @@ import ImageList from '@mui/material/ImageList'
 import LikeButtonForMainPage from 'components/home/likeButtonForMainPage'
 import ImageCardItem from 'components/home/imageCardItem'
 import MaxWidthContainer from 'components/layouts/containers/maxWidthContainer'
-import useMe from 'hooks/useMe'
 import useSnsPostInfiniteScroll from 'hooks/useSnsPostInfiniteScroll'
 import { DEFAULT_WHITE } from 'styles/constants/color'
-import { User } from 'types/user'
+import { useAuth } from 'context/AuthContext'
 
 const INITIAL_PAGE_NUMBER = 1
 const PAGE_SIZE = 20
@@ -26,7 +25,8 @@ const fetchTriggerStyle = css`
 const SnsPostLikeButtonWithLogin = withLogin(LikeButtonForMainPage)
 
 const MainPage = () => {
-  const { me } = useMe<User>()
+  const { me } = useAuth()
+
   const { snsPosts, fetchTriggerRef } = useSnsPostInfiniteScroll({
     initialPageNumber: INITIAL_PAGE_NUMBER,
     pageSize: PAGE_SIZE,

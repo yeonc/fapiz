@@ -6,15 +6,14 @@ import PostCommentWritingArea from 'components/sns/comment/postCommentWritingAre
 import PostCommentList from 'components/sns/comment/postCommentList'
 import BookmarkButton from 'components/common/buttons/bookmarkButton'
 import LikeButton from 'components/common/buttons/likeButton'
-import useMe from 'hooks/useMe'
 import useSnsPost from 'hooks/useSnsPost'
 import createUrlQuery from 'utils/createUrlQuery'
 import {
   SnsPostForPostDetail,
   SnsPostResponseAboutPostDetail,
 } from 'types/snsPost'
-import { User } from 'types/user'
 import getSafeNumberFromQuery from 'utils/getSafeNumberFromQuery'
+import { useAuth } from 'context/AuthContext'
 
 const StyledPostCommentWritingArea = styled(PostCommentWritingArea)`
   margin-bottom: 12px;
@@ -30,7 +29,7 @@ const queryForFetchingSnsPost = createUrlQuery({
 const OtherSnsPostPage = () => {
   const router = useRouter()
   const { snsPostId: snsPostIdFromQuery } = router.query
-  const { me } = useMe<User>()
+  const { me } = useAuth()
   const { mutate } = useSWRConfig()
   const snsPostId = snsPostIdFromQuery
     ? getSafeNumberFromQuery(snsPostIdFromQuery)

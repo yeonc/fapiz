@@ -1,11 +1,10 @@
 import { FunctionComponent } from 'react'
 import LoginPageRedirect from 'components/common/redirect/loginPageRedirect'
-import useMe from 'hooks/useMe'
-import { User } from 'types/user'
+import { useAuth } from 'context/AuthContext'
 
 const withLoginPageRedirect = (Page: FunctionComponent) => {
   const ComponentWithLoginPageRedirect = () => {
-    const { me, isLoading } = useMe<User>()
+    const { me, isLoading } = useAuth()
 
     if (isLoading) {
       return null

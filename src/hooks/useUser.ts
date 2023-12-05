@@ -1,8 +1,7 @@
 import useSWR from 'swr'
-import { UserResponseWithAdditionalFields } from 'types/user'
 
-const useUser = (userId?: number, query?: string) => {
-  const { data, error } = useSWR<UserResponseWithAdditionalFields, Error>(
+const useUser = <T>(userId?: number, query?: string) => {
+  const { data, error } = useSWR<T, Error>(
     userId
       ? {
           url: `/api/users/${userId}${query ? `?${query}` : ''}`,

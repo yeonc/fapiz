@@ -4,11 +4,9 @@ import Button from '@mui/material/Button'
 import useModalState from 'hooks/useModalState'
 import Modal from 'components/common/modals/modal'
 import UserList from 'components/sns/user/userList'
-import useMe from 'hooks/useMe'
-import createUrlQuery from 'utils/createUrlQuery'
 import { DEFAULT_BLACK } from 'styles/constants/color'
 import { horizontal, mgRight } from 'styles/layout'
-import { UserResponseWithFollowings, UserWithProfileImage } from 'types/user'
+import { UserWithProfileImageAndFollowers } from 'types/user'
 
 const followingStyle = css`
   color: ${DEFAULT_BLACK};
@@ -18,17 +16,12 @@ const StyledModal = styled(Modal)`
   border-radius: 10px;
 `
 
-const queryForUseMe = createUrlQuery({
-  'populate[0]': 'followings',
-})
-
 type FollowingProps = {
-  followings: UserWithProfileImage[]
+  followings: UserWithProfileImageAndFollowers[]
   afterFollow: () => void
 }
 
 const Following = ({ followings, afterFollow }: FollowingProps) => {
-  const { me } = useMe<UserResponseWithFollowings>(queryForUseMe)
   const {
     isOpen: isFollowingModalOpen,
     handleOpen: handleFollowingModalOpen,
@@ -49,11 +42,7 @@ const Following = ({ followings, afterFollow }: FollowingProps) => {
       </Button>
       <StyledModal
         title="팔로잉"
-        contents={
-          me && (
-            <UserList users={followings} me={me} afterFollow={afterFollow} />
-          )
-        }
+        contents={<UserList users={followings} afterFollow={afterFollow} />}
         open={isFollowingModalOpen}
         onClose={handleFollowingModalClose}
       />

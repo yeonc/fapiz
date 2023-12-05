@@ -1,10 +1,10 @@
 import axios, { AxiosResponse } from 'axios'
 import { BACKEND_URL } from 'constants/constants'
-import { AccessToken, LoginSuccessResponse } from 'types/auth'
+import { AccessToken, LoginSuccessResponseFromStrapi } from 'types/auth'
 
-const googleLogin = async (
+const loginWithGoogle = async (
   accessToken: AccessToken
-): Promise<AxiosResponse<LoginSuccessResponse>> => {
+): Promise<AxiosResponse<LoginSuccessResponseFromStrapi>> => {
   return axios({
     method: 'get',
     url: `${BACKEND_URL}/api/auth/google/callback`,
@@ -12,4 +12,4 @@ const googleLogin = async (
   })
 }
 
-export default googleLogin
+export default loginWithGoogle

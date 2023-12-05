@@ -4,20 +4,20 @@ import { BACKEND_URL } from 'constants/constants'
 type unfollowArgs = {
   myId: number
   targetUserId: number
-  myFollowingUserIds: number[]
+  targetUserFollowerIds: number[]
 }
 type Unfollow = (args: unfollowArgs) => Promise<AxiosResponse>
 
 const unfollow: Unfollow = async ({
   myId,
   targetUserId,
-  myFollowingUserIds,
+  targetUserFollowerIds,
 }) => {
   return axios({
     method: 'put',
-    url: `${BACKEND_URL}/api/users/${myId}`,
+    url: `${BACKEND_URL}/api/users/${targetUserId}`,
     data: {
-      followings: myFollowingUserIds.filter(id => id !== targetUserId),
+      followers: targetUserFollowerIds.filter(id => id !== myId),
     },
   })
 }

@@ -71,9 +71,19 @@ const inputWidth = css`
   width: 35%;
 `
 
+const errorMessageStyle = css`
+  margin-bottom: 18px;
+  text-align: center;
+`
+
 type FashionStyleId = FashionStyle['id']
 
-const MyInfoEditForm = ({ myInfo }: { myInfo: UserForMyInfo }) => {
+type MyInfoEditFormProps = {
+  myInfo: UserForMyInfo
+  afterMyInfoEdited: () => void
+}
+
+const MyInfoEditForm = ({ myInfo, afterMyInfoEdited }: MyInfoEditFormProps) => {
   const [avatarImageFiles, setAvatarImageFiles] = useState<ImageFiles>(null)
   const [previewAvatar, setPreviewAvatar] = useState<Nullable<Image>>(null)
   const [username, setUsername] = useState(myInfo.username)
@@ -84,6 +94,7 @@ const MyInfoEditForm = ({ myInfo }: { myInfo: UserForMyInfo }) => {
   const [fashionStyles, setFashionStyles] = useState(myInfo.fashionStyles)
   const [isMyInfoEditLoading, setIsMyInfoEditLoading] = useState(false)
   const [isEditButtonActivated, setIsEditButtonActivated] = useState(false)
+  const [error, setError] = useState<Nullable<string>>(null)
 
   const avatarImageSrc = previewAvatar ? previewAvatar.url : myInfo.imageUrl
   const avatarImageAlt = previewAvatar ? previewAvatar.altText : myInfo.username
@@ -180,13 +191,16 @@ const MyInfoEditForm = ({ myInfo }: { myInfo: UserForMyInfo }) => {
 
   const handleMyInfoSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setIsMyInfoEditLoading(true)
     try {
-      setIsMyInfoEditLoading(true)
       await editInfo()
-      setIsMyInfoEditLoading(false)
       changeEditButtonActivateMode(false)
+      afterMyInfoEdited()
     } catch (error) {
-      console.error(error)
+      setError('❗ 정보 수정에 실패했습니다.')
+      setTimeout(() => setError(null), 4000)
+    } finally {
+      setIsMyInfoEditLoading(false)
     }
   }
 
@@ -314,6 +328,7 @@ const MyInfoEditForm = ({ myInfo }: { myInfo: UserForMyInfo }) => {
           </Select>
         </FormControl>
       </StyledBodyShapeAndFashionStyleInputWrapper>
+      {error && <p css={errorMessageStyle}>{error}</p>}
       <StyledUserInfoEditAndCancelButtonWrapper>
         <LoadingButton
           variant="contained"

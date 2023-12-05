@@ -3,8 +3,7 @@ import Link from '@mui/material/Link'
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import ROUTE_URL from 'constants/routeUrl'
-import useMe from 'hooks/useMe'
-import { User } from 'types/user'
+import { useAuth } from 'context/AuthContext'
 
 const StyledNavbar = styled.nav`
   display: flex;
@@ -20,22 +19,16 @@ const StyledPageLink = styled.li`
 `
 
 const AuthButton = () => {
+  const { me, logout } = useAuth()
   const router = useRouter()
-
-  const { me } = useMe<User>()
 
   const goToLoginPage = () => router.push(ROUTE_URL.LOGIN)
   const goToHomePage = () => router.push(ROUTE_URL.HOME)
 
-  const logout = () => {
-    localStorage.removeItem('jwt')
-    localStorage.removeItem('username')
-  }
-
   const authButtonText = me ? '로그아웃' : '로그인'
   const handleClick = me
-    ? () => {
-        logout()
+    ? async () => {
+        await logout()
         goToHomePage()
       }
     : goToLoginPage
@@ -48,7 +41,7 @@ const AuthButton = () => {
 }
 
 const Navbar = () => {
-  const { me } = useMe<User>()
+  const { me } = useAuth()
 
   const PAGE_LINK_LIST = [
     {
