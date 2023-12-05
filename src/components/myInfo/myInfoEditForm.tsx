@@ -169,26 +169,6 @@ const MyInfoEditForm = ({ myInfo, afterMyInfoEdited }: MyInfoEditFormProps) => {
     setFashionStyles(fashionStyles)
   }
 
-  const editInfo = async () => {
-    let uploadedImageId: UploadedImageId | undefined
-
-    if (avatarImageFiles) {
-      const res = await uploadImage(avatarImageFiles)
-      uploadedImageId = res.data[0].id
-    }
-
-    await editMyInfo({
-      myId: myInfo.id,
-      profileImageId: uploadedImageId,
-      username,
-      gender,
-      height,
-      weight,
-      bodyShape,
-      fashionStyles,
-    })
-  }
-
   const handleMyInfoSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsMyInfoEditLoading(true)
@@ -202,6 +182,29 @@ const MyInfoEditForm = ({ myInfo, afterMyInfoEdited }: MyInfoEditFormProps) => {
     } finally {
       setIsMyInfoEditLoading(false)
     }
+  }
+
+  const editInfo = async () => {
+    const imageId = await uploadUserAvatarImage()
+    await editMyInfo({
+      myId: myInfo.id,
+      profileImageId: imageId,
+      username,
+      gender,
+      height,
+      weight,
+      bodyShape,
+      fashionStyles,
+    })
+  }
+
+  const uploadUserAvatarImage = async (): Promise<
+    UploadedImageId | undefined
+  > => {
+    if (!avatarImageFiles) return
+    const res = await uploadImage(avatarImageFiles)
+    const uploadedImageId = res.data[0].id
+    return uploadedImageId
   }
 
   return (

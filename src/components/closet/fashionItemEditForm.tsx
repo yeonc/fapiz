@@ -56,18 +56,28 @@ const FashionItemEditForm = ({
     const previewImage = changeImageFileToPreviewImage(imageFiles[0])
     setPreviewImage(previewImage)
   }
+
   const handleCategoryChange = (category: string) => setCategory(category)
+
   const handleColorChange = (color: string) => setColor(color)
-  const getUploadedImageId = async (): Promise<UploadedImageId | undefined> => {
-    if (!imageFiles) {
-      return
+
+  const handleFashionItemEditButtonClick = async (
+    e: FormEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault()
+    setIsFashionItemEditLoading(true)
+    try {
+      await editFashionItemInCloset()
+      afterEditFashionItem()
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setIsFashionItemEditLoading(false)
     }
-    const res = await uploadImage(imageFiles)
-    const uploadedImageId = res.data[0].id
-    return uploadedImageId
   }
+
   const editFashionItemInCloset = async () => {
-    const imageId = await getUploadedImageId()
+    const imageId = await uploadFashionItemImage()
     await editFashionItem({
       fashionItemId: initialFashionItem.id,
       category,
@@ -75,23 +85,22 @@ const FashionItemEditForm = ({
       imageId,
     })
   }
-  const handleFashionItemEditButtonClick = async (
-    e: FormEvent<HTMLFormElement>
-  ) => {
-    e.preventDefault()
-    try {
-      setIsFashionItemEditLoading(true)
-      await editFashionItemInCloset()
-      setIsFashionItemEditLoading(false)
-      afterEditFashionItem()
-    } catch (error) {
-      console.error(error)
+
+  const uploadFashionItemImage = async (): Promise<
+    UploadedImageId | undefined
+  > => {
+    if (!imageFiles) {
+      return
     }
+    const res = await uploadImage(imageFiles)
+    const uploadedImageId = res.data[0].id
+    return uploadedImageId
   }
+
   const handleFashionItemDeleteButtonClick = async () => {
-    const isFashionItemDelete =
+    const willFashionItemBeDeleted =
       window.confirm('패션 아이템을 삭제하시겠습니까?')
-    if (!isFashionItemDelete) {
+    if (!willFashionItemBeDeleted) {
       return
     }
     try {

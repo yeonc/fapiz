@@ -23,13 +23,6 @@ export type SnsPostForMainPage = {
   likeUsers: UserWithAttributes[]
 }
 
-const ADD_ADDITIONAL_INFO_MESSAGE =
-  '추가 정보 세 개 중 하나밖에 작성되지 않았네요! 두 가지 이상을 작성하시면 맞춤형 게시물을 보실 수 있습니다! 지금 정보를 수정하러 가 볼까요?'
-
-// TODO: console.log가 아닌 다른 형태로 메시지 보여주기
-const showMessageAboutAddingAdditionalInfo = () =>
-  console.log(ADD_ADDITIONAL_INFO_MESSAGE)
-
 const filterSnsPosts = async (req: NextApiRequest, res: NextApiResponse) => {
   const { query } = req
 
@@ -167,7 +160,6 @@ const filterSnsPostsByMyInfo: FilterSnsPostsByMyInfo = ({
   }
 
   if (filterConditionCount === 1) {
-    showMessageAboutAddingAdditionalInfo()
     return snsPosts
   }
 

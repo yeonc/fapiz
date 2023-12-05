@@ -52,33 +52,41 @@ const FashionItemCreateForm = ({
     const previewImage = changeImageFileToPreviewImage(imageFiles[0])
     setPreviewImage(previewImage)
   }
+
   const handleCategoryChange = (category: string) => setCategory(category)
+
   const handleColorChange = (color: string) => setColor(color)
+
   const handleFashionItemSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (imageFiles === null) return
-    // TODO: uploadedImageId 가져오는 과정 함수로 빼기
+    setIsFashionItemCreateLoading(true)
     try {
-      setIsFashionItemCreateLoading(true)
-      const res = await uploadImage(imageFiles)
-      const uploadedImageId = res.data[0].id
-      await createFashionItemWithImage(uploadedImageId)
-      setIsFashionItemCreateLoading(false)
+      await createFashionItemInCloset()
       afterCreateFashionItem()
     } catch (error) {
       console.error(error)
+    } finally {
+      setIsFashionItemCreateLoading(false)
     }
   }
-  const createFashionItemWithImage = async (
-    uploadedImageId: UploadedImageId
-  ) => {
-    if (!me) return
+
+  const createFashionItemInCloset = async () => {
+    if (!me) {
+      throw new Error('로그인 상태가 아닙니다.')
+    }
+    const imageId = await uploadFashionItemImage()
     await createFashionItem({
       category,
       color,
-      imageId: uploadedImageId,
+      imageId: imageId,
       ownerId: me.id,
     })
+  }
+
+  const uploadFashionItemImage = async (): Promise<UploadedImageId> => {
+    const res = await uploadImage(imageFiles!)
+    const uploadedImageId = res.data[0].id
+    return uploadedImageId
   }
 
   return (
