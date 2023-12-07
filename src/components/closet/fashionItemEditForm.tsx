@@ -12,7 +12,6 @@ import { changeImageFileToPreviewImage } from 'utils/previewImage'
 import { ImageFiles, Image, UploadedImageId } from 'types/image'
 import { mgBottom, mgRight } from 'styles/layout'
 import { FashionItemForCloset } from 'pages/closet'
-import { Nullable } from 'types/common'
 import ErrorMessage, { ErrorType } from 'components/common/texts/ErrorMessage'
 import useError from 'hooks/useError'
 import { ERROR_MESSAGE_TIMEOUT_SEC } from 'constants/common'
@@ -55,7 +54,7 @@ const FashionItemEditForm = ({
     useState(false)
   const [isFashionItemDeleteLoading, setIsFashionItemDeleteLoading] =
     useState(false)
-  const { error, handleError } = useError()
+  const { error, handleError } = useError<ErrorType>()
 
   const handleImageFilesChange = (imageFiles: FileList) => {
     setImageFiles(imageFiles)

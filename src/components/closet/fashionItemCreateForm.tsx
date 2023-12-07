@@ -11,7 +11,7 @@ import { changeImageFileToPreviewImage } from 'utils/previewImage'
 import { ImageFiles, Image, UploadedImageId } from 'types/image'
 import { mgBottom } from 'styles/layout'
 import { useAuth } from 'context/AuthContext'
-import ErrorMessage from 'components/common/texts/ErrorMessage'
+import ErrorMessage, { ErrorType } from 'components/common/texts/ErrorMessage'
 import useError from 'hooks/useError'
 import { ERROR_MESSAGE_TIMEOUT_SEC } from 'constants/common'
 
@@ -49,7 +49,7 @@ const FashionItemCreateForm = ({
   const [color, setColor] = useState('')
   const [isFashionItemCreateLoading, setIsFashionItemCreateLoading] =
     useState(false)
-  const { error, handleError } = useError()
+  const { error, handleError } = useError<ErrorType>()
 
   const handleImageFilesChange = (imageFiles: FileList) => {
     setImageFiles(imageFiles)
