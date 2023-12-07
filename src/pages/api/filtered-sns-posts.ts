@@ -4,11 +4,11 @@ import paginateData from 'utils/paginateData'
 import getSafeStringFromQuery from 'utils/getSafeStringFromQuery'
 import getSafeNumberFromQuery from 'utils/getSafeNumberFromQuery'
 import { USER_FASHION_STYLES } from 'constants/user'
-import { SnsPostResponseAboutFiltering } from 'types/snsPost'
 import { FashionStyle } from 'types/fashion'
 import { Nullable } from 'types/common'
 import { Image } from 'types/image'
 import { UserWithAttributes } from 'types/user'
+import { sanitizeSnsPostsForHomePage } from 'sanitizer/snsPosts'
 
 export type SnsPostForHomePage = {
   id: number
@@ -40,7 +40,7 @@ const filterSnsPosts = async (req: NextApiRequest, res: NextApiResponse) => {
     const snsPostsFromStrapi = response.data.data
 
     // 3. strapi에서 받아온 SNS 게시물 데이터 정제하기
-    const snsPosts = sanitizedSnsPosts(snsPostsFromStrapi)
+    const snsPosts = sanitizeSnsPostsForHomePage(snsPostsFromStrapi)
 
     // 4. 정제한 SNS 게시물 데이터 필터링하기
     // (로그인 한 유저의 정보와 비슷한 정보를 가진 유저들이 올린 SNS 게시물들만 필터링)
@@ -106,26 +106,6 @@ const getSafeFashionStylesFromQuery = (
   })
 
   return fashionStyleArray
-}
-
-const sanitizedSnsPosts = (
-  snsPostsFromStrapi: SnsPostResponseAboutFiltering[]
-): SnsPostForHomePage[] => {
-  return snsPostsFromStrapi.map(post => ({
-    id: post.id,
-    createdAt: post.attributes.createdAt,
-    author: {
-      username: post.attributes.author.data.attributes.username,
-      gender: post.attributes.author.data.attributes.gender,
-      bodyShape: post.attributes.author.data.attributes.bodyShape,
-      fashionStyles: post.attributes.author.data.attributes.fashionStyles,
-    },
-    postImage: {
-      url: post.attributes.postImages.data[0].attributes.url,
-      altText: post.attributes.postImages.data[0].attributes.alternativeText,
-    },
-    likeUsers: post.attributes.likeUsers.data,
-  }))
 }
 
 type FilterSnsPostsByMyInfoArgs = {

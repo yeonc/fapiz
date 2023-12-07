@@ -18,6 +18,7 @@ import getSafeNumberFromQuery from 'utils/getSafeNumberFromQuery'
 import { Image } from 'types/image'
 import { Nullable } from 'types/common'
 import { FashionItemInfo } from 'types/fashion'
+import { sanitizeSnsPostForEditing } from 'sanitizer/snsPosts'
 
 export type SnsPostForEditing = {
   id: number
@@ -74,7 +75,7 @@ const SnsPostEditPage = () => {
     return null
   }
 
-  const snsPost = sanitizeSnsPost(snsPostFromStrapi)
+  const snsPost = sanitizeSnsPostForEditing(snsPostFromStrapi)
 
   return (
     <MaxWidthContainer>
@@ -167,15 +168,3 @@ const SnsPostEditPage = () => {
 }
 
 export default withHeader(SnsPostEditPage)
-
-const sanitizeSnsPost = (
-  snsPost: SnsPostResponseAboutDefaultQuery
-): SnsPostForEditing => ({
-  id: snsPost.id,
-  postImages: snsPost.attributes.postImages.data.map(image => ({
-    url: image.attributes.url,
-    altText: image.attributes.alternativeText,
-  })),
-  fashionItemInfos: snsPost.attributes.fashionItemInfos,
-  postText: snsPost.attributes.content || '',
-})

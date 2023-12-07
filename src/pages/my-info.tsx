@@ -14,6 +14,7 @@ import { FashionStyle } from 'types/fashion'
 import { useAuth } from 'context/AuthContext'
 import useUser from 'hooks/useUser'
 import { useSWRConfig } from 'swr'
+import { sanitizeUserForMyInfo } from 'sanitizer/users'
 
 export type UserForMyInfo = Omit<
   User,
@@ -56,7 +57,7 @@ const MyInfoPage = () => {
   const refetch = () => mutate({ url: `/api/users/${me?.id}?${query}` })
   const afterMyInfoEdited = () => refetch()
 
-  const myInfo = sanitizeUser(userFromStrapi)
+  const myInfo = sanitizeUserForMyInfo(userFromStrapi)
 
   return (
     <MaxWidthContainer>
@@ -76,14 +77,3 @@ const MyInfoPage = () => {
 }
 
 export default withHeader(withLoginPageRedirect(MyInfoPage))
-
-const sanitizeUser = (user: UserResponseWithProfileImage): UserForMyInfo => ({
-  id: user.id,
-  imageUrl: user.profileImage?.url,
-  username: user.username,
-  gender: user.gender || '',
-  height: user.height,
-  weight: user.weight,
-  bodyShape: user.bodyShape || '',
-  fashionStyles: user.fashionStyles || [],
-})

@@ -16,6 +16,7 @@ import createUrlQuery from 'utils/createUrlQuery'
 import removeDuplicatedValueFromArray from 'utils/removeDuplicatedValueFromArray'
 import { Image } from 'types/image'
 import { useAuth } from 'context/AuthContext'
+import { sanitizeFashionItemsForCloset } from 'sanitizer/fahsionItems'
 
 export type FashionItemForCloset = {
   id: number
@@ -67,16 +68,8 @@ const ClosetPage = () => {
 
   const { fashionItems: fashionItemsFromStrapi } = useFashionItems(query)
 
-  const fashionItems: FashionItemForCloset[] = fashionItemsFromStrapi
-    ? fashionItemsFromStrapi.map(fashionItem => ({
-        id: fashionItem.id,
-        category: fashionItem.attributes.category,
-        color: fashionItem.attributes.color,
-        image: {
-          url: fashionItem.attributes.image.data.attributes.url,
-          altText: fashionItem.attributes.image.data.attributes.alternativeText,
-        },
-      }))
+  const fashionItems = fashionItemsFromStrapi
+    ? sanitizeFashionItemsForCloset(fashionItemsFromStrapi)
     : []
 
   const {

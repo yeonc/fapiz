@@ -6,8 +6,9 @@ import useSnsPosts from 'hooks/useSnsPosts'
 import createUrlQuery from 'utils/createUrlQuery'
 import { SnsPostResponseAboutShowingAll } from 'types/snsPost'
 import { Image } from 'types/image'
+import { sanitizeSnsPostsForShowingAllSnsPosts } from 'sanitizer/snsPosts'
 
-export type SnsPostForSnsPostsPage = {
+export type SnsPostForSnsPosts = {
   id: number
   firstImage: Image
 }
@@ -32,15 +33,8 @@ const SnsPosts = ({ userId }: { userId: number }) => {
   const { snsPosts: snsPostsFromStrapi, isLoading } =
     useSnsPosts<SnsPostResponseAboutShowingAll[]>(query)
 
-  const snsPosts: SnsPostForSnsPostsPage[] = snsPostsFromStrapi
-    ? snsPostsFromStrapi.map(post => ({
-        id: post.id,
-        firstImage: {
-          url: post.attributes.postImages.data[0].attributes.url,
-          altText:
-            post.attributes.postImages.data[0].attributes.alternativeText,
-        },
-      }))
+  const snsPosts = snsPostsFromStrapi
+    ? sanitizeSnsPostsForShowingAllSnsPosts(snsPostsFromStrapi)
     : []
 
   const goToSnsPost = (postId: number) => router.push(`/sns/post/${postId}`)

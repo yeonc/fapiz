@@ -13,6 +13,7 @@ import visuallyHidden from 'styles/visuallyHidden'
 import { UserResponseWithAdditionalFields } from 'types/user'
 import { useAuth } from 'context/AuthContext'
 import getIdsFromArrayOfObject from 'utils/getIdsFromArrayOfObject'
+import { sanitizeUserForSnsUserInfo } from 'sanitizer/users'
 
 const StyledBodyInfoWrapper = styled.dl`
   display: flex;
@@ -55,7 +56,7 @@ const UserInfo = ({ userId, className }: UserInfoProps) => {
     return null
   }
 
-  const user = sanitizeUser(userFromStrapi)
+  const user = sanitizeUserForSnsUserInfo(userFromStrapi)
 
   const isMySnsPage = user.id === me?.id
   const isLoggedIn = !!me
@@ -107,15 +108,3 @@ const UserInfo = ({ userId, className }: UserInfoProps) => {
 }
 
 export default UserInfo
-
-const sanitizeUser = (
-  user: UserResponseWithAdditionalFields
-): UserForSnsUserInfo => ({
-  id: user.id,
-  username: user.username,
-  height: user.height,
-  weight: user.weight,
-  profileImageUrl: user.profileImage?.url,
-  followers: user.followers,
-  followings: user.followings,
-})

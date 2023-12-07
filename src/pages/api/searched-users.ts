@@ -2,7 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import fetchUsers from 'services/user/fetchUsers'
 import getSafeStringFromQuery from 'utils/getSafeStringFromQuery'
 import { Nullable } from 'types/common'
-import { User, UserResponseWithProfileImage } from 'types/user'
+import { User } from 'types/user'
+import { sanitizeUsersForSearching } from 'sanitizer/users'
 
 export type UserForSearching = Pick<
   User,
@@ -19,7 +20,7 @@ const searchUsers = async (req: NextApiRequest, res: NextApiResponse) => {
     const usersFromStrapi = response.data
 
     // 3. strapi에서 받아온 데이터 정제하기
-    const users = sanitizeUsers(usersFromStrapi)
+    const users = sanitizeUsersForSearching(usersFromStrapi)
 
     // 4. 검색 로직 실행하기
     const searchedUsers = searchUser({ searchKeyword, users })
@@ -32,18 +33,6 @@ const searchUsers = async (req: NextApiRequest, res: NextApiResponse) => {
 }
 
 export default searchUsers
-
-const sanitizeUsers = (
-  usersFromStrapi: UserResponseWithProfileImage[]
-): UserForSearching[] => {
-  return usersFromStrapi.map(user => ({
-    id: user.id,
-    username: user.username,
-    gender: user.gender,
-    fashionStyles: user.fashionStyles,
-    avatarUrl: user.profileImage?.url,
-  }))
-}
 
 type SearchUserArgs = {
   searchKeyword: Nullable<string>

@@ -5,11 +5,11 @@ import NoSearchResult from 'components/search/noSearchResult'
 import SearchResultHeadingTypo from 'components/search/searchResultHeadingTypo'
 import useSnsPosts from 'hooks/useSnsPosts'
 import createUrlQuery from 'utils/createUrlQuery'
-import getFormattedDate from 'utils/getFormattedDate'
 import { SnsPostResponseAboutSearchResult } from 'types/snsPost'
 import { HOVER_BACKGROUND_GRAY } from 'styles/constants/color'
 import { Image } from 'types/image'
 import { Nullable } from 'types/common'
+import { sanitizeSnsPostsForSearching } from 'sanitizer/snsPosts'
 
 export type SnsPostForSearching = {
   id: number
@@ -58,7 +58,7 @@ const SnsPostSearchResult = ({ searchKeyword }: { searchKeyword: string }) => {
 
   const searchedSnsPosts = isSnsPostsLoading
     ? null
-    : sanitizeSnsPosts(searchedSnsPostsFromStrapi || [])
+    : sanitizeSnsPostsForSearching(searchedSnsPostsFromStrapi || [])
 
   const searchedSnsPostsToBeShowed = searchedSnsPosts?.slice(
     0,
@@ -91,27 +91,3 @@ const SnsPostSearchResult = ({ searchKeyword }: { searchKeyword: string }) => {
 }
 
 export default SnsPostSearchResult
-
-const sanitizeSnsPosts = (
-  posts: SnsPostResponseAboutSearchResult[]
-): SnsPostForSearching[] =>
-  posts.map(post => {
-    const author = post.attributes.author.data.attributes
-    const createdDate = new Date(post.attributes.createdAt)
-
-    return {
-      id: post.id,
-      createdAt: getFormattedDate(createdDate),
-      firstImage: {
-        url: post.attributes.postImages.data[0].attributes.url,
-        altText: post.attributes.postImages.data[0].attributes.alternativeText,
-      },
-      content: post.attributes.content,
-      likeNumbers: post.attributes.likeUsers.data.length,
-      author: {
-        username: author.username,
-        avatarUrl: author.profileImage.data?.attributes.url ?? null,
-      },
-      commentCount: post.attributes.comments.data.length,
-    }
-  })

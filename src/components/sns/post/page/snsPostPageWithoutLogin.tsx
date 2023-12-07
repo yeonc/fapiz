@@ -8,6 +8,7 @@ import {
   SnsPostResponseAboutPostDetail,
 } from 'types/snsPost'
 import getSafeNumberFromQuery from 'utils/getSafeNumberFromQuery'
+import { sanitizeSnsPostForPostDetail } from 'sanitizer/snsPosts'
 
 const queryForFetchingSnsPost = createUrlQuery({
   'populate[0]': 'author.profileImage',
@@ -36,27 +37,7 @@ const SnsPostPageWithoutLogin = () => {
     return <p>페이지를 표시할 수 없습니다.</p>
   }
 
-  const snsPost: SnsPostForPostDetail = {
-    id: snsPostFromStrapi.id,
-    createdAt: snsPostFromStrapi.attributes.createdAt,
-    images: snsPostFromStrapi.attributes.postImages.data.map(image => ({
-      url: image.attributes.url,
-      altText: image.attributes.alternativeText,
-    })),
-    author: {
-      id: snsPostFromStrapi.attributes.author.data.id,
-      username: snsPostFromStrapi.attributes.author.data.attributes.username,
-      height: snsPostFromStrapi.attributes.author.data.attributes.height,
-      weight: snsPostFromStrapi.attributes.author.data.attributes.weight,
-      avatarUrl:
-        snsPostFromStrapi.attributes.author.data.attributes.profileImage.data
-          ?.attributes.url,
-    },
-    likeUsers: snsPostFromStrapi.attributes.likeUsers.data,
-    bookmarkUsers: snsPostFromStrapi.attributes.bookmarkUsers.data,
-    content: snsPostFromStrapi.attributes.content ?? '',
-    fashionItemInfos: snsPostFromStrapi.attributes.fashionItemInfos ?? [],
-  }
+  const snsPost = sanitizeSnsPostForPostDetail(snsPostFromStrapi)
 
   return (
     <>
