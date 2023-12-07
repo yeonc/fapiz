@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import withHeader from 'hocs/withHeader'
 import withLogin from 'hocs/withLogin'
 import { css } from '@emotion/react'
@@ -37,30 +38,36 @@ const HomePage = () => {
   })
 
   return (
-    <MaxWidthContainer>
-      <StyledHomePageWrapper>
-        <ImageList variant="masonry" cols={3}>
-          {snsPosts.map(snsPost => (
-            <ImageCardItem
-              key={snsPost.id}
-              cardItemData={snsPost}
-              rightActionButton={
-                me && (
-                  <SnsPostLikeButtonWithLogin
-                    myId={me.id}
-                    targetId={snsPost.id}
-                    likeUsers={snsPost.likeUsers}
-                    isShowLikeUsersNumber={false}
-                    borderColor={DEFAULT_WHITE}
-                  />
-                )
-              }
-            />
-          ))}
-        </ImageList>
-        <span ref={fetchTriggerRef} css={fetchTriggerStyle}></span>
-      </StyledHomePageWrapper>
-    </MaxWidthContainer>
+    <>
+      <Head>
+        <title>Fapiz</title>
+        <meta name="description" content="패션 공유 SNS & 나의 온라인 옷장" />
+      </Head>
+      <MaxWidthContainer>
+        <StyledHomePageWrapper>
+          <ImageList variant="masonry" cols={3}>
+            {snsPosts.map(snsPost => (
+              <ImageCardItem
+                key={snsPost.id}
+                cardItemData={snsPost}
+                rightActionButton={
+                  me && (
+                    <SnsPostLikeButtonWithLogin
+                      myId={me.id}
+                      targetId={snsPost.id}
+                      likeUsers={snsPost.likeUsers}
+                      isShowLikeUsersNumber={false}
+                      borderColor={DEFAULT_WHITE}
+                    />
+                  )
+                }
+              />
+            ))}
+          </ImageList>
+          <span ref={fetchTriggerRef} css={fetchTriggerStyle}></span>
+        </StyledHomePageWrapper>
+      </MaxWidthContainer>
+    </>
   )
 }
 

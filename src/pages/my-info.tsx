@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import withHeader from 'hocs/withHeader'
 import withLoginPageRedirect from 'hocs/withLoginPageRedirect'
 import styled from '@emotion/styled'
@@ -60,19 +61,28 @@ const MyInfoPage = () => {
   const myInfo = sanitizeUserForMyInfo(userFromStrapi)
 
   return (
-    <MaxWidthContainer>
-      <StyledMyInfoPageWrapper>
-        <Typo variant="h4" component="h1" css={mgBottom(10)}>
-          내 정보 수정
-        </Typo>
-        <Tooltip title={TOOLTIP_TEXT}>
-          <StyledButton startIcon={<TipsAndUpdatesIcon />} css={mgBottom(30)}>
-            Tip (마우스를 올려서 확인해 보세요)
-          </StyledButton>
-        </Tooltip>
-        <MyInfoEditForm myInfo={myInfo} afterMyInfoEdited={afterMyInfoEdited} />
-      </StyledMyInfoPageWrapper>
-    </MaxWidthContainer>
+    <>
+      <Head>
+        <title>내 정보 | Fapiz</title>
+        <meta name="description" content="내 정보를 수정해 보세요" />
+      </Head>
+      <MaxWidthContainer>
+        <StyledMyInfoPageWrapper>
+          <Typo variant="h4" component="h1" css={mgBottom(10)}>
+            내 정보 수정
+          </Typo>
+          <Tooltip title={TOOLTIP_TEXT}>
+            <StyledButton startIcon={<TipsAndUpdatesIcon />} css={mgBottom(30)}>
+              Tip (마우스를 올려서 확인해 보세요)
+            </StyledButton>
+          </Tooltip>
+          <MyInfoEditForm
+            myInfo={myInfo}
+            afterMyInfoEdited={afterMyInfoEdited}
+          />
+        </StyledMyInfoPageWrapper>
+      </MaxWidthContainer>
+    </>
   )
 }
 

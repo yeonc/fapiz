@@ -9,6 +9,7 @@ import useSnsPost from 'hooks/useSnsPost'
 import { SnsPostResponseAboutDefaultQuery } from 'types/snsPost'
 import getSafeNumberFromQuery from 'utils/getSafeNumberFromQuery'
 import { useAuth } from 'context/AuthContext'
+import SnsPageHeadContents from 'components/sns/page/snsPageHeadContents'
 
 const StyledSnsPostPageWrapper = styled.div`
   padding: 20px 0;
@@ -37,30 +38,36 @@ const SnsPostPage = () => {
 
   if (!isLoggedIn) {
     return (
-      <MaxWidthContainer>
-        <StyledSnsPostPageWrapper>
-          <SnsPostPageWithoutLogin />
-        </StyledSnsPostPageWrapper>
-      </MaxWidthContainer>
+      <SnsPageHeadContents>
+        <MaxWidthContainer>
+          <StyledSnsPostPageWrapper>
+            <SnsPostPageWithoutLogin />
+          </StyledSnsPostPageWrapper>
+        </MaxWidthContainer>
+      </SnsPageHeadContents>
     )
   }
 
   if (isMySnsPostPage) {
     return (
-      <MaxWidthContainer>
-        <StyledSnsPostPageWrapper>
-          <MySnsPostPage />
-        </StyledSnsPostPageWrapper>
-      </MaxWidthContainer>
+      <SnsPageHeadContents>
+        <MaxWidthContainer>
+          <StyledSnsPostPageWrapper>
+            <MySnsPostPage />
+          </StyledSnsPostPageWrapper>
+        </MaxWidthContainer>
+      </SnsPageHeadContents>
     )
   }
 
   return (
-    <MaxWidthContainer>
-      <StyledSnsPostPageWrapper>
-        <OtherSnsPostPage />
-      </StyledSnsPostPageWrapper>
-    </MaxWidthContainer>
+    <SnsPageHeadContents>
+      <MaxWidthContainer>
+        <StyledSnsPostPageWrapper>
+          <OtherSnsPostPage />
+        </StyledSnsPostPageWrapper>
+      </MaxWidthContainer>
+    </SnsPageHeadContents>
   )
 }
 

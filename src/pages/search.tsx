@@ -8,6 +8,7 @@ import Typo from 'components/common/typo'
 import MaxWidthContainer from 'components/layouts/containers/maxWidthContainer'
 import visuallyHidden from 'styles/visuallyHidden'
 import { mgBottom } from 'styles/layout'
+import Head from 'next/head'
 
 const StyledSearchPageWrapper = styled.div`
   padding: 30px 0;
@@ -40,21 +41,27 @@ const SearchPage = () => {
   }
 
   return (
-    <MaxWidthContainer>
-      <StyledSearchPageWrapper>
-        <h1 css={visuallyHidden}>통합 검색 결과 페이지</h1>
-        <StyledSearchFormWrapper>
-          {!searchKeyword && MessageBeforeSearching}
-          <SearchForm onSearchKeywordSubmit={onSearchKeywordSubmit} />
-        </StyledSearchFormWrapper>
-        {searchKeyword && (
-          <StyledSearchResultWrapper>
-            <StyledUserSearchResult searchKeyword={searchKeyword} />
-            <SnsPostSearchResult searchKeyword={searchKeyword} />
-          </StyledSearchResultWrapper>
-        )}
-      </StyledSearchPageWrapper>
-    </MaxWidthContainer>
+    <>
+      <Head>
+        <title>검색 | Fapiz</title>
+        <meta name="description" content="유저와 SNS 게시물을 검색해 보세요" />
+      </Head>
+      <MaxWidthContainer>
+        <StyledSearchPageWrapper>
+          <h1 css={visuallyHidden}>통합 검색 결과 페이지</h1>
+          <StyledSearchFormWrapper>
+            {!searchKeyword && MessageBeforeSearching}
+            <SearchForm onSearchKeywordSubmit={onSearchKeywordSubmit} />
+          </StyledSearchFormWrapper>
+          {searchKeyword && (
+            <StyledSearchResultWrapper>
+              <StyledUserSearchResult searchKeyword={searchKeyword} />
+              <SnsPostSearchResult searchKeyword={searchKeyword} />
+            </StyledSearchResultWrapper>
+          )}
+        </StyledSearchPageWrapper>
+      </MaxWidthContainer>
+    </>
   )
 }
 

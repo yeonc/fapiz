@@ -10,6 +10,7 @@ import MaxWidthContainer from 'components/layouts/containers/maxWidthContainer'
 import getSafeNumberFromQuery from 'utils/getSafeNumberFromQuery'
 import { LIGHT_GRAY } from 'styles/constants/color'
 import { useAuth } from 'context/AuthContext'
+import SnsPageHeadContents from 'components/sns/page/snsPageHeadContents'
 
 const StyledSnsPageWrapper = styled.div`
   padding: 30px 0;
@@ -44,26 +45,28 @@ const SnsPage = () => {
   const isMySnsPage = me?.id === userId
 
   return (
-    <MaxWidthContainer>
-      <StyledSnsPageWrapper>
-        {userId && (
-          <>
-            <StyledUserInfo userId={userId} />
-            <SnsPosts userId={userId} />
-          </>
-        )}
-        {isMySnsPage && (
-          <Fab
-            color="primary"
-            aria-label="SNS 게시물 등록"
-            css={positionOfSnsPostCreateButton}
-            onClick={handleSnsPostCreateButtonClick}
-          >
-            <CreateIcon />
-          </Fab>
-        )}
-      </StyledSnsPageWrapper>
-    </MaxWidthContainer>
+    <SnsPageHeadContents>
+      <MaxWidthContainer>
+        <StyledSnsPageWrapper>
+          {userId && (
+            <>
+              <StyledUserInfo userId={userId} />
+              <SnsPosts userId={userId} />
+            </>
+          )}
+          {isMySnsPage && (
+            <Fab
+              color="primary"
+              aria-label="SNS 게시물 등록"
+              css={positionOfSnsPostCreateButton}
+              onClick={handleSnsPostCreateButtonClick}
+            >
+              <CreateIcon />
+            </Fab>
+          )}
+        </StyledSnsPageWrapper>
+      </MaxWidthContainer>
+    </SnsPageHeadContents>
   )
 }
 

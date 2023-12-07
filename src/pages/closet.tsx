@@ -17,6 +17,7 @@ import removeDuplicatedValueFromArray from 'utils/removeDuplicatedValueFromArray
 import { Image } from 'types/image'
 import { useAuth } from 'context/AuthContext'
 import { sanitizeFashionItemsForCloset } from 'sanitizer/fahsionItems'
+import Head from 'next/head'
 
 export type FashionItemForCloset = {
   id: number
@@ -89,6 +90,13 @@ const ClosetPage = () => {
 
   return (
     <>
+      <Head>
+        <title>온라인 옷장 | Fapiz</title>
+        <meta
+          name="description"
+          content="온라인 옷장에서 내가 소장하고 있는 패션 아이템들을 관리해 보세요"
+        />
+      </Head>
       <IntroducingBanner />
       <MaxWidthContainer>
         <StyledClosetContentsWrapper>

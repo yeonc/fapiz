@@ -9,7 +9,7 @@ import { mgBottom } from 'styles/layout'
 const StyledClosetImage = styled.div`
   width: 100%;
   aspect-ratio: 2 / 1;
-  background-image: url('/closet.png');
+  background-image: url('/images/closet.png');
   background-position: center center;
   background-size: cover;
   color: #fff;

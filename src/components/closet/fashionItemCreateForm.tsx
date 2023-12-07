@@ -16,7 +16,7 @@ import useError from 'hooks/useError'
 import { ERROR_MESSAGE_TIMEOUT_SEC } from 'constants/common'
 
 const DEFAULT_PREVIEW_IMAGE = {
-  url: '/default-preview.png',
+  url: '/images/default-preview.png',
   altText: '기본 프리뷰 이미지',
 }
 
