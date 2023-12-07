@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
-import { BACKEND_URL } from 'constants/constants'
+import { BACKEND_URL } from 'constants/common'
 import GoogleLogo from 'components/login/googleLogo'
 import { DEFAULT_WHITE } from 'styles/constants/color'
 

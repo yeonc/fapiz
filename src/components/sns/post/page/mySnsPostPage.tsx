@@ -74,7 +74,7 @@ const MySnsPostPage = () => {
     likeUsers: snsPostFromStrapi.attributes.likeUsers.data,
     bookmarkUsers: snsPostFromStrapi.attributes.bookmarkUsers.data,
     content: snsPostFromStrapi.attributes.content ?? '',
-    fashionItemsInfo: snsPostFromStrapi.attributes.fashionItemsInfo ?? [],
+    fashionItemInfos: snsPostFromStrapi.attributes.fashionItemInfos ?? [],
   }
 
   const refetchSnsPost = () =>
@@ -111,7 +111,7 @@ const MySnsPostPage = () => {
           postAuthor={snsPost.author}
           postImages={snsPost.images}
           postContent={snsPost.content}
-          postFashionItemInfos={snsPost.fashionItemsInfo}
+          postFashionItemInfos={snsPost.fashionItemInfos}
         />
       )}
       <StyledPostCommentWritingArea

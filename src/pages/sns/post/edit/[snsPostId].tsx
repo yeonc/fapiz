@@ -7,7 +7,7 @@ import TextField from '@mui/material/TextField'
 import AddIcon from '@mui/icons-material/Add'
 import PostEdit from 'components/sns/post/postEdit'
 import ImageUploadButton from 'components/common/buttons/imageUploadButton'
-import FashionItemsInfo from 'components/sns/post/fashionItemsInfo'
+import FashionItemInfos from 'components/sns/post/FashionItemInfos'
 import PostWritingHeadingTypo from 'components/sns/post/postWritingHeadingTypo'
 import PostWritingSubheadingTypo from 'components/sns/post/postWritingSubheadingTypo'
 import ImageUploadCaptionTypo from 'components/common/typo/imageUploadCaptionTypo'
@@ -15,6 +15,16 @@ import MaxWidthContainer from 'components/layouts/containers/maxWidthContainer'
 import useSnsPost from 'hooks/useSnsPost'
 import { SnsPostResponseAboutDefaultQuery } from 'types/snsPost'
 import getSafeNumberFromQuery from 'utils/getSafeNumberFromQuery'
+import { Image } from 'types/image'
+import { Nullable } from 'types/common'
+import { FashionItemInfo } from 'types/fashion'
+
+export type SnsPostForEditing = {
+  id: number
+  postImages: Image[]
+  fashionItemInfos: Nullable<FashionItemInfo[]>
+  postText: string
+}
 
 const StyledSnsPostEditPageWrapper = styled.div`
   padding: 20px 0;
@@ -32,7 +42,7 @@ const StyledPostDescriptionWrapper = styled.section`
   margin-bottom: 22px;
 `
 
-const StyledFashionItemsInfo = styled(FashionItemsInfo)`
+const StyledFashionItemInfos = styled(FashionItemInfos)`
   margin-bottom: 10px;
 `
 
@@ -54,19 +64,17 @@ const SnsPostEditPage = () => {
   const snsPostId = snsPostIdFromQuery
     ? getSafeNumberFromQuery(snsPostIdFromQuery)
     : undefined
-  const { snsPost } = useSnsPost<SnsPostResponseAboutDefaultQuery>(
-    snsPostId || undefined
-  )
+  const { snsPost: snsPostFromStrapi } =
+    useSnsPost<SnsPostResponseAboutDefaultQuery>(snsPostId || undefined)
 
   const goToEditedPostPage = () => router.push(`/sns/post/${snsPostId}`)
+  const afterPostEdited = () => goToEditedPostPage()
 
-  const afterPostEdited = () => {
-    goToEditedPostPage()
-  }
-
-  if (!snsPost) {
+  if (!snsPostFromStrapi) {
     return null
   }
+
+  const snsPost = sanitizeSnsPost(snsPostFromStrapi)
 
   return (
     <MaxWidthContainer>
@@ -74,10 +82,10 @@ const SnsPostEditPage = () => {
         <PostEdit snsPost={snsPost} afterPostEdited={afterPostEdited}>
           {({
             previewImages,
-            fashionItemsInfo,
+            fashionItemInfos,
             postText,
             handleImageFilesChange,
-            handleFashionItemsInfoChange,
+            handleFashionItemInfosChange,
             handleFashionItemInfoAddMoreButtonClick,
             handleFashionItemInfoDeleteButtonClick,
             handlePostTextChange,
@@ -114,9 +122,9 @@ const SnsPostEditPage = () => {
                   <PostWritingSubheadingTypo>
                     착용한 패션 아이템 정보
                   </PostWritingSubheadingTypo>
-                  <StyledFashionItemsInfo
-                    fashionItemsInfo={fashionItemsInfo}
-                    onFashionItemsInfoChange={handleFashionItemsInfoChange}
+                  <StyledFashionItemInfos
+                    fashionItemInfos={fashionItemInfos}
+                    onFashionItemInfosChange={handleFashionItemInfosChange}
                     onFashionItemInfoDeleteButtonClick={
                       handleFashionItemInfoDeleteButtonClick
                     }
@@ -159,3 +167,15 @@ const SnsPostEditPage = () => {
 }
 
 export default withHeader(SnsPostEditPage)
+
+const sanitizeSnsPost = (
+  snsPost: SnsPostResponseAboutDefaultQuery
+): SnsPostForEditing => ({
+  id: snsPost.id,
+  postImages: snsPost.attributes.postImages.data.map(image => ({
+    url: image.attributes.url,
+    altText: image.attributes.alternativeText,
+  })),
+  fashionItemInfos: snsPost.attributes.fashionItemInfos,
+  postText: snsPost.attributes.content || '',
+})

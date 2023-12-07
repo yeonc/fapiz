@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
-import { BACKEND_URL } from 'constants/constants'
+import { BACKEND_URL } from 'constants/common'
 
 const deletePost = async (postId: number): Promise<AxiosResponse> => {
   return axios({

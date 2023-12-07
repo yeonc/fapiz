@@ -55,7 +55,7 @@ const SnsPostPageWithoutLogin = () => {
     likeUsers: snsPostFromStrapi.attributes.likeUsers.data,
     bookmarkUsers: snsPostFromStrapi.attributes.bookmarkUsers.data,
     content: snsPostFromStrapi.attributes.content ?? '',
-    fashionItemsInfo: snsPostFromStrapi.attributes.fashionItemsInfo ?? [],
+    fashionItemInfos: snsPostFromStrapi.attributes.fashionItemInfos ?? [],
   }
 
   return (
@@ -68,7 +68,7 @@ const SnsPostPageWithoutLogin = () => {
         postAuthor={snsPost.author}
         postImages={snsPost.images}
         postContent={snsPost.content}
-        postFashionItemInfos={snsPost.fashionItemsInfo}
+        postFashionItemInfos={snsPost.fashionItemInfos}
       />
       <PostCommentList snsPostId={snsPost.id} />
     </>

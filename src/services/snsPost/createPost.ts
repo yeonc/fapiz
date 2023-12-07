@@ -1,10 +1,10 @@
 import axios, { AxiosResponse } from 'axios'
-import { BACKEND_URL } from 'constants/constants'
+import { BACKEND_URL } from 'constants/common'
 import { FashionItemInfo } from 'types/fashion'
 
 type CreatePostArgs = {
   postText: string
-  fashionItemsInfo: FashionItemInfo[]
+  fashionItemInfos: FashionItemInfo[]
   authorId: number
   postImageIds: number[]
 }
@@ -15,7 +15,7 @@ type CreatePost = (
 
 const createPost: CreatePost = async ({
   postText,
-  fashionItemsInfo,
+  fashionItemInfos: fashionItemInfos,
   authorId,
   postImageIds,
 }) => {
@@ -25,7 +25,7 @@ const createPost: CreatePost = async ({
     data: {
       data: {
         content: postText,
-        fashionItemsInfo,
+        fashionItemInfos: fashionItemInfos,
         author: authorId,
         postImages: postImageIds,
       },

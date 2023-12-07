@@ -1,27 +1,27 @@
 import { FormEvent, useState } from 'react'
 import editPost from 'services/snsPost/editPost'
 import uploadImage from 'services/upload/uploadImage'
-import generateIdIntoObject from 'utils/generateIdIntoObject'
+import getObjectIncludedId from 'utils/getObjectIncludedId'
 import { changeImageFilesToPreviewImages } from 'utils/previewImage'
 import { EmotionJSX } from '@emotion/react/types/jsx-namespace'
-import { Nullable, Obj, WithId } from 'types/common'
+import { Nullable } from 'types/common'
 import { FashionItemInfo } from 'types/fashion'
 import { Image, ImageFiles, UploadedImageId } from 'types/image'
-import { SnsPostResponseAboutDefaultQuery } from 'types/snsPost'
+import { SnsPostForEditing } from 'pages/sns/post/edit/[snsPostId]'
 
 const EMPTY_FASHION_ITEM_INFO = { category: '', price: null, buyingPlace: '' }
 
-const createNewEmptyFashionItemInfo = (): WithId<Obj> => {
-  return generateIdIntoObject(EMPTY_FASHION_ITEM_INFO)
+const createNewEmptyFashionItemInfo = (): FashionItemInfo => {
+  return getObjectIncludedId(EMPTY_FASHION_ITEM_INFO)
 }
-const emptyFashionItemInfo = createNewEmptyFashionItemInfo() as FashionItemInfo
+const emptyFashionItemInfo = createNewEmptyFashionItemInfo()
 
 type ChildrenProps = {
   previewImages: Image[]
-  fashionItemsInfo: FashionItemInfo[]
+  fashionItemInfos: FashionItemInfo[]
   postText: Nullable<string>
   handleImageFilesChange: (imageFiles: FileList) => void
-  handleFashionItemsInfoChange: (fashionItemsInfo: FashionItemInfo[]) => void
+  handleFashionItemInfosChange: (fashionItemInfos: FashionItemInfo[]) => void
   handleFashionItemInfoAddMoreButtonClick: () => void
   handleFashionItemInfoDeleteButtonClick: (
     fashionItemInfoIdToDelete: number
@@ -31,28 +31,18 @@ type ChildrenProps = {
 }
 
 type PostEditProps = {
-  snsPost: SnsPostResponseAboutDefaultQuery
+  snsPost: SnsPostForEditing
   afterPostEdited: () => void
   children: (props: ChildrenProps) => EmotionJSX.Element
 }
 
 const PostEdit = ({ snsPost, afterPostEdited, children }: PostEditProps) => {
-  const initialPreviewImages: Image[] = snsPost.attributes.postImages.data.map(
-    image => ({
-      url: image.attributes.url,
-      altText: image.attributes.alternativeText,
-    })
-  )
-  const initialFashionItemsInfo: FashionItemInfo[] = snsPost.attributes
-    .fashionItemsInfo ?? [emptyFashionItemInfo]
-  const initialPostText = snsPost.attributes.content
-
   const [imageFiles, setImageFiles] = useState<ImageFiles>(null)
-  const [previewImages, setPreviewImages] = useState(initialPreviewImages)
-  const [fashionItemsInfo, setFashionItemsInfo] = useState(
-    initialFashionItemsInfo
+  const [previewImages, setPreviewImages] = useState(snsPost.postImages)
+  const [fashionItemInfos, setFashionItemInfos] = useState(
+    snsPost.fashionItemInfos ?? [emptyFashionItemInfo]
   )
-  const [postText, setPostText] = useState(initialPostText)
+  const [postText, setPostText] = useState(snsPost.postText)
 
   const handleImageFilesChange = (imageFiles: FileList) => {
     setImageFiles(imageFiles)
@@ -60,51 +50,29 @@ const PostEdit = ({ snsPost, afterPostEdited, children }: PostEditProps) => {
     setPreviewImages(previewImages)
   }
 
-  const handleFashionItemsInfoChange = (
-    fashionItemsInfo: FashionItemInfo[]
+  const handleFashionItemInfosChange = (
+    fashionItemInfos: FashionItemInfo[]
   ) => {
-    setFashionItemsInfo(fashionItemsInfo)
+    setFashionItemInfos(fashionItemInfos)
   }
 
   const handleFashionItemInfoAddMoreButtonClick = () => {
-    setFashionItemsInfo(prev => {
-      const emptyFashionItemInfo =
-        createNewEmptyFashionItemInfo() as FashionItemInfo
-      return prev.concat(emptyFashionItemInfo)
+    setFashionItemInfos(prev => {
+      const emptyFashionItemInfo = createNewEmptyFashionItemInfo()
+      return [...prev, emptyFashionItemInfo]
     })
   }
 
   const handleFashionItemInfoDeleteButtonClick = (
     fashionItemInfoIdToDelete: number
   ) => {
-    setFashionItemsInfo(prev => {
+    setFashionItemInfos(prev => {
       return prev.filter(prev => prev.id !== fashionItemInfoIdToDelete)
     })
   }
 
   const handlePostTextChange = (postText: string) => {
     setPostText(postText)
-  }
-
-  const getUploadedImageIds = async (): Promise<
-    UploadedImageId[] | undefined
-  > => {
-    if (!imageFiles) {
-      return
-    }
-    const res = await uploadImage(imageFiles)
-    const uploadedImageIds = res.data.map(image => image.id)
-    return uploadedImageIds
-  }
-
-  const editSnsPost = async () => {
-    const imageIds = await getUploadedImageIds()
-    await editPost({
-      postId: snsPost.id,
-      content: postText,
-      imageIds,
-      fashionItemsInfo,
-    })
   }
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -117,12 +85,31 @@ const PostEdit = ({ snsPost, afterPostEdited, children }: PostEditProps) => {
     }
   }
 
+  const editSnsPost = async () => {
+    const imageIds = await uploadPostImages()
+    await editPost({
+      postId: snsPost.id,
+      content: postText,
+      imageIds,
+      fashionItemInfos: fashionItemInfos,
+    })
+  }
+
+  const uploadPostImages = async (): Promise<UploadedImageId[] | undefined> => {
+    if (!imageFiles) {
+      return
+    }
+    const res = await uploadImage(imageFiles)
+    const uploadedImageIds = res.data.map(image => image.id)
+    return uploadedImageIds
+  }
+
   return children({
     previewImages,
-    fashionItemsInfo,
+    fashionItemInfos: fashionItemInfos,
     postText,
     handleImageFilesChange,
-    handleFashionItemsInfoChange,
+    handleFashionItemInfosChange: handleFashionItemInfosChange,
     handleFashionItemInfoAddMoreButtonClick,
     handleFashionItemInfoDeleteButtonClick,
     handlePostTextChange,

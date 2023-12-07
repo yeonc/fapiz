@@ -11,7 +11,7 @@ import { PostCommentIdResponse } from './postComment'
 type SnsPostResponseCommonAttributes = {
   content: Nullable<string>
   createdAt: string
-  fashionItemsInfo: Nullable<FashionItemInfo[]>
+  fashionItemInfos: Nullable<FashionItemInfo[]>
   likeUsers: {
     data: UserWithAttributes[]
   }
@@ -85,5 +85,5 @@ export type SnsPostForPostDetail = {
   likeUsers: UserWithAttributes[]
   bookmarkUsers: UserWithAttributes[]
   content: string
-  fashionItemsInfo: FashionItemInfo[]
+  fashionItemInfos: FashionItemInfo[]
 }

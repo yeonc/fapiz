@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios'
-import { BACKEND_URL } from 'constants/constants'
+import { BACKEND_URL } from 'constants/common'
 
 type SwrFetcherArgs = {
   baseURL?: string

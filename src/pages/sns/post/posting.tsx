@@ -8,7 +8,7 @@ import AddIcon from '@mui/icons-material/Add'
 import ImageUploadButton from 'components/common/buttons/imageUploadButton'
 import PostWritingHeadingTypo from 'components/sns/post/postWritingHeadingTypo'
 import PostWritingSubheadingTypo from 'components/sns/post/postWritingSubheadingTypo'
-import FashionItemsInfo from 'components/sns/post/fashionItemsInfo'
+import FashionItemInfos from 'components/sns/post/FashionItemInfos'
 import PostCreate from 'components/sns/post/postCreate'
 import ImageUploadCaptionTypo from 'components/common/typo/imageUploadCaptionTypo'
 import MaxWidthContainer from 'components/layouts/containers/maxWidthContainer'
@@ -30,7 +30,7 @@ const StyledPostDescriptionWrapper = styled.section`
   margin-bottom: 22px;
 `
 
-const StyledFashionItemsInfo = styled(FashionItemsInfo)`
+const StyledFashionItemInfos = styled(FashionItemInfos)`
   margin-bottom: 10px;
 `
 
@@ -66,10 +66,10 @@ const SnsPostCreatePage = () => {
           <PostCreate authorId={me.id} afterPostCreated={afterPostCreated}>
             {({
               previewImages,
-              fashionItemsInfo,
+              fashionItemInfos,
               postText,
               handleImageFilesChange,
-              handleFashionItemsInfoChange,
+              handleFashionItemInfosChange,
               handleFashionItemInfoAddMoreButtonClick,
               handleFashionItemInfoDeleteButtonClick,
               handlePostTextChange,
@@ -107,9 +107,9 @@ const SnsPostCreatePage = () => {
                     <PostWritingSubheadingTypo>
                       착용한 패션 아이템 정보
                     </PostWritingSubheadingTypo>
-                    <StyledFashionItemsInfo
-                      fashionItemsInfo={fashionItemsInfo}
-                      onFashionItemsInfoChange={handleFashionItemsInfoChange}
+                    <StyledFashionItemInfos
+                      fashionItemInfos={fashionItemInfos}
+                      onFashionItemInfosChange={handleFashionItemInfosChange}
                       onFashionItemInfoDeleteButtonClick={
                         handleFashionItemInfoDeleteButtonClick
                       }

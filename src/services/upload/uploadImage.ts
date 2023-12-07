@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
-import { BACKEND_URL } from 'constants/constants'
+import { BACKEND_URL } from 'constants/common'
 import { UploadImageResponse } from 'types/image'
 
 const uploadImage = async (

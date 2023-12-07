@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
-import { BACKEND_URL } from 'constants/constants'
+import { BACKEND_URL } from 'constants/common'
 import { User } from 'types/user'
 
 const fetchMe = async (token: string): Promise<AxiosResponse<User>> => {

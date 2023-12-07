@@ -1,7 +1,6 @@
 import { FormEvent, useState } from 'react'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import LoadingButton from '@mui/lab/LoadingButton'
 import ImageUploadButton from 'components/common/buttons/imageUploadButton'
@@ -13,6 +12,10 @@ import { changeImageFileToPreviewImage } from 'utils/previewImage'
 import { ImageFiles, Image, UploadedImageId } from 'types/image'
 import { mgBottom, mgRight } from 'styles/layout'
 import { FashionItemForCloset } from 'pages/closet'
+import { Nullable } from 'types/common'
+import ErrorMessage, { ErrorType } from 'components/common/texts/ErrorMessage'
+import useError from 'hooks/useError'
+import { ERROR_MESSAGE_TIMEOUT_SEC } from 'constants/common'
 
 const StyledFashionItemCreateForm = styled.form`
   text-align: center;
@@ -50,6 +53,9 @@ const FashionItemEditForm = ({
   const [color, setColor] = useState<string>(initialFashionItem.color)
   const [isFashionItemEditLoading, setIsFashionItemEditLoading] =
     useState(false)
+  const [isFashionItemDeleteLoading, setIsFashionItemDeleteLoading] =
+    useState(false)
+  const { error, handleError } = useError()
 
   const handleImageFilesChange = (imageFiles: FileList) => {
     setImageFiles(imageFiles)
@@ -69,8 +75,8 @@ const FashionItemEditForm = ({
     try {
       await editFashionItemInCloset()
       afterEditFashionItem()
-    } catch (error) {
-      console.error(error)
+    } catch {
+      handleError('fasionItemEditError', ERROR_MESSAGE_TIMEOUT_SEC)
     } finally {
       setIsFashionItemEditLoading(false)
     }
@@ -103,11 +109,14 @@ const FashionItemEditForm = ({
     if (!willFashionItemBeDeleted) {
       return
     }
+    setIsFashionItemDeleteLoading(true)
     try {
       await deleteFashionItem(initialFashionItem.id)
       afterDeleteFashionItem()
-    } catch (error) {
-      console.error(error)
+    } catch {
+      handleError('fashionItemDeleteError', ERROR_MESSAGE_TIMEOUT_SEC)
+    } finally {
+      setIsFashionItemDeleteLoading(false)
     }
   }
 
@@ -143,23 +152,27 @@ const FashionItemEditForm = ({
           fullWidth={true}
         />
       </StyledTextFieldWrapper>
+      {error && <ErrorMessage type={error} />}
       <LoadingButton
         variant="contained"
         type="submit"
         css={mgRight(6)}
         loading={isFashionItemEditLoading}
         loadingPosition="center"
+        disabled={isFashionItemDeleteLoading}
       >
         수정
       </LoadingButton>
-      <Button
+      <LoadingButton
         variant="outlined"
         type="button"
-        onClick={handleFashionItemDeleteButtonClick}
+        loading={isFashionItemDeleteLoading}
+        loadingPosition="center"
         disabled={isFashionItemEditLoading}
+        onClick={handleFashionItemDeleteButtonClick}
       >
         삭제
-      </Button>
+      </LoadingButton>
     </StyledFashionItemCreateForm>
   )
 }

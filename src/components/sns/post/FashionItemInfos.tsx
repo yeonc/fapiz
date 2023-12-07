@@ -26,16 +26,16 @@ const formControlWidth = css`
 
 type FashionItemInfoToChange = Partial<FashionItemInfo>
 
-type ChangeFashionItemsInfoArgs = {
+type ChangeFashionItemInfosArgs = {
   fashionItemInfoId: number
   fashionItemInfoToChange: FashionItemInfoToChange
 }
 
-type ChangedFashionItemsInfo = FashionItemInfo[]
+type ChangedFashionItemInfos = FashionItemInfo[]
 
-type ChangeFashionItemsInfo = (
-  args: ChangeFashionItemsInfoArgs
-) => ChangedFashionItemsInfo
+type ChangeFashionItemInfos = (
+  args: ChangeFashionItemInfosArgs
+) => ChangedFashionItemInfos
 
 type HandleCategoryChangeArgs = {
   fashionItemInfoId: number
@@ -52,26 +52,26 @@ type HandleBuyingPlaceChangeArgs = {
   buyingPlace: string
 }
 
-type FashionItemsInfoProps = {
-  fashionItemsInfo: FashionItemInfo[]
-  onFashionItemsInfoChange: (fashionItemsInfo: FashionItemInfo[]) => void
+type FashionItemInfosProps = {
+  fashionItemInfos: FashionItemInfo[]
+  onFashionItemInfosChange: (fashionItemInfos: FashionItemInfo[]) => void
   onFashionItemInfoDeleteButtonClick: (
     fashionItemInfoIdToDelete: number
   ) => void
   className?: string
 }
 
-const FashionItemsInfo = ({
-  fashionItemsInfo,
-  onFashionItemsInfoChange,
+const FashionItemInfos = ({
+  fashionItemInfos: fashionItemInfos,
+  onFashionItemInfosChange: onFashionItemInfosChange,
   onFashionItemInfoDeleteButtonClick,
   className,
-}: FashionItemsInfoProps) => {
-  const changeFashionItemsInfo: ChangeFashionItemsInfo = ({
+}: FashionItemInfosProps) => {
+  const changeFashionItemInfos: ChangeFashionItemInfos = ({
     fashionItemInfoId,
     fashionItemInfoToChange,
   }) => {
-    const changedFashionItemsInfo = fashionItemsInfo.map(fashionItemInfo => {
+    const changedFashionItemInfos = fashionItemInfos.map(fashionItemInfo => {
       if (fashionItemInfo.id === fashionItemInfoId) {
         return {
           ...fashionItemInfo,
@@ -80,18 +80,18 @@ const FashionItemsInfo = ({
       }
       return fashionItemInfo
     })
-    return changedFashionItemsInfo
+    return changedFashionItemInfos
   }
 
   const handleCategoryChange = ({
     fashionItemInfoId,
     category,
   }: HandleCategoryChangeArgs) => {
-    const changedFashionItemsInfo = changeFashionItemsInfo({
+    const changedFashionItemInfos = changeFashionItemInfos({
       fashionItemInfoId,
       fashionItemInfoToChange: { category },
     })
-    onFashionItemsInfoChange(changedFashionItemsInfo)
+    onFashionItemInfosChange(changedFashionItemInfos)
   }
 
   const handlePriceChange = ({
@@ -99,27 +99,27 @@ const FashionItemsInfo = ({
     price,
   }: handlePriceChangeArgs) => {
     const priceValue = !Number.isNaN(price) ? price : null
-    const changedFashionItemsInfo = changeFashionItemsInfo({
+    const changedFashionItemInfos = changeFashionItemInfos({
       fashionItemInfoId,
       fashionItemInfoToChange: { price: priceValue },
     })
-    onFashionItemsInfoChange(changedFashionItemsInfo)
+    onFashionItemInfosChange(changedFashionItemInfos)
   }
 
   const handleBuyingPlaceChange = ({
     fashionItemInfoId,
     buyingPlace,
   }: HandleBuyingPlaceChangeArgs) => {
-    const changedFashionItemsInfo = changeFashionItemsInfo({
+    const changedFashionItemInfos = changeFashionItemInfos({
       fashionItemInfoId,
       fashionItemInfoToChange: { buyingPlace },
     })
-    onFashionItemsInfoChange(changedFashionItemsInfo)
+    onFashionItemInfosChange(changedFashionItemInfos)
   }
 
   return (
     <ul className={className}>
-      {fashionItemsInfo.map(fashionItemInfo => (
+      {fashionItemInfos.map(fashionItemInfo => (
         <StyledFashionItemInfo key={fashionItemInfo.id}>
           <FormControl css={formControlWidth}>
             <InputLabel>아이템 종류</InputLabel>
@@ -132,6 +132,7 @@ const FashionItemsInfo = ({
                   category: e.target.value,
                 })
               }
+              required
             >
               {FASHION_ITEM_CATEGORIES.map(category => (
                 <MenuItem key={category.id} value={category.name}>
@@ -150,6 +151,7 @@ const FashionItemsInfo = ({
                 price: (e.target as HTMLInputElement).valueAsNumber,
               })
             }
+            required
           />
           <TextField
             label="구입처"
@@ -160,6 +162,7 @@ const FashionItemsInfo = ({
                 buyingPlace: e.target.value,
               })
             }
+            required
           />
           <IconButton
             color="primary"
@@ -175,4 +178,4 @@ const FashionItemsInfo = ({
   )
 }
 
-export default FashionItemsInfo
+export default FashionItemInfos

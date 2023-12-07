@@ -11,6 +11,14 @@ import { changeImageFileToPreviewImage } from 'utils/previewImage'
 import { ImageFiles, Image, UploadedImageId } from 'types/image'
 import { mgBottom } from 'styles/layout'
 import { useAuth } from 'context/AuthContext'
+import ErrorMessage from 'components/common/texts/ErrorMessage'
+import useError from 'hooks/useError'
+import { ERROR_MESSAGE_TIMEOUT_SEC } from 'constants/common'
+
+const DEFAULT_PREVIEW_IMAGE = {
+  url: '/default-preview.png',
+  altText: '기본 프리뷰 이미지',
+}
 
 const StyledFashionItemCreateForm = styled.form`
   text-align: center;
@@ -29,11 +37,6 @@ const previewImageStyle = css`
   aspect-ratio: 1 / 1;
 `
 
-const DEFAULT_PREVIEW_IMAGE = {
-  url: '/default-preview.png',
-  altText: '기본 프리뷰 이미지',
-}
-
 const FashionItemCreateForm = ({
   afterCreateFashionItem,
 }: {
@@ -46,6 +49,7 @@ const FashionItemCreateForm = ({
   const [color, setColor] = useState('')
   const [isFashionItemCreateLoading, setIsFashionItemCreateLoading] =
     useState(false)
+  const { error, handleError } = useError()
 
   const handleImageFilesChange = (imageFiles: FileList) => {
     setImageFiles(imageFiles)
@@ -63,8 +67,8 @@ const FashionItemCreateForm = ({
     try {
       await createFashionItemInCloset()
       afterCreateFashionItem()
-    } catch (error) {
-      console.error(error)
+    } catch {
+      handleError('fashionItemCreateError', ERROR_MESSAGE_TIMEOUT_SEC)
     } finally {
       setIsFashionItemCreateLoading(false)
     }
@@ -121,6 +125,7 @@ const FashionItemCreateForm = ({
           fullWidth={true}
         />
       </StyledTextFieldWrapper>
+      {error && <ErrorMessage type={error} />}
       <LoadingButton
         variant="contained"
         type="submit"

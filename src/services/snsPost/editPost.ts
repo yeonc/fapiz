@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
-import { BACKEND_URL } from 'constants/constants'
+import { BACKEND_URL } from 'constants/common'
 import { Nullable } from 'types/common'
 import { FashionItemInfo } from 'types/fashion'
 
@@ -7,7 +7,7 @@ type EditPostArgs = {
   postId: number
   content: Nullable<string>
   imageIds?: number[]
-  fashionItemsInfo: FashionItemInfo[]
+  fashionItemInfos: FashionItemInfo[]
 }
 
 type EditPost = (args: EditPostArgs) => Promise<AxiosResponse>
@@ -16,7 +16,7 @@ const editPost: EditPost = async ({
   postId,
   content,
   imageIds,
-  fashionItemsInfo,
+  fashionItemInfos: fashionItemInfos,
 }) => {
   return axios({
     method: 'put',
@@ -25,8 +25,8 @@ const editPost: EditPost = async ({
       data: {
         content: content === '' ? null : content,
         postImages: imageIds,
-        fashionItemsInfo:
-          fashionItemsInfo.length === 0 ? null : fashionItemsInfo,
+        fashionItemInfos:
+          fashionItemInfos.length === 0 ? null : fashionItemInfos,
       },
     },
   })
