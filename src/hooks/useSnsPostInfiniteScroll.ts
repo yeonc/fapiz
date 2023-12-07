@@ -3,7 +3,7 @@ import useInfiniteScroll from 'hooks/useInfiniteScroll'
 import fetchFilteredSnsPosts from 'services/snsPost/fetchFilteredSnsPosts'
 import { Nullable } from 'types/common'
 import { FashionStyle } from 'types/fashion'
-import { SnsPostForMainPage } from 'pages/api/filtered-sns-posts'
+import { SnsPostForHomePage } from 'pages/api/filtered-sns-posts'
 
 type UseSnsPostInfiniteScrollArgs = {
   initialPageNumber: number
@@ -15,7 +15,7 @@ type UseSnsPostInfiniteScrollArgs = {
 }
 
 type UseSnsPostInfiniteScrollReturns = {
-  snsPosts: SnsPostForMainPage[]
+  snsPosts: SnsPostForHomePage[]
   isSnsPostsLoading: boolean
   fetchTriggerRef: RefObject<HTMLElement>
 }
@@ -32,7 +32,7 @@ const useSnsPostInfiniteScroll: UseSnsPostInfiniteScroll = ({
   myBodyShape,
   myFashionStyles,
 }) => {
-  const [snsPosts, setSnsPosts] = useState<SnsPostForMainPage[]>([])
+  const [snsPosts, setSnsPosts] = useState<SnsPostForHomePage[]>([])
   const [isSnsPostsLoading, setIsSnsPostsLoading] = useState(false)
   const [pageNumber, setPageNumber] = useState(initialPageNumber)
   const [pageNumberAlreadyFetched, setPageNumberAlreadyFetched] = useState(0)

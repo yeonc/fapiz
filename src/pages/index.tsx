@@ -3,7 +3,7 @@ import withLogin from 'hocs/withLogin'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import ImageList from '@mui/material/ImageList'
-import LikeButtonForMainPage from 'components/home/likeButtonForMainPage'
+import LikeButtonForHomePage from 'components/home/likeButtonForHomePage'
 import ImageCardItem from 'components/home/imageCardItem'
 import MaxWidthContainer from 'components/layouts/containers/maxWidthContainer'
 import useSnsPostInfiniteScroll from 'hooks/useSnsPostInfiniteScroll'
@@ -13,7 +13,7 @@ import { useAuth } from 'context/AuthContext'
 const INITIAL_PAGE_NUMBER = 1
 const PAGE_SIZE = 20
 
-const StyledMainPageWrapper = styled.div`
+const StyledHomePageWrapper = styled.div`
   padding: 30px 0;
 `
 
@@ -22,9 +22,9 @@ const fetchTriggerStyle = css`
   height: 1px;
 `
 
-const SnsPostLikeButtonWithLogin = withLogin(LikeButtonForMainPage)
+const SnsPostLikeButtonWithLogin = withLogin(LikeButtonForHomePage)
 
-const MainPage = () => {
+const HomePage = () => {
   const { me } = useAuth()
 
   const { snsPosts, fetchTriggerRef } = useSnsPostInfiniteScroll({
@@ -38,7 +38,7 @@ const MainPage = () => {
 
   return (
     <MaxWidthContainer>
-      <StyledMainPageWrapper>
+      <StyledHomePageWrapper>
         <ImageList variant="masonry" cols={3}>
           {snsPosts.map(snsPost => (
             <ImageCardItem
@@ -59,9 +59,9 @@ const MainPage = () => {
           ))}
         </ImageList>
         <span ref={fetchTriggerRef} css={fetchTriggerStyle}></span>
-      </StyledMainPageWrapper>
+      </StyledHomePageWrapper>
     </MaxWidthContainer>
   )
 }
 
-export default withHeader(MainPage)
+export default withHeader(HomePage)

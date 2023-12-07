@@ -10,7 +10,7 @@ import { Nullable } from 'types/common'
 import { Image } from 'types/image'
 import { UserWithAttributes } from 'types/user'
 
-export type SnsPostForMainPage = {
+export type SnsPostForHomePage = {
   id: number
   createdAt: string
   author: {
@@ -110,7 +110,7 @@ const getSafeFashionStylesFromQuery = (
 
 const sanitizedSnsPosts = (
   snsPostsFromStrapi: SnsPostResponseAboutFiltering[]
-): SnsPostForMainPage[] => {
+): SnsPostForHomePage[] => {
   return snsPostsFromStrapi.map(post => ({
     id: post.id,
     createdAt: post.attributes.createdAt,
@@ -129,7 +129,7 @@ const sanitizedSnsPosts = (
 }
 
 type FilterSnsPostsByMyInfoArgs = {
-  snsPosts: SnsPostForMainPage[]
+  snsPosts: SnsPostForHomePage[]
   isLoggedIn: boolean
   myGender: Nullable<string>
   myBodyShape: Nullable<string>
@@ -138,7 +138,7 @@ type FilterSnsPostsByMyInfoArgs = {
 
 type FilterSnsPostsByMyInfo = (
   args: FilterSnsPostsByMyInfoArgs
-) => SnsPostForMainPage[]
+) => SnsPostForHomePage[]
 
 const filterSnsPostsByMyInfo: FilterSnsPostsByMyInfo = ({
   snsPosts,
@@ -173,7 +173,7 @@ const filterSnsPostsByMyInfo: FilterSnsPostsByMyInfo = ({
 
 const byMyBodyShape =
   (myBodyShape: Nullable<string>) =>
-  (snsPost: SnsPostForMainPage): boolean => {
+  (snsPost: SnsPostForHomePage): boolean => {
     if (myBodyShape === null) {
       return true
     }
@@ -183,7 +183,7 @@ const byMyBodyShape =
 
 const byMyGender =
   (myGender: Nullable<string>) =>
-  (snsPost: SnsPostForMainPage): boolean => {
+  (snsPost: SnsPostForHomePage): boolean => {
     if (myGender === null) {
       return true
     }
@@ -193,7 +193,7 @@ const byMyGender =
 
 const byMyFashionStyles =
   (myFashionStyles: Nullable<FashionStyle[]>) =>
-  (snsPost: SnsPostForMainPage): boolean => {
+  (snsPost: SnsPostForHomePage): boolean => {
     if (myFashionStyles === null) {
       return true
     }

@@ -4,8 +4,8 @@ import { css } from '@emotion/react'
 import { EmotionJSX } from '@emotion/react/types/jsx-namespace'
 import ImageListItem from '@mui/material/ImageListItem'
 import ImageListItemBar from '@mui/material/ImageListItemBar'
-import LikeButtonForMainPage from 'components/home/likeButtonForMainPage'
-import { SnsPostForMainPage } from 'pages/api/filtered-sns-posts'
+import LikeButtonForHomePage from 'components/home/likeButtonForHomePage'
+import { SnsPostForHomePage } from 'pages/api/filtered-sns-posts'
 
 const imageListItemStyle = css`
   border-radius: 10px;
@@ -23,7 +23,7 @@ const imageListItemBarStyle = css`
 `
 
 type ImageCardItemProps = {
-  cardItemData: SnsPostForMainPage
+  cardItemData: SnsPostForHomePage
   rightActionButton: EmotionJSX.Element | null
 }
 
@@ -38,7 +38,7 @@ const ImageCardItem = ({
 
   const handleImageListItemClick = (e: MouseEvent<HTMLElement>) => {
     const isLikeButtonClicked =
-      (e.target as HTMLElement).id === LikeButtonForMainPage.id
+      (e.target as HTMLElement).id === LikeButtonForHomePage.id
     if (isLikeButtonClicked) {
       return
     }

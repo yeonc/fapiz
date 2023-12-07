@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
-import { SnsPostForMainPage } from 'pages/api/filtered-sns-posts'
+import { SnsPostForHomePage } from 'pages/api/filtered-sns-posts'
 import { Nullable } from 'types/common'
 import { FashionStyle } from 'types/fashion'
 
@@ -14,7 +14,7 @@ type FetchFilteredSnsPostsArgs = {
 
 type FetchFilteredSnsPosts = (
   args: FetchFilteredSnsPostsArgs
-) => Promise<AxiosResponse<SnsPostForMainPage[]>>
+) => Promise<AxiosResponse<SnsPostForHomePage[]>>
 
 const fetchFilteredSnsPosts: FetchFilteredSnsPosts = async ({
   pageNumber,

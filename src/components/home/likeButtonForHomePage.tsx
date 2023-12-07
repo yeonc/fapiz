@@ -8,13 +8,13 @@ import unlikePost from 'services/snsPost/unlikePost'
 import { UserWithAttributes } from 'types/user'
 import { LIKE_BUTTON_PINK } from 'styles/constants/color'
 
-const LIKE_BUTTON_ID = 'like-button-for-main-page'
+const LIKE_BUTTON_ID = 'like-button-for-home-page'
 
 const favoriteColor = css`
   color: ${LIKE_BUTTON_PINK};
 `
 
-type LikeButtonForMainPageProps = {
+type LikeButtonForHomePageProps = {
   myId: number
   targetId: number
   likeUsers: UserWithAttributes[]
@@ -22,13 +22,13 @@ type LikeButtonForMainPageProps = {
   borderColor?: string
 }
 
-const LikeButtonForMainPage = ({
+const LikeButtonForHomePage = ({
   myId,
   targetId,
   likeUsers,
   isShowLikeUsersNumber,
   borderColor,
-}: LikeButtonForMainPageProps) => {
+}: LikeButtonForHomePageProps) => {
   const initialIsLiked = likeUsers.some(likeUser => likeUser.id === myId)
   const likeUserIds = likeUsers.map(likeUser => likeUser.id)
 
@@ -75,6 +75,6 @@ const LikeButtonForMainPage = ({
   )
 }
 
-LikeButtonForMainPage.id = LIKE_BUTTON_ID
+LikeButtonForHomePage.id = LIKE_BUTTON_ID
 
-export default LikeButtonForMainPage
+export default LikeButtonForHomePage
