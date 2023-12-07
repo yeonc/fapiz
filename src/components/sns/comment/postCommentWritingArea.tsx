@@ -2,7 +2,7 @@ import { FormEvent, useState } from 'react'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import TextField from '@mui/material/TextField'
-import Button from '@mui/material/Button'
+import LoadingButton from '@mui/lab/LoadingButton'
 import Avatar from '@mui/material/Avatar'
 import createComment from 'services/snsComment/createComment'
 import { useAuth } from 'context/AuthContext'
@@ -48,9 +48,10 @@ const PostCommentWritingArea = ({
   afterPostCommentSubmit,
   className,
 }: PostCommentWritingAreaProps) => {
-  const [comment, setComment] = useState('')
   const { me } = useAuth()
   const { user } = useUser<UserResponseWithProfileImage>(me?.id, query)
+  const [comment, setComment] = useState('')
+  const [isCommentCreateLoading, setIsCommentCreateLoading] = useState(false)
 
   if (!user) {
     return null
@@ -59,12 +60,15 @@ const PostCommentWritingArea = ({
   const handleCommentChange = (comment: string) => setComment(comment)
   const handleCommentSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setIsCommentCreateLoading(true)
     try {
       await createComment({ comment, postId: snsPostId, authorId: user.id })
       setComment('')
       afterPostCommentSubmit()
     } catch (error) {
       console.error(error)
+    } finally {
+      setIsCommentCreateLoading(false)
     }
   }
 
@@ -84,9 +88,15 @@ const PostCommentWritingArea = ({
           required
           multiline
         />
-        <Button variant="contained" size="small" type="submit">
+        <LoadingButton
+          variant="contained"
+          size="small"
+          type="submit"
+          loading={isCommentCreateLoading}
+          loadingPosition="center"
+        >
           등록
-        </Button>
+        </LoadingButton>
       </StyledPostCommentForm>
     </StyledPostCommentWritingAreaWrapper>
   )
