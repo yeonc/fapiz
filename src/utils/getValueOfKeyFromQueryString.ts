@@ -7,14 +7,10 @@ type GetValueOfKeyFromQueryStringArgs = {
   key: string
 }
 
-type GetValueOfKeyFromQueryString = (
-  args: GetValueOfKeyFromQueryStringArgs
-) => Value
-
-const getValueOfKeyFromQueryString: GetValueOfKeyFromQueryString = ({
+const getValueOfKeyFromQueryString = ({
   queryString,
   key,
-}) => {
+}: GetValueOfKeyFromQueryStringArgs): Value => {
   const urlQueryParams = new URLSearchParams(queryString)
   const value = urlQueryParams.get(key)
   return value

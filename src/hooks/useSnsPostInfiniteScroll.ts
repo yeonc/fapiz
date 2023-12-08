@@ -4,13 +4,14 @@ import fetchFilteredSnsPosts from 'services/snsPost/fetchFilteredSnsPosts'
 import { Nullable } from 'types/common'
 import { FashionStyle } from 'types/fashion'
 import { SnsPostForHomePage } from 'pages/api/filtered-sns-posts'
+import { BodyShape, Gender } from 'types/user'
 
 type UseSnsPostInfiniteScrollArgs = {
   initialPageNumber: number
   pageSize: number
   isLoggedIn: boolean
-  myGender: Nullable<string>
-  myBodyShape: Nullable<string>
+  myGender: Nullable<Gender>
+  myBodyShape: Nullable<BodyShape>
   myFashionStyles: Nullable<FashionStyle[]>
 }
 

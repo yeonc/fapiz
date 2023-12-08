@@ -1,4 +1,4 @@
-import { Nullable } from 'types/common'
+import { Id, Nullable } from 'types/common'
 import { PostAuthorResponse, User, UserWithAttributes } from 'types/user'
 import { FashionItemInfo } from 'types/fashion'
 import {
@@ -33,13 +33,13 @@ type SnsPostResponseAdditionalAttributes = {
 }
 
 export type SnsPostResponseAboutDefaultQuery = {
-  id: number
+  id: Id
   attributes: SnsPostResponseCommonAttributes &
     SnsPostResponseAdditionalAttributes
 }
 
 export type SnsPostResponseAboutPostDetail = {
-  id: number
+  id: Id
   attributes: SnsPostResponseCommonAttributes &
     Pick<SnsPostResponseAdditionalAttributes, 'bookmarkUsers'> & {
       author: {
@@ -49,7 +49,7 @@ export type SnsPostResponseAboutPostDetail = {
 }
 
 export type SnsPostResponseAboutSearchResult = {
-  id: number
+  id: Id
   attributes: SnsPostResponseCommonAttributes &
     Pick<SnsPostResponseAdditionalAttributes, 'comments'> & {
       author: {
@@ -59,13 +59,13 @@ export type SnsPostResponseAboutSearchResult = {
 }
 
 export type SnsPostResponseAboutShowingAll = {
-  id: number
+  id: Id
   attributes: SnsPostResponseCommonAttributes &
     SnsPostResponseAdditionalAttributes
 }
 
 export type SnsPostResponseAboutFiltering = {
-  id: number
+  id: Id
   attributes: SnsPostResponseCommonAttributes &
     Pick<SnsPostResponseAdditionalAttributes, 'author'>
 }
@@ -78,7 +78,7 @@ export type SnsPostAuthorForPostDetail = Pick<
 }
 
 export type SnsPostForPostDetail = {
-  id: number
+  id: Id
   createdAt: string
   images: Image[]
   author: SnsPostAuthorForPostDetail

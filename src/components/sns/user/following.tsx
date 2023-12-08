@@ -8,6 +8,8 @@ import { DEFAULT_BLACK } from 'styles/constants/color'
 import { horizontal, mgRight } from 'styles/layout'
 import { UserWithProfileImageAndFollowers } from 'types/user'
 
+const FOLLOWING_TEXT = '팔로잉'
+
 const followingStyle = css`
   color: ${DEFAULT_BLACK};
 `
@@ -36,12 +38,12 @@ const Following = ({ followings, afterFollow }: FollowingProps) => {
         css={followingStyle}
       >
         <dl css={horizontal}>
-          <dt css={mgRight(10)}>팔로잉</dt>
+          <dt css={mgRight(10)}>{FOLLOWING_TEXT}</dt>
           <dd>{followings.length}</dd>
         </dl>
       </Button>
       <StyledModal
-        title="팔로잉"
+        title={FOLLOWING_TEXT}
         contents={<UserList users={followings} afterFollow={afterFollow} />}
         open={isFollowingModalOpen}
         onClose={handleFollowingModalClose}

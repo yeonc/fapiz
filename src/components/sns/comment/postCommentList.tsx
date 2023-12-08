@@ -4,7 +4,7 @@ import PostCommentItem from 'components/sns/comment/postCommentItem'
 import useSnsComments from 'hooks/useSnsComments'
 import createUrlQuery from 'utils/createUrlQuery'
 import { mgBottom } from 'styles/layout'
-import { Nullable } from 'types/common'
+import { Id, Nullable } from 'types/common'
 import { sanitizePostCommentsForSnsPost } from 'sanitizer/postComments'
 
 const StyledNotExistComment = styled.div`
@@ -17,10 +17,10 @@ const StyledPostCommentItem = styled(PostCommentItem)`
 `
 
 export type PostCommentForSnsPost = {
-  id: number
+  id: Id
   createdAt: string
   content: string
-  authorId: Nullable<number>
+  authorId: Nullable<Id>
   authorName: Nullable<string>
   authorProfileImageUrl?: string
 }

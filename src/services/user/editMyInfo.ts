@@ -1,16 +1,17 @@
 import axios, { AxiosResponse } from 'axios'
 import { BACKEND_URL } from 'constants/common'
-import { Nullable } from 'types/common'
+import { Id, Nullable } from 'types/common'
 import { FashionStyle } from 'types/fashion'
+import { BodyShape, Gender } from 'types/user'
 
 type EditMyInfoArgs = {
-  myId: number
-  profileImageId?: number
+  myId: Id
+  profileImageId?: Id
   username: string
-  gender: string
+  gender: Gender | ''
   height: Nullable<number>
   weight: Nullable<number>
-  bodyShape: string
+  bodyShape: BodyShape | ''
   fashionStyles: FashionStyle[]
 }
 

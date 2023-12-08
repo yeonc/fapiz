@@ -3,10 +3,7 @@ import PostDescriptionContentsLayout from 'components/sns/post/postDescriptionCo
 import PostCommentList from 'components/sns/comment/postCommentList'
 import useSnsPost from 'hooks/useSnsPost'
 import createUrlQuery from 'utils/createUrlQuery'
-import {
-  SnsPostForPostDetail,
-  SnsPostResponseAboutPostDetail,
-} from 'types/snsPost'
+import { SnsPostResponseAboutPostDetail } from 'types/snsPost'
 import getSafeNumberFromQuery from 'utils/getSafeNumberFromQuery'
 import { sanitizeSnsPostForPostDetail } from 'sanitizer/snsPosts'
 

@@ -7,8 +7,11 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import TextField from '@mui/material/TextField'
 import { FASHION_ITEM_CATEGORIES } from 'constants/fashionItem'
-import { FashionItemInfo } from 'types/fashion'
+import { FashionItemInfo, FashionItemCategoryName } from 'types/fashion'
 import styled from '@emotion/styled'
+import { Id } from 'types/common'
+
+const ITEM_TYPE_TEXT = '아이템 종류'
 
 const StyledFashionItemInfo = styled.li`
   display: flex;
@@ -27,7 +30,7 @@ const formControlWidth = css`
 type FashionItemInfoToChange = Partial<FashionItemInfo>
 
 type ChangeFashionItemInfosArgs = {
-  fashionItemInfoId: number
+  fashionItemInfoId: Id
   fashionItemInfoToChange: FashionItemInfoToChange
 }
 
@@ -38,17 +41,17 @@ type ChangeFashionItemInfos = (
 ) => ChangedFashionItemInfos
 
 type HandleCategoryChangeArgs = {
-  fashionItemInfoId: number
-  category: string
+  fashionItemInfoId: Id
+  category: FashionItemCategoryName
 }
 
 type handlePriceChangeArgs = {
-  fashionItemInfoId: number
+  fashionItemInfoId: Id
   price: number
 }
 
 type HandleBuyingPlaceChangeArgs = {
-  fashionItemInfoId: number
+  fashionItemInfoId: Id
   buyingPlace: string
 }
 
@@ -122,14 +125,14 @@ const FashionItemInfos = ({
       {fashionItemInfos.map(fashionItemInfo => (
         <StyledFashionItemInfo key={fashionItemInfo.id}>
           <FormControl css={formControlWidth}>
-            <InputLabel>아이템 종류</InputLabel>
+            <InputLabel>{ITEM_TYPE_TEXT}</InputLabel>
             <Select
-              label="아이템 종류"
+              label={ITEM_TYPE_TEXT}
               value={fashionItemInfo.category}
               onChange={e =>
                 handleCategoryChange({
                   fashionItemInfoId: fashionItemInfo.id,
-                  category: e.target.value,
+                  category: e.target.value as FashionItemCategoryName,
                 })
               }
               required

@@ -18,9 +18,11 @@ import { Image } from 'types/image'
 import { useAuth } from 'context/AuthContext'
 import { sanitizeFashionItemsForCloset } from 'sanitizer/fahsionItems'
 import Head from 'next/head'
+import { ALL_TEXT } from 'constants/common'
+import { Id } from 'types/common'
 
 export type FashionItemForCloset = {
-  id: number
+  id: Id
   category: string
   color: string
   image: Image
@@ -45,8 +47,8 @@ const fabPositionFixed = css`
 `
 
 const ClosetPage = () => {
-  const [category, setCategory] = useState('all')
-  const [color, setColor] = useState('all')
+  const [category, setCategory] = useState(ALL_TEXT)
+  const [color, setColor] = useState(ALL_TEXT)
 
   const handleCategoryChange = (category: string) => {
     setCategory(category)
@@ -170,7 +172,7 @@ const filterFashionItems: FilterFashionItems = ({
 const byCategory =
   (category: string) =>
   (fashionItem: FashionItemForCloset): boolean => {
-    if (category === 'all') {
+    if (category === ALL_TEXT) {
       return true
     }
     return fashionItem.category === category
@@ -179,7 +181,7 @@ const byCategory =
 const byColor =
   (color: string) =>
   (fashionItem: FashionItemForCloset): boolean => {
-    if (color === 'all') {
+    if (color === ALL_TEXT) {
       return true
     }
     return fashionItem.color === color

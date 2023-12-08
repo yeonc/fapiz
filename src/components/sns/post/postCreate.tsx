@@ -1,20 +1,24 @@
-import { FormEvent, useState } from 'react'
+import { FormEvent, ReactNode, useState } from 'react'
 import createPost from 'services/snsPost/createPost'
 import uploadImage from 'services/upload/uploadImage'
 import { changeImageFilesToPreviewImages } from 'utils/previewImage'
 import getObjectIncludedId from 'utils/getObjectIncludedId'
-import { EmotionJSX } from '@emotion/react/types/jsx-namespace'
 import { FashionItemInfo } from 'types/fashion'
 import { ImageFiles, Image, UploadedImageId } from 'types/image'
+import { Id } from 'types/common'
 
-const EMPTY_FASHION_ITEM_INFO = { category: '', price: null, buyingPlace: '' }
+const EMPTY_FASHION_ITEM_INFO: Omit<FashionItemInfo, 'id'> = {
+  category: '',
+  price: null,
+  buyingPlace: '',
+}
 
 const createNewEmptyFashionItemInfo = (): FashionItemInfo => {
   return getObjectIncludedId(EMPTY_FASHION_ITEM_INFO)
 }
 const emptyFashionItemInfo = createNewEmptyFashionItemInfo()
 
-type CreatedPostId = number
+type CreatedPostId = Id
 
 type ChildrenProps = {
   previewImages: Image[] | null
@@ -31,9 +35,9 @@ type ChildrenProps = {
 }
 
 type PostCreateProps = {
-  authorId: number
-  afterPostCreated: (createdPostId: number) => void
-  children: (props: ChildrenProps) => EmotionJSX.Element
+  authorId: Id
+  afterPostCreated: (createdPostId: Id) => void
+  children: (props: ChildrenProps) => ReactNode
 }
 
 const PostCreate = ({
@@ -107,17 +111,21 @@ const PostCreate = ({
     return uploadedImageIds
   }
 
-  return children({
-    previewImages,
-    fashionItemInfos,
-    postText,
-    handleImageFilesChange,
-    handleFashionItemInfosChange,
-    handleFashionItemInfoAddMoreButtonClick,
-    handleFashionItemInfoDeleteButtonClick,
-    handlePostTextChange,
-    handleSubmit,
-  })
+  return (
+    <>
+      {children({
+        previewImages,
+        fashionItemInfos,
+        postText,
+        handleImageFilesChange,
+        handleFashionItemInfosChange,
+        handleFashionItemInfoAddMoreButtonClick,
+        handleFashionItemInfoDeleteButtonClick,
+        handlePostTextChange,
+        handleSubmit,
+      })}
+    </>
+  )
 }
 
 export default PostCreate

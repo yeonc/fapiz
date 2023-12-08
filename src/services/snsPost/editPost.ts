@@ -1,12 +1,12 @@
 import axios, { AxiosResponse } from 'axios'
 import { BACKEND_URL } from 'constants/common'
-import { Nullable } from 'types/common'
+import { Id, Nullable } from 'types/common'
 import { FashionItemInfo } from 'types/fashion'
 
 type EditPostArgs = {
-  postId: number
+  postId: Id
   content: Nullable<string>
-  imageIds?: number[]
+  imageIds?: Id[]
   fashionItemInfos: FashionItemInfo[]
 }
 

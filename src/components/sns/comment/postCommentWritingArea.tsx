@@ -9,6 +9,7 @@ import { useAuth } from 'context/AuthContext'
 import useUser from 'hooks/useUser'
 import createUrlQuery from 'utils/createUrlQuery'
 import { UserResponseWithProfileImage } from 'types/user'
+import { Id } from 'types/common'
 
 const StyledPostCommentWritingAreaWrapper = styled.div`
   display: flex;
@@ -34,7 +35,7 @@ const StyledTextField = styled(TextField)`
 `
 
 type PostCommentWritingAreaProps = {
-  snsPostId: number
+  snsPostId: Id
   afterPostCommentSubmit: () => void
   className?: string
 }

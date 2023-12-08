@@ -8,11 +8,11 @@ import createUrlQuery from 'utils/createUrlQuery'
 import { SnsPostResponseAboutSearchResult } from 'types/snsPost'
 import { HOVER_BACKGROUND_GRAY } from 'styles/constants/color'
 import { Image } from 'types/image'
-import { Nullable } from 'types/common'
+import { Id, Nullable } from 'types/common'
 import { sanitizeSnsPostsForSearching } from 'sanitizer/snsPosts'
 
 export type SnsPostForSearching = {
-  id: number
+  id: Id
   createdAt: string
   firstImage: Image
   content: Nullable<string>
@@ -24,6 +24,7 @@ export type SnsPostForSearching = {
   commentCount: number
 }
 
+const SNS_POST_SEARCH_RESULT_START_INDEX = 0
 const SNS_POST_SEARCH_RESULT_COUNT_TO_BE_SHOWED = 5
 
 const StyledSnsPostSearchResultListItem = styled(SnsPostSearchResultListItem)`
@@ -61,7 +62,7 @@ const SnsPostSearchResult = ({ searchKeyword }: { searchKeyword: string }) => {
     : sanitizeSnsPostsForSearching(searchedSnsPostsFromStrapi || [])
 
   const searchedSnsPostsToBeShowed = searchedSnsPosts?.slice(
-    0,
+    SNS_POST_SEARCH_RESULT_START_INDEX,
     SNS_POST_SEARCH_RESULT_COUNT_TO_BE_SHOWED
   )
 

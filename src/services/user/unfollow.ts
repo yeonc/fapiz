@@ -1,10 +1,11 @@
 import axios, { AxiosResponse } from 'axios'
 import { BACKEND_URL } from 'constants/common'
+import { Id } from 'types/common'
 
 type unfollowArgs = {
-  myId: number
-  targetUserId: number
-  targetUserFollowerIds: number[]
+  myId: Id
+  targetUserId: Id
+  targetUserFollowerIds: Id[]
 }
 type Unfollow = (args: unfollowArgs) => Promise<AxiosResponse>
 

@@ -1,6 +1,5 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import { EmotionJSX } from '@emotion/react/types/jsx-namespace'
 import Link from '@mui/material/Link'
 import Avatar from '@mui/material/Avatar'
 import Typo from 'components/common/typo'
@@ -8,6 +7,7 @@ import ROUTE_URL from 'constants/routeUrl'
 import { mgRight } from 'styles/layout'
 import visuallyHidden from 'styles/visuallyHidden'
 import { SnsPostAuthorForPostDetail } from 'types/snsPost'
+import { ReactNode } from 'react'
 
 const StyledPostAuthorHeaderWrapper = styled.header`
   display: flex;
@@ -33,7 +33,7 @@ const authorAvatarStyle = css`
 
 type PostAuthorHeaderProps = {
   author: SnsPostAuthorForPostDetail
-  popoverMenu: EmotionJSX.Element | null
+  popoverMenu: ReactNode | null
   className?: string
 }
 

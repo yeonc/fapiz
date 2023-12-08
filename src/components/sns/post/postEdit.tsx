@@ -1,15 +1,18 @@
-import { FormEvent, useState } from 'react'
+import { FormEvent, ReactNode, useState } from 'react'
 import editPost from 'services/snsPost/editPost'
 import uploadImage from 'services/upload/uploadImage'
 import getObjectIncludedId from 'utils/getObjectIncludedId'
 import { changeImageFilesToPreviewImages } from 'utils/previewImage'
-import { EmotionJSX } from '@emotion/react/types/jsx-namespace'
 import { Nullable } from 'types/common'
 import { FashionItemInfo } from 'types/fashion'
 import { Image, ImageFiles, UploadedImageId } from 'types/image'
 import { SnsPostForEditing } from 'pages/sns/post/edit/[snsPostId]'
 
-const EMPTY_FASHION_ITEM_INFO = { category: '', price: null, buyingPlace: '' }
+const EMPTY_FASHION_ITEM_INFO: Omit<FashionItemInfo, 'id'> = {
+  category: '',
+  price: null,
+  buyingPlace: '',
+}
 
 const createNewEmptyFashionItemInfo = (): FashionItemInfo => {
   return getObjectIncludedId(EMPTY_FASHION_ITEM_INFO)
@@ -33,7 +36,7 @@ type ChildrenProps = {
 type PostEditProps = {
   snsPost: SnsPostForEditing
   afterPostEdited: () => void
-  children: (props: ChildrenProps) => EmotionJSX.Element
+  children: (props: ChildrenProps) => ReactNode
 }
 
 const PostEdit = ({ snsPost, afterPostEdited, children }: PostEditProps) => {
@@ -104,17 +107,21 @@ const PostEdit = ({ snsPost, afterPostEdited, children }: PostEditProps) => {
     return uploadedImageIds
   }
 
-  return children({
-    previewImages,
-    fashionItemInfos: fashionItemInfos,
-    postText,
-    handleImageFilesChange,
-    handleFashionItemInfosChange: handleFashionItemInfosChange,
-    handleFashionItemInfoAddMoreButtonClick,
-    handleFashionItemInfoDeleteButtonClick,
-    handlePostTextChange,
-    handleSubmit,
-  })
+  return (
+    <>
+      {children({
+        previewImages,
+        fashionItemInfos: fashionItemInfos,
+        postText,
+        handleImageFilesChange,
+        handleFashionItemInfosChange: handleFashionItemInfosChange,
+        handleFashionItemInfoAddMoreButtonClick,
+        handleFashionItemInfoDeleteButtonClick,
+        handlePostTextChange,
+        handleSubmit,
+      })}
+    </>
+  )
 }
 
 export default PostEdit

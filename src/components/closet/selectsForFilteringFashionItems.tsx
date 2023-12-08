@@ -4,6 +4,8 @@ import InputLabel from '@mui/material/InputLabel'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import { mgRight } from 'styles/layout'
+import styled from '@emotion/styled'
+import { ALL_TEXT } from 'constants/common'
 
 type SelectsForFilteringFashionItemsProps = {
   category: string
@@ -14,6 +16,13 @@ type SelectsForFilteringFashionItemsProps = {
   handleColorChange: (color: string) => void
   className?: string
 }
+
+export const CATEGORY_TEXT = '카테고리'
+export const COLOR_TEXT = '색상'
+
+const StyledAllText = styled.span`
+  text-transform: uppercase;
+`
 
 const formControlMinWidth = css`
   min-width: 120px;
@@ -31,13 +40,15 @@ const SelectsForFilteringFashionItems = ({
   return (
     <div className={className}>
       <FormControl css={[formControlMinWidth, mgRight(10)]}>
-        <InputLabel>카테고리</InputLabel>
+        <InputLabel>{CATEGORY_TEXT}</InputLabel>
         <Select
           value={category}
           onChange={e => handleCategoryChange(e.target.value)}
-          label="카테고리"
+          label={CATEGORY_TEXT}
         >
-          <MenuItem value="all">ALL</MenuItem>
+          <MenuItem value={ALL_TEXT}>
+            <StyledAllText>{ALL_TEXT}</StyledAllText>
+          </MenuItem>
           {categories.map((category, index) => (
             <MenuItem key={index} value={category}>
               {category}
@@ -46,13 +57,15 @@ const SelectsForFilteringFashionItems = ({
         </Select>
       </FormControl>
       <FormControl css={formControlMinWidth}>
-        <InputLabel>색상</InputLabel>
+        <InputLabel>{COLOR_TEXT}</InputLabel>
         <Select
           value={color}
           onChange={e => handleColorChange(e.target.value)}
-          label="색상"
+          label={COLOR_TEXT}
         >
-          <MenuItem value="all">ALL</MenuItem>
+          <MenuItem value={ALL_TEXT}>
+            <StyledAllText>{ALL_TEXT}</StyledAllText>
+          </MenuItem>
           {colors.map((color, index) => (
             <MenuItem key={index} value={color}>
               {color}

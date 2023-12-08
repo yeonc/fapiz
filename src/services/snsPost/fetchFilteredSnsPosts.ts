@@ -2,13 +2,14 @@ import axios, { AxiosResponse } from 'axios'
 import { SnsPostForHomePage } from 'pages/api/filtered-sns-posts'
 import { Nullable } from 'types/common'
 import { FashionStyle } from 'types/fashion'
+import { BodyShape, Gender } from 'types/user'
 
 type FetchFilteredSnsPostsArgs = {
   pageNumber: number
   pageSize: number
   isLoggedIn: boolean
-  myGender: Nullable<string>
-  myBodyShape: Nullable<string>
+  myGender: Nullable<Gender>
+  myBodyShape: Nullable<BodyShape>
   myFashionStyles: Nullable<FashionStyle[]>
 }
 

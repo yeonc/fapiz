@@ -8,6 +8,7 @@ import ROUTE_URL from 'constants/routeUrl'
 import { DEFAULT_GRAY } from 'styles/constants/color'
 import getFormattedDate from 'utils/getFormattedDate'
 import { PostCommentForSnsPost } from './postCommentList'
+import { Id } from 'types/common'
 
 const WITHDRAWN_USER_TEXT = '탈퇴한 유저'
 
@@ -39,7 +40,7 @@ const commentCreatedAtTextStyle = css`
 
 type PostCommentItemProps = {
   comment: PostCommentForSnsPost
-  postId: number
+  postId: Id
   className?: string
 }
 

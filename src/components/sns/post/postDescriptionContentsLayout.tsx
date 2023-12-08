@@ -1,6 +1,5 @@
-import { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { css } from '@emotion/react'
-import { EmotionJSX } from '@emotion/react/types/jsx-namespace'
 import styled from '@emotion/styled'
 import MobileStepper from '@mui/material/MobileStepper'
 import IconButton from '@mui/material/IconButton'
@@ -18,6 +17,7 @@ import { SnsPostAuthorForPostDetail } from 'types/snsPost'
 
 const INITIAL_SHOWED_POST_CONTENT_LENGTH = 200
 const POST_CONTENT_STRING_START_INDEX = 0
+const INITIAL_ACTIVE_STEP = 0
 
 const StyledPostAuthorHeader = styled(PostAuthorHeader)`
   margin-bottom: 20px;
@@ -89,9 +89,9 @@ const createdAtStyle = css`
 `
 
 type PostDescriptionContentsLayoutProps = {
-  snsPostEditMenu: EmotionJSX.Element | null
-  likeButton: EmotionJSX.Element | null
-  bookmarkButton: EmotionJSX.Element | null
+  snsPostEditMenu: ReactNode | null
+  likeButton: ReactNode | null
+  bookmarkButton: ReactNode | null
   postCreatedDate: string
   postAuthor: SnsPostAuthorForPostDetail
   postImages: Image[]
@@ -120,7 +120,7 @@ const PostDescriptionContentsLayout = ({
     initialPostContentToBeShowed
   )
   const [isHiddenContentShowed, setIsHiddenContentShowed] = useState(false)
-  const [activeStep, setActiveStep] = useState(0)
+  const [activeStep, setActiveStep] = useState(INITIAL_ACTIVE_STEP)
   const maxSteps = postImages.length
 
   const handleNextButtonClick = () => {

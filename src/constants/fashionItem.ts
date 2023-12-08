@@ -1,4 +1,6 @@
-export const FASHION_ITEM_CATEGORIES = [
+import { FashionItemCategory } from 'types/fashion'
+
+export const FASHION_ITEM_CATEGORIES: FashionItemCategory[] = [
   {
     id: 1,
     name: '상의',

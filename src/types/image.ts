@@ -1,4 +1,4 @@
-import { Nullable } from 'types/common'
+import { Id, Nullable } from 'types/common'
 
 export type ImageFiles = Nullable<FileList>
 
@@ -9,10 +9,10 @@ export type Image = {
   altText: string
 }
 
-export type UploadImageResponse = { id: number }[]
+export type UploadImageResponse = { id: Id }[]
 
 export type ImageResponseWithAltText = {
-  id: number
+  id: Id
   attributes: {
     url: string
     alternativeText: string
@@ -20,7 +20,7 @@ export type ImageResponseWithAltText = {
 }
 
 export type ImageResponseWithoutAltText = {
-  id: number
+  id: Id
   attributes: {
     url: string
   }

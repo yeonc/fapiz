@@ -5,18 +5,18 @@ import getSafeStringFromQuery from 'utils/getSafeStringFromQuery'
 import getSafeNumberFromQuery from 'utils/getSafeNumberFromQuery'
 import { USER_FASHION_STYLES } from 'constants/user'
 import { FashionStyle } from 'types/fashion'
-import { Nullable } from 'types/common'
+import { Id, Nullable } from 'types/common'
 import { Image } from 'types/image'
-import { UserWithAttributes } from 'types/user'
+import { BodyShape, Gender, UserWithAttributes } from 'types/user'
 import { sanitizeSnsPostsForHomePage } from 'sanitizer/snsPosts'
 
 export type SnsPostForHomePage = {
-  id: number
+  id: Id
   createdAt: string
   author: {
     username: string
-    gender: Nullable<string>
-    bodyShape: Nullable<string>
+    gender: Nullable<Gender>
+    bodyShape: Nullable<BodyShape>
     fashionStyles: Nullable<FashionStyle[]>
   }
   postImage: Image
@@ -30,8 +30,10 @@ const filterSnsPosts = async (req: NextApiRequest, res: NextApiResponse) => {
   const pageNumber = getSafeNumberFromQuery(query.pageNumber)
   const pageSize = getSafeNumberFromQuery(query.pageSize)
   const isLoggedIn = getSafeStringFromQuery(query.isLoggedIn) === 'true'
-  const myGender = getSafeStringFromQuery(query.myGender)
-  const myBodyShape = getSafeStringFromQuery(query.myBodyShape)
+  const myGender = getSafeStringFromQuery(query.myGender) as Nullable<Gender>
+  const myBodyShape = getSafeStringFromQuery(
+    query.myBodyShape
+  ) as Nullable<BodyShape>
   const myFashionStyles = getSafeFashionStylesFromQuery(query.myFashionStyles)
 
   try {
@@ -111,8 +113,8 @@ const getSafeFashionStylesFromQuery = (
 type FilterSnsPostsByMyInfoArgs = {
   snsPosts: SnsPostForHomePage[]
   isLoggedIn: boolean
-  myGender: Nullable<string>
-  myBodyShape: Nullable<string>
+  myGender: Nullable<Gender>
+  myBodyShape: Nullable<BodyShape>
   myFashionStyles: Nullable<FashionStyle[]>
 }
 
@@ -152,7 +154,7 @@ const filterSnsPostsByMyInfo: FilterSnsPostsByMyInfo = ({
 }
 
 const byMyBodyShape =
-  (myBodyShape: Nullable<string>) =>
+  (myBodyShape: Nullable<BodyShape>) =>
   (snsPost: SnsPostForHomePage): boolean => {
     if (myBodyShape === null) {
       return true
@@ -162,7 +164,7 @@ const byMyBodyShape =
   }
 
 const byMyGender =
-  (myGender: Nullable<string>) =>
+  (myGender: Nullable<Gender>) =>
   (snsPost: SnsPostForHomePage): boolean => {
     if (myGender === null) {
       return true

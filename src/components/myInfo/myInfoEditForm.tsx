@@ -28,6 +28,10 @@ import { DEFAULT_BLACK, DEFAULT_WHITE } from 'styles/constants/color'
 import { mgBottom, mgRight } from 'styles/layout'
 import { FashionStyle } from 'types/fashion'
 import { UserForMyInfo } from 'pages/my-info'
+import useError from 'hooks/useError'
+import ErrorMessage, { ErrorType } from 'components/common/texts/ErrorMessage'
+import { ERROR_MESSAGE_TIMEOUT_SEC } from 'constants/common'
+import { BodyShape, Gender } from 'types/user'
 
 const StyledAvatarAndUsernameWrapper = styled.div`
   text-align: center;
@@ -71,9 +75,9 @@ const inputWidth = css`
   width: 35%;
 `
 
-const errorMessageStyle = css`
-  margin-bottom: 18px;
+const StyledErrorMessageWrapper = styled.div`
   text-align: center;
+  margin-bottom: 20px;
 `
 
 type FashionStyleId = FashionStyle['id']
@@ -94,7 +98,7 @@ const MyInfoEditForm = ({ myInfo, afterMyInfoEdited }: MyInfoEditFormProps) => {
   const [fashionStyles, setFashionStyles] = useState(myInfo.fashionStyles)
   const [isMyInfoEditLoading, setIsMyInfoEditLoading] = useState(false)
   const [isEditButtonActivated, setIsEditButtonActivated] = useState(false)
-  const [error, setError] = useState<Nullable<string>>(null)
+  const { error, handleError } = useError<ErrorType>()
 
   const avatarImageSrc = previewAvatar ? previewAvatar.url : myInfo.imageUrl
   const avatarImageAlt = previewAvatar ? previewAvatar.altText : myInfo.username
@@ -122,7 +126,7 @@ const MyInfoEditForm = ({ myInfo, afterMyInfoEdited }: MyInfoEditFormProps) => {
     setUsername(username)
   }
 
-  const handleGenderChange = (gender: string) => {
+  const handleGenderChange = (gender: Gender) => {
     setEditButtonStateByPrimitiveValueChange({
       initialValue: myInfo.gender,
       inputValue: gender,
@@ -151,7 +155,7 @@ const MyInfoEditForm = ({ myInfo, afterMyInfoEdited }: MyInfoEditFormProps) => {
     setWeight(weightValue)
   }
 
-  const handleBodyShapeChange = (bodyShape: string) => {
+  const handleBodyShapeChange = (bodyShape: BodyShape) => {
     setEditButtonStateByPrimitiveValueChange({
       initialValue: myInfo.bodyShape,
       inputValue: bodyShape,
@@ -177,8 +181,7 @@ const MyInfoEditForm = ({ myInfo, afterMyInfoEdited }: MyInfoEditFormProps) => {
       changeEditButtonActivateMode(false)
       afterMyInfoEdited()
     } catch (error) {
-      setError('❗ 정보 수정에 실패했습니다.')
-      setTimeout(() => setError(null), 4000)
+      handleError('myInfoEditError', ERROR_MESSAGE_TIMEOUT_SEC)
     } finally {
       setIsMyInfoEditLoading(false)
     }
@@ -241,7 +244,7 @@ const MyInfoEditForm = ({ myInfo, afterMyInfoEdited }: MyInfoEditFormProps) => {
           <Select
             label="성별"
             value={gender}
-            onChange={e => handleGenderChange(e.target.value)}
+            onChange={e => handleGenderChange(e.target.value as Gender)}
           >
             {USER_GENDERS.map(gender => (
               <MenuItem key={gender.id} value={gender.name}>
@@ -283,7 +286,7 @@ const MyInfoEditForm = ({ myInfo, afterMyInfoEdited }: MyInfoEditFormProps) => {
           <Select
             label="체형"
             value={bodyShape}
-            onChange={e => handleBodyShapeChange(e.target.value)}
+            onChange={e => handleBodyShapeChange(e.target.value as BodyShape)}
           >
             {USER_BODY_SHAPES.map(bodyShape => (
               <MenuItem key={bodyShape.id} value={bodyShape.name}>
@@ -331,7 +334,11 @@ const MyInfoEditForm = ({ myInfo, afterMyInfoEdited }: MyInfoEditFormProps) => {
           </Select>
         </FormControl>
       </StyledBodyShapeAndFashionStyleInputWrapper>
-      {error && <p css={errorMessageStyle}>{error}</p>}
+      {error && (
+        <StyledErrorMessageWrapper>
+          <ErrorMessage type={error} />
+        </StyledErrorMessageWrapper>
+      )}
       <StyledUserInfoEditAndCancelButtonWrapper>
         <LoadingButton
           variant="contained"

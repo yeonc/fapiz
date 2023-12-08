@@ -16,13 +16,13 @@ import useSnsPost from 'hooks/useSnsPost'
 import { SnsPostResponseAboutDefaultQuery } from 'types/snsPost'
 import getSafeNumberFromQuery from 'utils/getSafeNumberFromQuery'
 import { Image } from 'types/image'
-import { Nullable } from 'types/common'
+import { Id, Nullable } from 'types/common'
 import { FashionItemInfo } from 'types/fashion'
 import { sanitizeSnsPostForEditing } from 'sanitizer/snsPosts'
 import Head from 'next/head'
 
 export type SnsPostForEditing = {
-  id: number
+  id: Id
   postImages: Image[]
   fashionItemInfos: Nullable<FashionItemInfo[]>
   postText: string

@@ -14,6 +14,7 @@ import ImageUploadCaptionTypo from 'components/common/typo/imageUploadCaptionTyp
 import MaxWidthContainer from 'components/layouts/containers/maxWidthContainer'
 import { useAuth } from 'context/AuthContext'
 import Head from 'next/head'
+import { Id } from 'types/common'
 
 const StyledSnsPostCreatePageWrapper = styled.div`
   padding: 20px 0;
@@ -52,11 +53,11 @@ const SnsPostCreatePage = () => {
 
   const router = useRouter()
 
-  const goToSnsPost = (postId: number) => {
+  const goToSnsPost = (postId: Id) => {
     router.push(`/sns/post/${postId}`)
   }
 
-  const afterPostCreated = (createdPostId: number) => {
+  const afterPostCreated = (createdPostId: Id) => {
     goToSnsPost(createdPostId)
   }
 

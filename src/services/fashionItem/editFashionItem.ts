@@ -1,11 +1,12 @@
 import axios, { AxiosResponse } from 'axios'
 import { BACKEND_URL } from 'constants/common'
+import { Id } from 'types/common'
 
 type EditFashionItemArgs = {
-  fashionItemId: number
+  fashionItemId: Id
   category: string
   color: string
-  imageId?: number
+  imageId?: Id
 }
 
 type EditFashionItem = (args: EditFashionItemArgs) => Promise<AxiosResponse>

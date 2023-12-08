@@ -7,14 +7,14 @@ import CommentEditInput from 'components/sns/comment/commentEditInput'
 import Comment from 'components/common/texts/comment'
 import deleteComment from 'services/snsComment/deleteComment'
 import createUrlQuery from 'utils/createUrlQuery'
-import { Nullable } from 'types/common'
+import { Id, Nullable } from 'types/common'
 import { useAuth } from 'context/AuthContext'
 
 type CommentByModeProps = {
-  commentId: number
+  commentId: Id
   commentText: string
-  snsPostId: number
-  commentAuthorId: Nullable<number>
+  snsPostId: Id
+  commentAuthorId: Nullable<Id>
 }
 
 const CommentByMode = ({

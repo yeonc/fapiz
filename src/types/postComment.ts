@@ -1,13 +1,14 @@
+import { Id } from './common'
 import { ImageResponseWithoutAltText } from './image'
 
 export type PostCommentResponse = {
-  id: number
+  id: Id
   attributes: {
     content: string
     createdAt: string
     author: {
       data: {
-        id: number
+        id: Id
         attributes: {
           username: string
           profileImage: {
@@ -20,5 +21,5 @@ export type PostCommentResponse = {
 }
 
 export type PostCommentIdResponse = {
-  id: number
+  id: Id
 }

@@ -6,6 +6,7 @@ import SearchResultHeadingTypo from 'components/search/searchResultHeadingTypo'
 import useSearchedUsers from 'hooks/useSearchedUsers'
 import { HOVER_BACKGROUND_GRAY } from 'styles/constants/color'
 
+const USER_SEARCH_RESULT_START_INDEX = 0
 const USER_SEARCH_RESULT_COUNT_TO_BE_SHOWED = 5
 
 const StyledUserSearchResultList = styled.ul`
@@ -43,7 +44,10 @@ const UserSearchResult = ({
   const { searchedUsers, isLoading } = useSearchedUsers(searchKeyword)
 
   const searchedUsersToBeShowed = searchedUsers
-    ? searchedUsers.slice(0, USER_SEARCH_RESULT_COUNT_TO_BE_SHOWED)
+    ? searchedUsers.slice(
+        USER_SEARCH_RESULT_START_INDEX,
+        USER_SEARCH_RESULT_COUNT_TO_BE_SHOWED
+      )
     : []
 
   return (

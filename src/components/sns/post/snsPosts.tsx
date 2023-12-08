@@ -7,9 +7,10 @@ import createUrlQuery from 'utils/createUrlQuery'
 import { SnsPostResponseAboutShowingAll } from 'types/snsPost'
 import { Image } from 'types/image'
 import { sanitizeSnsPostsForShowingAllSnsPosts } from 'sanitizer/snsPosts'
+import { Id } from 'types/common'
 
 export type SnsPostForSnsPosts = {
-  id: number
+  id: Id
   firstImage: Image
 }
 
@@ -23,7 +24,7 @@ const postImageStyle = css`
   object-fit: cover;
 `
 
-const SnsPosts = ({ userId }: { userId: number }) => {
+const SnsPosts = ({ userId }: { userId: Id }) => {
   const router = useRouter()
   const query = createUrlQuery({
     populate: '*',
@@ -37,7 +38,7 @@ const SnsPosts = ({ userId }: { userId: number }) => {
     ? sanitizeSnsPostsForShowingAllSnsPosts(snsPostsFromStrapi)
     : []
 
-  const goToSnsPost = (postId: number) => router.push(`/sns/post/${postId}`)
+  const goToSnsPost = (postId: Id) => router.push(`/sns/post/${postId}`)
 
   if (isLoading) {
     return <p>포스트 데이터를 불러오는 중입니다.</p>

@@ -24,6 +24,10 @@ const StyledTextFieldWrapper = styled.div`
   padding: 12px 12px 18px;
 `
 
+const StyledErrorMessageWrapper = styled.div`
+  margin-bottom: 12px;
+`
+
 const previewImageStyle = css`
   display: block;
   width: 200px;
@@ -151,7 +155,11 @@ const FashionItemEditForm = ({
           fullWidth={true}
         />
       </StyledTextFieldWrapper>
-      {error && <ErrorMessage type={error} />}
+      {error && (
+        <StyledErrorMessageWrapper>
+          <ErrorMessage type={error} />
+        </StyledErrorMessageWrapper>
+      )}
       <LoadingButton
         variant="contained"
         type="submit"

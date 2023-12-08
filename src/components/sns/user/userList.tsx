@@ -10,6 +10,7 @@ import { Nullable } from 'types/common'
 import { UserWithProfileImageAndFollowers } from 'types/user'
 import { useAuth } from 'context/AuthContext'
 import getIdsFromArrayOfObject from 'utils/getIdsFromArrayOfObject'
+import ROUTE_URL from 'constants/routeUrl'
 
 const StyledNoExistUser = styled.p`
   text-align: center;
@@ -51,7 +52,7 @@ const UserList = ({ users, afterFollow }: UserListProps) => {
               alt={user.username}
               src={user.profileImage?.url}
               component="a"
-              href={`/sns/${user.id}`}
+              href={`${ROUTE_URL.SNS}/${user.id}`}
             />
           </ListItemAvatar>
           <ListItemText
@@ -60,7 +61,7 @@ const UserList = ({ users, afterFollow }: UserListProps) => {
               weight: user.weight,
             })}
           >
-            <Link href={`/sns/${user.id}`}>{user.username}</Link>
+            <Link href={`${ROUTE_URL.SNS}/${user.id}`}>{user.username}</Link>
           </ListItemText>
         </ListItem>
       ))}
@@ -77,13 +78,11 @@ type GetUserBodyInfoTextArgs = {
   weight: Nullable<number>
 }
 
-type GetUserBodyInfoText = (
-  args: GetUserBodyInfoTextArgs
-) => UserBodyInfoText | undefined
+type GetUserBodyInfoText = (args: GetUserBodyInfoTextArgs) => UserBodyInfoText
 
 const getUserBodyInfoText: GetUserBodyInfoText = ({ height, weight }) => {
   if (!height && !weight) {
-    return
+    return ''
   }
 
   if (height && !weight) {

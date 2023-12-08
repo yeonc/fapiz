@@ -4,10 +4,11 @@ import BookmarkIcon from '@mui/icons-material/Bookmark'
 import createBookmark from 'services/snsPost/createBookmark'
 import deleteBookmark from 'services/snsPost/deleteBookmark'
 import { UserWithAttributes } from 'types/user'
+import { Id } from 'types/common'
 
 type BookmarkButtonProps = {
-  myId: number
-  targetId: number
+  myId: Id
+  targetId: Id
   bookmarkUsers: UserWithAttributes[]
   afterBookmark: () => void
   isShowBookmarkUsersNumber: boolean

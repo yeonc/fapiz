@@ -3,13 +3,14 @@ import useError from 'hooks/useError'
 import { useState } from 'react'
 import follow from 'services/user/follow'
 import unfollow from 'services/user/unfollow'
+import { Id } from 'types/common'
 
 const ERROR_BUTTON_TIMEOUT_SEC = 3
 
 type FollowToggleButtonProps = {
-  myId: number
-  targetUserId: number
-  targetUserFollowerIds: number[]
+  myId: Id
+  targetUserId: Id
+  targetUserFollowerIds: Id[]
   afterFollow: () => void
 }
 const FollowToggleButton = ({

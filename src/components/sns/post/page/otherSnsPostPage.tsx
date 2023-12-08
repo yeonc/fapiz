@@ -8,10 +8,7 @@ import BookmarkButton from 'components/common/buttons/bookmarkButton'
 import LikeButton from 'components/common/buttons/likeButton'
 import useSnsPost from 'hooks/useSnsPost'
 import createUrlQuery from 'utils/createUrlQuery'
-import {
-  SnsPostForPostDetail,
-  SnsPostResponseAboutPostDetail,
-} from 'types/snsPost'
+import { SnsPostResponseAboutPostDetail } from 'types/snsPost'
 import getSafeNumberFromQuery from 'utils/getSafeNumberFromQuery'
 import { useAuth } from 'context/AuthContext'
 import { sanitizeSnsPostForPostDetail } from 'sanitizer/snsPosts'

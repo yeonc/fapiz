@@ -3,7 +3,6 @@ type Days = number
 
 const TWO_WEEKS = 14
 const TODAY = 1
-
 const getFormattedDate = (createdDate: Date): DateFormattedString => {
   const today = new Date()
   const daysBetweenCreatedAndToday = getDaysBetweenTwoDate(createdDate, today)
@@ -30,11 +29,15 @@ const getDaysBetweenTwoDate = (startDate: Date, endDate: Date): Days => {
   return Math.floor(daysBetweenTwoDate)
 }
 
+const ONE_SECOND_TO_MILLISECONDS = 1000
+const ONE_MINUTE_TO_SECONDS = 60
+const ONE_HOUR_TO_MINUTES = 60
+const ONE_DAY_TO_HOURS = 24
 const convertMillisecondsToDays = (milliseconds: number): Days => {
-  const seconds = milliseconds / 1000
-  const minutes = seconds / 60
-  const hours = minutes / 60
-  const days = hours / 24
+  const seconds = milliseconds / ONE_SECOND_TO_MILLISECONDS
+  const minutes = seconds / ONE_MINUTE_TO_SECONDS
+  const hours = minutes / ONE_HOUR_TO_MINUTES
+  const days = hours / ONE_DAY_TO_HOURS
   return days
 }
 

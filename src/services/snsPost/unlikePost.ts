@@ -1,10 +1,11 @@
 import axios, { AxiosResponse } from 'axios'
 import { BACKEND_URL } from 'constants/common'
+import { Id } from 'types/common'
 
 type UnlikePostArgs = {
-  targetPostId: number
-  myId: number
-  likeUserIds: number[]
+  targetPostId: Id
+  myId: Id
+  likeUserIds: Id[]
 }
 
 type UnlikePost = (args: UnlikePostArgs) => Promise<AxiosResponse>

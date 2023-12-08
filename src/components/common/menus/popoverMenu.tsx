@@ -5,10 +5,11 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import deletePost from 'services/snsPost/deletePost'
+import { Id } from 'types/common'
 
 type PopoverMenuProps = {
-  postId: number
-  myId: number
+  postId: Id
+  myId: Id
 }
 
 const PopoverMenu = ({ postId, myId }: PopoverMenuProps) => {

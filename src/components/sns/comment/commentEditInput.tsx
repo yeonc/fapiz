@@ -5,6 +5,7 @@ import EditOffIcon from '@mui/icons-material/EditOff'
 import SendIcon from '@mui/icons-material/Send'
 import CommentInput from 'components/common/inputs/commentInput'
 import editComment from 'services/snsComment/editComment'
+import { Id } from 'types/common'
 
 const StyledCommentEditButtonsWrapper = styled.div`
   display: flex;
@@ -12,7 +13,7 @@ const StyledCommentEditButtonsWrapper = styled.div`
 `
 
 type CommentEditInputProps = {
-  commentId: number
+  commentId: Id
   initialCommentText: string
   onCommentEditCancelButtonClick: () => void
   afterPostCommentEdited: () => void

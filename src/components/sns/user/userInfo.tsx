@@ -14,6 +14,7 @@ import { UserResponseWithAdditionalFields } from 'types/user'
 import { useAuth } from 'context/AuthContext'
 import getIdsFromArrayOfObject from 'utils/getIdsFromArrayOfObject'
 import { sanitizeUserForSnsUserInfo } from 'sanitizer/users'
+import { Id } from 'types/common'
 
 const StyledBodyInfoWrapper = styled.dl`
   display: flex;
@@ -40,7 +41,7 @@ export type UserForSnsUserInfo = Omit<
 > & { profileImageUrl?: string }
 
 type UserInfoProps = {
-  userId: number
+  userId: Id
   className?: string
 }
 
