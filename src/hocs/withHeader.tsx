@@ -2,12 +2,12 @@ import { FunctionComponent } from 'react'
 import PaddingTopContainer from 'components/layouts/containers/paddingTopContainer'
 import Header from 'components/layouts/header'
 
-const withHeader = (Page: FunctionComponent) => {
-  const ComponentWithHeader = () => {
+const withHeader = <P extends {}>(Page: FunctionComponent<P>) => {
+  const ComponentWithHeader = (props: P) => {
     return (
       <PaddingTopContainer>
         <Header />
-        <Page />
+        <Page {...props} />
       </PaddingTopContainer>
     )
   }

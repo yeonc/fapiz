@@ -1,7 +1,7 @@
 import { useEffect, useRef, RefObject } from 'react'
 
 const useInfiniteScroll = (
-  increasePageNumber: () => void
+  handleIntersecting: () => void
 ): RefObject<HTMLElement> => {
   const fetchTriggerRef = useRef<HTMLElement>(null)
   const fetchTriggerElement = fetchTriggerRef.current
@@ -10,14 +10,14 @@ const useInfiniteScroll = (
     const handleObserver = (entries: IntersectionObserverEntry[]) => {
       const target = entries[0]
       if (target.isIntersecting) {
-        increasePageNumber()
+        handleIntersecting()
       }
     }
     const observer = new IntersectionObserver(handleObserver)
     if (fetchTriggerElement) {
       observer.observe(fetchTriggerElement)
     }
-  }, [fetchTriggerElement, increasePageNumber])
+  }, [fetchTriggerElement, handleIntersecting])
 
   return fetchTriggerRef
 }

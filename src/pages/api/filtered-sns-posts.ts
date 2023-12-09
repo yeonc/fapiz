@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import fetchSnsPosts from 'services/snsPost/fetchSnsPosts'
 import paginateData from 'utils/paginateData'
 import getSafeStringFromQuery from 'utils/getSafeStringFromQuery'
 import getSafeNumberFromQuery from 'utils/getSafeNumberFromQuery'
@@ -8,7 +7,7 @@ import { FashionStyle } from 'types/fashion'
 import { Id, Nullable } from 'types/common'
 import { Image } from 'types/image'
 import { BodyShape, Gender, UserWithAttributes } from 'types/user'
-import { sanitizeSnsPostsForHomePage } from 'sanitizer/snsPosts'
+import getFilteredSnsPosts from 'services/snsPost/getFilteredSnsPosts'
 
 export type SnsPostForHomePage = {
   id: Id
@@ -23,10 +22,9 @@ export type SnsPostForHomePage = {
   likeUsers: UserWithAttributes[]
 }
 
-const filterSnsPosts = async (req: NextApiRequest, res: NextApiResponse) => {
+const filterPosts = async (req: NextApiRequest, res: NextApiResponse) => {
   const { query } = req
 
-  // 1. query 받아오기
   const pageNumber = getSafeNumberFromQuery(query.pageNumber)
   const pageSize = getSafeNumberFromQuery(query.pageSize)
   const isLoggedIn = getSafeStringFromQuery(query.isLoggedIn) === 'true'
@@ -37,24 +35,13 @@ const filterSnsPosts = async (req: NextApiRequest, res: NextApiResponse) => {
   const myFashionStyles = getSafeFashionStylesFromQuery(query.myFashionStyles)
 
   try {
-    // 2. strapi에 모든 SNS 게시물 데이터 요청해서 받아오기
-    const response = await fetchSnsPosts()
-    const snsPostsFromStrapi = response.data.data
-
-    // 3. strapi에서 받아온 SNS 게시물 데이터 정제하기
-    const snsPosts = sanitizeSnsPostsForHomePage(snsPostsFromStrapi)
-
-    // 4. 정제한 SNS 게시물 데이터 필터링하기
-    // (로그인 한 유저의 정보와 비슷한 정보를 가진 유저들이 올린 SNS 게시물들만 필터링)
-    const filteredSnsPostsByMyInfo = filterSnsPostsByMyInfo({
-      snsPosts,
+    const filteredSnsPostsByMyInfo = await getFilteredSnsPosts({
       isLoggedIn,
       myGender,
       myBodyShape,
       myFashionStyles,
     })
 
-    // 5-1. 요청 쿼리에 pageNumber, pageSize 둘 다 있는 경우, 필터링 된 SNS 게시물 데이터에서 특정 페이지를 추출해서 내려주기
     if (pageNumber && pageSize) {
       const paginatedSnsPosts = paginateData({
         dataArray: filteredSnsPostsByMyInfo,
@@ -64,7 +51,6 @@ const filterSnsPosts = async (req: NextApiRequest, res: NextApiResponse) => {
       res.status(200).json(paginatedSnsPosts)
     }
 
-    // 5-2. 요청 쿼리에 pageNumber, pageSize 중 하나라도 빠져있는 경우, 필터링 된 SNS 게시물 데이터 내려주기
     if (!pageNumber || !pageSize) {
       res.status(200).json(filteredSnsPostsByMyInfo)
     }
@@ -73,7 +59,7 @@ const filterSnsPosts = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 }
 
-export default filterSnsPosts
+export default filterPosts
 
 const getSafeFashionStylesFromQuery = (
   queryValue: string | string[]
@@ -109,84 +95,3 @@ const getSafeFashionStylesFromQuery = (
 
   return fashionStyleArray
 }
-
-type FilterSnsPostsByMyInfoArgs = {
-  snsPosts: SnsPostForHomePage[]
-  isLoggedIn: boolean
-  myGender: Nullable<Gender>
-  myBodyShape: Nullable<BodyShape>
-  myFashionStyles: Nullable<FashionStyle[]>
-}
-
-type FilterSnsPostsByMyInfo = (
-  args: FilterSnsPostsByMyInfoArgs
-) => SnsPostForHomePage[]
-
-const filterSnsPostsByMyInfo: FilterSnsPostsByMyInfo = ({
-  snsPosts,
-  isLoggedIn,
-  myGender,
-  myBodyShape,
-  myFashionStyles,
-}) => {
-  if (!isLoggedIn) {
-    return snsPosts
-  }
-
-  const filterConditionCount = [myGender, myBodyShape, myFashionStyles]
-    .map(Boolean)
-    .filter(Boolean).length
-
-  if (filterConditionCount === 0) {
-    return snsPosts
-  }
-
-  if (filterConditionCount === 1) {
-    return snsPosts
-  }
-
-  const filteredSnsPosts = snsPosts
-    .filter(byMyGender(myGender))
-    .filter(byMyBodyShape(myBodyShape))
-    .filter(byMyFashionStyles(myFashionStyles))
-
-  return filteredSnsPosts
-}
-
-const byMyBodyShape =
-  (myBodyShape: Nullable<BodyShape>) =>
-  (snsPost: SnsPostForHomePage): boolean => {
-    if (myBodyShape === null) {
-      return true
-    }
-
-    return snsPost.author.bodyShape === myBodyShape
-  }
-
-const byMyGender =
-  (myGender: Nullable<Gender>) =>
-  (snsPost: SnsPostForHomePage): boolean => {
-    if (myGender === null) {
-      return true
-    }
-
-    return snsPost.author.gender === myGender
-  }
-
-const byMyFashionStyles =
-  (myFashionStyles: Nullable<FashionStyle[]>) =>
-  (snsPost: SnsPostForHomePage): boolean => {
-    if (myFashionStyles === null) {
-      return true
-    }
-
-    if (!snsPost.author.fashionStyles) {
-      return false
-    }
-
-    return snsPost.author.fashionStyles.some(authorFashionStyle =>
-      myFashionStyles.some(
-        myFashionStyle => authorFashionStyle.id === myFashionStyle.id
-      )
-    )
-  }

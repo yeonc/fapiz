@@ -10,6 +10,11 @@ import MaxWidthContainer from 'components/layouts/containers/maxWidthContainer'
 import useSnsPostInfiniteScroll from 'hooks/useSnsPostInfiniteScroll'
 import { DEFAULT_WHITE } from 'styles/constants/color'
 import { useAuth } from 'context/AuthContext'
+import { SnsPostForHomePage } from './api/filtered-sns-posts'
+import fetchMe from 'services/auth/fetchMe'
+import paginateData from 'utils/paginateData'
+import { GetServerSidePropsContext } from 'next'
+import getFilteredSnsPosts from 'services/snsPost/getFilteredSnsPosts'
 
 const INITIAL_PAGE_NUMBER = 1
 const PAGE_SIZE = 20
@@ -25,7 +30,7 @@ const fetchTriggerStyle = css`
 
 const SnsPostLikeButtonWithLogin = withLogin(LikeButtonForHomePage)
 
-const HomePage = () => {
+const HomePage = ({ initialPosts }: { initialPosts: SnsPostForHomePage[] }) => {
   const { me } = useAuth()
 
   const { snsPosts, fetchTriggerRef } = useSnsPostInfiniteScroll({
@@ -35,6 +40,7 @@ const HomePage = () => {
     myGender: me?.gender || null,
     myBodyShape: me?.bodyShape || null,
     myFashionStyles: me?.fashionStyles || null,
+    initialPosts,
   })
 
   return (
@@ -72,3 +78,38 @@ const HomePage = () => {
 }
 
 export default withHeader(HomePage)
+
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const jwt = context.req.cookies.jwt
+  try {
+    const authRes = await fetchMe(jwt)
+    const me = authRes.data
+
+    const filteredSnsPostsByMyInfo = await getFilteredSnsPosts({
+      isLoggedIn: !!me,
+      myGender: me?.gender || null,
+      myBodyShape: me?.bodyShape || null,
+      myFashionStyles: me?.fashionStyles || null,
+    })
+
+    const initialPosts = paginateData({
+      dataArray: filteredSnsPostsByMyInfo,
+      pageNumber: INITIAL_PAGE_NUMBER,
+      pageSize: PAGE_SIZE,
+    })
+
+    return {
+      props: {
+        initialPosts,
+      },
+    }
+  } catch {
+    return {
+      props: {
+        initialPosts: [],
+      },
+    }
+  }
+}
