@@ -30,7 +30,12 @@ const fetchTriggerStyle = css`
 
 const SnsPostLikeButtonWithLogin = withLogin(LikeButtonForHomePage)
 
-const HomePage = ({ initialPosts }: { initialPosts: SnsPostForHomePage[] }) => {
+export type FilteredPosts = {
+  initialPosts: SnsPostForHomePage[]
+  total: number
+}
+
+const HomePage = ({ filteredPosts }: { filteredPosts: FilteredPosts }) => {
   const { me } = useAuth()
 
   const { snsPosts, fetchTriggerRef } = useSnsPostInfiniteScroll({
@@ -40,7 +45,7 @@ const HomePage = ({ initialPosts }: { initialPosts: SnsPostForHomePage[] }) => {
     myGender: me?.gender || null,
     myBodyShape: me?.bodyShape || null,
     myFashionStyles: me?.fashionStyles || null,
-    initialPosts,
+    filteredPosts,
   })
 
   return (
@@ -94,6 +99,8 @@ export const getServerSideProps = async (
       myFashionStyles: me?.fashionStyles || null,
     })
 
+    const total = filteredSnsPostsByMyInfo.length
+
     const initialPosts = paginateData({
       dataArray: filteredSnsPostsByMyInfo,
       pageNumber: INITIAL_PAGE_NUMBER,
@@ -102,13 +109,19 @@ export const getServerSideProps = async (
 
     return {
       props: {
-        initialPosts,
+        filteredPosts: {
+          initialPosts,
+          total,
+        },
       },
     }
   } catch {
     return {
       props: {
-        initialPosts: [],
+        filteredPosts: {
+          initialPosts: [],
+          total: 0,
+        },
       },
     }
   }

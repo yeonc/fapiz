@@ -5,6 +5,7 @@ import { Nullable } from 'types/common'
 import { FashionStyle } from 'types/fashion'
 import { SnsPostForHomePage } from 'pages/api/filtered-sns-posts'
 import { BodyShape, Gender } from 'types/user'
+import { FilteredPosts } from 'pages'
 
 type UseSnsPostInfiniteScrollArgs = {
   initialPageNumber: number
@@ -13,7 +14,7 @@ type UseSnsPostInfiniteScrollArgs = {
   myGender: Nullable<Gender>
   myBodyShape: Nullable<BodyShape>
   myFashionStyles: Nullable<FashionStyle[]>
-  initialPosts: SnsPostForHomePage[]
+  filteredPosts: FilteredPosts
 }
 
 type UseSnsPostInfiniteScrollReturns = {
@@ -33,13 +34,16 @@ const useSnsPostInfiniteScroll: UseSnsPostInfiniteScroll = ({
   myGender,
   myBodyShape,
   myFashionStyles,
-  initialPosts,
+  filteredPosts,
 }) => {
-  const [snsPosts, setSnsPosts] = useState<SnsPostForHomePage[]>(initialPosts)
+  const [snsPosts, setSnsPosts] = useState<SnsPostForHomePage[]>(
+    filteredPosts.initialPosts
+  )
   const [isSnsPostsLoading, setIsSnsPostsLoading] = useState(false)
   const [pageNumber, setPageNumber] = useState(initialPageNumber)
   const [pageNumberAlreadyFetched, setPageNumberAlreadyFetched] = useState(0)
   const [hasDynamicPosts, setHasDynamicPosts] = useState(false)
+  const [isLastPage, setIsLastPage] = useState(false)
 
   const handleIntersecting = useCallback(() => {
     setPageNumber(prev => prev + 1)
@@ -48,7 +52,9 @@ const useSnsPostInfiniteScroll: UseSnsPostInfiniteScroll = ({
   const fetchTriggerRef = useInfiniteScroll(handleIntersecting)
 
   useEffect(() => {
-    if (!hasDynamicPosts) {
+    setIsLastPage(filteredPosts.total === snsPosts.length)
+
+    if (!hasDynamicPosts || isLastPage) {
       return
     }
 
@@ -83,6 +89,9 @@ const useSnsPostInfiniteScroll: UseSnsPostInfiniteScroll = ({
     myBodyShape,
     myFashionStyles,
     hasDynamicPosts,
+    isLastPage,
+    filteredPosts.total,
+    snsPosts.length,
   ])
 
   return {
