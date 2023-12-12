@@ -12,7 +12,7 @@ import { LIGHT_GRAY } from 'styles/constants/color'
 import { useAuth } from 'context/AuthContext'
 import SnsPageHeadContents from 'components/sns/page/snsPageHeadContents'
 import { SWRConfig, unstable_serialize } from 'swr'
-import { GetServerSidePropsContext } from 'next'
+import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import createUrlQuery from 'utils/createUrlQuery'
 import { UserResponseWithAdditionalFields } from 'types/user'
 import { SnsPostResponseAboutShowingAll } from 'types/snsPost'
@@ -42,8 +42,11 @@ type FallbackValue =
   | SnsPostResponseAboutShowingAll[]
   | {}
 type Fallback = Record<Key, FallbackValue>
+type SnsPageProps = {
+  fallback: Fallback
+}
 
-const SnsPage = ({ fallback }: { fallback: Fallback }) => {
+const SnsPage = ({ fallback }: SnsPageProps) => {
   const router = useRouter()
   const { userId: userIdFromQuery } = router.query
   const userId = userIdFromQuery
@@ -93,7 +96,7 @@ const queryForUser = createUrlQuery({
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
-) => {
+): Promise<GetServerSidePropsResult<SnsPageProps>> => {
   const { userId: userIdFromQuery } = context.query
   const userId = userIdFromQuery
     ? getSafeNumberFromQuery(userIdFromQuery)

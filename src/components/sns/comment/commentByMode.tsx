@@ -36,12 +36,8 @@ const CommentByMode = ({
     mutate({ url: `/api/sns-comments?${query}` })
   }
 
-  const { me, isLoading } = useAuth()
+  const { me } = useAuth()
   const [isCommentEditMode, setIsCommentEditMode] = useState(false)
-
-  if (isLoading) {
-    return <p>로그인 유저 정보를 불러오는 중입니다..</p>
-  }
 
   const isShowCommentEditButtonGroup = me?.id === commentAuthorId ? true : false
 
