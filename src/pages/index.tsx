@@ -13,7 +13,7 @@ import { useAuth } from 'context/AuthContext'
 import { SnsPostForHomePage } from './api/filtered-sns-posts'
 import fetchMe from 'services/auth/fetchMe'
 import paginateData from 'utils/paginateData'
-import { GetServerSidePropsContext } from 'next'
+import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import getFilteredSnsPosts from 'services/snsPost/getFilteredSnsPosts'
 
 const INITIAL_PAGE_NUMBER = 1
@@ -34,8 +34,11 @@ export type FilteredPosts = {
   initialPosts: SnsPostForHomePage[]
   total: number
 }
+type HomePageProps = {
+  filteredPosts: FilteredPosts
+}
 
-const HomePage = ({ filteredPosts }: { filteredPosts: FilteredPosts }) => {
+const HomePage = ({ filteredPosts }: HomePageProps) => {
   const { me } = useAuth()
 
   const { snsPosts, fetchTriggerRef } = useSnsPostInfiniteScroll({
@@ -86,11 +89,16 @@ export default withHeader(HomePage)
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
-) => {
+): Promise<GetServerSidePropsResult<HomePageProps>> => {
   const jwt = context.req.cookies.jwt
   try {
-    const authRes = await fetchMe(jwt)
-    const me = authRes.data
+    let me
+    if (!!jwt) {
+      const authRes = await fetchMe(jwt)
+      me = authRes.data
+    } else {
+      me = null
+    }
 
     const filteredSnsPostsByMyInfo = await getFilteredSnsPosts({
       isLoggedIn: !!me,
@@ -117,12 +125,7 @@ export const getServerSideProps = async (
     }
   } catch {
     return {
-      props: {
-        filteredPosts: {
-          initialPosts: [],
-          total: 0,
-        },
-      },
+      notFound: true,
     }
   }
 }

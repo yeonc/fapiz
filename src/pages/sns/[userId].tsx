@@ -129,12 +129,7 @@ export const getServerSideProps = async (
     }
   } catch {
     return {
-      props: {
-        fallback: {
-          [userKey]: {},
-          [postsKey]: [],
-        },
-      },
+      notFound: true,
     }
   }
 }
