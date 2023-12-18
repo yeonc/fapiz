@@ -1,9 +1,10 @@
 import { FunctionComponent } from 'react'
-import useMe from 'hooks/useMe'
+import { useAuth } from 'context/AuthContext'
 
-const withLogin = <T,>(Component: FunctionComponent<T>) => {
-  return ({ ...props }: T) => {
-    const { me } = useMe()
+const withLogin = <P extends {}>(Component: FunctionComponent<P>) => {
+  const ComponentWithLogin = (props: P) => {
+    const { me } = useAuth()
+
     const isLoggedIn = !!me
 
     if (!isLoggedIn) {
@@ -12,6 +13,7 @@ const withLogin = <T,>(Component: FunctionComponent<T>) => {
 
     return <Component {...props} />
   }
+  return ComponentWithLogin
 }
 
 export default withLogin

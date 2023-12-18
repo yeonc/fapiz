@@ -22,12 +22,16 @@ import {
   USER_FASHION_STYLES,
   USER_GENDERS,
 } from 'constants/user'
-import { UserForMyInfoPage } from 'types/user'
-import { ImageFiles, PreviewImage } from 'types/image'
+import { ImageFiles, Image, UploadedImageId } from 'types/image'
 import { Nullable } from 'types/common'
 import { DEFAULT_BLACK, DEFAULT_WHITE } from 'styles/constants/color'
 import { mgBottom, mgRight } from 'styles/layout'
 import { FashionStyle } from 'types/fashion'
+import { UserForMyInfo } from 'pages/my-info'
+import useError from 'hooks/useError'
+import ErrorMessage, { ErrorType } from 'components/common/texts/ErrorMessage'
+import { ERROR_MESSAGE_TIMEOUT_SEC } from 'constants/common'
+import { BodyShape, Gender } from 'types/user'
 
 const StyledAvatarAndUsernameWrapper = styled.div`
   text-align: center;
@@ -71,16 +75,21 @@ const inputWidth = css`
   width: 35%;
 `
 
+const StyledErrorMessageWrapper = styled.div`
+  text-align: center;
+  margin-bottom: 20px;
+`
+
 type FashionStyleId = FashionStyle['id']
 
 type MyInfoEditFormProps = {
-  myInfo: UserForMyInfoPage
+  myInfo: UserForMyInfo
+  afterMyInfoEdited: () => void
 }
 
-const MyInfoEditForm = ({ myInfo }: MyInfoEditFormProps) => {
+const MyInfoEditForm = ({ myInfo, afterMyInfoEdited }: MyInfoEditFormProps) => {
   const [avatarImageFiles, setAvatarImageFiles] = useState<ImageFiles>(null)
-  const [previewAvatar, setPreviewAvatar] =
-    useState<Nullable<PreviewImage>>(null)
+  const [previewAvatar, setPreviewAvatar] = useState<Nullable<Image>>(null)
   const [username, setUsername] = useState(myInfo.username)
   const [gender, setGender] = useState(myInfo.gender)
   const [height, setHeight] = useState(myInfo.height)
@@ -89,6 +98,7 @@ const MyInfoEditForm = ({ myInfo }: MyInfoEditFormProps) => {
   const [fashionStyles, setFashionStyles] = useState(myInfo.fashionStyles)
   const [isMyInfoEditLoading, setIsMyInfoEditLoading] = useState(false)
   const [isEditButtonActivated, setIsEditButtonActivated] = useState(false)
+  const { error, handleError } = useError<ErrorType>()
 
   const avatarImageSrc = previewAvatar ? previewAvatar.url : myInfo.imageUrl
   const avatarImageAlt = previewAvatar ? previewAvatar.altText : myInfo.username
@@ -116,7 +126,7 @@ const MyInfoEditForm = ({ myInfo }: MyInfoEditFormProps) => {
     setUsername(username)
   }
 
-  const handleGenderChange = (gender: string) => {
+  const handleGenderChange = (gender: Gender) => {
     setEditButtonStateByPrimitiveValueChange({
       initialValue: myInfo.gender,
       inputValue: gender,
@@ -126,24 +136,26 @@ const MyInfoEditForm = ({ myInfo }: MyInfoEditFormProps) => {
   }
 
   const handleHeightChange = (height: number) => {
+    const heightValue = !Number.isNaN(height) ? height : null
     setEditButtonStateByPrimitiveValueChange({
       initialValue: myInfo.height,
-      inputValue: height,
+      inputValue: heightValue,
       changeEditButtonActivateMode,
     })
-    setHeight(height)
+    setHeight(heightValue)
   }
 
   const handleWeightChange = (weight: number) => {
+    const weightValue = !Number.isNaN(weight) ? weight : null
     setEditButtonStateByPrimitiveValueChange({
       initialValue: myInfo.weight,
-      inputValue: weight,
+      inputValue: weightValue,
       changeEditButtonActivateMode,
     })
-    setWeight(weight)
+    setWeight(weightValue)
   }
 
-  const handleBodyShapeChange = (bodyShape: string) => {
+  const handleBodyShapeChange = (bodyShape: BodyShape) => {
     setEditButtonStateByPrimitiveValueChange({
       initialValue: myInfo.bodyShape,
       inputValue: bodyShape,
@@ -161,17 +173,25 @@ const MyInfoEditForm = ({ myInfo }: MyInfoEditFormProps) => {
     setFashionStyles(fashionStyles)
   }
 
-  const editInfo = async () => {
-    let uploadedImageId: number | undefined
-
-    if (avatarImageFiles) {
-      const res = await uploadImage(avatarImageFiles)
-      uploadedImageId = res.data[0].id
+  const handleMyInfoSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsMyInfoEditLoading(true)
+    try {
+      await editInfo()
+      changeEditButtonActivateMode(false)
+      afterMyInfoEdited()
+    } catch (error) {
+      handleError('myInfoEditError', ERROR_MESSAGE_TIMEOUT_SEC)
+    } finally {
+      setIsMyInfoEditLoading(false)
     }
+  }
 
+  const editInfo = async () => {
+    const imageId = await uploadUserAvatarImage()
     await editMyInfo({
       myId: myInfo.id,
-      profileImageId: uploadedImageId,
+      profileImageId: imageId,
       username,
       gender,
       height,
@@ -181,17 +201,13 @@ const MyInfoEditForm = ({ myInfo }: MyInfoEditFormProps) => {
     })
   }
 
-  const handleMyInfoSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    try {
-      setIsMyInfoEditLoading(true)
-      await editInfo()
-      setIsMyInfoEditLoading(false)
-      changeEditButtonActivateMode(false)
-    } catch (error) {
-      console.error(error)
-    }
+  const uploadUserAvatarImage = async (): Promise<
+    UploadedImageId | undefined
+  > => {
+    if (!avatarImageFiles) return
+    const res = await uploadImage(avatarImageFiles)
+    const uploadedImageId = res.data[0].id
+    return uploadedImageId
   }
 
   return (
@@ -228,7 +244,7 @@ const MyInfoEditForm = ({ myInfo }: MyInfoEditFormProps) => {
           <Select
             label="성별"
             value={gender}
-            onChange={e => handleGenderChange(e.target.value)}
+            onChange={e => handleGenderChange(e.target.value as Gender)}
           >
             {USER_GENDERS.map(gender => (
               <MenuItem key={gender.id} value={gender.name}>
@@ -242,8 +258,10 @@ const MyInfoEditForm = ({ myInfo }: MyInfoEditFormProps) => {
         <TextField
           label="키"
           type="number"
-          value={height}
-          onChange={e => handleHeightChange(Number(e.target.value))}
+          value={height ?? ''}
+          onChange={e =>
+            handleHeightChange((e.target as HTMLInputElement).valueAsNumber)
+          }
           InputProps={{
             endAdornment: <InputAdornment position="end">cm</InputAdornment>,
           }}
@@ -252,8 +270,10 @@ const MyInfoEditForm = ({ myInfo }: MyInfoEditFormProps) => {
         <TextField
           label="몸무게"
           type="number"
-          value={weight}
-          onChange={e => handleWeightChange(Number(e.target.value))}
+          value={weight ?? ''}
+          onChange={e =>
+            handleWeightChange((e.target as HTMLInputElement).valueAsNumber)
+          }
           InputProps={{
             endAdornment: <InputAdornment position="end">kg</InputAdornment>,
           }}
@@ -266,7 +286,7 @@ const MyInfoEditForm = ({ myInfo }: MyInfoEditFormProps) => {
           <Select
             label="체형"
             value={bodyShape}
-            onChange={e => handleBodyShapeChange(e.target.value)}
+            onChange={e => handleBodyShapeChange(e.target.value as BodyShape)}
           >
             {USER_BODY_SHAPES.map(bodyShape => (
               <MenuItem key={bodyShape.id} value={bodyShape.name}>
@@ -314,6 +334,11 @@ const MyInfoEditForm = ({ myInfo }: MyInfoEditFormProps) => {
           </Select>
         </FormControl>
       </StyledBodyShapeAndFashionStyleInputWrapper>
+      {error && (
+        <StyledErrorMessageWrapper>
+          <ErrorMessage type={error} />
+        </StyledErrorMessageWrapper>
+      )}
       <StyledUserInfoEditAndCancelButtonWrapper>
         <LoadingButton
           variant="contained"
@@ -349,8 +374,8 @@ const setEditButtonStateByAvatarImageFilesChange = ({
 }
 
 type SetEditButtonStateByPrimitiveValueChangeArgs = {
-  initialValue: string | number
-  inputValue: string | number
+  initialValue: Nullable<string | number>
+  inputValue: string | Nullable<number>
   changeEditButtonActivateMode: (activateMode: boolean) => void
 }
 
@@ -379,29 +404,29 @@ const setEditButtonStateByFashionStylesChange = ({
   fashionStylesOfInput,
   changeEditButtonActivateMode,
 }: SetEditButtonStateByFashionStylesChangeArgs) => {
-  const areTwoFashionStyesEqual = compareTwoArrays({
+  const areTwoFashionStylesEqual = compareTwoArrays({
     firstArray: initialFashionStyles,
     secondArray: fashionStylesOfInput,
   })
 
-  if (!areTwoFashionStyesEqual) {
+  if (!areTwoFashionStylesEqual) {
     changeEditButtonActivateMode(true)
   }
 
-  if (areTwoFashionStyesEqual) {
+  if (areTwoFashionStylesEqual) {
     changeEditButtonActivateMode(false)
   }
 }
 
 const convertFashionStyleIdsToFashionStyleObjects = (
-  fashionStyles: FashionStyleId[]
+  fashionStyleIds: FashionStyleId[]
 ): FashionStyle[] => {
-  return fashionStyles.map(fashionStyleId => {
-    const foundedFashionStyleObject = USER_FASHION_STYLES.find(
+  return fashionStyleIds.map(fashionStyleId => {
+    const foundedFashionStyleObject = USER_FASHION_STYLES.filter(
       fashionStyle => fashionStyle.id === fashionStyleId
     )
-    return foundedFashionStyleObject
-  }) as FashionStyle[]
+    return foundedFashionStyleObject[0]
+  })
 }
 
 const convertFashionStyleObjectsToFashionStyleIds = (

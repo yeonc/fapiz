@@ -3,8 +3,9 @@ import CommentIcon from '@mui/icons-material/Comment'
 import PostCommentItem from 'components/sns/comment/postCommentItem'
 import useSnsComments from 'hooks/useSnsComments'
 import createUrlQuery from 'utils/createUrlQuery'
-import { PostCommentForSnsPostPage } from 'types/postComment'
 import { mgBottom } from 'styles/layout'
+import { Id, Nullable } from 'types/common'
+import { sanitizePostCommentsForSnsPost } from 'sanitizer/postComments'
 
 const StyledNotExistComment = styled.div`
   padding: 30px;
@@ -15,11 +16,16 @@ const StyledPostCommentItem = styled(PostCommentItem)`
   margin-bottom: 14px;
 `
 
-type PostCommentListProps = {
-  snsPostId: number
+export type PostCommentForSnsPost = {
+  id: Id
+  createdAt: string
+  content: string
+  authorId: Nullable<Id>
+  authorName: Nullable<string>
+  authorProfileImageUrl?: string
 }
 
-const PostCommentList = ({ snsPostId }: PostCommentListProps) => {
+const PostCommentList = ({ snsPostId }: { snsPostId: number }) => {
   const query = createUrlQuery({
     'populate[0]': 'author',
     'populate[1]': 'author.profileImage',
@@ -29,21 +35,9 @@ const PostCommentList = ({ snsPostId }: PostCommentListProps) => {
 
   const { snsComments: snsCommentsFromStrapi } = useSnsComments(query)
 
-  const comments: PostCommentForSnsPostPage[] = snsCommentsFromStrapi.map(
-    (snsComment: any) => {
-      const author = snsComment.attributes.author.data
-
-      return {
-        id: snsComment.id,
-        createdAt: snsComment.attributes.createdAt,
-        content: snsComment.attributes.content,
-        authorId: author.id,
-        authorName: author.attributes.username,
-        authorProfileImageUrl:
-          author.attributes.profileImage.data?.attributes.url,
-      }
-    }
-  )
+  const comments = snsCommentsFromStrapi
+    ? sanitizePostCommentsForSnsPost(snsCommentsFromStrapi)
+    : []
 
   if (comments.length === 0) {
     return (

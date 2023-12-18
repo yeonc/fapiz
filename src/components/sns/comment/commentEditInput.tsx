@@ -5,6 +5,7 @@ import EditOffIcon from '@mui/icons-material/EditOff'
 import SendIcon from '@mui/icons-material/Send'
 import CommentInput from 'components/common/inputs/commentInput'
 import editComment from 'services/snsComment/editComment'
+import { Id } from 'types/common'
 
 const StyledCommentEditButtonsWrapper = styled.div`
   display: flex;
@@ -12,7 +13,7 @@ const StyledCommentEditButtonsWrapper = styled.div`
 `
 
 type CommentEditInputProps = {
-  commentId: number
+  commentId: Id
   initialCommentText: string
   onCommentEditCancelButtonClick: () => void
   afterPostCommentEdited: () => void
@@ -62,9 +63,7 @@ const CommentEditInput = ({
     <CommentInput
       placeholder="수정할 댓글 내용을 입력하세요"
       value={commentText}
-      onChange={(e: ChangeEvent<HTMLInputElement>) =>
-        handleCommentTextChange(e.target.value)
-      }
+      onChange={e => handleCommentTextChange(e.target.value)}
       buttons={commentEditButtons}
     />
   )

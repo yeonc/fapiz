@@ -1,11 +1,11 @@
-import { MouseEvent } from 'react'
+import { MouseEvent, ReactNode } from 'react'
 import { useRouter } from 'next/router'
 import { css } from '@emotion/react'
-import { EmotionJSX } from '@emotion/react/types/jsx-namespace'
 import ImageListItem from '@mui/material/ImageListItem'
 import ImageListItemBar from '@mui/material/ImageListItemBar'
-import LikeButtonForMainPage from 'components/home/likeButtonForMainPage'
-import { SnsPostForMainPage } from 'types/snsPost'
+import LikeButtonForHomePage from 'components/home/likeButtonForHomePage'
+import { SnsPostForHomePage } from 'pages/api/filtered-sns-posts'
+import { Id } from 'types/common'
 
 const imageListItemStyle = css`
   border-radius: 10px;
@@ -23,8 +23,8 @@ const imageListItemBarStyle = css`
 `
 
 type ImageCardItemProps = {
-  cardItemData: SnsPostForMainPage
-  rightActionButton: EmotionJSX.Element | null
+  cardItemData: SnsPostForHomePage
+  rightActionButton: ReactNode | null
 }
 
 const ImageCardItem = ({
@@ -33,12 +33,11 @@ const ImageCardItem = ({
 }: ImageCardItemProps) => {
   const router = useRouter()
 
-  const goToSnsPost = (snsPostId: number) =>
-    router.push(`/sns/post/${snsPostId}`)
+  const goToSnsPost = (snsPostId: Id) => router.push(`/sns/post/${snsPostId}`)
 
   const handleImageListItemClick = (e: MouseEvent<HTMLElement>) => {
     const isLikeButtonClicked =
-      (e.target as HTMLElement).id === LikeButtonForMainPage.id
+      (e.target as HTMLElement).id === LikeButtonForHomePage.id
     if (isLikeButtonClicked) {
       return
     }

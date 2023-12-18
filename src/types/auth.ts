@@ -1,25 +1,26 @@
 import { Nullable } from 'types/common'
-import { FashionStyle } from 'types/fashion'
+import { User } from './user'
 
 export type AccessToken = Nullable<string>
 
-export type LoginSuccessResponseData = {
+export type LoginSuccessResponseFromStrapi = {
   jwt: string
-  user: {
-    id: number
-    username: string
-    email: string
-    gender: Nullable<string>
-    height: Nullable<number>
-    weight: Nullable<number>
-    bodyShape: Nullable<string>
-    fashionStyles: Nullable<FashionStyle[]>
-    level: Nullable<number>
-    points: Nullable<number>
-    provider: string
-    confirmed: boolean
-    blocked: boolean
-    createdAt: string
-    updatedAt: string
-  }
+  user: User
+}
+
+export type LogoutResponse = {
+  message: string
+}
+
+export type AuthResponse = SuccessAuthResponse | FailAuthResponse
+
+type SuccessAuthResponse = {
+  result: 'success'
+  message: string
+  user: User
+}
+
+type FailAuthResponse = {
+  result: 'fail'
+  message: string
 }

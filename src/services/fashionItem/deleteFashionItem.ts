@@ -1,9 +1,8 @@
 import axios, { AxiosResponse } from 'axios'
-import { BACKEND_URL } from 'constants/constants'
+import { BACKEND_URL } from 'constants/common'
+import { Id } from 'types/common'
 
-const deleteFashionItem = async (
-  fashionItemId: number
-): Promise<AxiosResponse> => {
+const deleteFashionItem = async (fashionItemId: Id): Promise<AxiosResponse> => {
   return axios({
     method: 'delete',
     url: `${BACKEND_URL}/api/fashion-items/${fashionItemId}`,

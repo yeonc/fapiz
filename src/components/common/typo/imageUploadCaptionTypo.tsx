@@ -1,10 +1,6 @@
 import Typo from 'components/common/typo'
 
-type ImageUploadCaptionTypoProps = {
-  children: string
-}
-
-const ImageUploadCaptionTypo = ({ children }: ImageUploadCaptionTypoProps) => (
+const ImageUploadCaptionTypo = ({ children }: { children: string }) => (
   <Typo variant="caption">{children}</Typo>
 )
 

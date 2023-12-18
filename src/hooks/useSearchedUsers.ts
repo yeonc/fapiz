@@ -1,13 +1,11 @@
 import useSWR from 'swr'
 import ROUTE_URL from 'constants/routeUrl'
-import { UserForSearching } from 'types/user'
-
-const NEXT_SERVER_SEARCHED_USERS_API_ENDPOINT = '/api/searched-users'
+import { UserForSearching } from 'pages/api/searched-users'
 
 const useSearchedUsers = (searchKeyword: string) => {
-  const { data, error } = useSWR<UserForSearching[]>({
+  const { data, error } = useSWR<UserForSearching[], Error>({
     baseURL: ROUTE_URL.HOME,
-    url: NEXT_SERVER_SEARCHED_USERS_API_ENDPOINT,
+    url: '/api/searched-users',
     config: {
       params: {
         keyword: searchKeyword,
@@ -17,7 +15,7 @@ const useSearchedUsers = (searchKeyword: string) => {
 
   return {
     searchedUsers: data,
-    isSearchedUsersLoading: !data && !error,
+    isLoading: !data && !error,
     error,
   }
 }

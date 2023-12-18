@@ -1,10 +1,11 @@
 import axios, { AxiosResponse } from 'axios'
-import { BACKEND_URL } from 'constants/constants'
+import { BACKEND_URL } from 'constants/common'
+import { Id } from 'types/common'
 
 type LikePostArgs = {
-  targetPostId: number
-  myId: number
-  likeUserIds: number[]
+  targetPostId: Id
+  myId: Id
+  likeUserIds: Id[]
 }
 
 type LikePost = (args: LikePostArgs) => Promise<AxiosResponse>

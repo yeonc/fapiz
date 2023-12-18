@@ -1,18 +1,18 @@
 import axios, { AxiosResponse } from 'axios'
-import { BACKEND_URL } from 'constants/constants'
-import { Nullable } from 'types/common'
+import { BACKEND_URL } from 'constants/common'
+import { Id, Nullable } from 'types/common'
 import { FashionStyle } from 'types/fashion'
+import { BodyShape, Gender } from 'types/user'
 
-// TODO: height, weight, fashionStyles 타입은 임시로 써 놓은 것이니 고치기
 type EditMyInfoArgs = {
-  myId: number
-  profileImageId?: number
+  myId: Id
+  profileImageId?: Id
   username: string
-  gender: Nullable<string>
+  gender: Gender | ''
   height: Nullable<number>
   weight: Nullable<number>
-  bodyShape: Nullable<string>
-  fashionStyles: Nullable<FashionStyle[]>
+  bodyShape: BodyShape | ''
+  fashionStyles: FashionStyle[]
 }
 
 type EditMyInfo = (args: EditMyInfoArgs) => Promise<AxiosResponse>
@@ -33,11 +33,11 @@ const editMyInfo: EditMyInfo = async ({
     data: {
       profileImage: profileImageId,
       username,
-      gender,
+      gender: gender === '' ? null : gender,
       height,
       weight,
-      bodyShape,
-      fashionStyles,
+      bodyShape: bodyShape === '' ? null : bodyShape,
+      fashionStyles: fashionStyles.length === 0 ? null : fashionStyles,
     },
   })
 }

@@ -3,19 +3,19 @@ import ImageList from '@mui/material/ImageList'
 import AnnouncementIcon from '@mui/icons-material/Announcement'
 import FashionItemListItem from 'components/closet/fashionItemListItem'
 import Typo from 'components/common/typo'
-import { FashionItemForClosetPage } from 'types/fashion'
 import { mgBottom } from 'styles/layout'
+import { FashionItemForCloset } from 'pages/closet'
 
 const StyledNoExistFashionItem = styled.div`
   text-align: center;
   padding-top: 40px;
 `
 
-type FashonItemListProps = {
-  fashionItems: FashionItemForClosetPage[]
-}
-
-const FashionItemList = ({ fashionItems }: FashonItemListProps) => {
+const FashionItemList = ({
+  fashionItems,
+}: {
+  fashionItems: FashionItemForCloset[]
+}) => {
   if (fashionItems.length === 0) {
     return (
       <StyledNoExistFashionItem>

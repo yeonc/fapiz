@@ -5,15 +5,16 @@ import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import CommentEditInput from 'components/sns/comment/commentEditInput'
 import Comment from 'components/common/texts/comment'
-import useMe from 'hooks/useMe'
 import deleteComment from 'services/snsComment/deleteComment'
 import createUrlQuery from 'utils/createUrlQuery'
+import { Id, Nullable } from 'types/common'
+import { useAuth } from 'context/AuthContext'
 
 type CommentByModeProps = {
-  commentId: number
+  commentId: Id
   commentText: string
-  snsPostId: number
-  commentAuthorId: number
+  snsPostId: Id
+  commentAuthorId: Nullable<Id>
 }
 
 const CommentByMode = ({
@@ -35,12 +36,8 @@ const CommentByMode = ({
     mutate({ url: `/api/sns-comments?${query}` })
   }
 
-  const { me, isLoading } = useMe()
+  const { me } = useAuth()
   const [isCommentEditMode, setIsCommentEditMode] = useState(false)
-
-  if (isLoading) {
-    return <p>로그인 유저 정보를 불러오는 중입니다..</p>
-  }
 
   const isShowCommentEditButtonGroup = me?.id === commentAuthorId ? true : false
 

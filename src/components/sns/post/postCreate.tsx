@@ -1,28 +1,31 @@
-import { FormEvent, useState } from 'react'
+import { FormEvent, ReactNode, useState } from 'react'
 import createPost from 'services/snsPost/createPost'
 import uploadImage from 'services/upload/uploadImage'
 import { changeImageFilesToPreviewImages } from 'utils/previewImage'
-import generateIdIntoObject from 'utils/generateIdIntoObject'
-import { EmotionJSX } from '@emotion/react/types/jsx-namespace'
-import { Obj, WithId } from 'types/common'
+import getObjectIncludedId from 'utils/getObjectIncludedId'
 import { FashionItemInfo } from 'types/fashion'
-import { ImageFiles, PreviewImage } from 'types/image'
+import { ImageFiles, Image, UploadedImageId } from 'types/image'
+import { Id } from 'types/common'
 
-const EMPTY_FASHION_ITEM_INFO = { category: '', price: 0, buyingPlace: '' }
-
-const createNewEmptyFashionItemInfo = (): WithId<Obj> => {
-  return generateIdIntoObject(EMPTY_FASHION_ITEM_INFO)
+const EMPTY_FASHION_ITEM_INFO: Omit<FashionItemInfo, 'id'> = {
+  category: '',
+  price: null,
+  buyingPlace: '',
 }
-const emptyFashionItemInfo = createNewEmptyFashionItemInfo() as FashionItemInfo
 
-type CreatedPostId = number
+const createNewEmptyFashionItemInfo = (): FashionItemInfo => {
+  return getObjectIncludedId(EMPTY_FASHION_ITEM_INFO)
+}
+const emptyFashionItemInfo = createNewEmptyFashionItemInfo()
+
+type CreatedPostId = Id
 
 type ChildrenProps = {
-  previewImages: PreviewImage[] | null
-  fashionItemsInfo: FashionItemInfo[]
+  previewImages: Image[] | null
+  fashionItemInfos: FashionItemInfo[]
   postText: string
   handleImageFilesChange: (imageFiles: FileList) => void
-  handleFashionItemsInfoChange: (fashionItemsInfo: FashionItemInfo[]) => void
+  handleFashionItemInfosChange: (fashionItemInfos: FashionItemInfo[]) => void
   handleFashionItemInfoAddMoreButtonClick: () => void
   handleFashionItemInfoDeleteButtonClick: (
     fashionItemInfoIdToDelete: number
@@ -32,9 +35,9 @@ type ChildrenProps = {
 }
 
 type PostCreateProps = {
-  authorId: number
-  afterPostCreated: (createdPostId: number) => void
-  children: (props: ChildrenProps) => EmotionJSX.Element
+  authorId: Id
+  afterPostCreated: (createdPostId: Id) => void
+  children: (props: ChildrenProps) => ReactNode
 }
 
 const PostCreate = ({
@@ -43,10 +46,8 @@ const PostCreate = ({
   children,
 }: PostCreateProps) => {
   const [imageFiles, setImageFiles] = useState<ImageFiles>(null)
-  const [previewImages, setPreviewImages] = useState<PreviewImage[] | null>(
-    null
-  )
-  const [fashionItemsInfo, setFashionItemsInfo] = useState<FashionItemInfo[]>([
+  const [previewImages, setPreviewImages] = useState<Image[] | null>(null)
+  const [fashionItemInfos, setFashionItemInfos] = useState<FashionItemInfo[]>([
     emptyFashionItemInfo,
   ])
   const [postText, setPostText] = useState('')
@@ -57,24 +58,23 @@ const PostCreate = ({
     setPreviewImages(previewImages)
   }
 
-  const handleFashionItemsInfoChange = (
-    fashionItemsInfo: FashionItemInfo[]
+  const handleFashionItemInfosChange = (
+    fashionItemInfos: FashionItemInfo[]
   ) => {
-    setFashionItemsInfo(fashionItemsInfo)
+    setFashionItemInfos(fashionItemInfos)
   }
 
   const handleFashionItemInfoAddMoreButtonClick = () => {
-    setFashionItemsInfo(prev => {
-      const emptyFashionItemInfo =
-        createNewEmptyFashionItemInfo() as FashionItemInfo
-      return prev.concat(emptyFashionItemInfo)
+    setFashionItemInfos(prev => {
+      const emptyFashionItemInfo = createNewEmptyFashionItemInfo()
+      return [...prev, emptyFashionItemInfo]
     })
   }
 
   const handleFashionItemInfoDeleteButtonClick = (
     fashionItemInfoIdToDelete: number
   ) => {
-    setFashionItemsInfo(prev => {
+    setFashionItemInfos(prev => {
       return prev.filter(prev => prev.id !== fashionItemInfoIdToDelete)
     })
   }
@@ -83,31 +83,8 @@ const PostCreate = ({
     setPostText(postText)
   }
 
-  const getUploadedImageIds = async (): Promise<number[]> => {
-    // TODO: map 함수 image 인자 타입 정의
-    const res = await uploadImage(imageFiles as FileList)
-    const uploadedImageIds: number[] = res.data.map((image: any) => image.id)
-    return uploadedImageIds
-  }
-
-  const createSnsPost = async (): Promise<CreatedPostId> => {
-    const uploadedImageIds = await getUploadedImageIds()
-
-    const res = await createPost({
-      postText,
-      fashionItemsInfo,
-      authorId,
-      postImageIds: uploadedImageIds,
-    })
-
-    const createdPostId: number = res.data.data.id
-    return createdPostId
-  }
-
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
-    // TODO: map 함수 image 인자 타입 정의
     try {
       const createdPostId = await createSnsPost()
       afterPostCreated(createdPostId)
@@ -116,17 +93,39 @@ const PostCreate = ({
     }
   }
 
-  return children({
-    previewImages,
-    fashionItemsInfo,
-    postText,
-    handleImageFilesChange,
-    handleFashionItemsInfoChange,
-    handleFashionItemInfoAddMoreButtonClick,
-    handleFashionItemInfoDeleteButtonClick,
-    handlePostTextChange,
-    handleSubmit,
-  })
+  const createSnsPost = async (): Promise<CreatedPostId> => {
+    const imageIds = await uploadPostImages()
+    const res = await createPost({
+      postText,
+      fashionItemInfos: fashionItemInfos,
+      authorId,
+      postImageIds: imageIds,
+    })
+    const createdPostId = res.data.data.id
+    return createdPostId
+  }
+
+  const uploadPostImages = async (): Promise<UploadedImageId[]> => {
+    const res = await uploadImage(imageFiles!)
+    const uploadedImageIds = res.data.map(image => image.id)
+    return uploadedImageIds
+  }
+
+  return (
+    <>
+      {children({
+        previewImages,
+        fashionItemInfos,
+        postText,
+        handleImageFilesChange,
+        handleFashionItemInfosChange,
+        handleFashionItemInfoAddMoreButtonClick,
+        handleFashionItemInfoDeleteButtonClick,
+        handlePostTextChange,
+        handleSubmit,
+      })}
+    </>
+  )
 }
 
 export default PostCreate

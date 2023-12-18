@@ -3,6 +3,16 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder'
 import BookmarkIcon from '@mui/icons-material/Bookmark'
 import createBookmark from 'services/snsPost/createBookmark'
 import deleteBookmark from 'services/snsPost/deleteBookmark'
+import { UserWithAttributes } from 'types/user'
+import { Id } from 'types/common'
+
+type BookmarkButtonProps = {
+  myId: Id
+  targetId: Id
+  bookmarkUsers: UserWithAttributes[]
+  afterBookmark: () => void
+  isShowBookmarkUsersNumber: boolean
+}
 
 const BookmarkButton = ({
   myId,
@@ -10,13 +20,11 @@ const BookmarkButton = ({
   bookmarkUsers,
   afterBookmark,
   isShowBookmarkUsersNumber,
-}) => {
+}: BookmarkButtonProps) => {
   const isBookmarked = bookmarkUsers.some(
-    (bookmarkUser: any) => bookmarkUser.id === myId
+    bookmarkUser => bookmarkUser.id === myId
   )
-  const bookmarkUserIds = bookmarkUsers.map(
-    (bookmarkUser: any) => bookmarkUser.id
-  )
+  const bookmarkUserIds = bookmarkUsers.map(bookmarkUser => bookmarkUser.id)
 
   const bookmark = async () => {
     await createBookmark({
@@ -25,7 +33,6 @@ const BookmarkButton = ({
       bookmarkUserIds,
     })
   }
-
   const unBookmark = async () => {
     await deleteBookmark({
       targetPostId: targetId,
@@ -33,7 +40,6 @@ const BookmarkButton = ({
       bookmarkUserIds,
     })
   }
-
   const handleBookmarkButtonClick = async () => {
     try {
       if (isBookmarked) await unBookmark()

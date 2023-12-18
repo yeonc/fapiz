@@ -1,7 +1,21 @@
-import axios from 'axios'
-import { BACKEND_URL } from 'constants/constants'
+import axios, { AxiosResponse } from 'axios'
+import { BACKEND_URL } from 'constants/common'
+import { Id } from 'types/common'
 
-const createFashionItem = async ({ category, color, imageId, ownerId }) => {
+type createFashionItemArgs = {
+  category: string
+  color: string
+  imageId: Id
+  ownerId: Id
+}
+type CreateFashionitem = (args: createFashionItemArgs) => Promise<AxiosResponse>
+
+const createFashionItem: CreateFashionitem = async ({
+  category,
+  color,
+  imageId,
+  ownerId,
+}) => {
   return axios({
     method: 'post',
     url: `${BACKEND_URL}/api/fashion-items`,

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { EmotionJSX } from '@emotion/react/types/jsx-namespace'
+import { ReactNode } from 'react'
 
 const StyledCommentText = styled.p`
   display: inline;
@@ -9,7 +9,7 @@ const StyledCommentText = styled.p`
 
 type CommentProps = {
   text: string
-  buttons?: EmotionJSX.Element | null
+  buttons: ReactNode | null
 }
 
 const Comment = ({ text, buttons }: CommentProps) => (

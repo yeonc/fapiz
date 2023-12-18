@@ -11,6 +11,7 @@ import theme from 'theme'
 import createEmotionCache from 'createEmotionCache'
 import { SWRConfig } from 'swr'
 import swrFetcher from 'services/fetcher/swrFetcher'
+import { AuthProvider } from 'context/AuthContext'
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache()
@@ -37,7 +38,9 @@ export default function MyApp(props: MyAppProps) {
           }}
         >
           <GlobalContainer>
-            <Component {...pageProps} />
+            <AuthProvider>
+              <Component {...pageProps} />
+            </AuthProvider>
           </GlobalContainer>
         </SWRConfig>
       </ThemeProvider>

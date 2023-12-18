@@ -4,7 +4,15 @@ import ImageList from '@mui/material/ImageList'
 import ImageListItem from '@mui/material/ImageListItem'
 import useSnsPosts from 'hooks/useSnsPosts'
 import createUrlQuery from 'utils/createUrlQuery'
-import { SnsPostForSnsPostsPage } from 'types/snsPost'
+import { SnsPostResponseAboutShowingAll } from 'types/snsPost'
+import { Image } from 'types/image'
+import { sanitizeSnsPostsForShowingAllSnsPosts } from 'sanitizer/snsPosts'
+import { Id } from 'types/common'
+
+export type SnsPostForSnsPosts = {
+  id: Id
+  firstImage: Image
+}
 
 const cursorPointer = css`
   cursor: pointer;
@@ -16,33 +24,24 @@ const postImageStyle = css`
   object-fit: cover;
 `
 
-const SnsPosts = ({ userId }) => {
+const SnsPosts = ({ userId }: { userId: Id }) => {
   const router = useRouter()
-
   const query = createUrlQuery({
     populate: '*',
     'filters[author][id][$eq]': userId,
     sort: 'createdAt:desc',
   })
+  const { snsPosts: snsPostsFromStrapi, isLoading } =
+    useSnsPosts<SnsPostResponseAboutShowingAll[]>(query)
 
-  const { snsPosts: snsPostsFromStrapi, isLoading } = useSnsPosts(query)
+  const snsPosts = snsPostsFromStrapi
+    ? sanitizeSnsPostsForShowingAllSnsPosts(snsPostsFromStrapi)
+    : []
+
+  const goToSnsPost = (postId: Id) => router.push(`/sns/post/${postId}`)
 
   if (isLoading) {
-    return null
-  }
-
-  const snsPosts: SnsPostForSnsPostsPage[] = snsPostsFromStrapi.map(
-    (post: any) => ({
-      id: post.id,
-      firstImage: {
-        url: post.attributes.postImages.data[0].attributes.url,
-        altText: post.attributes.postImages.data[0].attributes.alternativeText,
-      },
-    })
-  )
-
-  const goToSnsPost = (postId: number) => {
-    router.push(`/sns/post/${postId}`)
+    return <p>포스트 데이터를 불러오는 중입니다.</p>
   }
 
   if (snsPosts.length === 0) {

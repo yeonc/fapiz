@@ -1,11 +1,16 @@
 import useSWR from 'swr'
+import { FashionItemResponse } from 'types/fashion'
 
-const useFashionItems = (query: any) => {
-  const { data, error } = useSWR({ url: `/api/fashion-items?${query}` })
+const useFashionItems = (query: string) => {
+  const { data, error } = useSWR<{ data: FashionItemResponse[] }, Error>({
+    url: `/api/fashion-items?${query}`,
+  })
 
-  const fashionItems = data ? data.data : []
-
-  return { fashionItems, isLoading: !data && !error, error }
+  return {
+    fashionItems: data?.data,
+    isLoading: !data && !error,
+    error,
+  }
 }
 
 export default useFashionItems

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { FormEvent, useState } from 'react'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import LoadingButton from '@mui/lab/LoadingButton'
@@ -7,10 +7,18 @@ import ImageUploadButton from 'components/common/buttons/imageUploadButton'
 import ImageUploadCaptionTypo from 'components/common/typo/imageUploadCaptionTypo'
 import uploadImage from 'services/upload/uploadImage'
 import createFashionItem from 'services/fashionItem/createFashionItem'
-import useMe from 'hooks/useMe'
 import { changeImageFileToPreviewImage } from 'utils/previewImage'
-import { ImageFiles, PreviewImage } from 'types/image'
+import { ImageFiles, Image, UploadedImageId } from 'types/image'
 import { mgBottom } from 'styles/layout'
+import { useAuth } from 'context/AuthContext'
+import ErrorMessage, { ErrorType } from 'components/common/texts/ErrorMessage'
+import useError from 'hooks/useError'
+import { ERROR_MESSAGE_TIMEOUT_SEC } from 'constants/common'
+
+const DEFAULT_PREVIEW_IMAGE = {
+  url: '/images/default-preview.png',
+  altText: '기본 프리뷰 이미지',
+}
 
 const StyledFashionItemCreateForm = styled.form`
   text-align: center;
@@ -18,6 +26,10 @@ const StyledFashionItemCreateForm = styled.form`
 
 const StyledTextFieldWrapper = styled.div`
   padding: 12px 12px 18px;
+`
+
+const StyledErrorMessageWrapper = styled.div`
+  margin-bottom: 12px;
 `
 
 const previewImageStyle = css`
@@ -29,22 +41,19 @@ const previewImageStyle = css`
   aspect-ratio: 1 / 1;
 `
 
-const DEFAULT_PREVIEW_IMAGE = {
-  url: '/default-preview.png',
-  altText: '기본 프리뷰 이미지',
-}
-
-const FashionItemCreateForm = ({ afterCreateFashionItem }) => {
-  const { me } = useMe()
-
+const FashionItemCreateForm = ({
+  afterCreateFashionItem,
+}: {
+  afterCreateFashionItem: () => void
+}) => {
+  const { me } = useAuth()
   const [imageFiles, setImageFiles] = useState<ImageFiles>(null)
-  const [previewImage, setPreviewImage] = useState<PreviewImage>(
-    DEFAULT_PREVIEW_IMAGE
-  )
+  const [previewImage, setPreviewImage] = useState<Image>(DEFAULT_PREVIEW_IMAGE)
   const [category, setCategory] = useState('')
   const [color, setColor] = useState('')
   const [isFashionItemCreateLoading, setIsFashionItemCreateLoading] =
     useState(false)
+  const { error, handleError } = useError<ErrorType>()
 
   const handleImageFilesChange = (imageFiles: FileList) => {
     setImageFiles(imageFiles)
@@ -52,42 +61,40 @@ const FashionItemCreateForm = ({ afterCreateFashionItem }) => {
     setPreviewImage(previewImage)
   }
 
-  const handleCategoryChange = (category: any) => {
-    setCategory(category)
+  const handleCategoryChange = (category: string) => setCategory(category)
+
+  const handleColorChange = (color: string) => setColor(color)
+
+  const handleFashionItemSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsFashionItemCreateLoading(true)
+    try {
+      await createFashionItemInCloset()
+      afterCreateFashionItem()
+    } catch {
+      handleError('fashionItemCreateError', ERROR_MESSAGE_TIMEOUT_SEC)
+    } finally {
+      setIsFashionItemCreateLoading(false)
+    }
   }
 
-  const handleColorChange = (color: any) => {
-    setColor(color)
-  }
-
-  const createFashionItemWithImage = async (uploadedImageId: any) => {
+  const createFashionItemInCloset = async () => {
+    if (!me) {
+      throw new Error('로그인 상태가 아닙니다.')
+    }
+    const imageId = await uploadFashionItemImage()
     await createFashionItem({
       category,
       color,
-      imageId: uploadedImageId,
+      imageId: imageId,
       ownerId: me.id,
     })
   }
 
-  const handleFashionItemSubmit = async (e: any) => {
-    e.preventDefault()
-
-    if (imageFiles === null) {
-      alert('이미지를 첨부해 주세요!')
-      return
-    }
-
-    // TODO: uploadedImageId 가져오는 과정 함수로 빼기
-    try {
-      setIsFashionItemCreateLoading(true)
-      const res = await uploadImage(imageFiles)
-      const uploadedImageId = res.data[0].id
-      await createFashionItemWithImage(uploadedImageId)
-      setIsFashionItemCreateLoading(false)
-      afterCreateFashionItem()
-    } catch (error) {
-      console.error(error)
-    }
+  const uploadFashionItemImage = async (): Promise<UploadedImageId> => {
+    const res = await uploadImage(imageFiles!)
+    const uploadedImageId = res.data[0].id
+    return uploadedImageId
   }
 
   return (
@@ -122,6 +129,11 @@ const FashionItemCreateForm = ({ afterCreateFashionItem }) => {
           fullWidth={true}
         />
       </StyledTextFieldWrapper>
+      {error && (
+        <StyledErrorMessageWrapper>
+          <ErrorMessage type={error} />
+        </StyledErrorMessageWrapper>
+      )}
       <LoadingButton
         variant="contained"
         type="submit"

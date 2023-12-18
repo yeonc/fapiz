@@ -4,11 +4,11 @@ import ROUTE_URL from 'constants/routeUrl'
 
 const LoginPageRedirect = () => {
   const router = useRouter()
-  const goToLoginPage = () => router.push(ROUTE_URL.LOGIN)
 
   useEffect(() => {
+    const goToLoginPage = () => router.push(ROUTE_URL.LOGIN)
     goToLoginPage()
-  }, [])
+  }, [router])
 
   return null
 }

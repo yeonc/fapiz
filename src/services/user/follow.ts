@@ -1,12 +1,24 @@
-import axios from 'axios'
-import { BACKEND_URL } from 'constants/constants'
+import axios, { AxiosResponse } from 'axios'
+import { BACKEND_URL } from 'constants/common'
+import { Id } from 'types/common'
 
-const follow = async ({ myId, targetUserId, myFollowingUserIds }) => {
+type FollowArgs = {
+  myId: Id
+  targetUserId: Id
+  targetUserFollowerIds: Id[]
+}
+type Follow = (args: FollowArgs) => Promise<AxiosResponse>
+
+const follow: Follow = async ({
+  myId,
+  targetUserId,
+  targetUserFollowerIds,
+}) => {
   return axios({
     method: 'put',
-    url: `${BACKEND_URL}/api/users/${myId}`,
+    url: `${BACKEND_URL}/api/users/${targetUserId}`,
     data: {
-      followings: [...myFollowingUserIds, targetUserId],
+      followers: [...targetUserFollowerIds, myId],
     },
   })
 }

@@ -1,8 +1,9 @@
 import axios, { AxiosResponse } from 'axios'
-import { BACKEND_URL } from 'constants/constants'
+import { BACKEND_URL } from 'constants/common'
+import { Id } from 'types/common'
 
 type EditCommentArgs = {
-  commentId: number
+  commentId: Id
   commentText: string
 }
 

@@ -1,35 +1,89 @@
-import { Nullable } from 'types/common'
-import { LikeUser } from 'types/user'
-import { FashionStyle } from 'types/fashion'
-import { SnsPostImage } from 'types/image'
+import { Id, Nullable } from 'types/common'
+import { PostAuthorResponse, User, UserWithAttributes } from 'types/user'
+import { FashionItemInfo } from 'types/fashion'
+import {
+  Image,
+  ImageResponseWithAltText,
+  ImageResponseWithoutAltText,
+} from 'types/image'
+import { PostCommentIdResponse } from './postComment'
 
-export type SnsPostForSearching = {
-  id: number
+type SnsPostResponseCommonAttributes = {
+  content: Nullable<string>
   createdAt: string
-  firstImage: SnsPostImage
+  fashionItemInfos: Nullable<FashionItemInfo[]>
+  likeUsers: {
+    data: UserWithAttributes[]
+  }
+  postImages: {
+    data: ImageResponseWithAltText[]
+  }
+}
+
+type SnsPostResponseAdditionalAttributes = {
+  author: {
+    data: UserWithAttributes
+  }
+  comments: {
+    data: PostCommentIdResponse[]
+  }
+  bookmarkUsers: {
+    data: UserWithAttributes[]
+  }
+}
+
+export type SnsPostResponseAboutDefaultQuery = {
+  id: Id
+  attributes: SnsPostResponseCommonAttributes &
+    SnsPostResponseAdditionalAttributes
+}
+
+export type SnsPostResponseAboutPostDetail = {
+  id: Id
+  attributes: SnsPostResponseCommonAttributes &
+    Pick<SnsPostResponseAdditionalAttributes, 'bookmarkUsers'> & {
+      author: {
+        data: PostAuthorResponse<ImageResponseWithAltText>
+      }
+    }
+}
+
+export type SnsPostResponseAboutSearchResult = {
+  id: Id
+  attributes: SnsPostResponseCommonAttributes &
+    Pick<SnsPostResponseAdditionalAttributes, 'comments'> & {
+      author: {
+        data: PostAuthorResponse<ImageResponseWithoutAltText>
+      }
+    }
+}
+
+export type SnsPostResponseAboutShowingAll = {
+  id: Id
+  attributes: SnsPostResponseCommonAttributes &
+    SnsPostResponseAdditionalAttributes
+}
+
+export type SnsPostResponseAboutFiltering = {
+  id: Id
+  attributes: SnsPostResponseCommonAttributes &
+    Pick<SnsPostResponseAdditionalAttributes, 'author'>
+}
+
+export type SnsPostAuthorForPostDetail = Pick<
+  User,
+  'id' | 'username' | 'height' | 'weight'
+> & {
+  avatarUrl?: string
+}
+
+export type SnsPostForPostDetail = {
+  id: Id
+  createdAt: string
+  images: Image[]
+  author: SnsPostAuthorForPostDetail
+  likeUsers: UserWithAttributes[]
+  bookmarkUsers: UserWithAttributes[]
   content: string
-  likeNumbers: number
-  author: {
-    username: string
-    avatarUrl: string | undefined
-  }
-  commentCount: number
-}
-
-export type SnsPostForMainPage = {
-  id: number
-  createdAt: string
-  author: {
-    username: string
-    gender: Nullable<string>
-    bodyShape: Nullable<string>
-    fashionStyles: Nullable<FashionStyle[]>
-  }
-  postImage: SnsPostImage
-  likeUsers: LikeUser[]
-}
-
-export type SnsPostForSnsPostsPage = {
-  id: number
-  firstImage: SnsPostImage
+  fashionItemInfos: FashionItemInfo[]
 }

@@ -1,72 +1,60 @@
-import { Nullable } from 'types/common'
+import { Id, Nullable } from 'types/common'
 import { FashionStyle } from 'types/fashion'
 
-export type UserForSearching = {
-  id: number
+export type Gender = '남' | '여'
+export type BodyShape =
+  | '삼각형'
+  | '역삼각형'
+  | '타원형'
+  | '직사각형'
+  | '모래시계형'
+  | '사다리꼴형'
+
+export type User = {
+  id: Id
   username: string
-  gender: Nullable<string>
+  gender: Nullable<Gender>
+  height: Nullable<number>
+  weight: Nullable<number>
+  bodyShape: Nullable<BodyShape>
   fashionStyles: Nullable<FashionStyle[]>
-  avatarUrl: string | undefined
 }
 
-export type LikeUser = {
-  id: number
-  attributes: {
-    username: string
-    email: string
-    provider: string
-    confirmed: boolean
-    blocked: boolean
-    createdAt: string
-    updatedAt: string
-    height: Nullable<number>
-    weight: Nullable<number>
-    points: Nullable<number>
-    level: Nullable<number>
-    gender: Nullable<string>
-    bodyShape: Nullable<string>
-    fashionStyles: Nullable<FashionStyle[]>
+export type UserAdditional = {
+  profileImage: Nullable<{ url: string }>
+  followers: User[]
+  followings: User[]
+}
+
+export type UserWithAttributes = {
+  id: Id
+  attributes: Omit<User, 'id'>
+}
+
+export type UserResponse = User &
+  Pick<UserAdditional, 'profileImage' | 'followings'>
+
+export type UserWithProfileImage = User & Pick<UserAdditional, 'profileImage'>
+
+export type UserWithProfileImageAndFollowers = User &
+  Pick<UserAdditional, 'profileImage' | 'followers'>
+
+export type UserResponseWithAdditionalFields = User &
+  Pick<UserAdditional, 'profileImage'> & {
+    followers: UserWithProfileImageAndFollowers[]
+    followings: UserWithProfileImageAndFollowers[]
   }
-}
 
-type FollowUserForUserInfo = {
-  id: number
-  username: string
-  email: string
-  provider: string
-  password: null
-  resetPasswordToken: null
-  confirmationToken: null
-  confirmed: boolean
-  blocked: boolean
-  createdAt: string
-  updatedAt: string
-  height: Nullable<number>
-  weight: Nullable<number>
-  points: Nullable<number>
-  level: Nullable<number>
-  gender: Nullable<string>
-  bodyShape: Nullable<string>
-  fashionStyles: Nullable<FashionStyle[]>
-}
+export type UserResponseWithProfileImage = UserWithProfileImage
 
-export type UserForUserInfo = {
-  id: number
-  username: string
-  height: Nullable<number>
-  weight: Nullable<number>
-  profileImageUrl: string | undefined
-  followings: FollowUserForUserInfo[]
-  followers: FollowUserForUserInfo[]
-}
+export type UserResponseWithFollowings = User &
+  Pick<UserAdditional, 'followings'>
 
-export type UserForMyInfoPage = {
-  id: number
-  imageUrl: string
-  username: string
-  gender: string
-  height: number
-  weight: number
-  bodyShape: string
-  fashionStyles: FashionStyle[]
+export type PostAuthorResponse<T> = {
+  id: Id
+  attributes: Omit<User, 'id'> & {
+    profileImage: {
+      data: T
+    }
+  }
 }

@@ -1,19 +1,22 @@
 import axios, { AxiosResponse } from 'axios'
-import { BACKEND_URL } from 'constants/constants'
+import { BACKEND_URL } from 'constants/common'
+import { Id } from 'types/common'
 import { FashionItemInfo } from 'types/fashion'
 
 type CreatePostArgs = {
   postText: string
-  fashionItemsInfo: FashionItemInfo[]
-  authorId: number
-  postImageIds: number[]
+  fashionItemInfos: FashionItemInfo[]
+  authorId: Id
+  postImageIds: Id[]
 }
 
-type CreatePost = (args: CreatePostArgs) => Promise<AxiosResponse>
+type CreatePost = (
+  args: CreatePostArgs
+) => Promise<AxiosResponse<{ data: { id: Id } }>>
 
 const createPost: CreatePost = async ({
   postText,
-  fashionItemsInfo,
+  fashionItemInfos: fashionItemInfos,
   authorId,
   postImageIds,
 }) => {
@@ -23,7 +26,7 @@ const createPost: CreatePost = async ({
     data: {
       data: {
         content: postText,
-        fashionItemsInfo,
+        fashionItemInfos: fashionItemInfos,
         author: authorId,
         postImages: postImageIds,
       },

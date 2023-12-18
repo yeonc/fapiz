@@ -1,50 +1,30 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import googleLogin from 'services/auth/googleLogin'
-import getValueOfKeyFromQueryString from 'utils/getValueOfKeyFromQueryString'
 import ROUTE_URL from 'constants/routeUrl'
-import { LoginSuccessResponseData, AccessToken } from 'types/auth'
-
-const ACCESS_TOKEN_KEY = 'access_token'
-
-const getAccessTokenFromQueryString = (queryString: string): AccessToken => {
-  const accessToken = getValueOfKeyFromQueryString({
-    queryString,
-    key: ACCESS_TOKEN_KEY,
-  })
-  return accessToken
-}
-
-const setUserDataToLocalStorage = (data: LoginSuccessResponseData) => {
-  localStorage.setItem('jwt', data.jwt)
-  localStorage.setItem('username', data.user.username)
-}
-
-const login = async (accessToken: AccessToken) => {
-  try {
-    const res = await googleLogin(accessToken)
-    setUserDataToLocalStorage(res.data)
-  } catch (error) {
-    console.error(error)
-  }
-}
+import { AccessToken } from 'types/auth'
+import { useAuth } from 'context/AuthContext'
 
 const GoogleLoginRedirectPage = () => {
   const router = useRouter()
-
-  const afterLogin = () => {
-    router.push(ROUTE_URL.HOME)
-  }
+  const { login } = useAuth()
 
   useEffect(() => {
     const queryString = location.search
     const accessToken = getAccessTokenFromQueryString(queryString)
-    login(accessToken)
-      .then(() => afterLogin())
+    const goToHomePage = () => router.push(ROUTE_URL.HOME)
+    login(accessToken) //
+      .then(goToHomePage)
       .catch(console.error)
-  }, [])
+  }, [router, login])
 
   return null
 }
 
 export default GoogleLoginRedirectPage
+
+const getAccessTokenFromQueryString = (queryString: string): AccessToken => {
+  const ACCESS_TOKEN_KEY = 'access_token'
+  const urlQueryParams = new URLSearchParams(queryString)
+  const accessToken = urlQueryParams.get(ACCESS_TOKEN_KEY)
+  return accessToken
+}

@@ -7,8 +7,11 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import TextField from '@mui/material/TextField'
 import { FASHION_ITEM_CATEGORIES } from 'constants/fashionItem'
-import { FashionItemInfo } from 'types/fashion'
+import { FashionItemInfo, FashionItemCategoryName } from 'types/fashion'
 import styled from '@emotion/styled'
+import { Id } from 'types/common'
+
+const ITEM_TYPE_TEXT = '아이템 종류'
 
 const StyledFashionItemInfo = styled.li`
   display: flex;
@@ -26,52 +29,52 @@ const formControlWidth = css`
 
 type FashionItemInfoToChange = Partial<FashionItemInfo>
 
-type ChangeFashionItemsInfoArgs = {
-  fashionItemInfoId: number
+type ChangeFashionItemInfosArgs = {
+  fashionItemInfoId: Id
   fashionItemInfoToChange: FashionItemInfoToChange
 }
 
-type ChangedFashionItemsInfo = FashionItemInfo[]
+type ChangedFashionItemInfos = FashionItemInfo[]
 
-type ChangeFashionItemsInfo = (
-  args: ChangeFashionItemsInfoArgs
-) => ChangedFashionItemsInfo
+type ChangeFashionItemInfos = (
+  args: ChangeFashionItemInfosArgs
+) => ChangedFashionItemInfos
 
 type HandleCategoryChangeArgs = {
-  fashionItemInfoId: number
-  category: string
+  fashionItemInfoId: Id
+  category: FashionItemCategoryName
 }
 
 type handlePriceChangeArgs = {
-  fashionItemInfoId: number
+  fashionItemInfoId: Id
   price: number
 }
 
 type HandleBuyingPlaceChangeArgs = {
-  fashionItemInfoId: number
+  fashionItemInfoId: Id
   buyingPlace: string
 }
 
-type FashionItemsInfoProps = {
-  fashionItemsInfo: FashionItemInfo[]
-  onFashionItemsInfoChange: (fashionItemsInfo: FashionItemInfo[]) => void
+type FashionItemInfosProps = {
+  fashionItemInfos: FashionItemInfo[]
+  onFashionItemInfosChange: (fashionItemInfos: FashionItemInfo[]) => void
   onFashionItemInfoDeleteButtonClick: (
     fashionItemInfoIdToDelete: number
   ) => void
   className?: string
 }
 
-const FashionItemsInfo = ({
-  fashionItemsInfo,
-  onFashionItemsInfoChange,
+const FashionItemInfos = ({
+  fashionItemInfos: fashionItemInfos,
+  onFashionItemInfosChange: onFashionItemInfosChange,
   onFashionItemInfoDeleteButtonClick,
   className,
-}: FashionItemsInfoProps) => {
-  const changeFashionItemsInfo: ChangeFashionItemsInfo = ({
+}: FashionItemInfosProps) => {
+  const changeFashionItemInfos: ChangeFashionItemInfos = ({
     fashionItemInfoId,
     fashionItemInfoToChange,
   }) => {
-    const changedFashionItemsInfo = fashionItemsInfo.map(fashionItemInfo => {
+    const changedFashionItemInfos = fashionItemInfos.map(fashionItemInfo => {
       if (fashionItemInfo.id === fashionItemInfoId) {
         return {
           ...fashionItemInfo,
@@ -80,57 +83,59 @@ const FashionItemsInfo = ({
       }
       return fashionItemInfo
     })
-    return changedFashionItemsInfo
+    return changedFashionItemInfos
   }
 
   const handleCategoryChange = ({
     fashionItemInfoId,
     category,
   }: HandleCategoryChangeArgs) => {
-    const changedFashionItemsInfo = changeFashionItemsInfo({
+    const changedFashionItemInfos = changeFashionItemInfos({
       fashionItemInfoId,
       fashionItemInfoToChange: { category },
     })
-    onFashionItemsInfoChange(changedFashionItemsInfo)
+    onFashionItemInfosChange(changedFashionItemInfos)
   }
 
   const handlePriceChange = ({
     fashionItemInfoId,
     price,
   }: handlePriceChangeArgs) => {
-    const changedFashionItemsInfo = changeFashionItemsInfo({
+    const priceValue = !Number.isNaN(price) ? price : null
+    const changedFashionItemInfos = changeFashionItemInfos({
       fashionItemInfoId,
-      fashionItemInfoToChange: { price },
+      fashionItemInfoToChange: { price: priceValue },
     })
-    onFashionItemsInfoChange(changedFashionItemsInfo)
+    onFashionItemInfosChange(changedFashionItemInfos)
   }
 
   const handleBuyingPlaceChange = ({
     fashionItemInfoId,
     buyingPlace,
   }: HandleBuyingPlaceChangeArgs) => {
-    const changedFashionItemsInfo = changeFashionItemsInfo({
+    const changedFashionItemInfos = changeFashionItemInfos({
       fashionItemInfoId,
       fashionItemInfoToChange: { buyingPlace },
     })
-    onFashionItemsInfoChange(changedFashionItemsInfo)
+    onFashionItemInfosChange(changedFashionItemInfos)
   }
 
   return (
     <ul className={className}>
-      {fashionItemsInfo.map(fashionItemInfo => (
+      {fashionItemInfos.map(fashionItemInfo => (
         <StyledFashionItemInfo key={fashionItemInfo.id}>
           <FormControl css={formControlWidth}>
-            <InputLabel>아이템 종류</InputLabel>
+            <InputLabel>{ITEM_TYPE_TEXT}</InputLabel>
             <Select
-              label="아이템 종류"
+              label={ITEM_TYPE_TEXT}
               value={fashionItemInfo.category}
               onChange={e =>
                 handleCategoryChange({
                   fashionItemInfoId: fashionItemInfo.id,
-                  category: e.target.value,
+                  category: e.target.value as FashionItemCategoryName,
                 })
               }
+              required
             >
               {FASHION_ITEM_CATEGORIES.map(category => (
                 <MenuItem key={category.id} value={category.name}>
@@ -142,13 +147,14 @@ const FashionItemsInfo = ({
           <TextField
             label="가격"
             type="number"
-            value={fashionItemInfo.price}
+            value={fashionItemInfo.price ?? ''}
             onChange={e =>
               handlePriceChange({
                 fashionItemInfoId: fashionItemInfo.id,
-                price: Number(e.target.value),
+                price: (e.target as HTMLInputElement).valueAsNumber,
               })
             }
+            required
           />
           <TextField
             label="구입처"
@@ -159,6 +165,7 @@ const FashionItemsInfo = ({
                 buyingPlace: e.target.value,
               })
             }
+            required
           />
           <IconButton
             color="primary"
@@ -174,4 +181,4 @@ const FashionItemsInfo = ({
   )
 }
 
-export default FashionItemsInfo
+export default FashionItemInfos

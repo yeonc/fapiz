@@ -1,3 +1,4 @@
+import { ReactNode } from 'react'
 import styled from '@emotion/styled'
 
 const StyledContainer = styled.div`
@@ -5,7 +6,7 @@ const StyledContainer = styled.div`
   margin: 0 auto;
 `
 
-const MaxWidthContainer = ({ children }) => (
+const MaxWidthContainer = ({ children }: { children: ReactNode }) => (
   <StyledContainer>{children}</StyledContainer>
 )
 

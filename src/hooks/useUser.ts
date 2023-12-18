@@ -1,11 +1,13 @@
 import useSWR from 'swr'
 
-const useUser = (userId: number, query?: string) => {
-  const urlNotIncludedQuery = `/api/users/${userId}`
-  const urlIncludedQuery = `/api/users/${userId}?${query}`
-  const url = query ? urlIncludedQuery : urlNotIncludedQuery
-
-  const { data, error } = useSWR(userId ? { url } : null)
+const useUser = <T>(userId?: number, query?: string) => {
+  const { data, error } = useSWR<T, Error>(
+    userId
+      ? {
+          url: `/api/users/${userId}${query ? `?${query}` : ''}`,
+        }
+      : null
+  )
 
   if (!userId) {
     return {

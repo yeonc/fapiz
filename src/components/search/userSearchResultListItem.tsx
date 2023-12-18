@@ -2,12 +2,12 @@ import { css } from '@emotion/react'
 import Avatar from '@mui/material/Avatar'
 import Link from '@mui/material/Link'
 import ROUTE_URL from 'constants/routeUrl'
-import { UserForSearching } from 'types/user'
 import { mgBottom } from 'styles/layout'
 import {
   DEFAULT_BLACK,
   FASHION_STYLE_TAG_BACKGROUND_GRAY,
 } from 'styles/constants/color'
+import { UserForSearching } from 'pages/api/searched-users'
 
 const DIVIDER = ' / '
 const NO_DIVIDER = ''

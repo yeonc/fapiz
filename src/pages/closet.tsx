@@ -10,12 +10,23 @@ import SelectsForFilteringFashionItems from 'components/closet/selectsForFilteri
 import IntroducingBanner from 'components/closet/introducingBanner'
 import MaxWidthContainer from 'components/layouts/containers/maxWidthContainer'
 import FashionItemCreatingModal from 'components/closet/fashionItemCreatingModal'
-import useMe from 'hooks/useMe'
 import useModalState from 'hooks/useModalState'
 import useFashionItems from 'hooks/useFashionItems'
 import createUrlQuery from 'utils/createUrlQuery'
 import removeDuplicatedValueFromArray from 'utils/removeDuplicatedValueFromArray'
-import { FashionItemForClosetPage } from 'types/fashion'
+import { Image } from 'types/image'
+import { useAuth } from 'context/AuthContext'
+import { sanitizeFashionItemsForCloset } from 'sanitizer/fahsionItems'
+import Head from 'next/head'
+import { ALL_TEXT } from 'constants/common'
+import { Id } from 'types/common'
+
+export type FashionItemForCloset = {
+  id: Id
+  category: string
+  color: string
+  image: Image
+}
 
 const StyledClosetContentsWrapper = styled.div`
   padding: 30px 0;
@@ -36,8 +47,8 @@ const fabPositionFixed = css`
 `
 
 const ClosetPage = () => {
-  const [category, setCategory] = useState('all')
-  const [color, setColor] = useState('all')
+  const [category, setCategory] = useState(ALL_TEXT)
+  const [color, setColor] = useState(ALL_TEXT)
 
   const handleCategoryChange = (category: string) => {
     setCategory(category)
@@ -47,28 +58,22 @@ const ClosetPage = () => {
     setColor(color)
   }
 
-  const { me } = useMe()
+  const { me } = useAuth()
 
-  const query = createUrlQuery({
-    'populate[0]': 'image',
-    'populate[1]': 'owner',
-    'filters[owner][id][$eq]': me && me.id,
-    sort: 'createdAt:desc',
-  })
+  const query = me
+    ? createUrlQuery({
+        'populate[0]': 'image',
+        'populate[1]': 'owner',
+        'filters[owner][id][$eq]': me.id,
+        sort: 'createdAt:desc',
+      })
+    : ''
 
   const { fashionItems: fashionItemsFromStrapi } = useFashionItems(query)
 
-  const fashionItems: FashionItemForClosetPage[] = fashionItemsFromStrapi.map(
-    (fashionItem: any) => ({
-      id: fashionItem.id,
-      category: fashionItem.attributes.category,
-      color: fashionItem.attributes.color,
-      image: {
-        url: fashionItem.attributes.image.data.attributes.url,
-        altText: fashionItem.attributes.image.data.attributes.alternativeText,
-      },
-    })
-  )
+  const fashionItems = fashionItemsFromStrapi
+    ? sanitizeFashionItemsForCloset(fashionItemsFromStrapi)
+    : []
 
   const {
     isOpen: isFashionItemCreateModalOpen,
@@ -87,6 +92,13 @@ const ClosetPage = () => {
 
   return (
     <>
+      <Head>
+        <title>온라인 옷장 | Fapiz</title>
+        <meta
+          name="description"
+          content="온라인 옷장에서 내가 소장하고 있는 패션 아이템들을 관리해 보세요"
+        />
+      </Head>
       <IntroducingBanner />
       <MaxWidthContainer>
         <StyledClosetContentsWrapper>
@@ -123,14 +135,14 @@ type Category = string
 type Color = string
 
 const getCategoriesFromFashionItems = (
-  fashionItems: FashionItemForClosetPage[]
+  fashionItems: FashionItemForCloset[]
 ): Category[] => {
   const categories = fashionItems.map(fashionItem => fashionItem.category)
   return removeDuplicatedValueFromArray(categories)
 }
 
 const getColorsFromFashionItems = (
-  fashionItems: FashionItemForClosetPage[]
+  fashionItems: FashionItemForCloset[]
 ): Color[] => {
   const colors = fashionItems.map(fashionItem => fashionItem.color)
   return removeDuplicatedValueFromArray(colors)
@@ -139,12 +151,12 @@ const getColorsFromFashionItems = (
 type FilterFashionItemsArgs = {
   category: string
   color: string
-  fashionItems: FashionItemForClosetPage[]
+  fashionItems: FashionItemForCloset[]
 }
 
 type FilterFashionItems = (
   args: FilterFashionItemsArgs
-) => FashionItemForClosetPage[]
+) => FashionItemForCloset[]
 
 const filterFashionItems: FilterFashionItems = ({
   category,
@@ -154,26 +166,23 @@ const filterFashionItems: FilterFashionItems = ({
   const filteredFashionItems = fashionItems
     .filter(byCategory(category))
     .filter(byColor(color))
-
   return filteredFashionItems
 }
 
 const byCategory =
   (category: string) =>
-  (fashionItem: FashionItemForClosetPage): boolean => {
-    if (category === 'all') {
+  (fashionItem: FashionItemForCloset): boolean => {
+    if (category === ALL_TEXT) {
       return true
     }
-
     return fashionItem.category === category
   }
 
 const byColor =
   (color: string) =>
-  (fashionItem: FashionItemForClosetPage): boolean => {
-    if (color === 'all') {
+  (fashionItem: FashionItemForCloset): boolean => {
+    if (color === ALL_TEXT) {
       return true
     }
-
     return fashionItem.color === color
   }

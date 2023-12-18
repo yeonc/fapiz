@@ -1,10 +1,11 @@
 import axios, { AxiosResponse } from 'axios'
-import { BACKEND_URL } from 'constants/constants'
+import { BACKEND_URL } from 'constants/common'
+import { Id } from 'types/common'
 
 type CreateBookmarkArgs = {
-  targetPostId: number
-  myId: number
-  bookmarkUserIds: number[]
+  targetPostId: Id
+  myId: Id
+  bookmarkUserIds: Id[]
 }
 
 type CreateBookmark = (args: CreateBookmarkArgs) => Promise<AxiosResponse>

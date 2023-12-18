@@ -1,12 +1,24 @@
-import axios from 'axios'
-import { BACKEND_URL } from 'constants/constants'
+import axios, { AxiosResponse } from 'axios'
+import { BACKEND_URL } from 'constants/common'
+import { Id } from 'types/common'
 
-const unfollow = async ({ myId, targetUserId, myFollowingUserIds }) => {
+type unfollowArgs = {
+  myId: Id
+  targetUserId: Id
+  targetUserFollowerIds: Id[]
+}
+type Unfollow = (args: unfollowArgs) => Promise<AxiosResponse>
+
+const unfollow: Unfollow = async ({
+  myId,
+  targetUserId,
+  targetUserFollowerIds,
+}) => {
   return axios({
     method: 'put',
-    url: `${BACKEND_URL}/api/users/${myId}`,
+    url: `${BACKEND_URL}/api/users/${targetUserId}`,
     data: {
-      followings: myFollowingUserIds.filter((id: any) => id !== targetUserId),
+      followers: targetUserFollowerIds.filter(id => id !== myId),
     },
   })
 }

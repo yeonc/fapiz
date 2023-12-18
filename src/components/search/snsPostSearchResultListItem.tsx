@@ -3,9 +3,9 @@ import styled from '@emotion/styled'
 import Avatar from '@mui/material/Avatar'
 import Link from '@mui/material/Link'
 import ROUTE_URL from 'constants/routeUrl'
-import { SnsPostForSearching } from 'types/snsPost'
 import { mgBottom, mgRight } from 'styles/layout'
 import { DEFAULT_BLACK } from 'styles/constants/color'
+import { SnsPostForSearching } from './snsPostSearchResult'
 
 const StyledSnsPostSearchResultWrapper = styled.div`
   display: flex;

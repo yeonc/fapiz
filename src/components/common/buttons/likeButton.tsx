@@ -4,8 +4,9 @@ import FavoriteBorder from '@mui/icons-material/FavoriteBorder'
 import Favorite from '@mui/icons-material/Favorite'
 import likePost from 'services/snsPost/likePost'
 import unlikePost from 'services/snsPost/unlikePost'
-import { LikeUser } from 'types/user'
+import { UserWithAttributes } from 'types/user'
 import { LIKE_BUTTON_PINK } from 'styles/constants/color'
+import { Id } from 'types/common'
 
 const LIKE_BUTTON_ID = 'like-button'
 
@@ -14,9 +15,9 @@ const favoriteColor = css`
 `
 
 type LikeButtonProps = {
-  myId: number
-  targetId: number
-  likeUsers: LikeUser[]
+  myId: Id
+  targetId: Id
+  likeUsers: UserWithAttributes[]
   afterLike: () => void
   isShowLikeUsersNumber: boolean
   borderColor?: string

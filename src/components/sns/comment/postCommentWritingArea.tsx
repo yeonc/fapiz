@@ -2,11 +2,14 @@ import { FormEvent, useState } from 'react'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import TextField from '@mui/material/TextField'
-import Button from '@mui/material/Button'
+import LoadingButton from '@mui/lab/LoadingButton'
 import Avatar from '@mui/material/Avatar'
-import useMe from 'hooks/useMe'
 import createComment from 'services/snsComment/createComment'
+import { useAuth } from 'context/AuthContext'
+import useUser from 'hooks/useUser'
 import createUrlQuery from 'utils/createUrlQuery'
+import { UserResponseWithProfileImage } from 'types/user'
+import { Id } from 'types/common'
 
 const StyledPostCommentWritingAreaWrapper = styled.div`
   display: flex;
@@ -31,46 +34,52 @@ const StyledTextField = styled(TextField)`
   margin-right: 6px;
 `
 
-const queryForUseMe = createUrlQuery({ 'populate[0]': 'profileImage' })
-
 type PostCommentWritingAreaProps = {
-  snsPostId: number
+  snsPostId: Id
   afterPostCommentSubmit: () => void
   className?: string
 }
+
+const query = createUrlQuery({
+  'populate[0]': 'profileImage',
+})
 
 const PostCommentWritingArea = ({
   snsPostId,
   afterPostCommentSubmit,
   className,
 }: PostCommentWritingAreaProps) => {
+  const { me } = useAuth()
+  const { user } = useUser<UserResponseWithProfileImage>(me?.id, query)
   const [comment, setComment] = useState('')
+  const [isCommentCreateLoading, setIsCommentCreateLoading] = useState(false)
 
-  const { me, isLoading } = useMe(queryForUseMe)
-
-  if (isLoading) {
-    return <p>로딩중</p>
+  if (!user) {
+    return null
   }
 
-  const handleCommentChange = (comment: string) => {
-    setComment(comment)
-  }
-
+  const handleCommentChange = (comment: string) => setComment(comment)
   const handleCommentSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
+    setIsCommentCreateLoading(true)
     try {
-      await createComment({ comment, postId: snsPostId, authorId: me.id })
+      await createComment({ comment, postId: snsPostId, authorId: user.id })
       setComment('')
       afterPostCommentSubmit()
     } catch (error) {
       console.error(error)
+    } finally {
+      setIsCommentCreateLoading(false)
     }
   }
 
   return (
     <StyledPostCommentWritingAreaWrapper className={className}>
-      <Avatar alt={me.username} src={me.profileImage?.url} css={avatarStyle} />
+      <Avatar
+        alt={user.username}
+        src={user.profileImage?.url}
+        css={avatarStyle}
+      />
       <StyledPostCommentForm onSubmit={handleCommentSubmit}>
         <StyledTextField
           label="댓글을 입력하세요"
@@ -80,9 +89,15 @@ const PostCommentWritingArea = ({
           required
           multiline
         />
-        <Button variant="contained" size="small" type="submit">
+        <LoadingButton
+          variant="contained"
+          size="small"
+          type="submit"
+          loading={isCommentCreateLoading}
+          loadingPosition="center"
+        >
           등록
-        </Button>
+        </LoadingButton>
       </StyledPostCommentForm>
     </StyledPostCommentWritingAreaWrapper>
   )

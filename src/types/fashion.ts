@@ -1,9 +1,10 @@
-import { fashionItemImage } from 'types/image'
+import { Id, Nullable } from './common'
+import { ImageResponseWithAltText } from './image'
 
 export type FashionItemInfo = {
-  id: number
-  category: string
-  price: number
+  id: Id
+  category: FashionItemCategoryName | ''
+  price: Nullable<number>
   buyingPlace: string
 }
 
@@ -22,13 +23,32 @@ type FashionStyleName =
   | '힙스터'
 
 export type FashionStyle = {
-  id: number
+  id: Id
   name: FashionStyleName
 }
 
-export type FashionItemForClosetPage = {
-  id: number
-  category: string
-  color: string
-  image: fashionItemImage
+export type FashionItemCategoryName =
+  | '상의'
+  | '하의'
+  | '원피스'
+  | '아우터'
+  | '신발'
+  | '가방'
+  | '모자'
+  | '액세서리'
+
+export type FashionItemCategory = {
+  id: Id
+  name: FashionItemCategoryName
+}
+
+export type FashionItemResponse = {
+  id: Id
+  attributes: {
+    category: string
+    color: string
+    image: {
+      data: ImageResponseWithAltText
+    }
+  }
 }

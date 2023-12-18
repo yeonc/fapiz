@@ -5,10 +5,26 @@ import NoSearchResult from 'components/search/noSearchResult'
 import SearchResultHeadingTypo from 'components/search/searchResultHeadingTypo'
 import useSnsPosts from 'hooks/useSnsPosts'
 import createUrlQuery from 'utils/createUrlQuery'
-import getFormattedDate from 'utils/getFormattedDate'
-import { SnsPostForSearching } from 'types/snsPost'
+import { SnsPostResponseAboutSearchResult } from 'types/snsPost'
 import { HOVER_BACKGROUND_GRAY } from 'styles/constants/color'
+import { Image } from 'types/image'
+import { Id, Nullable } from 'types/common'
+import { sanitizeSnsPostsForSearching } from 'sanitizer/snsPosts'
 
+export type SnsPostForSearching = {
+  id: Id
+  createdAt: string
+  firstImage: Image
+  content: Nullable<string>
+  likeNumbers: number
+  author: {
+    username: string
+    avatarUrl?: string
+  }
+  commentCount: number
+}
+
+const SNS_POST_SEARCH_RESULT_START_INDEX = 0
 const SNS_POST_SEARCH_RESULT_COUNT_TO_BE_SHOWED = 5
 
 const StyledSnsPostSearchResultListItem = styled(SnsPostSearchResultListItem)`
@@ -27,11 +43,7 @@ const StyledSnsPostSearchResultListItemSkeleton = styled(
   margin-bottom: 20px;
 `
 
-type SnsPostSearchResultProps = {
-  searchKeyword: string
-}
-
-const SnsPostSearchResult = ({ searchKeyword }: SnsPostSearchResultProps) => {
+const SnsPostSearchResult = ({ searchKeyword }: { searchKeyword: string }) => {
   const query = createUrlQuery({
     'populate[0]': 'postImages',
     'populate[1]': 'author',
@@ -43,14 +55,14 @@ const SnsPostSearchResult = ({ searchKeyword }: SnsPostSearchResultProps) => {
   })
 
   const { snsPosts: searchedSnsPostsFromStrapi, isLoading: isSnsPostsLoading } =
-    useSnsPosts(query)
+    useSnsPosts<SnsPostResponseAboutSearchResult[]>(query)
 
   const searchedSnsPosts = isSnsPostsLoading
     ? null
-    : sanitizeSnsPosts(searchedSnsPostsFromStrapi)
+    : sanitizeSnsPostsForSearching(searchedSnsPostsFromStrapi || [])
 
   const searchedSnsPostsToBeShowed = searchedSnsPosts?.slice(
-    0,
+    SNS_POST_SEARCH_RESULT_START_INDEX,
     SNS_POST_SEARCH_RESULT_COUNT_TO_BE_SHOWED
   )
 
@@ -80,28 +92,3 @@ const SnsPostSearchResult = ({ searchKeyword }: SnsPostSearchResultProps) => {
 }
 
 export default SnsPostSearchResult
-
-const sanitizeSnsPosts = (searchedSnsPostsFromStrapi): SnsPostForSearching[] =>
-  searchedSnsPostsFromStrapi.map(searchedSnsPostFromStrapi => {
-    const author = searchedSnsPostFromStrapi.attributes.author.data.attributes
-    const createdDate = new Date(searchedSnsPostFromStrapi.attributes.createdAt)
-
-    return {
-      id: searchedSnsPostFromStrapi.id,
-      createdAt: getFormattedDate(createdDate),
-      firstImage: {
-        url: searchedSnsPostFromStrapi.attributes.postImages.data[0].attributes
-          .url,
-        altText:
-          searchedSnsPostFromStrapi.attributes.postImages.data[0].attributes
-            .alternativeText,
-      },
-      content: searchedSnsPostFromStrapi.attributes.content,
-      likeNumbers: searchedSnsPostFromStrapi.attributes.likeUsers.data.length,
-      author: {
-        username: author.username,
-        avatarUrl: author.profileImage.data?.attributes.url,
-      },
-      commentCount: searchedSnsPostFromStrapi.attributes.comments.data.length,
-    }
-  })

@@ -7,6 +7,10 @@ import CommentByMode from 'components/sns/comment/commentByMode'
 import ROUTE_URL from 'constants/routeUrl'
 import { DEFAULT_GRAY } from 'styles/constants/color'
 import getFormattedDate from 'utils/getFormattedDate'
+import { PostCommentForSnsPost } from './postCommentList'
+import { Id } from 'types/common'
+
+const WITHDRAWN_USER_TEXT = '탈퇴한 유저'
 
 const StyledPostCommentWrapper = styled.li`
   display: flex;
@@ -35,8 +39,8 @@ const commentCreatedAtTextStyle = css`
 `
 
 type PostCommentItemProps = {
-  comment: any // TODO: 타입 정의
-  postId: number
+  comment: PostCommentForSnsPost
+  postId: Id
   className?: string
 }
 
@@ -52,11 +56,11 @@ const PostCommentItem = ({
       <Link href={`${ROUTE_URL.SNS}/${comment.authorId}`}>
         <StyledCommentAuthorWrapper>
           <Avatar
-            alt={comment.authorName}
+            alt={comment.authorName || WITHDRAWN_USER_TEXT}
             src={comment.authorProfileImageUrl}
             css={authorAvatarStyle}
           />
-          <span>{comment.authorName}</span>
+          <span>{comment.authorName || WITHDRAWN_USER_TEXT}</span>
         </StyledCommentAuthorWrapper>
       </Link>
       <StyledCommentContentWrapper>
