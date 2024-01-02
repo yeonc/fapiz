@@ -53,3 +53,4 @@
 - [작업 진행 방식](https://github.com/yeonc/fapiz-frontend/wiki/%EC%9E%91%EC%97%85-%EC%A7%84%ED%96%89-%EB%B0%A9%EC%8B%9D)
 - [개발 과정에서 겪은 문제, 코드 수정(개선) 사항](https://github.com/yeonc/fapiz-frontend/wiki/%EA%B0%9C%EB%B0%9C-%EA%B3%BC%EC%A0%95%EC%97%90%EC%84%9C-%EA%B2%AA%EC%9D%80-%EB%AC%B8%EC%A0%9C,-%EC%BD%94%EB%93%9C-%EC%88%98%EC%A0%95(%EA%B0%9C%EC%84%A0)-%EC%82%AC%ED%95%AD)
 - [돌아보며 → 성과, 잘했던 점, 아쉬웠던 점](https://github.com/yeonc/fapiz-frontend/wiki/%EB%8F%8C%EC%95%84%EB%B3%B4%EB%A9%B0)
+- [개발 Full Story - Fapiz와 함께 성장한 나를 돌아보며: 개인 프로젝트 \<Fapiz\> 개발기](https://velog.io/@yeonc/fapiz-retrospective)
